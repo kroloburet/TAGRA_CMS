@@ -1,0 +1,12 @@
+/*
+Стили для контента в редакторе tinymce если необходимо привести стили контента в нем к стилям страниц сайта
+Эти стили подключаются в файле /application/helpers/back/redactor_helper.php
+ВНИМАНИЕ! Каждый селектор в этом файле должен относиться к классу "mce-content-body"
+*/
+@font-face{font-family:'Lobster';src:url(/css/fonts/Lobster.ttf)}
+.mce-content-body h1,.mce-content-body h2,.mce-content-body h3,.mce-content-body h4,.mce-content-body h5,.mce-content-body h6{font-family:'Lobster',Georgia,Helvetica,Arial;font-weight:400;color:#634D35}
+.mce-content-body h1{font-size:2.2em;line-height:1em;margin:0;padding:0 0 1em}
+.mce-content-body h2{font-size:1.5em;margin:0;padding:0 0 .6em}
+.mce-content-body h3{font-size:1.3em;margin:0;padding:0 0 .2em}
+.mce-content-body h4{font-size:1.2em;margin:0;padding:0 0 .1em}
+.mce-content-body h5{font-size:1em;margin:0;padding:0}

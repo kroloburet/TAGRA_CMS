@@ -1,0 +1,137 @@
+/* Basic Styles
+================================================== */
+audio { border:0;font:inherit;font-size:100%;margin:0;padding:0;vertical-align:baseline;width:98%;}
+.a_container { position:relative; margin:0 auto 1.5em auto; color:#694a28; border:1px solid #ddd; }
+.fixed-controls { border-bottom: rgba(0,0,0,0.6) 2px solid; position: fixed; z-index: 1000; top:0;}
+#audio0 { margin:0 auto; text-align: center;}
+#a_controls { background-color:#231F20; margin:0; padding: 0; }
+#audiowrap { background-color:#231F20; margin:0 auto; }
+#plwrap ul, #plwrap li { list-style:none; padding: inherit;}
+.a_left { float:left; }
+.a_right { float:right; }
+.a_center { text-align:center; }
+#plwrap { margin:0 auto; }
+#tracks { min-height:65px; position:relative; text-align:center; text-decoration:none; top:13px; }
+#nowPlay { display:inline; }
+#npTitle { margin: 0; padding: 21px; text-align: right; overflow: hidden; text-overflow: ellipsis; top: 0; white-space: nowrap; width: 70%; }
+#npAction { padding:21px; display: block; text-overflow: ellipsis; white-space: nowrap; width: 30%; overflow: hidden; }
+#plList { margin:0; }
+#plList li { background-color:#231F20; cursor:pointer; margin:0; padding:21px 0; }
+#plList li:hover { background-color:#262223; }
+.plItem { position:relative; }
+.plTitle { left:50px; overflow:hidden; position:absolute; right:65px; text-overflow:ellipsis; top:0; white-space:nowrap; }
+.plNum { padding-left:21px; width:25px; }
+.plLength { padding-left:21px; position:absolute; right:21px; top:0; }
+.plDownload { padding-left:21px; position:absolute; right:21px; top:0; }
+.plSel,.plSel:hover { background-color:#262223!important; cursor:default!important; }
+a[id^="a_btn"] { background-color:#231F20; color:#C8C7C8; cursor:pointer; font-size:50px; margin:0; padding:0 27px 11px; text-decoration:none; }
+a[id^="a_btn"]:last-child { margin-left:-4px; }
+a[id^="a_btn"]:hover,a[id^="a_btn"]:active { background-color:#262223; }
+a[id^="a_btn"]::-moz-focus-inner { border:0; padding:0; }
+
+/* IE 9*/
+/*html[data-useragent*="MSIE 9.0"] audio { margin-left:9px; outline:none; width:880px; }*/
+html[data-useragent*="MSIE 9.0"] #audiowrap { background-color:#000; }
+html[data-useragent*="MSIE 9.0"] #tracks { min-height:57px; top:5px; }
+html[data-useragent*="MSIE 9.0"] a[id^="a_btn"] { background-color:#000; }
+html[data-useragent*="MSIE 9.0"] a[id^="a_btn"]:hover { background-color:#080808; }
+html[data-useragent*="MSIE 9.0"] #plList li { background-color:#000; }
+html[data-useragent*="MSIE 9.0"] #plList li:hover { background-color:#080808; }
+html[data-useragent*="MSIE 9.0"] .plSel,
+html[data-useragent*="MSIE 9.0"] .plSel:hover { background-color:#080808!important; }
+
+/* IE 10*/
+/*html[data-useragent*="MSIE 10.0"] audio { margin-left:6px; width:887px; }*/
+html[data-useragent*="MSIE 10.0"] #audiowrap { background-color:#000; }
+html[data-useragent*="MSIE 10.0"] #tracks { min-height:60px; top:8px; }
+html[data-useragent*="MSIE 10.0"] a[id^="a_btn"] { background-color:#000; }
+html[data-useragent*="MSIE 10.0"] a[id^="a_btn"]:hover { background-color:#080808; }
+html[data-useragent*="MSIE 10.0"] #plList li { background-color:#000; }
+html[data-useragent*="MSIE 10.0"] #plList li:hover { background-color:#080808; }
+html[data-useragent*="MSIE 10.0"] .plSel,
+html[data-useragent*="MSIE 10.0"] .plSel:hover { background-color:#080808!important; }
+
+ /*IE 11*/
+/*html[data-useragent*="rv:11.0"] audio { margin-left:2px; width:895px; }*/
+html[data-useragent*="rv:11.0"] #audiowrap { background-color:#000; }
+html[data-useragent*="rv:11.0"] #tracks { min-height:60px; top:8px; }
+html[data-useragent*="rv:11.0"] a[id^="a_btn"] { background-color:#000; }
+html[data-useragent*="rv:11.0"] a[id^="a_btn"]:hover { background-color:#080808; }
+html[data-useragent*="rv:11.0"] #plList li { background-color:#000; }
+html[data-useragent*="rv:11.0"] #plList li:hover { background-color:#080808; }
+html[data-useragent*="rv:11.0"] .plSel,
+html[data-useragent*="rv:11.0"] .plSel:hover { background-color:#080808!important; }
+
+ /*All Apple Products*/
+/*html[data-useragent*="Apple"] audio { margin:0; width:890px; }*/
+html[data-useragent*="Apple"] #audiowrap { background-color:#000; }
+html[data-useragent*="Apple"] #tracks { min-height:64px; top:12px; }
+html[data-useragent*="Apple"] a[id^="a_btn"] { background-color:#000; }
+html[data-useragent*="Apple"] a[id^="a_btn"]:hover { background-color:#080808; }
+html[data-useragent*="Apple"] #plList li { background-color:#000; }
+html[data-useragent*="Apple"] #plList li:hover { background-color:#080808; }
+html[data-useragent*="Apple"] .plSel,
+html[data-useragent*="Apple"] .plSel:hover { background-color:#080808!important; }
+
+ /*IOS 7*/
+/*html[data-useragent*="OS 7"] audio { margin-left:3px; width:890px; }*/
+html[data-useragent*="OS 7"] #audiowrap { background-color:#e6e6e6; }
+html[data-useragent*="OS 7"] #tracks { min-height:75px; top:23px; }
+html[data-useragent*="OS 7"] a[id^="a_btn"] { background-color:#e6e6e6; color:#373837; }
+html[data-useragent*="OS 7"] a[id^="a_btn"]:hover { background-color:#eee; }
+html[data-useragent*="OS 7"] #plList li { background-color:#e6e6e6; }
+html[data-useragent*="OS 7"] #plList li:hover { background-color:#eee; }
+html[data-useragent*="OS 7"] .plSel,
+html[data-useragent*="OS 7"] .plSel:hover { background-color:#eee!important; }
+
+/* Chrome*/
+/*html[data-useragent*="Chrome"] audio { margin-left:6px; width:887px; }*/
+html[data-useragent*="Chrome"] #tracks { min-height:64px; top:12px; }
+html[data-useragent*="Chrome"] #audiowrap { background-color:#fafafa; }
+html[data-useragent*="Chrome"] a[id^="a_btn"] { background-color:#fafafa; color:#5a5a5a; }
+html[data-useragent*="Chrome"] a[id^="a_btn"]:hover { background-color:#eee; }
+html[data-useragent*="Chrome"] #plList li { background-color:#fafafa; }
+html[data-useragent*="Chrome"] #plList li:hover { background-color:#eee; }
+html[data-useragent*="Chrome"] .plSel,
+html[data-useragent*="Chrome"] .plSel:hover { background-color:#eee!important; }
+
+/* Chrome / Android / Tablet*/
+/*html[data-useragent*="Chrome"][data-useragent*="Android"] audio { margin-left:5px; width:682px; }*/
+/*
+ Audio Player Media Queries
+==================================================
+
+ Tablet Portrait
+@media only screen and (min-width: 768px) and (max-width: 959px) {
+audio { width:746px; }
+html[data-useragent*="MSIE 9.0"] audio { width:656px; }
+html[data-useragent*="MSIE 10.0"] audio { width:663px; }
+html[data-useragent*="rv:11.0"] audio { width:671px; }
+html[data-useragent*="OS 7"] audio { width:666px; }
+html[data-useragent*="Chrome"] audio { width:663px; }
+html[data-useragent*="Chrome"][data-useragent*="Android"] audio { margin-left:5px; width:658px; }
+}
+
+ Mobile Landscape
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+audio { width:460px; }
+html[data-useragent*="MSIE 9.0"] audio { width:470px; }
+html[data-useragent*="MSIE 10.0"] audio { width:477px; }
+html[data-useragent*="rv:11.0"] audio { width:485px; }
+html[data-useragent*="OS 7"] audio { width:480px; }
+html[data-useragent*="Chrome"] audio { width:477px; }
+html[data-useragent*="Chrome"][data-useragent*="Mobile"] audio { margin-left:5px; width:473px; }
+#npTitle { width:245px; }
+}
+
+ Mobile Portrait
+@media only screen and (max-width: 479px) {
+audio { width:290px; }
+html[data-useragent*="MSIE 9.0"] audio { width:300px; }
+html[data-useragent*="MSIE 10.0"] audio { width:307px; }
+html[data-useragent*="rv:11.0"] audio { width:315px; }
+html[data-useragent*="OS 7"] audio { width:300px; }
+html[data-useragent*="Chrome"] audio { width:307px; }
+html[data-useragent*="Chrome"][data-useragent*="Mobile"] audio { margin-left:5px; width:313px; }
+#npTitle { width:167px; }
+}*/

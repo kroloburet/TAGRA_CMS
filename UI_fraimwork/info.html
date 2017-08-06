@@ -1,0 +1,768 @@
+<!doctype html>
+<html>
+
+ <head>
+  <meta name="generator" content="Powered by «Tagra CMS» Development and design by kroloburet@gmail.com">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="none">
+  <title>Справка по системе и UI-фреймворк</title>
+  <link href="fonts/FontAwesome/style.css" rel="stylesheet">
+  <!--[if lt IE 8]><!-->
+  <link href="fonts/FontAwesome/ie7/ie7.css" rel="stylesheet">
+  <!--<![endif]-->
+  <link rel="stylesheet" href="css.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" defer></script>
+  <script src="js.js" defer></script>
+  <style>
+   body{border-top:2px solid #E7D977;margin-bottom:2em;}
+   .demo_grid .col1,
+   .demo_grid .col2,
+   .demo_grid .col3,
+   .demo_grid .col4,
+   .demo_grid .col5,
+   .demo_grid .col6,
+   .demo_grid .col7,
+   .demo_grid .col8,
+   .demo_grid .col9,
+   .demo_grid .col10,
+   .demo_grid .col11,
+   .demo_grid .col12 {
+    padding: 15px 0;
+    background-color: #ddd;
+    text-align: center;
+   }
+
+   .bord {
+    border: 1px solid #afafaf;
+    padding: 1em 0.5em;
+    margin-bottom: 1.5em;
+   }
+
+   .block {
+    padding: 0.5em;
+    margin-bottom: 1em;
+    background-color: #0E7AA9;
+   }
+  </style>
+ </head>
+
+ <body>
+  <div id="content">
+   <!--content-->
+   <div class="row">
+    <div class="col12">
+     <h1>Справка по системе и UI-фреймворк</h1>
+     <p>Система управления контентом &laquo;Tagra CMS&raquo;, далее просто система, создана для реализации веб-ресурсов (корпоративных, визиток, промо) с адаптивным дизайном и высокой производительностью. Также система может служить базой для разработки более масштабных и сложных веб-проектов. В отличии от более &laquo;тяжеловесных&raquo; CMS (Joomla, WordPress и т.д), использует меньше программного кода, библиотек, не перегружена лишним и проста в администрировании.</p>
+     <h2>Структура и шаблон</h2>
+     <p>В системе используются адаптивные шаблоны для комфортной работы и просмотра сайта на разнообразных устройствах. Чтобы ваш контент также был адаптивен, воспользуйтесь услугами профессионального верстальщика. С целью упрощения адаптивной верстки, в основном CSS-файле предусмотрена 12-ти колоночная модульная сетка, речь о которой пойдет ниже &mdash; в &laquo;Верстальщику&raquo;</p>
+     В системе предусмотрена возможность создавать: &laquo;страницы&raquo;, &laquo;разделы&raquo; и &laquo;галереи&raquo;.
+     <br> <b>Страница </b>&mdash; контент, оформленный с помощью текстового редактора, HTML, CSS, JS (JQuery), выводимый в шаблон системы (/application/views/front/page_view.php)
+     <br> <b>Раздел </b>&mdash; контент, оформленный с помощью текстового редактора, HTML, CSS, JS (JQuery), выводимый в шаблон системы (/application/views/front/section_view.php). После контента пользователя следует перечень входящих в данный раздел страниц, галерей и других разделов с кратким описанием и ссылкой. В каждом разделе может быть неограниченное число подразделов, но с целью улучшения структуры сайта не следует злоупотреблять этой возможностью
+     <br> <b>Галереи </b>&mdash; контент, оформленный с помощью текстового редактора, HTML, CSS, JS (JQuery), выводимый в шаблон системы (/application/views/front/gallery_view.php). После контента пользователя следует сама галерея. Возможны следующие типы галерей:
+     <ul>
+      <li>фото-галерея из папки</li>
+      <li>фото-галерея с описанием изображений</li>
+      <li>видео-галерея &laquo;ссылки YouTube&raquo;</li>
+      <li>аудио-галерея</li>
+     </ul>
+     <b>Главная страница </b>&mdash; контент, оформленный с помощью текстового редактора, HTML, CSS, JS (JQuery), выводимый в шаблон системы. Главная страница редактируется в админке отдельно от остальных страниц и выводится в отдельный шаблон системы (/application/views/front/home_view.php).
+     <br> <b>Страница &laquo;контакты&raquo; </b>&mdash; контент, оформленный с помощью текстового редактора, HTML, CSS, JS (JQuery), выводимый в шаблон системы. После контента пользователя следуют контакты и форма обратной связи. Страница &laquo;контакты&raquo; редактируется в админке отдельно от остальных страниц и выводится в отдельный шаблон системы (/application/views/front/contact_view.php).
+     <br> <b>Header (шапка сайта) </b>&mdash; не редактируется из админки, а доступна как шаблон для всего сайта кроме административной его части (/application/views/front/blocks/header_view.php). Содержит метатеги и фрагменты JS, CSS. Здесь же выводится и меню сайта.
+     <br> <b>Footer (подвал сайта) </b>&mdash; не редактируется из админки, а доступен как шаблон для всего сайта кроме административной его части (/application/views/front/blocks/footer_view.php). Содержит фрагменты JS, информацию о правах и копирайте. Может также содержать продублированное меню или ссылки на другие ресурсы, контактные данные.
+     <br> <b>Основной CSS-файл </b>&mdash; действует для всего сайта кроме административной его части (/css/front/general.css).
+     <br> <b>CSS-файл редактора</b>&mdash; действует для редактора контента в административной части (/css/back/redactor.css).
+     <br> <b>Страница 404 </b>&mdash; (/application/views/404_view.php).
+     <br> <b>Страница 403 </b>&mdash; (/403.html).</div>
+   </div>
+   <div class="row">
+    <div class="col12">
+     <h2>Используемые скрипты, плагины и библиотеки</h2> Система написана мной на базе PHP-фреймворка <a href="http://www.codeigniter.com/" target="_blank">CodeIgniter</a>. Чтобы не придумывать &laquo;велосипед&raquo; для решения некоторых задач в системе, я использовал скрипты, плагины и библиотеки с открытым исходным кодом, написанные другими разработчиками. Они опубликованы для свободного использования и распространения. Список источников:
+     <ul>
+      <li><a href="http://www.tinymce.com" target="_blank">TinyMCE&nbsp;WYSIWYG editor</a>
+      </li>
+      <li><a href="http://www.moxiemanager.com" target="_blank">MoxieManager</a>
+      </li>
+      <li><a href="https://github.com/emmetio/textarea" target="_blank">Emmet for &lt;textarea&gt;</a> | <a href="http://docs.emmet.io" target="_blank">Документация и синтаксис emmet</a>
+      </li>
+      <li><a href="http://fortawesome.github.io/Font-Awesome" target="_blank">Font Awesome</a> | <a href="/UI_fraimwork/fonts/FontAwesome/demo.html" target="_blank">Быстрая справка по иконкам</a>
+      </li>
+      <li><a href="http://html5media.info" target="_blank">html5media</a>
+      </li>
+      <li><a href="https://github.com/aFarkas/html5shiv" target="_blank">html5shiv</a>
+      </li>
+      <li><a href="https://github.com/scottjehl/Respond" target="_blank">Respond</a>
+      </li>
+     </ul>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col12">
+     <h2>Верстальщику</h2>
+     <p>Система оснащена UI-фрейворком в котором предусмотрен CSS файл для стилистического оформления системы, и облегчения адаптивной верстки. А так же небольшой javasript файл. Эти файлы система использует повсеместно. Все файлы доступны в папке <a href="/UI_fraimwork/" target="_blank">/UI_fraimwork</a>. <span class="red">Внимание! Не изменяйте и не удаляйте файлы UI-фреймворка.</span> Если вы хотите изменить стилевое оформление или javasript сценарий, редактируйте соответствующие файлы в /css/front и /scripts/front директориях или обратитесь к разаботчику по email в конце страницы. Далее представленны примеры работы с UI-фрейворком.</p>
+     <h4>Адаптивная модульная сетка</h4>
+     <p>Чтобы посетители могли комфортно просматривать контент на вашем сайте на разных устройствах, будь то смартфон или домашний кинотеатр &mdash; верстайте его, используя модульную сетку. Сетка может иметь неограниченное количество строк (row), каждая из которых может содержать до 12-ти колонок (col). 12 колонок = 100% от ширины шаблона сайта (устанавливается в админке &mdash; меню/конфигурация), 3 колоноки = 25% и так далее. Сделав поначалу каркас из сетки и разместив в нем контент, вы будете уверены в том, что при разной ширине устройств контент будет оставаться в рамках вашего каркаса, и ничто никуда не &laquo;поплывет&raquo;. При ширине устройства &gt;=600px все колонки сетки трансформируются в строки. Верстать в текстовом редакторе админки каркас из сетки и размещать в нем контент лучше в представлении &laquo;исходный код&raquo;.</p>
+     <div class="demo_grid">
+      <div class="row">
+       <div class="col1">.col1</div>
+       <div class="col11">.col11</div>
+      </div>
+      <div class="row">
+       <div class="col2">.col2</div>
+       <div class="col10">.col10</div>
+      </div>
+      <div class="row">
+       <div class="col3">.col3</div>
+       <div class="col9">.col9</div>
+      </div>
+      <div class="row">
+       <div class="col4">.col4</div>
+       <div class="col8">.col8</div>
+      </div>
+      <div class="row">
+       <div class="col5">.col5</div>
+       <div class="col7">.col7</div>
+      </div>
+      <div class="row">
+       <div class="col6">.col6</div>
+       <div class="col6">.col6</div>
+      </div>
+      <div class="row">
+       <div class="col12">.col12</div>
+      </div>
+     </div>
+     <dl class="tabs">
+      <dt class="tab_active">Пример кода сетки</dt>
+      <dd>
+       <div class="tab_content">
+        <pre>
+&lt;div class=&quot;row&quot;&gt;
+    &lt;div class=&quot;col6&quot;&gt;
+     Lorem Ipsum is simply dummy text of the printing and typesetting
+     industry. Lorem Ipsum has been the industry's standard dummy
+     text ever since the 1500s, when an unknown printer took a galley
+     of type and scrambled it to make a type specimen book.
+    &lt;/div&gt;
+    &lt;div class=&quot;col6&quot;&gt;
+     Lorem Ipsum is simply dummy text of the printing and typesetting
+     industry. Lorem Ipsum has been the industry's standard dummy
+     text ever since the 1500s, when an unknown printer took a galley
+     of type and scrambled it to make a type specimen book.
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;div class=&quot;row&quot;&gt;
+    &lt;div class=&quot;col12&quot;&gt;
+     Lorem Ipsum is simply dummy text of the printing and typesetting
+     industry. Lorem Ipsum has been the industry's standard dummy
+     text ever since the 1500s, when an unknown printer took a galley
+     of type and scrambled it to make a type specimen book.
+    &lt;/div&gt;
+&lt;/div&gt;
+        </pre>
+       </div>
+      </dd>
+      <dt>Результат</dt>
+      <dd>
+       <div class="tab_content">
+        <div class="row">
+         <div class="col6">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</div>
+         <div class="col6">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</div>
+        </div>
+        <div class="row">
+         <div class="col12">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</div>
+        </div>
+       </div>
+      </dd>
+     </dl>
+     <h4>Другие полезные классы</h4>
+     <p>Если вы хотите скрыть некоторые элементы страницы при выводе ее на печать — присвойте таким элементам class="noprint".</p>
+     <p>Чтобы пользователь видел, что ссылка ведет на другой ресурс или откроется в новом окне или вкладке, в фрейморке предусмотрены классы "world" и "blank". Пример: <a href="#" class="world">class="world"</a>, <a href="#" target="_blank">class="blank" или target="_blank"</a>
+     </p>
+     <p class="warn">Присвойте class="warn" для элемента с текстом, чтобы он стал таким как этот. Это подойдет, к примеру, для аннотации к статье или другой важной информации, которая должна быть ненавязчиво подана читателю.</p>
+     <p>
+      <span class="red">У этого текста class="red" поэтому он такой.</span>
+      <br>
+      <span class="yellow">У этого текста class="yellow" поэтому он такой.</span>
+      <br>
+      <span class="green">У этого текста class="green" поэтому он такой.</span>
+      <br>
+      <span class="blue">У этого текста class="blue" поэтому он такой.</span>
+     </p>
+     <p class="algn_l bord">У этого блока class="algn_l" поэтому текст и другие блоки в нем будут выровнены по левой стороне</p>
+     <p class="algn_r bord">У этого блока class="algn_r" поэтому текст и другие блоки в нем будут выровнены по правой стороне</p>
+     <p class="algn_c bord">У этого блока class="algn_c" поэтому текст и другие блоки в нем будут выровнены по центру</p>
+     Установите нужную длину для любого блочного элемента:
+     <br>class="width10"
+     <div class="block width10"></div>
+     class="width20"
+     <div class="block width20"></div>
+     class="width30"
+     <div class="block width30"></div>
+     class="width40"
+     <div class="block width40"></div>
+     class="width50"
+     <div class="block width50"></div>
+     class="width60"
+     <div class="block width60"></div>
+     class="width70"
+     <div class="block width70"></div>
+     class="width80"
+     <div class="block width80"></div>
+     class="width90"
+     <div class="block width90"></div>
+     class="width99"
+     <div class="block width99"></div>
+     class="full"
+     <div class="block full"></div>
+
+     <dl class="tabs">
+      <dt class="tab_active">Адаптивные табы</dt>
+      <dd>
+       <div class="tab_content">Табы используют JQuery, а при ширине устройства >=600px трансформируются в аккордеон.</div>
+      </dd>
+      <dt>Пример кода</dt>
+      <dd>
+       <div class="tab_content">
+        <pre>
+&lt;dl class="tabs"&gt;
+  &lt;dt class="tab_active"&gt;Tab 1&lt;/dt&gt;
+  &lt;dd&gt;
+     &lt;div class="tab_content"&gt;
+        &lt;p&gt;Content for item 1&lt;/p&gt;
+        &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit.&lt;/p&gt;
+     &lt;/div&gt;
+  &lt;/dd&gt;
+  &lt;dt&gt;Tab 2&lt;/dt&gt;
+  &lt;dd&gt;
+     &lt;div class="tab_content"&gt;
+        &lt;p&gt;Content for item 2&lt;/p&gt;
+        &lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit.&lt;/p&gt;
+     &lt;/div&gt;
+  &lt;/dd&gt;
+&lt;/dl&gt;
+        </pre>
+       </div>
+      </dd>
+     </dl>
+
+     <dl class="tabs">
+      <dt class="tab_active">Адаптивная таблица</dt>
+      <dd>
+       <div class="tab_content">
+        <table class="tabl">
+         <thead>
+          <tr>
+           <th>Планета</th>
+           <th>Наклон оси</th>
+           <th>Спутники</th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+           <td>Меркурий</td>
+           <td>~0,01</td>
+           <td>0</td>
+          </tr>
+          <tr>
+           <td>Венера</td>
+           <td>177,36</td>
+           <td>2</td>
+          </tr>
+          <tr>
+           <td>Земля</td>
+           <td>23,439281</td>
+           <td>1</td>
+          </tr>
+         </tbody>
+        </table>
+       </div>
+      </dd>
+      <dt>Пример кода</dt>
+      <dd>
+       <div class="tab_content">
+        <pre>
+&lt;table class=&quot;tabl&quot;&gt;
+    &lt;thead&gt;
+        &lt;tr&gt;
+            &lt;th&gt;Планета&lt;/th&gt;
+            &lt;th&gt;Наклон оси&lt;/th&gt;
+            &lt;th&gt;Спутники&lt;/th&gt;
+        &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;
+        &lt;tr&gt;
+            &lt;td&gt;Меркурий&lt;/td&gt;
+            &lt;td&gt;~0,01&lt;/td&gt;
+            &lt;td&gt;0&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;Венера&lt;/td&gt;
+            &lt;td&gt;177,36&lt;/td&gt;
+            &lt;td&gt;2&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;Земля&lt;/td&gt;
+            &lt;td&gt;23,439281&lt;/td&gt;
+            &lt;td&gt;1&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/tbody&gt;
+&lt;/table&gt;
+        </pre>
+       </div>
+      </dd>
+     </dl>
+
+     <dl class="tabs">
+      <dt class="tab_active">Уведомления</dt>
+      <dd>
+       <div class="tab_content">
+        <p class="notific_r">class="notific_r"</p>
+        <p class="notific_y">class="notific_y"</p>
+        <p class="notific_g">class="notific_g"</p>
+        <p class="notific_b">class="notific_b"</p>
+       </div>
+      </dd>
+      <dt>Пример кода</dt>
+      <dd>
+       <div class="tab_content">
+        <pre>
+&lt;p class=&quot;notific_r&quot;&gt;class=&quot;notific_r&quot;&lt;/p&gt;
+&lt;p class=&quot;notific_y&quot;&gt;class=&quot;notific_y&quot;&lt;/p&gt;
+&lt;p class=&quot;notific_g&quot;&gt;class=&quot;notific_g&quot;&lt;/p&gt;
+&lt;p class=&quot;notific_b&quot;&gt;class=&quot;notific_b&quot;&lt;/p&gt;
+        </pre>
+       </div>
+      </dd>
+     </dl>
+
+     <dl class="tabs">
+      <dt class="tab_active">Всплывающая подсказка (tooltip)</dt>
+      <dd>
+       <div class="tab_content">
+        Особенность этой
+        <mark onmouseover="tt(this)">всплывающей подсказки</mark>
+        <pre class="tt">Привет, Мир!
+Это пример всплывающей подсказки,
+которая появляется потому, что в якоре,
+над которым сейчас расположен курсор,
+есть событие с вызовом функции
+onmouseover="tt(this)"</pre> в том, что:
+        <ul>
+         <li>она может быть вызвана по любому доступному событию на якоре</li>
+         <li>якорем может быть любой элемент</li>
+         <li>содержимое подсказки может содержать HTML</li>
+         <li>содержимое подсказки будет индексироваться поисковым роботом</li>
+         <li>скрытие подсказки допускается одним из трех событий</li>
+         <li>простой и акуратный код</li>
+        </ul>
+        Функция tt() запускается по событию, установленному в якоре и показывает\скрывает подсказку, которая должна быть "завернута" в строчном элементе (span, pre). Элемент с подсказкой должен следовать сразу после якоря, ему необходимо присвоить class="tt". Аргументы функции: первый — указатель на якорь (как правило "this"), второй — способ сокрытия подсказки ("с" — клик, "2с" — двойной клик).
+       </div>
+      </dd>
+      <dt>Пример кода</dt>
+      <dd>
+       <div class="tab_content">
+        <pre>
+&lt;ol&gt;
+    &lt;li&gt;Подсказка по умолчанию. Якорь &lt;mark onmouseover=&quot;tt(this)&quot;&gt;здесь&lt;/mark&gt;
+&lt;pre class=&quot;tt&quot;&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+Dolores, aliquid consequuntur harum, quia voluptatem&lt;/pre&gt;
+    &lt;/li&gt;
+    &lt;li&gt;Чтобы скрыть &lt;mark onmouseover=&quot;tt(this,&#39;c&#39;)&quot;&gt;эту подсказку&lt;/mark&gt;
+&lt;pre class=&quot;tt&quot;&gt;Чтобы скрыть эту подсказку кликните
+в любом месте. Это прегодится, например,
+если в подсказке будет &lt;a href=&quot;#&quot;&gt;ссылка&lt;/a&gt;
+или другой, подибный элемент взаимодействия&lt;/pre&gt;нужно кликнуть
+   &lt;/li&gt;
+    &lt;li&gt;&lt;mark onmouseover=&quot;tt(this,&#39;2c&#39;)&quot;&gt;Подсказка&lt;/mark&gt;
+&lt;pre class=&quot;tt&quot;&gt;Ну, вы прочли как ее скрыть.
+Кликайте дважды..)&lt;/pre&gt;в этом примере скрывается при двойном клике
+    &lt;/li&gt;
+    &lt;li&gt;А в &lt;mark onmouseover=&quot;tt(this)&quot;&gt;этой&lt;/mark&gt;
+&lt;pre class=&quot;tt&quot;&gt;&lt;h3&gt;Случайная картинка&lt;/h3&gt;
+&lt;img src=&quot;http://lorempixel.com/g/250/150&quot; alt=&quot;random&quot;&gt;&lt;/pre&gt;небольшой HTML-контент
+   &lt;/li&gt;
+    &lt;li&gt;Если что-то нужно разъяснить &lt;i class=&quot;fa-question-circle blue&quot; onclick=&quot;tt(this,&#39;2c&#39;)&quot;&gt;&lt;/i&gt;
+&lt;pre class=&quot;tt&quot;&gt;А что здесь разъяснять?
+Все предельно просто если посмотреть
+в исходный код этих примеров в вкладке
+&quot;Пример кода&quot;.&lt;/pre&gt;
+    &lt;/li&gt;
+&lt;/ol&gt;
+        </pre>
+       </div>
+      </dd>
+      <dt>Результат</dt>
+      <dd>
+       <div class="tab_content">
+        <ol>
+         <li>Подсказка по умолчанию. Якорь
+          <mark onmouseover="tt(this)">здесь</mark>
+          <pre class="tt">Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+Dolores, aliquid consequuntur harum, quia voluptatem</pre>
+         </li>
+         <li>Чтобы скрыть
+          <mark onmouseover="tt(this,'c')">эту подсказку</mark>
+          <pre class="tt">Чтобы скрыть эту подсказку кликните
+в любом месте. Это пригодится, например,
+если в подсказке будет <a href="#">ссылка</a>
+или другой подобный элемент взаимодействия</pre>нужно кликнуть
+         </li>
+         <li>
+          <mark onmouseover="tt(this,'2c')">Подсказка</mark>
+          <pre class="tt">Ну, вы прочли как ее скрыть.
+Кликайте дважды..)</pre>в этом примере скрывается при двойном клике
+         </li>
+         <li>А в
+          <mark onmouseover="tt(this)">этой</mark>
+          <pre class="tt"><b>Случайная картинка</b>
+<img src="http://lorempixel.com/g/250/150" alt="random"></pre>небольшой HTML-контент
+         </li>
+         <li>Если что-то нужно разъяснить <i class="fa-question-circle blue" onclick="tt(this,'2c')"></i>
+          <pre class="tt">А что здесь разъяснять?
+Все предельно просто, если посмотреть
+в исходный код этих примеров в вкладке
+"Пример кода".</pre>
+         </li>
+        </ol>
+       </div>
+      </dd>
+     </dl>
+
+     <dl class="tabs">
+      <dt class="tab_active">Модальные окна (popup)</dt>
+      <dd>
+       <div class="tab_content">
+        <p>Вызов модального окна может быть привязан к любому элементу:</p>
+        <p><button type="button" onclick="popup('pop')">Кнопка</button>
+        <a href="#" onclick="popup('pup');return false">Ссылка</a> и т.д.</p>
+        <p>Функция вызова popup() принимает один параметр — id елемента который станет модальным окном. поместите в него свой контент и присвойте ему class="popup"</p>
+        <div id="pop" class="popup">
+         <h3>Привет!</h3>
+         Окно активировано кнопкой.
+        </div>
+        <div id="pup" class="popup">
+         Окно активировано ссылкой.
+        </div>
+       </div>
+      </dd>
+      <dt>Пример кода</dt>
+      <dd>
+       <div class="tab_content">
+        <pre>
+&lt;button type=&quot;button&quot; onclick=&quot;popup(&#39;pop&#39;)&quot;&gt;Кнопка&lt;/button&gt;
+&lt;div id=&quot;pop&quot; class=&quot;popup&quot;&gt;
+ Привет, Мир!
+&lt;/div&gt;
+        </pre>
+       </div>
+      </dd>
+     </dl>
+
+     <dl class="tabs">
+      <dt class="tab_active">Формы</dt>
+      <dd>
+       <div class="tab_content">
+        <div class="row">
+         <div class="col6">
+          <label class="select">
+           <select name="options">
+            <option selected>Default select</option>
+            <option>Option1</option>
+            <option>Option2</option>
+            <option>Option3</option>
+           </select>
+          </label>
+          <label class="input">
+           default input
+           <input type="text">
+          </label>
+          <label class="textarea">
+           default textarea
+           <textarea></textarea>
+          </label>
+          <label class="input">
+           disabled input
+           <input type="text" disabled>
+          </label>
+          <label class="input">
+           class="novalid"
+           <input type="text" class="novalid">
+          </label>
+         </div>
+         <div class="col6">
+          <label class="checkbox">
+           <input type="checkbox" checked>
+           <span class="custom-checkbox"><i class="icon-check"></i></span> Option one
+          </label>
+          <label class="checkbox">
+           <input type="checkbox">
+           <span class="custom-checkbox"><i class="icon-check"></i></span> Option two
+          </label>
+          <label class="checkbox inline">
+           <input type="checkbox" checked>
+           <span class="custom-checkbox"><i class="icon-check"></i></span> Option inline one
+          </label>
+          <label class="checkbox inline">
+           <input type="checkbox">
+           <span class="custom-checkbox"><i class="icon-check"></i></span> Option inline two
+          </label>
+          <label class="radio">
+           <input type="radio" name="radio" checked>
+           <span class="custom-radio"></span> Option one
+          </label>
+          <label class="radio">
+           <input type="radio" name="radio">
+           <span class="custom-radio"></span> Option two
+          </label>
+          <label class="radio inline">
+           <input type="radio" name="radio_inline" checked>
+           <span class="custom-radio"></span> Option inline one
+          </label>
+          <label class="radio inline">
+           <input type="radio" name="radio_inline">
+           <span class="custom-radio"></span> Option inline two
+          </label>
+          <label class="radio inline">
+           <input type="radio" disabled checked>
+           <span class="custom-radio"></span> Disabled radio
+          </label>
+          <label class="checkbox inline">
+           <input type="checkbox" disabled checked>
+           <span class="custom-checkbox"><i class="icon-check"></i></span> Disabled checkbox
+          </label>
+          <label class="file">
+           <input type="file">
+           <span data-default="Выберите файл">Выберите файл</span>
+          </label>
+          <label class="range">
+           Default input type="range" Значение:
+           <span class="range_val">0</span>/10
+           <input type="range" min="0" value="0" max="10" step="1">
+          </label>
+         </div>
+        </div>
+        <div class="button">
+         <button type="button">button</button>
+         <input type="button" value="input button">
+         <a href="#" class="btn_lnk">&lt;a class="btn_lnk"&gt;&lt;/a&gt;</a>
+         <input type="submit" value="disabled button" disabled>
+        </div>
+       </div>
+      </dd>
+      <dt>Пример кода</dt>
+      <dd>
+       <div class="tab_content">
+        <pre>
+&lt;form action=&quot;&quot;&gt;
+    &lt;label class=&quot;input inline&quot;&gt;
+        Name
+        &lt;input type=&quot;text&quot;&gt;
+    &lt;/label&gt;
+    &lt;label class=&quot;input inline&quot;&gt;
+        E-mail
+        &lt;input type=&quot;email&quot;&gt;
+    &lt;/label&gt;
+    &lt;label class=&quot;select inline&quot;&gt;
+        &lt;select name=&quot;options&quot;&gt;
+            &lt;option selected&gt;Default select&lt;/option&gt;
+            &lt;option&gt;Option1&lt;/option&gt;
+            &lt;option&gt;Option2&lt;/option&gt;
+            &lt;option&gt;Option3&lt;/option&gt;
+        &lt;/select&gt;
+    &lt;/label&gt;
+    &lt;label class=&quot;textarea&quot;&gt;
+        Text
+        &lt;textarea&gt;&lt;/textarea&gt;
+    &lt;/label&gt;
+    &lt;label class=&quot;radio inline&quot;&gt;
+        &lt;input type=&quot;radio&quot;&gt;
+        &lt;span class=&quot;custom-radio&quot;&gt;&lt;/span&gt;
+        Option radio
+    &lt;/label&gt;
+    &lt;label class=&quot;checkbox inline&quot;&gt;
+        &lt;input type=&quot;checkbox&quot;&gt;
+        &lt;span class=&quot;custom-checkbox&quot;&gt;&lt;i class=&quot;icon-check&quot;&gt;&lt;/i&gt;&lt;/span&gt;
+        Option checkbox
+    &lt;/label&gt;
+    &lt;label class=&quot;file&quot;&gt;
+        &lt;input type=&quot;file&quot;&gt;
+        &lt;span data-default=&quot;Выберите файл&quot;&gt;Выберите файл&lt;/span&gt;
+    &lt;/label&gt;
+    &lt;label class=&quot;range inline&quot;&gt;
+        Default input type=&quot;range&quot; Значение:
+        &lt;span class=&quot;range_val&quot;&gt;0&lt;/span&gt;/10
+        &lt;input type=&quot;range&quot; min=&quot;0&quot; value=&quot;0&quot; max=&quot;10&quot; step=&quot;1&quot;&gt;
+    &lt;/label&gt;
+    &lt;div class=&quot;button&quot;&gt;
+        &lt;button type=&quot;button&quot;&gt;Default button&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/form&gt;
+        </pre>
+       </div>
+      </dd>
+      <dt>Результат</dt>
+      <dd>
+       <div class="tab_content">
+        <form action="">
+         <label class="input inline">
+          Name
+          <input type="text">
+         </label>
+         <label class="input inline">
+          E-mail
+          <input type="email">
+         </label>
+         <label class="select inline">
+          <select name="options">
+           <option selected>Default select</option>
+           <option>Option1</option>
+           <option>Option2</option>
+           <option>Option3</option>
+          </select>
+         </label>
+         <label class="textarea">
+          Text
+          <textarea></textarea>
+         </label>
+         <label class="radio inline">
+          <input type="radio">
+          <span class="custom-radio"></span> Option radio
+         </label>
+         <label class="checkbox inline">
+          <input type="checkbox">
+          <span class="custom-checkbox"><i class="icon-check"></i></span> Option checkbox
+         </label>
+         <label class="file">
+          <input type="file">
+          <span data-default="Выберите файл">Выберите файл</span>
+         </label>
+         <label class="range inline">
+          Default input type="range" Значение:
+          <span class="range_val">0</span>/10
+          <input type="range" min="0" value="0" max="10" step="1">
+         </label>
+         <div class="button">
+          <button type="button">Default button</button>
+         </div>
+        </form>
+       </div>
+      </dd>
+     </dl>
+
+     <dl class="tabs">
+      <dt class="tab_active">Лимит ввода</dt>
+      <dd>
+       <div class="tab_content">
+        <p>Если вы хотите ограничить количество символов, вводимых в поле, и показать пользователю, что лимит ограничен и сколько еще можно ввести — функция lim() поможет вам в этом. В теге input или textarea разместите onkeyup="lim(this,75)". Из аргументов здесь: "this" — указатель на обрабатываемое поле, "75" — лимит символов в данном случае.</p>
+        default input
+        <label class="input">
+         <input type="text" class="width80" placeholder="начните вводить символы" onkeyup="lim(this,75)">
+        </label>
+        default textarea
+        <label class="textarea">
+         <textarea class="width80" placeholder="начните вводить символы" onkeyup="lim(this,75)"></textarea>
+        </label>
+       </div>
+      </dd>
+      <dt>Пример кода</dt>
+      <dd>
+       <div class="tab_content">
+        <pre>
+default input
+&lt;label class=&quot;input&quot;&gt;
+    &lt;input type=&quot;text&quot; class=&quot;width80&quot; placeholder=&quot;начните вводить символы&quot; onkeyup=&quot;lim(this,75)&quot;&gt;
+&lt;/label&gt;
+default textarea
+&lt;label class=&quot;textarea&quot;&gt;
+    &lt;textarea class=&quot;width80&quot; placeholder=&quot;начните вводить символы&quot; onkeyup=&quot;lim(this,75)&quot;&gt;&lt;/textarea&gt;
+&lt;/label&gt;
+        </pre>
+       </div>
+      </dd>
+     </dl>
+
+     <dl class="tabs">
+      <dt class="tab_active">Меню</dt>
+      <dd>
+       <div class="tab_content">
+        <span class="mobile_menu noprint">&#8801;</span>
+        <nav>
+         <ul class="menu">
+          <li class="active"><a href="#">item1</a>
+          </li>
+          <li><span>item2</span>
+           <ul class="sub_menu">
+            <li><a href="#">sub item1</a>
+            </li>
+            <li><a href="#">sub item2</a>
+            </li>
+           </ul>
+          </li>
+          <li><a href="#">item3</a>
+           <ul class="sub_menu">
+            <li><a href="#">sub item1</a>
+            </li>
+            <li><a href="#">sub item2</a>
+             <ul class="sub_menu">
+              <li><a href="#">sub item1</a>
+              </li>
+              <li><a href="#">sub item2</a>
+              </li>
+             </ul>
+            </li>
+            <li><span>sub item3</span>
+            </li>
+           </ul>
+          </li>
+         </ul>
+        </nav>
+       </div>
+      </dd>
+      <dt>Пример кода</dt>
+      <dd>
+       <div class="tab_content">
+        <pre>
+&lt;span class=&quot;mobile_menu&quot;&gt;&#8801;&lt;/span&gt;
+&lt;nav&gt;
+    &lt;ul class=&quot;menu&quot;&gt;
+        &lt;li class=&quot;active&quot;&gt;&lt;a href=&quot;#&quot;&gt;item1&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;span&gt;item2&lt;/span&gt;
+            &lt;ul class=&quot;sub_menu&quot;&gt;
+                &lt;li&gt;&lt;a href=&quot;#&quot;&gt;sub item1&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href=&quot;#&quot;&gt;sub item2&lt;/a&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;#&quot;&gt;item3&lt;/a&gt;
+            &lt;ul class=&quot;sub_menu&quot;&gt;
+                &lt;li&gt;&lt;a href=&quot;#&quot;&gt;sub item1&lt;/a&gt;&lt;/li&gt;
+                &lt;li&gt;&lt;a href=&quot;#&quot;&gt;sub item2&lt;/a&gt;
+                    &lt;ul class=&quot;sub_menu&quot;&gt;
+                        &lt;li&gt;&lt;a href=&quot;#&quot;&gt;sub item1&lt;/a&gt;&lt;/li&gt;
+                        &lt;li&gt;&lt;a href=&quot;#&quot;&gt;sub item2&lt;/a&gt;&lt;/li&gt;
+                    &lt;/ul&gt;
+                &lt;/li&gt;
+                &lt;li&gt;&lt;span&gt;sub item3&lt;/span&gt;&lt;/li&gt;
+            &lt;/ul&gt;
+        &lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/nav&gt;
+        </pre>
+       </div>
+      </dd>
+     </dl>
+
+    </div>
+   </div>
+  </div>
+  <!--content-->
+  <footer class="algn_c" id="copy">
+   Веб-разработка и дизайн
+   <a href="mailto:kroloburet@gmail.com">
+    <img src="img/kroloburet_18_18.jpeg" alt="Web development and design"> kroloburet@gmail.com
+   </a><br>
+    <img src="img/logo_tagra_18_18.svg" alt="Tagra CMS"> Tagra CMS
+  </footer>
+ </body>
+
+</html>
