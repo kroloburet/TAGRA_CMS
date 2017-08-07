@@ -10,7 +10,7 @@
 <?php if(!empty($img_prev)){//метатеги для соцсетей?>
 <meta itemprop="image" content="<?=$img_prev//картинка для google+?>">
 <meta property="og:image" content="<?=$img_prev//картинка для facebook?>">
-<meta name="twitter:image:src" content="<?=$img_prev//картинка для twitter?>"/>
+<meta name="twitter:image:src" content="<?=$img_prev//картинка для twitter?>">
 <link rel="image_src" href="<?=$img_prev//картинка для vk?>">
 <?php }?>
 <title><?=$title?> | <?=$conf_site_name?></title>
