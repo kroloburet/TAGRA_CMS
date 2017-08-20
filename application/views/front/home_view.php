@@ -1,5 +1,5 @@
 <!--####### Headline #######-->
-<div id="headline" class="clear">
+<div id="headline">
 <h1><?=$title?></h1>
 <?php if($conf_addthis_share&&$addthis_share=='on'){?>
 <div class="addthis_layout noprint"><?=$conf_addthis_share?></div>

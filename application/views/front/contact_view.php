@@ -1,7 +1,7 @@
 <!--####### Headline #######-->
-<div id="headline" class="clear">
+<div id="headline">
  <h1><?=$title?></h1>
- <div class="algn_r noprint">
+ <div class="noprint">
   <button type="button" class="fa fa-print" id="print_btn" onclick="window.print();">&nbsp;Печатать</button>
  </div>
 </div>
@@ -53,8 +53,8 @@
  $gps_=explode(',',$gps);
  $gps_[0]=round($gps_[0],6);
  $gps_[1]=round($gps_[1],6);
- ?><p><b>GPS-координаты (широта, долгота): </b><span class="num"><?=$gps_[0].', '.$gps_[1]?></span></p><?php }?>
-<?php if($address&&$gps){?>
+ ?>
+ <p><b>GPS-координаты (широта, долгота): </b><span class="num"><?=$gps_[0].', '.$gps_[1]?></span></p>
  <div id="map" style="height:500px;"></div>
  <p class="algn_r noprint">
   <a href="https://www.google.com.ua/maps/place/<?=$gps?>" target="_blank" class="fa fa-map-marker">&nbsp;показать на большой карте</a>
@@ -128,8 +128,8 @@ window.addEventListener('load',function(){
  });
 });
 </script>
-<?php }if($address&&$gps){//если нужна карта"?>
-<script src="http://maps.googleapis.com/maps/api/js?language=ru" defer></script>
+<?php }if($address||$gps){//если нужна карта"?>
+<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDdOpnwYxfTmWEIYDqbU4_4lrWfD9v_TUI&language=ru" defer></script>
 <script>
 function initialize(){
  var LL='<?=$gps?>'.split(','),//разобрать строку до и после запятой и записать в массив

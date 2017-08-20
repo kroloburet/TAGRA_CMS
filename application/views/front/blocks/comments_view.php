@@ -32,8 +32,8 @@ if($c>0){//есть комментарии
 <?php }?>
 
 <!--####### Форма для комментирования #######-->
-<h2>Комментировать</h2>
 <div id="add_comment" class="noprint">
+<h2>Комментировать</h2>
 <form id="add_com">
 <label class="input">
 <input type="text" name="name" onkeyup="lim(this,50)" placeholder="Ваше имя">

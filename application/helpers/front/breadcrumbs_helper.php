@@ -23,9 +23,9 @@ if(!function_exists('breadcrumbs')){
    if($seg1==='section'){
     $q=$CI->front_basic_model->get_where_alias($prefix.'_sections',$seg2);//получаю выборку по алиасу
     if(!$q['section']){//если родителя нет
-     echo '<ul id="breadcrumbs">'.$home.'<li class="bc_end">'.$q['title'].PHP_EOL.'</ul>'.PHP_EOL;
+     echo '<ul id="breadcrumbs" class="noprint">'.$home.'<li class="bc_end">'.$q['title'].PHP_EOL.'</ul>'.PHP_EOL;
     }else{//если есть родитель
-     echo '<ul id="breadcrumbs">'.$home;
+     echo '<ul id="breadcrumbs" class="noprint">'.$home;
      sctn_path($q['section']);
      echo '<li class="bc_end">'.$q['title'].PHP_EOL.'</ul>'.PHP_EOL;
     }
@@ -34,9 +34,9 @@ if(!function_exists('breadcrumbs')){
    if($seg1==='gallery'){
     $q=$CI->front_basic_model->get_where_alias($prefix.'_gallerys',$seg2);//получаю выборку по алиасу
     if(!$q['section']){//если родителя нет
-     echo '<ul id="breadcrumbs">'.$home.'<li class="bc_end">'.$q['title'].PHP_EOL.'</ul>'.PHP_EOL;
+     echo '<ul id="breadcrumbs" class="noprint">'.$home.'<li class="bc_end">'.$q['title'].PHP_EOL.'</ul>'.PHP_EOL;
     }else{//если есть родитель
-     echo '<ul id="breadcrumbs">'.$home;
+     echo '<ul id="breadcrumbs" class="noprint">'.$home;
      sctn_path($q['section']);
      echo '<li class="bc_end">'.$q['title'].PHP_EOL.'</ul>'.PHP_EOL;
     }
@@ -45,9 +45,9 @@ if(!function_exists('breadcrumbs')){
    if($seg1!=='section'&&$seg1!=='gallery'){
     $q=$CI->front_basic_model->get_where_alias($prefix.'_pages',$seg1);//получаю выборку по алиасу
     if(!$q['section']){//если родителя нет
-     echo '<ul id="breadcrumbs">'.$home.'<li class="bc_end">'.$q['title'].PHP_EOL.'</ul>'.PHP_EOL;
+     echo '<ul id="breadcrumbs" class="noprint">'.$home.'<li class="bc_end">'.$q['title'].PHP_EOL.'</ul>'.PHP_EOL;
     }else{//если есть родитель
-     echo '<ul id="breadcrumbs">'.$home;
+     echo '<ul id="breadcrumbs" class="noprint">'.$home;
      sctn_path($q['section']);
      echo '<li class="bc_end">'.$q['title'].PHP_EOL.'</ul>'.PHP_EOL;
     }

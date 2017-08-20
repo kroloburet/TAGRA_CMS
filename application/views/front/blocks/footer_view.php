@@ -18,7 +18,7 @@
 </div>
 </div>
 </footer>
-<div id="scrol_btn" onclick="scrll('body');" class="fa-angle-up"></div>
+<div id="scrol_btn" onclick="scrll('body');" class="fa-angle-up noprint"></div>
 
 <!--####### Отложенная загрузка CSS #######-->
 <script>

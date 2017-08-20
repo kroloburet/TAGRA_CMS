@@ -19,9 +19,7 @@ Developer:Sergey Nizhnik kroloburet@gmail.com
 #breadcrumbs li.bc_end:after,#breadcrumbs li.bc_end:before{display:none}
 
 /*------------------------------------------------------------------------------headline*/
-#headline{margin:0;padding:0;zoom:1}
-#headline h1{float:left}
-.addthis_layout{text-align:right}
+#headline{margin:0;padding:0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;}
 
 /*------------------------------------------------------------------------------content & layouts*/
 #content{padding:0 1%;margin:0 auto}
