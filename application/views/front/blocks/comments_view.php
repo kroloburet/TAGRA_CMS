@@ -2,7 +2,7 @@
 $CI=&get_instance();
 $prefix=$CI->config->item('db_tabl_prefix');
 $url=uri_string();
-$q=$CI->db->order_by('id','DESC')->where(array('public'=>'on','url'=>$url))->get($prefix.'_comments')->result_array();//выборка комментов
+$q=$CI->db->order_by('id','DESC')->where(array('public'=>'on','url'=>$url))->get($prefix.'comments')->result_array();//выборка комментов
 $c=count($q);//количество комментов
 $vsbl=3;//количество первых (не скрытых)
 if($c>0){//есть комментарии

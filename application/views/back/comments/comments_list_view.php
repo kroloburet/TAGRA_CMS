@@ -98,7 +98,7 @@
    <td>
     <a href="<?=base_url($item['url'])?>" target="_blank" class="fa fa-external-link" title="Перейти на страницу"></a>&nbsp;&nbsp;
     <span class="blue fa fa-info-circle" onmouseover="tt(this);"></span><pre class="tt" style="max-width:400px;white-space:normal;"><?=$item['comment']?></pre>&nbsp;&nbsp;
-    <a href="#" class="fa fa-trash-o red" title="Удалить" onclick="del_tab(this,<?=$item['id']?>,'<?=$prefix?>_comments');return false"></a>
+    <a href="#" class="fa fa-trash-o red" title="Удалить" onclick="del_tab(this,<?=$item['id']?>,'<?=$prefix?>comments');return false"></a>
    </td>
   </tr>
   <?php }?>

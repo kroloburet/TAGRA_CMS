@@ -1,5 +1,5 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
-include(APPPATH.'controllers/Back_basic_control.php');
+include_once(APPPATH.'controllers/Back_basic_control.php');
 
 ///////////////////////////////////
 //работа с галереями
@@ -39,14 +39,14 @@ class Back_gallery_control extends Back_basic_control{
 
  function edit_form($id){
   $this->_is_login()?TRUE:redirect('admin/login');
-  $data=array_merge($this->conf,$this->back_basic_model->get_where_id($this->_prefix().'_gallerys',$id));//соединение массивов
+  $data=array_merge($this->conf,$this->back_basic_model->get_where_id($this->_prefix().'gallerys',$id));//соединение массивов
   $data['conf_title']='Редактировать галерею';
   $this->_viewer('back/gallerys/gallerys_edit_form_view',$data);
  }
 
  function add(){//добавление галереи
   $this->_is_login()?TRUE:redirect('admin/login');
-  $this->back_basic_model->add(array_map('trim', $this->input->post()),$this->_prefix().'_gallerys');//убираем пробелы в начале и в конце
+  $this->back_basic_model->add(array_map('trim', $this->input->post()),$this->_prefix().'gallerys');//убираем пробелы в начале и в конце
   ($this->conf['sitemap']['generate']==='auto')?$this->sitemap_generator():FALSE;//если карта сайта должна генерироваться автоматически
   redirect('admin/gallery/get_list');
  }

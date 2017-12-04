@@ -313,8 +313,8 @@ AddType text/vtt                            vtt
 # закомментировать ее и использовать `Options +SymLinksIfOwnerMatch`, но будьте в курсе
 # возможного изменения производительности: http://httpd.apache.org/docs/2.4/misc/perf-tuning.html#symlinks
 <IfModule mod_rewrite.c>
-  Options +FollowSymlinks
-# Options +SymLinksIfOwnerMatch
+# Options +FollowSymlinks
+  Options +SymLinksIfOwnerMatch
   RewriteEngine On
 </IfModule>
 

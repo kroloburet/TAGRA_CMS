@@ -1,5 +1,5 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
-include(APPPATH.'controllers/Back_basic_control.php');
+include_once(APPPATH.'controllers/Back_basic_control.php');
 
 ///////////////////////////////////
 //работа с главной страницей

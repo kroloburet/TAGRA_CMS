@@ -19,15 +19,16 @@
    <h1>Статус выполнения установки системы</h1>
 <?php
 
-//убираем пробелы в начале и в конце
-$_POST=array_map('trim',$_POST);
+$_POST=array_map('trim',$_POST);//убираем пробелы в начале и в конце
+$moment=date('Y-m-d H:i:s');//текущая дата и время
+$ip=$_SERVER["REMOTE_ADDR"];//текущий IP
 
 //база данных
 $db_name=$_POST['db_name'];
 $db_host=$_POST['db_host'];
 $db_user=$_POST['db_user'];
 $db_pass=$_POST['db_pass'];
-$db_tabl_prefix=$_POST['db_tabl_prefix'];
+$db_tabl_prefix=$_POST['db_tabl_prefix'].'_';
 
 //Начальные установки системы
 $site_name=$_POST['site_name'];
@@ -50,7 +51,7 @@ $moder_name=crypt($_POST['moder_name'],$moder_salt);
 $moder_pass=crypt($_POST['moder_pass'],$moder_salt);
 
 //сообщения пользователю
-$good_msg='<h2 style="margin-top:1.5em">Отлично, вы установили систему!</h2>Теперь, с целью безопасности системы, удалите папку <b>instal/</b> со всем ее содержимым,<br>установите права (755) на папки:<ul><li><b>application/</b></li><li><b>application/config/</b></li><li><b>scripts/</b></li><li><b>scripts/back/</b></li></ul>права (644) на файлы:<ul><li><b>application/config/config.php</b></li><li><b>application/config/database.php</b></li><li><b>scripts/back/overall_js.js</b></li></ul> Для работы файлового менеджера установите права на папку <b>upload/ (777)</b>, а для генерирования карты сайта — права на файл <b>sitemap.xml (777)</b><br>Вот и все. Скорее жмите кнопку «На главную страницу»..)<p>Да, вот еще что! Часто бывает, что систему нужно расширять, модифицировать под ваши персональные нужды для повышения эффективности и конверсии сайта. Поэтому, и в целях скромной саморекламы, я, как разработчик системы, внизу страниц сайта оставил свой email, по которому со мной всегда можно связаться — пожалуйта, не удаляйте его. Приятного использования!</p><a href="'.$domen.'" class="btn">На главную страницу</a>';
+$good_msg='<h2 style="margin-top:1.5em">Отлично, вы установили систему!</h2>Теперь, с целью безопасности системы, удалите папку <b>instal/</b> со всем ее содержимым,<br>установите права (755) на папки:<ul><li><b>application/</b></li><li><b>application/config/</b></li></ul>права (644) на файлы:<ul><li><b>application/config/config.php</b></li><li><b>application/config/database.php</b></li></ul> Для работы файлового менеджера установите права на папку <b>upload/ (777)</b>, а для генерирования карты сайта — права на файл <b>sitemap.xml (777)</b><br>Вот и все. Скорее жмите кнопку «На главную страницу»..)<p>Да, вот еще что! Часто бывает, что систему нужно расширять, модифицировать под ваши персональные нужды для повышения эффективности и конверсии сайта. Поэтому, и в целях скромной саморекламы, я, как разработчик системы, внизу страниц сайта оставил свой email, по которому со мной всегда можно связаться — пожалуйта, не удаляйте его. Приятного использования!</p><a href="'.$domen.'" class="btn">На главную страницу</a>';
 $bad_msg='<h2 style="margin-top:1.5em">Упс! Что-то пошло не так..(</h2><p>Вы можете повторить попытку, нажав кнопку «Попробовать снова», или обратиться к разработчику по e-mail: <a href="mailto:kroloburet@gmail.com">kroloburet@gmail.com</a></p><a href="index.php" class="btn">Попробовать снова</a>';
 $index_promo='<div class="row"><div class="col2 algn_c"><img src="'.$domen.'img/logo_tagra.svg" alt="Tagra CMS" title="Tagra CMS"></div><div class="col7"><p>Добро пожаловать в систему управления контентом &laquo;Tagra&raquo;!<br> Итак. Для быстрого старта вашего сайта &mdash; <a href="'.$domen.'admin/">зайдите в админку</a>, используя логин и пароль, созданный вами при установке системы, и начинайте творить..) Но прежде, чтобы облегчить работу с самой системой и верстку контента для вашего сайта, я предлагаю <a href="'.$domen.'UI_fraimwork/info.html" target="_blank">краткое знакомство с системой</a></p></div></div>
 ';
@@ -68,7 +69,7 @@ echo "<div class='notific_g'>Соединение с базой « $db_name » �
 //создаем таблицы:
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////_sessions
-$t=$db_tabl_prefix.'_sessions';
+$t=$db_tabl_prefix.'sessions';
 @mysql_query("CREATE TABLE IF NOT EXISTS `$t` (
   `id` varchar(40) NOT NULL,
   `ip_address` varchar(45) NOT NULL,
@@ -80,7 +81,7 @@ or die("<div class='notific_r'>Не удалось создать таблицу
 echo "<div class='notific_g'>Таблица « $t » успешно создана</div>";
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////_comments
-$t=$db_tabl_prefix.'_comments';
+$t=$db_tabl_prefix.'comments';
 @mysql_query("CREATE TABLE IF NOT EXISTS `$t` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `premod_code` text NOT NULL,
@@ -89,13 +90,12 @@ $t=$db_tabl_prefix.'_comments';
   `name` varchar(300) NOT NULL,
   `comment` longtext NOT NULL,
   `public` varchar(20) NOT NULL DEFAULT 'off',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;")
+  PRIMARY KEY (`id`));")
 or die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".mysql_error()."</div>".$bad_msg);
 echo "<div class='notific_g'>Таблица « $t » успешно создана</div>";
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////_gallerys
-$t=$db_tabl_prefix.'_gallerys';
+$t=$db_tabl_prefix.'gallerys';
 @mysql_query("CREATE TABLE IF NOT EXISTS `$t` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `alias` text NOT NULL,
@@ -118,13 +118,12 @@ $t=$db_tabl_prefix.'_gallerys';
   `img_prev` text NOT NULL,
   `comments` varchar(20) NOT NULL DEFAULT 'off',
   `public` varchar(20) NOT NULL DEFAULT 'on',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;")
+  PRIMARY KEY (`id`));")
 or die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".mysql_error()."</div>".$bad_msg);
 echo "<div class='notific_g'>Таблица « $t » успешно создана</div>";
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////_sections
-$t=$db_tabl_prefix.'_sections';
+$t=$db_tabl_prefix.'sections';
 @mysql_query("CREATE TABLE IF NOT EXISTS `$t`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `alias` text NOT NULL,
@@ -145,13 +144,12 @@ $t=$db_tabl_prefix.'_sections';
   `img_prev` text NOT NULL,
   `comments` varchar(20) NOT NULL DEFAULT 'off',
   `public` varchar(20) NOT NULL DEFAULT 'on',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;")
+  PRIMARY KEY (`id`));")
 or die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".mysql_error()."</div>".$bad_msg);
 echo "<div class='notific_g'>Таблица « $t » успешно создана</div>";
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////_pages
-$t=$db_tabl_prefix.'_pages';
+$t=$db_tabl_prefix.'pages';
 @mysql_query("CREATE TABLE IF NOT EXISTS `$t` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `alias` text NOT NULL,
@@ -172,13 +170,12 @@ $t=$db_tabl_prefix.'_pages';
   `img_prev` text NOT NULL,
   `comments` varchar(20) NOT NULL DEFAULT 'off',
   `public` varchar(20) NOT NULL DEFAULT 'on',
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;")
+  PRIMARY KEY (`id`));")
 or die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".mysql_error()."</div>".$bad_msg);
 echo "<div class='notific_g'>Таблица « $t » успешно создана</div>";
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////_menu
-$t=$db_tabl_prefix.'_menu';
+$t=$db_tabl_prefix.'menu';
 @mysql_query("CREATE TABLE IF NOT EXISTS `$t` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `pid` bigint(20) NOT NULL,
@@ -187,14 +184,14 @@ $t=$db_tabl_prefix.'_menu';
   `target` varchar(20) NOT NULL DEFAULT '_self',
   `order` int(20) NOT NULL,
   `public` varchar(20) NOT NULL DEFAULT 'on',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;")
+  PRIMARY KEY (`id`));")
 or die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".mysql_error()."</div>".$bad_msg);
 echo "<div class='notific_g'>Таблица « $t » успешно создана</div>";
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////_index_page
-$t=$db_tabl_prefix.'_index_page';
+$t=$db_tabl_prefix.'index_page';
 $q_c=@mysql_query("CREATE TABLE IF NOT EXISTS `$t` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `title` text NOT NULL,
   `description` text NOT NULL,
   `robots` varchar(100) NOT NULL DEFAULT 'all',
@@ -208,8 +205,8 @@ $q_c=@mysql_query("CREATE TABLE IF NOT EXISTS `$t` (
   `links` text NOT NULL,
   `addthis_share` varchar(20) NOT NULL DEFAULT 'off',
   `addthis_follow` varchar(20) NOT NULL DEFAULT 'off',
-  `img_prev` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+  `img_prev` text NOT NULL,
+  PRIMARY KEY (`id`));");
 $q_i=@mysql_query("INSERT INTO `$t` (`title`, `description`, `robots`, `css`, `js`, `layout_t`, `layout_l`, `layout_r`, `layout_b`, `layout_l_width`, `links`, `addthis_share`, `addthis_follow`) VALUES
 ('Привет, Мир!', 'Привет, Мир!', 'all', '', '', '$index_promo', '', '', '', 60, '',  'off', 'off');");
 if(!$q_c && !$q_i){
@@ -218,8 +215,9 @@ die("<div class='notific_r'>Не удалось создать таблицу «
 echo "<div class='notific_g'>Таблица « $t » успешно создана</div>";
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////_contact_page
-$t=$db_tabl_prefix.'_contact_page';
+$t=$db_tabl_prefix.'contact_page';
 $q_c=@mysql_query("CREATE TABLE IF NOT EXISTS `$t` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `title` text NOT NULL,
   `description` text NOT NULL,
   `robots` varchar(100) NOT NULL DEFAULT 'all',
@@ -231,77 +229,77 @@ $q_c=@mysql_query("CREATE TABLE IF NOT EXISTS `$t` (
   `skype` text NOT NULL,
   `qr` text NOT NULL,
   `address` text NOT NULL,
-  `gps` text NOT NULL,
   `addthis_share` varchar(20) NOT NULL DEFAULT 'off',
   `addthis_follow` varchar(20) NOT NULL DEFAULT 'off',
-  `contact_form` varchar(20) NOT NULL DEFAULT 'on'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-$q_i=@mysql_query("INSERT INTO `$t` (`title`, `description`, `robots`, `css`, `js`, `layout_t`, `mail`, `tel`, `skype`, `qr`, `address`, `gps`, `addthis_share`, `addthis_follow`, `contact_form`) VALUES
-('Контакты', 'Мои контакты', 'all', '', '', '', '$admin_mail', '', '', '', '', '', 'off', 'off', 'on');");
+  `contact_form` varchar(20) NOT NULL DEFAULT 'on',
+  PRIMARY KEY (`id`));");
+$q_i=@mysql_query("INSERT INTO `$t` (`title`, `description`, `robots`, `css`, `js`, `layout_t`, `mail`, `tel`, `skype`, `qr`, `address`, `addthis_share`, `addthis_follow`, `contact_form`) VALUES
+('Контакты', 'Мои контакты', 'all', '', '', '', '$admin_mail', '', '', '', '', 'off', 'off', 'on');");
 if(!$q_c && !$q_i){
 die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".mysql_error()."</div>".$bad_msg);
 }
 echo "<div class='notific_g'>Таблица « $t » успешно создана</div>";
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////_my_config
-$t=$db_tabl_prefix.'_my_config';
+$t=$db_tabl_prefix.'my_config';
 $q_c=@mysql_query("CREATE TABLE IF NOT EXISTS `$t` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` text NOT NULL,
   `value` text NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=17;");
-$q_i=@mysql_query("INSERT INTO `$t` (`id`, `name`, `value`) VALUES
-(1, 'conf_site_access', 'on'),
-(2, 'conf_jq', 'https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'),
-(3, 'conf_site_name', '$site_name'),
-(4, 'conf_site_mail', '$admin_mail'),
-(5, 'conf_body_width', '1000'),
-(6, 'conf_layout_l_width', '60'),
-(7, 'conf_addthis_js', ''),
-(8, 'conf_addthis_share', ''),
-(9, 'conf_addthis_follow', ''),
-(10, 'conf_addthis_share_def', 'off'),
-(11, 'conf_addthis_follow_def', 'off'),
-(12, 'conf_breadcrumbs_public', 'on'),
-(13, 'conf_breadcrumbs_home', 'Home'),
-(14, 'conf_emmet', 'off'),
-(15, 'conf_comment_notific', 'off');");
+  PRIMARY KEY (`id`));");
+$q_i=@mysql_query("INSERT INTO `$t` (`name`, `value`) VALUES
+('conf_site_access', 'on'),
+('conf_jq', 'https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'),
+('conf_site_name', '$site_name'),
+('conf_site_mail', '$admin_mail'),
+('conf_body_width', '1000'),
+('conf_layout_l_width', '60'),
+('conf_addthis_js', ''),
+('conf_addthis_share', ''),
+('conf_addthis_follow', ''),
+('conf_addthis_share_def', 'off'),
+('conf_addthis_follow_def', 'off'),
+('conf_breadcrumbs_public', 'on'),
+('conf_breadcrumbs_home', 'Home'),
+('conf_emmet', 'off'),
+('conf_comment_notific', 'off');");
 if(!$q_c && !$q_i){
 die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".mysql_error()."</div>".$bad_msg);
 }
 echo "<div class='notific_g'>Таблица « $t » успешно создана</div>";
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////_sitemap_config
-$t=$db_tabl_prefix.'_sitemap_config';
+$t=$db_tabl_prefix.'sitemap_config';
 $q_c=@mysql_query("CREATE TABLE IF NOT EXISTS `$t` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` text NOT NULL,
   `value` text NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=3;");
-$q_i=@mysql_query("INSERT INTO `$t` (`id`, `name`, `value`) VALUES
-(1, 'allowed', 'all'),
-(2, 'generate', 'auto');");
+  PRIMARY KEY (`id`));");
+$q_i=@mysql_query("INSERT INTO `$t` (`name`, `value`) VALUES
+('allowed', 'all'),
+('generate', 'auto');");
 if(!$q_c && !$q_i){
 die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".mysql_error()."</div>".$bad_msg);
 }
 echo "<div class='notific_g'>Таблица « $t » успешно создана</div>";
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////_back_users
-$t=$db_tabl_prefix.'_back_users';
+$t=$db_tabl_prefix.'back_users';
 $q_c=@mysql_query("CREATE TABLE IF NOT EXISTS `$t` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `ip` varchar(200) NOT NULL,
   `status` varchar(200) NOT NULL,
-  `login` varchar(200) NOT NULL,
-  `password` varchar(200) NOT NULL,
+  `login` text NOT NULL,
+  `password` text NOT NULL,
   `salt` text NOT NULL,
   `email` text NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=3;");
-$q_i=@mysql_query("INSERT INTO `$t` (`id`, `status`, `login`, `password`, `salt`, `email`) VALUES
-(1, 'administrator', '$admin_name', '$admin_pass', '$admin_salt', '$admin_mail'),
-(2, 'moderator', '$moder_name', '$moder_pass', '$moder_salt', '$moder_mail');");
+  `register_date` varchar(20) NOT NULL,
+  `last_mod_date` varchar(20) NOT NULL,
+  `last_login_date` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`));");
+$q_i=@mysql_query("INSERT INTO `$t` (`ip`, `status`, `login`, `password`, `salt`, `email`, `register_date`) VALUES
+('$ip', 'administrator', '$admin_name', '$admin_pass', '$admin_salt', '$admin_mail', '$moment'),
+('$ip', 'moderator', '$moder_name', '$moder_pass', '$moder_salt', '$moder_mail', '$moment');");
 if(!$q_c && !$q_i){
 die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".mysql_error()."</div>".$bad_msg);
 }
@@ -312,17 +310,16 @@ echo "<div class='notific_g'>Таблица « $t » успешно создан
 $cms_path=str_replace('/instal', '', dirname(__FILE__));//абсолютный путь к директории с CMS
 $f1='/application/config/config.php';
 $f2='/application/config/database.php';
-$f3='/scripts/back/overall_js.js';
 $fp1 = fopen($cms_path.$f1, 'a');
 $fp2 = fopen($cms_path.$f2, 'a');
-$fp3 = fopen($cms_path.$f3, 'a');
 
 ftruncate($fp1, 0);//очищаем файл config.php
 ftruncate($fp2, 0);//очищаем файл database.php
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////config.php
 $conf = '<?php defined("BASEPATH") OR exit("No direct script access allowed");'.PHP_EOL
-        . '$config["tagra_version"] = "1.1";'.PHP_EOL
+        . '$config["tagra_version"] = "1.2";'.PHP_EOL
+        . '$config["tagra_instal_date"] = \''.$moment.'\';'.PHP_EOL
         . '$config["base_url"] = \''.$domen.'\';'.PHP_EOL
         . '$config["db_tabl_prefix"] = \''.$db_tabl_prefix.'\';'.PHP_EOL
         . '$config["index_page"] = "";'.PHP_EOL
@@ -349,7 +346,7 @@ $conf = '<?php defined("BASEPATH") OR exit("No direct script access allowed");'.
         . '$config["cache_query_string"] = FALSE;'.PHP_EOL
         . '$config["encryption_key"] = "'.uniqid('Kroloburet_').'";'.PHP_EOL
         . '$config["sess_driver"] = "database";'.PHP_EOL
-        . '$config["sess_save_path"] = \''.$db_tabl_prefix.'_sessions\';'.PHP_EOL
+        . '$config["sess_save_path"] = \''.$db_tabl_prefix.'sessions\';'.PHP_EOL
         . '$config["sess_cookie_name"] = "tagra_session";'.PHP_EOL
         . '$config["sess_expiration"] = 0;'.PHP_EOL
         . '$config["sess_match_ip"]	= FALSE;'.PHP_EOL
@@ -397,11 +394,6 @@ $conf_db = '<?php defined("BASEPATH") OR exit("No direct script access allowed")
         . '$db["default"]["failover"] = array();'.PHP_EOL
         . '$db["default"]["save_queries"] = TRUE;';
 
-///////////////////////////////////////////////////////////////////////////////////////////////////overall_js.js
-$js = '////////////////////////////////////////////////КОНФИГУРАЦИОННЫЕ ПЕРЕМЕННЫЕ'.PHP_EOL
-      . 'base_url="'.$domen.'";'.PHP_EOL
-    . '////////////////////////////////////////////////КОНФИГУРАЦИОННЫЕ ПЕРЕМЕННЫЕ';
-
 if (!fwrite($fp1, $conf)){
 die("<div class='notific_r'>Не удалось записать $f1</div>".$bad_msg);
 }
@@ -412,11 +404,6 @@ die("<div class='notific_r'>Не удалось записать $f2</div>".$bad
 }
 echo "<div class='notific_g'>Файл $f2 успешно записан</div>";
 fclose($fp2);
-if (!fwrite($fp3, PHP_EOL.$js)){
-die("<div class='notific_r'>Не удалось записать $f3</div>".$bad_msg);
-}
-echo "<div class='notific_g'>Файл $f3 успешно записан</div>";
-fclose($fp3);
 echo $good_msg;
 ?>
    

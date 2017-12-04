@@ -10,7 +10,7 @@ class Front_comment_model extends Front_basic_model{
  }
 
  function add_comment($data=array()){
-  return $this->db->insert($this->_prefix().'_comments',$data)?TRUE:FALSE;
+  return $this->db->insert($this->_prefix().'comments',$data)?TRUE:FALSE;
  }
 
 }

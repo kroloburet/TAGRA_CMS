@@ -2,9 +2,9 @@
 /////////////////////////////////////////////////////////////////
 $CI=&get_instance();
 $prefix=$this->config->item('db_tabl_prefix');
-$pages=$CI->db->select('title,alias,section')->order_by('title','ASC')->get($prefix.'_pages')->result_array();
-$sections=$CI->db->select('title,alias,section')->order_by('title','ASC')->get($prefix.'_sections')->result_array();
-$gallerys=$CI->db->select('title,alias,section')->order_by('title','ASC')->get($prefix.'_gallerys')->result_array();
+$pages=$CI->db->select('title,alias,section')->order_by('title','ASC')->get($prefix.'pages')->result_array();
+$sections=$CI->db->select('title,alias,section')->order_by('title','ASC')->get($prefix.'sections')->result_array();
+$gallerys=$CI->db->select('title,alias,section')->order_by('title','ASC')->get($prefix.'gallerys')->result_array();
 ?>
 
 <script src="<?=base_url('scripts/tinymce_4.6.1/tinymce.min.js')?>"></script>

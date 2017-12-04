@@ -10,6 +10,7 @@ class Front_basic_control extends CI_Controller{
   parent::__construct();
   $this->load->model('front_basic_model');
   $this->conf=$this->front_basic_model->my_config_data();
+  $this->conf['conf_site_access']==='off'?redirect('plug.html'):TRUE;//если сайт закрыт в конфигурации - напрвляю на страницу-заглушку
  }
 
  function _prefix(){//получение префикса таблиц базы данных из конфигурационного файла

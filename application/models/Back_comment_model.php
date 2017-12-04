@@ -10,15 +10,15 @@ class Back_comment_model extends Back_basic_model{
  }
 
  function get_new_comments(){
-  return $this->db->where('public','off')->get($this->_prefix().'_comments')->result_array();
+  return $this->db->where('public','off')->get($this->_prefix().'comments')->result_array();
  }
 
  function del_new_comment($id){
-  $this->db->where('id',$id)->delete($this->_prefix().'_comments');
+  $this->db->where('id',$id)->delete($this->_prefix().'comments');
  }
 
  function public_new_comment($id){
-  $this->db->where('id',$id)->update($this->_prefix().'_comments',array('public'=>'on','premod_code'=>''));
+  $this->db->where('id',$id)->update($this->_prefix().'comments',array('public'=>'on','premod_code'=>''));
  }
 
 }

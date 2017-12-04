@@ -48,18 +48,31 @@
  <?php }?>
 </div>
 </div>
-<?php if($address){?><b>Адрес: </b><?=$address?><?php }?>
-<?php if($gps){//если пришли координаты - округляем их до 6-ти знаков после точки
- $gps_=explode(',',$gps);
- $gps_[0]=round($gps_[0],6);
- $gps_[1]=round($gps_[1],6);
- ?>
- <p><b>GPS-координаты (широта, долгота): </b><span class="num"><?=$gps_[0].', '.$gps_[1]?></span></p>
- <div id="map" style="height:500px;"></div>
- <p class="algn_r noprint">
-  <a href="https://www.google.com.ua/maps/place/<?=$gps?>" target="_blank" class="fa fa-map-marker">&nbsp;показать на большой карте</a>
- </p>
+
+<?php if($address){?>
+<!--####### Адреса и карта #######-->
+<dl class="tabs addr">
+ <dt class="tab_active">Адреса на карте</dt>
+ <dd>
+  <div class="tab_content">
+   <div id="map" style="height:500px;"></div>
+  </div>
+ </dd>
+ <dt>Адреса списком</dt>
+ <dd>
+  <div class="tab_content">
+   <?php foreach(json_decode($address,TRUE) as $v){?>
+   <div class="addr_list">
+    <div><i class="fa-home"></i> <?=$v['address']?></div> 
+    <div><i class="fa-crosshairs"></i> <?=$v['gps']?></div> 
+    <div><i class="fa-compass"></i> <a href="https://www.google.com.ua/maps/place/<?=$v['gps']?>" target="_blank">Показать на большой карте</a></div> 
+   </div>
+   <?php }?>
+  </div>
+ </dd>
+</dl>
 <?php }?>
+
  
 <?php if($contact_form==='on'){?>
 <!--####### Форма обратной связи #######-->
@@ -128,31 +141,37 @@ window.addEventListener('load',function(){
  });
 });
 </script>
-<?php }if($address||$gps){//если нужна карта"?>
-<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDdOpnwYxfTmWEIYDqbU4_4lrWfD9v_TUI&language=ru" defer></script>
+<?php }if($address){?>
+<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDdOpnwYxfTmWEIYDqbU4_4lrWfD9v_TUI&language=ru"></script>
 <script>
-function initialize(){
- var LL='<?=$gps?>'.split(','),//разобрать строку до и после запятой и записать в массив
-     latlng=new google.maps.LatLng(LL[0],LL[1]),
-     options={
-  zoom:16,
-  scrollwheel:false,
-  center:latlng,
-  mapTypeControlOptions:{
-   style:google.maps.MapTypeControlStyle.DROPDOWN_MENU
-  },
-  mapTypeId:google.maps.MapTypeId.ROADMAP
- },
-     map=new google.maps.Map($("#map")[0], options);
- new google.maps.Marker({
-  animation:google.maps.Animation.DROP,
-  map:map,
-  position:latlng
- });
-}
 window.addEventListener('load',function(){
- $('#map').height(($(window).height())/1.5);//устанвливаю высоту и инициализирую карту
- initialize();
+ var data=JSON.parse('<?=$address?>'),//объект данных
+     mapOptions={zoom:6,scrollwheel:false,center:new google.maps.LatLng(49.303,31.203),streetViewControl:true,mapTypeControlOptions:{style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}},
+     map=new google.maps.Map($('#map')[0],mapOptions),
+     infowindow=new google.maps.InfoWindow(),//создаю инфоокно
+     markers=[];
+ /////////////////////////////////////////////////создать маркеры, расставить по координатам
+ var init=function(){
+  for(var k in data){//обход данных
+   var LL=data[k].gps.split(',');
+   markers[k]=new google.maps.Marker({//записываем маркер и его опции
+    map:map,
+    position:new google.maps.LatLng(LL[0],LL[1])
+   });
+   iw(markers[k],data[k].marker_desc);
+  }
+ };
+ /////////////////////////////////////////////////показываю\скрываю инфоокно маркера по клику
+ var iw=function(marker,content){
+  google.maps.event.addListener(marker,'click',function(){
+   infowindow.setContent(content);//контент в окне
+   infowindow.open(map,marker);//показать окно
+   map.panTo(marker.getPosition());//маркер в центер карты
+  });
+  google.maps.event.addListener(map,'click',function(){infowindow.close();});//клик на карте скрывает все окна
+ };
+ /////////////////////////////////////////////////устанвливаю высоту и инициализирую карту
+ $('#map').height(($(window).height())/1.5);init();
 });
 </script>
 <?php }?>

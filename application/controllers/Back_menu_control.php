@@ -1,5 +1,5 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
-include(APPPATH.'controllers/Back_basic_control.php');
+include_once(APPPATH.'controllers/Back_basic_control.php');
 
 ///////////////////////////////////
 //работа с меню
@@ -16,9 +16,9 @@ class Back_menu_control extends Back_basic_control{
   $data=$this->conf;
   $data['conf_title']='Главное меню сайта';
   $data['menu']=$this->back_menu_model->get_menu();
-  $data['pages']=$this->db->select('title,alias,section')->order_by('title','ASC')->get($this->_prefix().'_pages')->result_array();
-  $data['sections']=$this->db->select('title,alias,section')->order_by('title','ASC')->get($this->_prefix().'_sections')->result_array();
-  $data['gallerys']=$this->db->select('title,alias,section')->order_by('title','ASC')->get($this->_prefix().'_gallerys')->result_array();
+  $data['pages']=$this->db->select('title,alias,section')->order_by('title','ASC')->get($this->_prefix().'pages')->result_array();
+  $data['sections']=$this->db->select('title,alias,section')->order_by('title','ASC')->get($this->_prefix().'sections')->result_array();
+  $data['gallerys']=$this->db->select('title,alias,section')->order_by('title','ASC')->get($this->_prefix().'gallerys')->result_array();
   $this->_viewer('back/menu_edit_form_view',$data);
  }
 
@@ -43,7 +43,7 @@ class Back_menu_control extends Back_basic_control{
   $data['title']=$this->input->post('title');
   $data['url']=$this->input->post('url');
   $data['target']=$this->input->post('target');
-  $this->back_basic_model->edit($id,$data,$this->_prefix().'_menu');
+  $this->back_basic_model->edit($id,$data,$this->_prefix().'menu');
   redirect('admin/menu/edit_form');
  }
 

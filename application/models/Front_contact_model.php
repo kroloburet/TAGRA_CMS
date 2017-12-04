@@ -10,7 +10,7 @@ class Front_contact_model extends Front_basic_model{
  }
 
  function get_contact_page(){
-  foreach($this->db->get($this->_prefix().'_contact_page')->result_array() as $data){
+  foreach($this->db->get($this->_prefix().'contact_page')->result_array() as $data){
    foreach($data as $k=>$v){$data[$k]=$v;}
   }
   return $data;

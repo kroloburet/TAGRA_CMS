@@ -25,7 +25,7 @@ class Back_menu_model extends Back_basic_model{
    */
   $m_tree=array();
   $this->db->order_by('order','ASC');//порядок пунктов
-  $m_query=$this->db->get($this->_prefix().'_menu')->result_array();
+  $m_query=$this->db->get($this->_prefix().'menu')->result_array();
   if(!$m_query){return $m_tree;}
   $m_nodes=array();
   $m_keys=array();
@@ -51,27 +51,27 @@ class Back_menu_model extends Back_basic_model{
 
  function add_menu_item($post_arr=array()){//добавление пункта меню
   $this->db->where(array('pid'=>$post_arr['pid'],'order >='=>$post_arr['order']));
-  $q=$this->db->get($this->_prefix().'_menu')->result_array();
+  $q=$this->db->get($this->_prefix().'menu')->result_array();
   if($q){//если в базе есть пункты того же родителя, порядок которых больше или ровно добавляемого пункта
    foreach($q as $k){//обход массива
-    $this->db->where('id',$k['id'])->update($this->_prefix().'_menu',array('order'=>$k['order']+1));//порядковый номер каждого увеличить на 1
+    $this->db->where('id',$k['id'])->update($this->_prefix().'menu',array('order'=>$k['order']+1));//порядковый номер каждого увеличить на 1
    }
   }
-  $this->db->insert($this->_prefix().'_menu',$post_arr);//добавить пункт
+  $this->db->insert($this->_prefix().'menu',$post_arr);//добавить пункт
  }
 
  function del_menu_item($id,$pid='',$order=''){//удаление веток меню
   if($pid!==''&&$order!==''){//чтобы в случае рекурссии не выполнять запрос к базе
    $this->db->where(array('pid'=>$pid,'order >'=>$order));
-   $q=$this->db->get($this->_prefix().'_menu')->result_array();
+   $q=$this->db->get($this->_prefix().'menu')->result_array();
    if($q){//если в базе есть пункты того же родителя, порядок которых больше удаляемого пункта
     foreach($q as $k){//обход массива
-     $this->db->where('id',$k['id'])->update($this->_prefix().'_menu',array('order'=>$k['order']-1));//порядковый номер каждого уменьшить на 1
+     $this->db->where('id',$k['id'])->update($this->_prefix().'menu',array('order'=>$k['order']-1));//порядковый номер каждого уменьшить на 1
     }
    }
   }
-  $this->db->where('id',$id)->delete($this->_prefix().'_menu');//нахожу по id, удаляю
-  $w=$this->db->where('pid',$id)->get($this->_prefix().'_menu')->result_array();//поиск дочерних веток
+  $this->db->where('id',$id)->delete($this->_prefix().'menu');//нахожу по id, удаляю
+  $w=$this->db->where('pid',$id)->get($this->_prefix().'menu')->result_array();//поиск дочерних веток
   if($w){//если есть дочерние ветки - рекрссия
    foreach($w as $pids){$this->del_menu_item($pids['id']);}
   }
@@ -79,9 +79,9 @@ class Back_menu_model extends Back_basic_model{
 
  function public_menu_item($id,$pub){
   if($pub==='off'){
-   return $this->db->where('id',$id)->update($this->_prefix().'_menu',array('public'=>'on'));
+   return $this->db->where('id',$id)->update($this->_prefix().'menu',array('public'=>'on'));
   }elseif($pub==='on'){
-   return $this->db->where('id',$id)->update($this->_prefix().'_menu',array('public'=>'off'));
+   return $this->db->where('id',$id)->update($this->_prefix().'menu',array('public'=>'off'));
   }
  }
 

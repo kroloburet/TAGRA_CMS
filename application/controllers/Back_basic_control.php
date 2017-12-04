@@ -25,6 +25,28 @@ class Back_basic_control extends CI_Controller {
 //приватные методы
 ///////////////////////////////////
  
+ function _get_admin_param($param){
+  $q=$this->db->where('status','administrator')->get($this->_prefix().'back_users')->result_array();
+  return $q[0][$param];
+ }
+ 
+ function _get_moderator_param($id_mail,$param){
+ //$id_mail='basic_email'||'id'
+  $mail=(!ctype_digit($id_mail))?$id_mail:FALSE;
+  $id=(ctype_digit($id_mail))?$id_mail:FALSE;
+  //mail или id
+  if($mail){
+   $this->db->where(array('email'=>$mail));
+  }elseif($id){
+   $this->db->where(array('id'=>$id));
+  }else{return FALSE;}
+  $q=$this->db->get($this->_prefix().'back_users')->result_array();
+  //получение и возврат данных
+  if($q){
+   return $q[0][$param];
+  }else{return FALSE;}
+ }
+ 
  function _prefix(){//получение префикса таблиц базы данных из конфигурационного файла
   return $this->config->item('db_tabl_prefix');
  }
@@ -80,12 +102,6 @@ class Back_basic_control extends CI_Controller {
   }
   return $password;
  }
- 
- function _get_user_param($status,$param){
-  foreach($this->back_basic_model->get_back_users() as $v){
-   if($v['status']===$status){return $v[$param];}
-  }
- }
 
  function _is_login(){//если в сессии есть админ или модератор и пароли совпали с БД — формирую массив conf
   foreach($this->back_basic_model->get_back_users() as $v){
@@ -94,8 +110,7 @@ class Back_basic_control extends CI_Controller {
     $data['sitemap']=$this->back_basic_model->sitemap_config_data();
     $data['prefix']=$this->_prefix();//префикс таблиц БД
     $data['conf_status']='administrator';
-    $data['conf_admin_mail']=$this->_get_user_param('administrator','email');
-    $data['conf_moderator_mail']=$this->_get_user_param('moderator','email');
+    $data['conf_admin_mail']=$this->_get_admin_param('email');
     $this->conf=$data;
     return TRUE;
    }elseif($v['status']==='moderator'&&$v['password'].$v['login']===$this->session->moderator){
@@ -103,8 +118,7 @@ class Back_basic_control extends CI_Controller {
     $data['sitemap']=$this->back_basic_model->sitemap_config_data();
     $data['prefix']=$this->_prefix();//префикс таблиц БД
     $data['conf_status']='moderator';
-    $data['conf_moderator_mail']=$this->_get_user_param('moderator','email');
-    $data['conf_admin_mail']=$this->_get_user_param('administrator','email');
+    $data['conf_admin_mail']=$this->_get_admin_param('email');
     $this->conf=$data;
     return TRUE;
    }
@@ -117,9 +131,10 @@ class Back_basic_control extends CI_Controller {
    $input=array_map('trim',$this->input->post());//убираем пробелы в начале и в конце
    $l=$input['login'];
    $p=$input['password'];
-   foreach($this->back_basic_model->get_back_users() as $v){
+   foreach ($this->back_basic_model->get_back_users() as $v){
     if($v['password']===crypt($p,$v['salt'])&&$v['login']===crypt($l,$v['salt'])){
-     $this->session->set_userdata($v['status'], $v['password'].$v['login']);
+     $this->session->set_userdata($v['status'], $v['password'].$v['login']);//стартует сессия
+     $this->back_basic_model->edit_back_user($v['id'],array('last_login_date'=>date('Y-m-d H:i:s'),'ip'=>$this->input->server('REMOTE_ADDR')));//фиксирую дату авторизации, ip
      redirect('admin');
     }
    }
@@ -142,11 +157,11 @@ class Back_basic_control extends CI_Controller {
   $mail=$p['send_pass_mail'];//поле email
   if($p['fuck_bot']!==''){$resp['status']='bot';exit(json_encode($resp));}//если бот
   if(!$mail){$resp['status']='nomail';exit(json_encode($resp));}//если не передан email
-  $q=$this->back_basic_model->get_back_users($mail);//выборка по email
+  $q=$this->back_basic_model->get_back_users($mail);//выборка
   if(!$q){$resp['status']='nomail';exit(json_encode($resp));}//если выборка пуста
   //////////////////////подготовка к рассылке
   $domen=str_replace('www.','',$_SERVER['HTTP_HOST']);//домен
-  $site_name=$this->back_basic_model->get_val($this->_prefix().'_my_config','name','conf_site_name','value');//имя сайта
+  $site_name=$this->back_basic_model->get_val($this->_prefix().'my_config','name','conf_site_name','value');//имя сайта
   $this->load->library('email');//загрузка библиотеки
   foreach($q as $v){//проход по выборке
    $login=(strstr($mail,'@',TRUE))?strstr($mail,'@',TRUE):$this->_gen_pass(8);//имя пользователя из email или генерим как пароль
@@ -154,7 +169,8 @@ class Back_basic_control extends CI_Controller {
    $data['salt']=$this->_gen_salt();//генерим новую соль
    $data['login']=crypt($login,$data['salt']);//шифруем логин для БД
    $data['password']=crypt($pass,$data['salt']);//шифруем пароль для БД
-   $this->back_basic_model->set_user($v['id'],$data);//перезаписываем данные пользователя
+   $data['last_mod_date']=date('Y-m-d H:i:s');
+   $this->back_basic_model->edit_back_user($v['id'],$data);//перезаписываем данные пользователя
    //отправляем новые данные пользователю
    $msg='
 <html><head><title>Пароли к '.$domen.'</title>
@@ -233,9 +249,9 @@ class Back_basic_control extends CI_Controller {
    $where=array('robots !='=>'none','robots !='=>'noindex');//только индексируемые
    ($this->conf['sitemap']['allowed'] === 'public')?$where['public']='on':FALSE;//если включать только опубликованные материалы
    $select='alias';//только нужные поля
-   $pgs=$this->db->where($where)->select($select)->get($this->_prefix().'_pages')->result_array();
-   $sctns=$this->db->where($where)->select($select)->get($this->_prefix().'_sections')->result_array();
-   $glrs=$this->db->where($where)->select($select)->get($this->_prefix().'_gallerys')->result_array();
+   $pgs=$this->db->where($where)->select($select)->get($this->_prefix().'pages')->result_array();
+   $sctns=$this->db->where($where)->select($select)->get($this->_prefix().'sections')->result_array();
+   $glrs=$this->db->where($where)->select($select)->get($this->_prefix().'gallerys')->result_array();
    //формирую URL XML sitemap
    if(!empty($pgs)){//если есть страницы
     foreach($pgs as $i){$pages.='<url><loc>'.base_url($i['alias']).'</loc></url>'.PHP_EOL;}
@@ -278,6 +294,7 @@ class Back_basic_control extends CI_Controller {
  function index(){
   $this->_is_login()?TRUE:redirect('admin/login');
   $data=$this->conf;
+  $data['moderators']=$this->db->where('status','moderator')->get($this->_prefix().'back_users')->result_array();
   $data['conf_title']='Конфигурация';
   $this->_viewer('back/set_my_config_view',$data);
  }

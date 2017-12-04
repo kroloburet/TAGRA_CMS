@@ -1,5 +1,5 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
-include(APPPATH.'controllers/Back_basic_control.php');
+include_once(APPPATH.'controllers/Back_basic_control.php');
 
 ///////////////////////////////////
 //работа с разделами
@@ -39,14 +39,14 @@ class Back_section_control extends Back_basic_control{
 
  function edit_form($id){
   $this->_is_login()?TRUE:redirect('admin/login');
-  $data=array_merge($this->conf,$this->back_basic_model->get_where_id($this->_prefix().'_sections',$id));//соединение массивов
+  $data=array_merge($this->conf,$this->back_basic_model->get_where_id($this->_prefix().'sections',$id));//соединение массивов
   $data['conf_title']='Редактировать раздел';
   $this->_viewer('back/sections/sections_edit_form_view',$data);
  }
 
  function add(){//добавление раздела
   $this->_is_login()?TRUE:redirect('admin/login');
-  $this->back_basic_model->add(array_map('trim',$this->input->post()),$this->_prefix().'_sections');//убираем пробелы в начале и в конце
+  $this->back_basic_model->add(array_map('trim',$this->input->post()),$this->_prefix().'sections');//убираем пробелы в начале и в конце
   ($this->conf['sitemap']['generate']==='auto')?$this->sitemap_generator():FALSE;//если карта сайта должна генерироваться автоматически
   redirect('admin/section/get_list');
  }

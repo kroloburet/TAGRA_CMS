@@ -11,7 +11,7 @@ class Back_setting_model extends Back_basic_model{
 
  function set_my_config($post_arr=array()){
   foreach($post_arr as $name=>$value){
-   $this->db->where('name',$name)->update($this->_prefix().'_my_config',array('name'=>$name,'value'=>$value));
+   $this->db->where('name',$name)->update($this->_prefix().'my_config',array('name'=>$name,'value'=>$value));
   }
  }
 

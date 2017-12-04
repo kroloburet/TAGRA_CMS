@@ -178,42 +178,51 @@ JAVASCRIPT-код без тегов script
     <input type="text" id="qr" name="qr" class="width90" value="<?=$qr?>">&nbsp;
     <a href="#" class="fa-folder-open fa-lg blue" onclick="files('qr');return false"></a>
    </label>
-   Адрес <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
-   <pre class="tt">
-Начинайте вводить адрес для вызова вариантов.
-Выберите из предложенных вариантов чтобы установить
-координаты этого адреса в поле «GPS-координаты»
-и установить маркер на карте.</pre>
-   <label class="input">
-    <input id="address" name="address" type="text" class="width90" value="<?=$address?>" placeholder="Крещатик, 20-22, Киев">
-   </label>
-   GPS-координаты <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
-   <pre class="tt">
-GPS-координаты (широта,долгота)
-При вводе недопустимые символы
-удаляются автоматически.
-Если координаты указаны,
-на странице «Контакты» будет
-отображена карта.</pre><br>
-   <label class="input inline width90">
-    <input name="gps" id="LL" type="text" value="<?=$gps?>" placeholder="50.450031,30.524205">
-   </label>
-   <a href="#" class="fa-map-marker fa-lg blue" id="geo_init_btn" onmouseover="tt(this);"></a>
-   <pre class="tt">
-Нажмите чтобы воспользоваться поиском координат.
-Начинайте вводить адрес в поле поиска для вызова
-вариантов. Выберите из предложенных вариантов
-чтобы установить координаты этого адреса в поле
-«GPS-координаты». Чтобы кузать более точно,
-передвиньте маркер на карте в нужное место.</pre>
-   <div id="geo_search">
-    <input id="gps_search" type="text" placeholder="Поиск координат">
-    <div id="gmap"></div>
+  </div>
+  
+  <!--####### Адреса #######-->
+  <div class="touch" id="addr">
+   <h3 class="float_l">Адреса</h3> <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+<pre class="tt">
+Здесь вы можете указать один или
+несколько адресов, назначить им
+GPS-координаты и маркеры на карте</pre>
+   <hr>
+   <button type="button" class="add_addr_btn">Добавить адрес</button>
+   <div class="addr_box" style="display:none">
+    Адрес <i class="fa-question-circle red" onmouseover="tt(this);"></i>
+    <pre class="tt"><b class="red">Обязательно для заполнения!</b></pre>
+    <label class="input">
+     <input class="addr" type="text" placeholder="Крещатик, 20-22, Киев">
+    </label>
+    GPS-координаты <i class="fa-question-circle red" onmouseover="tt(this);"></i>
+    <pre class="tt">
+GPS-координаты (широта,долгота).
+Координаты можно получить перетащив
+маркер на карте в нужное место, или
+воспользоваться полем «Поиск координат».
+Начните вводить в поле поиска адрес чтобы
+вызвать варианты, выберите нужный вариант,
+координаты и маркер будут установлены.
+<b class="red">Обязательно для заполнения!</b></pre>
+    <label class="input">
+     <input class="gps" type="text" placeholder="50.450031,30.524205">
+    </label>
+    <input class="gps_search" type="text" placeholder="Поиск координат">
+    <div class="addr_gmap"></div>
+    <textarea class="marker_desc" type="text" placeholder="Текст для маркера (можно использовать HTML)"></textarea>
+    <div class="button algn_r">
+     <button type="button" class="addr_done_btn">Готово</button><button type="button" class="addr_cancel_btn">Отмена</button>
+    </div>
    </div>
+   <textarea name="address" hidden><?=$address?></textarea>
+   <div class="addr_prev"></div>
   </div>
 
   <!--####### Форма обратной связи #######-->
   <div class="touch">
+   <h3>Форма обратной связи</h3>
+   <hr>
    <label class="select">
     <select name="contact_form">
      <option value="on" <?php if($contact_form=='on') echo'selected'?>>Показать форму обратной связи</option>
@@ -229,15 +238,13 @@ GPS-координаты (широта,долгота)
 </div>
 
 <script>
-//////////////////////////////////////////////////////////работа полей "телефон" и "email"
 ///////////////////////рег.выражения для проверки полей
 var s_opts={};
  s_opts['title']=/^[^><]+$/i;
  s_opts['description']=/^[^><]+$/i;
  s_opts['mail[]']=/^(([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6})?$/;
  s_opts['tel[]']=/^((\+\d{2,3})?[\s-]?\(?\d{0,3}\)?[\s-]?\d{3}[\s-]?\d{2}[\s-]?\d{2})?$/;
- s_opts['gps']=/^((^-?)[0-9]+(?:\.[0-9]*)?,-?[0-9]+(?:\.[0-9]*)?)?$/;
- 
+//////////////////////////////////////////////////////////работа полей "телефон" и "email"
 ///////////////////////добавление дополнительного поля "телефон"
 function add_tel(el){
  var tel=$(el).parent().html();
@@ -245,12 +252,10 @@ function add_tel(el){
  $(el).remove();
  $(".tel").append('<label class="input">'+tel+'</label>').find('input:last').val('').focus();
 }
-
 ///////////////////////удаление поля "телефон"
 function del_tel(el){
  $(el).parent().remove();
 }
-
 ///////////////////////добавление дополнительного поля "email"
 function add_mail(el){
  var mail=$(el).parent().html();
@@ -258,101 +263,154 @@ function add_mail(el){
  $(el).remove();
  $(".mail").append('<label class="input">'+mail+'</label>').find('input:last').val('').focus();
 }
-
 ///////////////////////удаление поля "email"
 function del_mail(el){
  $(el).parent().remove();
 }
 
-//////////////////////////////////////////////////////////GPS и карта
-//////////////////////////установка переменных
-var geocoder,map,marker,
-    LL=$('#LL'),
-    g_search=$('#geo_search'),
-    gps_search=$('#gps_search'),
-    g_btn=$('#geo_init_btn'),
-    g_map=$('#gmap')[0];
-
-/////////////////////////валидация поля координат
-LL.on('keyup',function(){
- if(!/[0-9]|\.|,|-/.test($(this).val().slice(-1))){//если не цифра,точка,запятая,минус в последнем символе поля
-  $(this).val($(this).val().slice(0,-1));//установить значение без последнего символа
- }
- if(/(^-?)[0-9]+(?:\.[0-9]*)?,-?[0-9]+(?:\.[0-9]*)?$/.test($(this).val())){//если соответствует шаблону gps-координат
-  var LL_arr=$(this).val().split(',');//разобрать строку до и после запятой и записать в массив
-  var location=new google.maps.LatLng(LL_arr[0],LL_arr[1]);
-  marker.setPosition(location);
-  map.setCenter(location);
- }
-});
-
-/////////////////////////показать\скрыть геопоиск и карту
-g_btn.on('click',function(e){
- e.preventDefault();
- if(g_search.is(':hidden')){//геопоиск и карту показать
-  g_search.slideDown(200);//показать
-  $(g_map).is(':empty')?setTimeout(map_init,300):true;//инициализировать карту если не была инициализирована
-//  setTimeout(map_init,300);
- }else{//геопоиск и карту скрыть
-  g_search.slideUp(200);//скрыть
-  gps_search.val('');//очистить поле геопоиска
- }
-});
-
-/////////////////////////подготовка инициализации карты
-function map_init(){
- /////////////////////установка координат
- if(/(^-?)[0-9]+(?:\.[0-9]*)?,-?[0-9]+(?:\.[0-9]*)?$/.test(LL.val())){//если соответствует шаблону gps-координат
-  var LL_arr=LL.val().split(','); //разобрать строку до и после запятой и записать в массив
-  var latlng=new google.maps.LatLng(LL_arr[0],LL_arr[1]);
- }else{
-  var latlng=new google.maps.LatLng(50.450209,30.522536899999977);
- }
- ////////////////////опции карты
- var mapOptions={
-   zoom:6,
-   scrollwheel:false,
-   center:latlng,
-   mapTypeId:google.maps.MapTypeId.ROADMAP,
-   mapTypeControlOptions:{style:google.maps.MapTypeControlStyle.DROPDOWN_MENU}
+//////////////////////////////////////////////////////////адреса
+;(function($,google){
+ //////////////////////////////////////////////////////////
+ //объявление приватных свойств по умолчанию
+ //////////////////////////////////////////////////////////
+ var _a=$('#addr'),//блок адреса
+     _a_addr=_a.find('.addr'),//поле "адрес"
+     _a_gps=_a.find('.gps'),//поле "gps"
+     _a_marker_desc=_a.find('.marker_desc'),//поле "текст для маркера"
+     _a_opt=_a.find('textarea[name=address]'),//поле объекта адресов
+     _a_box=_a.find('.addr_box'),//блок полей добавить\редактировать
+     _a_gmap=_a.find('.addr_gmap'),//блок карты
+     _a_prev=_a.find('.addr_prev'),//блок превью
+     _a_add_btn=_a.find('.add_addr_btn'),//кнопка "добавить адрес"
+     _a_done_btn=_a.find('.addr_done_btn'),//кнопка "готово"
+     _a_cancel_btn=_a.find('.addr_cancel_btn'),//кнопка "отмена"
+     _gps_reg=/(^-?)[0-9]+(?:\.[0-9]*)?,-?[0-9]+(?:\.[0-9]*)?$/,//регулярка проверки gps
+     _opt=!_a_opt.val()?{}:JSON.parse(_a_opt.val());//объект адресов
+ 
+ //////////////////////////////////////////////////////////
+ //приватные методы
+ //////////////////////////////////////////////////////////
+ ////////////////////////////////получить уникальный id
+ var _get_id=function(){return new Date().getTime().toString();};
+ ////////////////////////////////открыть форму добавления адреса
+ var _get_add_form=function(){
+  _a_done_btn.on('click.Addr',function(){_add();});//событие на "готово" - добавить
+  _a_box.slideDown(200);//открыть блок полей
+  _map_init();//запуск карты
  };
- ///////////////////создание карты
- map=new google.maps.Map(g_map,mapOptions);//карта
- geocoder=new google.maps.Geocoder();//геолокация
- marker=new google.maps.Marker({//маркер
-  map:map,
-  draggable:true,
-  position:latlng,
-  title:"Для получения координат передвиньте маркер в нужное место"
- });
- //////////////////поиск координат на карте
- gps_search.autocomplete({
-  source:function(request,response){
-   geocoder.geocode({'address':request.term},function(results,status){
-    response($.map(results,function(item){
-     return {
-      label:item.formatted_address,
-      value:item.formatted_address,
-      latitude:item.geometry.location.lat(),
-      longitude:item.geometry.location.lng()
-     };
-    }));
-   });
-  },
-  select:function(event,ui){
-   LL.val(ui.item.latitude+','+ui.item.longitude);
-   var location=new google.maps.LatLng(ui.item.latitude,ui.item.longitude);
-   marker.setPosition(location);
-   map.setCenter(location);
-  },
-  delay:500
- });
- google.maps.event.addListener(marker,'drag',function(){
-  geocoder.geocode({'latLng':marker.getPosition()},function(results,status){
-   if(status===google.maps.GeocoderStatus.OK){
-    if(results[0]){LL.val(marker.getPosition().lat()+','+marker.getPosition().lng());}
+ ////////////////////////////////открыть форму редактирования адреса
+ var _get_edit_form=function(id){
+  _a_done_btn.on('click.Addr',function(){_edit(id);});//событие на "готово" - редактировать
+  _a_addr.val(_opt[id].address);
+  _a_gps.val(_opt[id].gps);
+  _a_marker_desc.val(_opt[id].marker_desc);
+  _a_box.slideDown(200);//открыть блок полей
+  _map_init();//запуск карты
+ };
+ ////////////////////////////////скрыть, очистить блок полей
+ var _clear=function(){
+  _a_done_btn.off();//удалить все события у кнопки "готово"
+  _a_gmap.empty();//очистить карту
+  _a_box.slideUp(200).find('input,textarea').val('');//очистить поля, скрыть блок
+ };
+ ////////////////////////////////добавить адрес
+ var _add=function(){
+  var added=false;
+  if(!/\S/.test(_a_addr.val())){alert('Поле "Адрес" не заполнено!');return false;}
+  if(!_gps_reg.test(_a_gps.val())){alert('Поле "GPS-координаты" не заполнено или заполнено не правильно!');return false;}
+  for(var k in _opt){if(_opt[k].gps===_a_gps.val()){added=true;break;}}//проверка на уникальность
+  if(!added){
+   _opt[_get_id()]={gps:_a_gps.val(),marker_desc:_a_marker_desc.val(),address:_a_addr.val()};
+  }else{alert('Адрес с такими координатами уже добавлен!');return false;}
+  if(!$.isEmptyObject(_opt)){_a_opt.val(JSON.stringify(_opt));_clear();_show();}
+ };
+ ////////////////////////////////редактирование опций
+ var _edit=function(id){
+  var added=false;
+  if(!/\S/.test(_a_addr.val())){alert('Поле "Адрес" не заполнено!');return false;}
+  if(!_gps_reg.test(_a_gps.val())){alert('Поле "GPS-координаты" не заполнено или заполнено не правильно!');return false;}
+  for(var k in _opt){if(_opt[k].gps===_a_gps.val()&&k!==id){added=true;break;}}//проверка на уникальность
+  if(!added){
+   _opt[id]={gps:_a_gps.val(),marker_desc:_a_marker_desc.val(),address:_a_addr.val()};
+  }else{alert('Адрес с такими координатами уже добавлен!');return false;}
+  if(!$.isEmptyObject(_opt)){_a_opt.val(JSON.stringify(_opt));_clear();_show();}
+ };
+ ////////////////////////////////удаление адреса
+ var _del=function(id){
+  delete _opt[id];
+  if($.isEmptyObject(_opt)){_a_prev.empty();_a_opt.val('');}else{_a_opt.val(JSON.stringify(_opt));_show();}
+ };
+ ////////////////////////////////отображение превью
+ var _show=function(){
+  if($.isEmptyObject(_opt)){return false;}
+  _a_prev.empty();//очистить превью
+  for(var k in _opt){//заполнять превью адресами
+   var address=$('<div/>',{class:'addr_prev_address',text:_opt[k].address}),
+       edit_btn=$('<div/>',{class:'addr_prev_edit_btn fa-edit',title:'Редактировать адрес'}).data('id',k),
+       del_btn=$('<div/>',{class:'addr_prev_del_btn fa-trash-o',title:'Удалить адрес'}).data('id',k),
+       control=$('<div/>',{class:'addr_prev_control',html:[edit_btn,del_btn]}),
+       prev_item=$('<div/>',{class:'addr_prev_item',html:[address,control]});
+   edit_btn.on('click.Addr',function(){_get_edit_form($(this).data('id'));});
+   del_btn.on('click.Addr',function(){if(confirm('Этот адрес будет удален!\nВыполнить действие?'))_del($(this).data('id'));});
+   _a_prev.prepend(prev_item);
+  }
+ };
+ ////////////////////////////////инициализация карты
+ var _map_init=function(){
+  var latlng=_gps_reg.test(_a_gps.val())?new google.maps.LatLng(_a_gps.val().split(',')[0],_a_gps.val().split(',')[1]):new google.maps.LatLng(50.450209,30.522536899999977),
+      mapOptions={zoom:6,scrollwheel:false,center:latlng,mapTypeId:google.maps.MapTypeId.ROADMAP,mapTypeControlOptions:{style:google.maps.MapTypeControlStyle.DROPDOWN_MENU}},
+      map=new google.maps.Map(_a_gmap[0],mapOptions),
+      geocoder=new google.maps.Geocoder(),
+      marker=new google.maps.Marker({map:map,draggable:true,position:latlng,title:"Для получения координат передвиньте маркер в нужное место"});
+  //поиск координат на карте
+  _a.find('.gps_search').autocomplete({
+   source:function(request,response){
+    geocoder.geocode({'address':request.term},function(results,status){
+     response($.map(results,function(item){
+      return {
+       label:item.formatted_address,
+       value:item.formatted_address,
+       latitude:item.geometry.location.lat(),
+       longitude:item.geometry.location.lng()
+      };
+     }));
+    });
+   },
+   select:function(event,ui){
+    _a_gps.val(ui.item.latitude+','+ui.item.longitude);
+    var location=new google.maps.LatLng(ui.item.latitude,ui.item.longitude);
+    marker.setPosition(location);
+    map.setCenter(location);
+   },
+   delay:500
+  });
+  //установка маркера по введенным координатам
+  _a_gps.on('keyup.Addr',function(){
+   if(_gps_reg.test($(this).val())){//если соответствует шаблону gps-координат
+    var location=new google.maps.LatLng($(this).val().split(',')[0],$(this).val().split(',')[1]);
+    marker.setPosition(location);
+    map.setCenter(location);
    }
   });
- });
-};
+  //перетаскивание маркера
+  google.maps.event.addListener(marker,'drag',function(){
+   geocoder.geocode({'latLng':marker.getPosition()},function(results,status){
+    if(status===google.maps.GeocoderStatus.OK){
+     if(results[0]){_a_gps.val(marker.getPosition().lat()+','+marker.getPosition().lng());}
+    }
+   });
+  });
+ };
+ 
+ //////////////////////////////////////////////////////////
+ //события
+ //////////////////////////////////////////////////////////
+ _a_add_btn.on('click.Addr',function(){_get_add_form();});//открыть блок полей
+ _a_cancel_btn.on('click.Addr',function(){_clear();});//скрыть, очистить блок полей
+ 
+ //////////////////////////////////////////////////////////
+ //после загрузки модуля
+ //////////////////////////////////////////////////////////
+ _show();//показать превью
+}(jQuery,google));
 </script>

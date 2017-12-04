@@ -4,9 +4,9 @@ if(!function_exists('links')){
 function links($opt=''){
 $CI=&get_instance();
 $prefix=$CI->config->item('db_tabl_prefix');
-$sections=$CI->db->select('title,alias,section')->order_by('title','ASC')->get($prefix.'_sections')->result_array();
-$gallerys=$CI->db->select('title,alias,section')->order_by('title','ASC')->get($prefix.'_gallerys')->result_array();
-$pages=$CI->db->select('title,alias,section')->order_by('title','ASC')->get($prefix.'_pages')->result_array();
+$sections=$CI->db->select('title,alias')->order_by('title','ASC')->get($prefix.'sections')->result_array();
+$gallerys=$CI->db->select('title,alias')->order_by('title','ASC')->get($prefix.'gallerys')->result_array();
+$pages=$CI->db->select('title,alias')->order_by('title','ASC')->get($prefix.'pages')->result_array();
 ?>
 
 <h3 class="float_l">Связанные ссылки</h3> <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
@@ -49,9 +49,9 @@ $pages=$CI->db->select('title,alias,section')->order_by('title','ASC')->get($pre
  var _l_opt=$('#links_opt'),//textarea с опциями
      _opt=!_l_opt.val()?{}:JSON.parse(_l_opt.val()),//объект опций,
      _materials=$('<select/>',{class:'SelectSearch',size:5}),//список материалов,
-     _pages='<?php if(empty($pages)){echo '<option>На сайте нет страниц</option>';}else{foreach($pages as $i){?><option value="/<?=$i['alias']?>"><?=$i['title']?></option><?php }}?>',
-     _sections='<?php if(empty($sections)){echo '<option>На сайте нет разделов</option>';}else{foreach ($sections as $i){?><option value="<?='/section/'.$i['alias']?>"><?=$i['title']?></option><?php }}?>',
-     _gallerys='<?php if(empty($gallerys)){echo '<option>На сайте нет галерей</option>';}else{foreach($gallerys as $i){?><option value="<?='/gallery/'.$i['alias']?>"><?=$i['title']?></option><?php }}?>';
+     _pages='<?php if(empty($pages)){echo '<option value="">На сайте нет страниц</option>';}else{foreach($pages as $i){?><option value="/<?=$i['alias']?>"><?=$i['title']?></option><?php }}?>',
+     _sections='<?php if(empty($sections)){echo '<option value="">На сайте нет разделов</option>';}else{foreach ($sections as $i){?><option value="<?='/section/'.$i['alias']?>"><?=$i['title']?></option><?php }}?>',
+     _gallerys='<?php if(empty($gallerys)){echo '<option value="">На сайте нет галерей</option>';}else{foreach($gallerys as $i){?><option value="<?='/gallery/'.$i['alias']?>"><?=$i['title']?></option><?php }}?>';
      
  //////////////////////////////////////////////////////////
  //приватные методы

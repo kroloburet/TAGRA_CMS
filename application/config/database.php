@@ -1,11 +1,11 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined("BASEPATH") OR exit("No direct script access allowed");
 $active_group = "default";
 $query_builder = TRUE;
 $db["default"]["dsn"] = "";
-$db["default"]["hostname"] = "localhost";
-$db["default"]["username"] = "u_cherezov";
-$db["default"]["password"] = "Sy3Afg4e";
-$db["default"]["database"] = "cherezov";
+$db["default"]["hostname"] = 'localhost';
+$db["default"]["username"] = 'u_cherezov';
+$db["default"]["password"] = 'XPAPojJt';
+$db["default"]["database"] = 'cherezov';
 $db["default"]["dbdriver"] = "mysqli";
 $db["default"]["dbprefix"] = "";
 $db["default"]["pconnect"] = FALSE;

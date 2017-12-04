@@ -22,23 +22,17 @@ $f1='/application/';
 $f2='/application/config/';
 $f3='/application/config/config.php';
 $f4='/application/config/database.php';
-$f5='/scripts/';
-$f6='/scripts/back/';
-$f7='/scripts/back/overall_js.js';
 if(//если файлы и папки доступны для записи
    @is_writable($cms_path.$f1)&&
    @is_writable($cms_path.$f2)&&
    @is_writable($cms_path.$f3)&&
-   @is_writable($cms_path.$f4)&&
-   @is_writable($cms_path.$f5)&&
-   @is_writable($cms_path.$f6)&&
-   @is_writable($cms_path.$f7)
+   @is_writable($cms_path.$f4)
   ){
 ?>
    <h1>Установка системы управления контентом</h1>
-   <p>Заполните все поля и нажмите на кнопку «Установить систему» Если ви все правильно сделали и не возникло каких-либо программных сбоев, вы перейдете на страницу, где сможете увидеть статус установки. Если на этом или другом этапе у вас возникли проблемы — вы можете обратиться к разработчику по e-mail: <a href="mailto:kroloburet@gmail.com">kroloburet@gmail.com</a></p>
+   <p>Заполните все поля (одиночные и двойные кавычки не допускаются) и нажмите на кнопку «Установить систему» Если ви все правильно сделали и не возникло каких-либо программных сбоев, вы перейдете на страницу, где сможете увидеть статус установки. Если на этом или другом этапе у вас возникли проблемы — вы можете обратиться к разработчику по e-mail: <a href="mailto:kroloburet@gmail.com">kroloburet@gmail.com</a></p>
    <div class="container">
-    <form action="process.php" method="post">
+    <form id="instal_form" action="process.php" method="post">
      <div class="touch">
       <h2>База данных</h2>
       <label for="db_name">Имя базы данных:</label>
@@ -112,21 +106,6 @@ URL к директории в которой будет запущена сис
  }else{
   echo '<div><i class="fa-times-circle red"></i> Файл <b>'.$f4.'</b> не доступен для записи</div>';
  }
- if(@is_writable($cms_path.$f5)){
-  echo '<div><i class="fa-check-circle green"></i> Папка <b>'.$f5.'</b> доступна для записи</div>';
- }else{
-  echo '<div><i class="fa-times-circle red"></i> Папка <b>'.$f5.'</b> не доступна для записи</div>';
- }
- if(@is_writable($cms_path.$f6)){
-  echo '<div><i class="fa-check-circle green"></i> Папка <b>'.$f6.'</b> доступна для записи</div>';
- }else{
-  echo '<div><i class="fa-times-circle red"></i> Папка <b>'.$f6.'</b> не доступна для записи</div>';
- }
- if(@is_writable($cms_path.$f7)){
-  echo '<div><i class="fa-check-circle green"></i> Папка <b>'.$f7.'</b> доступна для записи</div>';
- }else{
-  echo '<div><i class="fa-times-circle red"></i> Папка <b>'.$f7.'</b> не доступна для записи</div>';
- }
 echo '<p style="margin-top:1.5em;">Установите права на запись (777) и жмите <a href="index.php" class="btn">Попробовать снова</a> или обратитесь к разработчику по e-mail: <a href="mailto:kroloburet@gmail.com">kroloburet@gmail.com</a></p>';
 }
 ?>
@@ -134,8 +113,8 @@ echo '<p style="margin-top:1.5em;">Установите права на запи
  <img src="/UI_fraimwork/img/logo_tagra_18_18.svg" alt="Tagra CMS"> Tagra CMS<br></div>
   </div>
   
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" defer></script>
-  <script src="/UI_fraimwork/js.js" defer></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="/UI_fraimwork/js.js"></script>
   <script>
   /////////////////////////////////////////////////////////////////////////генерирование пароля с вставкой в поле
   function gen_pass(pass/*поле для вставки пароля*/){
@@ -147,6 +126,12 @@ echo '<p style="margin-top:1.5em;">Установите права на запи
    }
    $('#'+pass).val(passwd);
   }
+  /////////////////////////////////////////////////////////////////////////удалять одиночные и двойные кавычки в полях
+  $('#instal_form input').on('keyup change',function(){
+   var el=$(this);
+   if(!/"|'/.test(el.val())){return true;}
+   el.val(el.val().replace(/"|'/g,""));
+  });
   </script>
  </body>
 </html>

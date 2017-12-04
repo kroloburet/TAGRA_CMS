@@ -1,5 +1,5 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
-include(APPPATH.'controllers/Back_basic_control.php');
+include_once(APPPATH.'controllers/Back_basic_control.php');
 
 ///////////////////////////////////
 //работа с конфигурацией
@@ -11,44 +11,66 @@ class Back_setting_control extends Back_basic_control{
   $this->load->model('back_setting_model');
  }
  
- function set_user(){
+ function _check_back_user($login,$pass){//проверка на уникальность логина и пароля
+  $q=$this->back_basic_model->get_back_users();
+  if(!$q){return TRUE;}
+  foreach($q as $v){
+   if($v['login']===crypt($login,$v['salt'])&&$v['password']===crypt($pass,$v['salt'])){return FALSE;}//логин и пароль не уникальный
+  }
+  return TRUE;//логин и пароль уникальный
+ }
+ 
+ function edit_administrator(){//если изменяем администратора
   $this->_is_login()?TRUE:redirect('admin/login');
-  $data=array_map('trim',$this->input->post());//убираем пробелы в начале и в конце
-  //если изменяем администратора
-  if(isset($data['admin_login'],$data['admin_pass'],$data['admin_mail'])){
-   $a_l=$data['admin_login'];
-   $a_p=$data['admin_pass'];
-   $a_m=$data['admin_mail'];
-   //если пароль и логин не заполнены или не заполнен хоть один из них - используем старую соль, иначе - генерим новую
-   $admin['salt']=(($a_l==''&&$a_p=='')||($a_l==''||$a_p==''))?$this->_get_user_param('administrator','salt'):$this->_gen_salt();
-   //если логин не заполнен используем старый, иначе - генерим новый
-   $admin['login']=($a_l=='')?$this->_get_user_param('administrator','login'):crypt($a_l,$admin['salt']);
-   //если пароль не заполнен используем старый, иначе - генерим новый
-   $admin['password']=($a_p=='')?$this->_get_user_param('administrator','password'):crypt($a_p,$admin['salt']);
-   //записываем email
-   $admin['email']=$a_m;
-   //перезаписываю администратора
-   $this->back_basic_model->set_user($this->_get_user_param('administrator','id'),$admin);
-   //перезаписываю сессию чтобы не выбрасывало с админки
-   ($this->session->administrator)?$this->session->set_userdata('administrator',$admin['password'].$admin['login']):TRUE;
-  }
-  //если изменяем модератора
-  if(isset($data['moder_login'],$data['moder_pass'],$data['moder_mail'])){
-   $m_l=$data['moder_login'];
-   $m_p=$data['moder_pass'];
-   $m_m=$data['moder_mail'];
-   //если пароль и логин не заполнены или не заполнен хоть один из них - используем старую соль, иначе - генерим новую
-   $moder['salt']=(($m_l==''&&$m_p=='')||($m_l==''||$m_p==''))?$this->_get_user_param('moderator','salt'):$this->_gen_salt();
-   //если логин не заполнен используем старый, иначе - генерим новый
-   $moder['login']=($m_l=='')?$this->_get_user_param('moderator','login'):crypt($m_l,$moder['salt']);
-   //если пароль не заполнен используем старый, иначе - генерим новый
-   $moder['password']=($m_p=='')?$this->_get_user_param('moderator','password'):crypt($m_p,$moder['salt']);
-   //записываем email
-   $moder['email']=$m_m;
-   //перезаписываю модератора
-   $this->back_basic_model->set_user($this->_get_user_param('moderator','id'),$moder);
-  }
-  redirect('admin');
+  $p=array_map('trim',$this->input->post());//убираем пробелы в начале и в конце
+  $this->_check_back_user($p['login'],$p['password'])?TRUE:exit('nounq');//проверка на уникальность логина и пароля
+  $p['last_mod_date']=date('Y-m-d H:i:s');
+  //если пароль и логин не заполнены или не заполнен хоть один из них - используем старую соль, иначе - генерим новую
+  $p['salt']=(($p['login']===''&&$p['password']==='')||($p['login']===''||$p['password']===''))?$this->_get_admin_param('salt'):$this->_gen_salt();
+  //если логин не заполнен используем старый, иначе - генерим новый
+  $p['login']=($p['login']==='')?$this->_get_admin_param('login'):crypt($p['login'],$p['salt']);
+  //если пароль не заполнен используем старый, иначе - генерим новый
+  $p['password']=($p['password']==='')?$this->_get_admin_param('password'):crypt($p['password'],$p['salt']);
+  //перезаписываю администратора
+  $this->back_basic_model->edit_back_user($this->_get_admin_param('id'),$p)?TRUE:exit('error');
+  //перезаписываю сессию чтобы не выбрасывало с админки
+  $this->session->administrator?$this->session->set_userdata('administrator',$p['password'].$p['login']):TRUE;
+  exit('ok');
+ }
+ 
+ function add_moderator(){
+  $this->_is_login()?TRUE:redirect('admin/login');
+  $p=array_map('trim',$this->input->post());//убираем пробелы в начале и в конце
+  $this->_check_back_user($p['login'],$p['password'])?TRUE:exit('nounq');//проверка на уникальность логина и пароля
+  $p['register_date']=date('Y-m-d H:i:s');
+  $p['status']='moderator';
+  $p['salt']=$this->_gen_salt();
+  $p['login']=crypt($p['login'],$p['salt']);
+  $p['password']=crypt($p['password'],$p['salt']);
+  $this->back_basic_model->add($p,$this->_prefix().'back_users')?exit('ok'):exit('error');
+ }
+ 
+ function edit_moderator($id){//если изменяем модератора
+  $this->_is_login()?TRUE:redirect('admin/login');
+  $p=array_map('trim',$this->input->post());//убираем пробелы в начале и в конце
+  $this->_check_back_user($p['login'],$p['password'])?TRUE:exit('nounq');//проверка на уникальность логина и пароля
+  $p['last_mod_date']=date('Y-m-d H:i:s');
+  //если пароль и логин не заполнены или не заполнен хоть один из них - используем старую соль, иначе - генерим новую
+  $p['salt']=(($p['login']===''&&$p['password']==='')||($p['login']===''||$p['password']===''))?$this->_get_moderator_param($id,'salt'):$this->_gen_salt();
+  //если логин не заполнен используем старый, иначе - генерим новый
+  $p['login']=($p['login']==='')?$this->_get_moderator_param($id,'login'):crypt($p['login'],$p['salt']);
+  //если пароль не заполнен используем старый, иначе - генерим новый
+  $p['password']=($p['password']==='')?$this->_get_moderator_param($id,'password'):crypt($p['password'],$p['salt']);
+  //перезаписываю модератора
+  $this->back_basic_model->edit_back_user($id,$p)?exit('ok'):exit('error');
+ }
+ 
+ function del_moderator(){//удалить модератора
+  $this->_is_login()?TRUE:redirect('admin/login');
+  //сколько модераторов в системе, если один - не удалять
+  $this->db->where('status','moderator')->from($this->_prefix().'back_users')->count_all_results()===1?exit('last'):TRUE;
+  $id=$this->input->post('id');
+  $this->back_basic_model->del($this->_prefix().'back_users',$id)?exit('ok'):exit('error');
  }
          
  function set_my_config(){

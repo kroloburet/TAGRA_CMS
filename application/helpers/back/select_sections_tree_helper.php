@@ -5,7 +5,7 @@ if(!function_exists('select_sections')){//вывод дерева раздело
   $tree=array();
   $CI=&get_instance();
   $prefix=$CI->config->item('db_tabl_prefix');
-  $query=$CI->db->select('title, alias,section')->get($prefix.'_sections')->result_array();
+  $query=$CI->db->select('title, alias,section')->get($prefix.'sections')->result_array();
   if(empty($query)){
    echo '<br><label class="select inline width90" style="vertical-align:baseline;"><select name="section">';
    echo '<option value="">Нет</option>';

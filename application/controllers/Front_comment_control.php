@@ -1,5 +1,5 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
-include(APPPATH.'controllers/Front_basic_control.php');
+include_once(APPPATH.'controllers/Front_basic_control.php');
 
 ///////////////////////////////////
 //работа с комментариями
@@ -14,7 +14,7 @@ class Front_comment_control extends Front_basic_control{
  function add_comment(){//отправка комментария аяксом
   $this->input->post('fuck_bot')!==''?exit('bot'):TRUE;
   $p=array_map('strip_tags',array_map('trim',$this->input->post()));
-  $data=array('name'=>$p['name'],'comment'=>$this->_replace_urls($p['comment']),'url'=>$p['url'],'date'=>date('d.m.Y'),'public'=>'on');
+  $data=array('name'=>$p['name'],'comment'=>$this->_replace_urls($p['comment']),'url'=>$p['url'],'date'=>date('Y-m-d'),'public'=>'on');
   $mail_to=FALSE;
   if($this->conf['conf_comment_notific']!=='off'){//нужно отправлять уведомление на e-mail
    //подготовка данных для отправки уведомления
@@ -82,18 +82,18 @@ class Front_comment_control extends Front_basic_control{
  function comment_action($action,$code){//публикация\удаление комментария по ссылке из уведомления
   $data['msg_class']='notific_r';
   $data['msg']='Ой! Ошибка..(<br>Возможно это временные неполадки, побробуйте снова.<br><i class="fa fa-spin fa-spinner"></i>&nbsp;&nbsp;завершение сценария...';
-  $q=$this->db->where('premod_code',$code)->get($this->_prefix().'_comments')->result_array();
+  $q=$this->db->where('premod_code',$code)->get($this->_prefix().'comments')->result_array();
   //////////////////////проверка данных
   if(empty($q)||($action!=='public'&&$action!=='del')){//ошибка если некорректное действие или в базе нет такого кода
    $data['msg_class']='notific_r';
    $data['msg']='Действие невозможно! Комментарий уже удален или опубликован.<br><i class="fa fa-spin fa-spinner"></i>&nbsp;&nbsp;завершение сценария...';
   }else{//код есть, все корректно
    if($action==='public'){//публиковать
-    $this->db->where('premod_code',$code)->update($this->_prefix().'_comments',array('public'=>'on','premod_code'=>''));
+    $this->db->where('premod_code',$code)->update($this->_prefix().'comments',array('public'=>'on','premod_code'=>''));
     $data['msg_class']='notific_g';
     $data['msg']='Комментарий успешно опубликован!<br><i class="fa fa-spin fa-spinner"></i>&nbsp;&nbsp;завершение сценария...';
    }elseif($action==='del'){//удалить
-    $this->db->where('premod_code',$code)->delete($this->_prefix().'_comments');
+    $this->db->where('premod_code',$code)->delete($this->_prefix().'comments');
     $data['msg_class']='notific_g';
     $data['msg']='Комментарий успешно удален!<br><i class="fa fa-spin fa-spinner"></i>&nbsp;&nbsp;завершение сценария...';
    }

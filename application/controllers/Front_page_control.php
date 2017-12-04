@@ -1,5 +1,5 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
-include(APPPATH.'controllers/Front_basic_control.php');
+include_once(APPPATH.'controllers/Front_basic_control.php');
 
 ///////////////////////////////////
 //работа с страницами
@@ -12,14 +12,12 @@ class Front_page_control extends Front_basic_control{
  }
 
  function is_page($alias){
-  ($this->conf['conf_site_access']==='off')?redirect('plug.html'):TRUE;//если сайт закрыт в конфигурации - напрвляю на страницу-заглушку
-  if($this->front_page_model->is_page($alias)){//если в базе есть такой алиас
-  $data=array_merge($this->conf,$this->front_page_model->is_page($alias));//соединение массивов
+  $q=$this->front_page_model->is_page($alias);
+  if($q){//если в базе есть такой алиас
+  $data=array_merge($this->conf,$q);//соединение массивов
   $this->_viewer('front/page_view',$data,$data['comments']);
   }else{//если нет алиаса
-   include(APPPATH.'controllers/Error.php');
-   $error=new Error();
-   $error->error_404();
+   redirect('404_override');
   }
  }
 

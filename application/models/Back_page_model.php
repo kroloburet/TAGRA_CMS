@@ -9,24 +9,28 @@ class Back_page_model extends Back_basic_model{
   parent::__construct();
  }
 
- function edit_page(/* изменения по id */$id,/* значения полей */$post_arr,/* алиас раздела */$alias){
+ function edit_page(/*изменения по id*/$id,/*значения полей*/$post_arr,$alias){
   if($post_arr['alias']!==$alias){//алиас изменился
-   $this->db->where('id',$id)->update($this->_prefix().'_pages',$post_arr);
+   $this->db->where('id',$id)->update($this->_prefix().'pages',$post_arr);
    $url=$alias;
-   //перезапись url комментариев этой страницы
-   $this->db->where('url',$url)->update($this->_prefix().'_comments',array('url'=>$post_arr['alias']));
-   //перезапись url пунктов меню на эту страницу
-   $this->db->where('url','/'.$url)->update($this->_prefix().'_menu',array('url'=>'/'.$post_arr['alias']));
+   //перезапись url комментариев
+   $this->db->where('url',$url)->update($this->_prefix().'comments',array('url'=>$post_arr['alias']));
+   //перезаписать url пунктов меню
+   $this->db->where('url','/'.$url)->update($this->_prefix().'menu',array('url'=>'/'.$post_arr['alias']));
+   //перезаписать связанные ссылки
+   $this->links_url_replace('/'.$alias,'/'.$post_arr['alias']);
   }else{//алиас не менялся
-   $this->db->where('id',$id)->update($this->_prefix().'_pages',$post_arr);
+   $this->db->where('id',$id)->update($this->_prefix().'pages',$post_arr);
   }
  }
 
- function del_page(/* alias галереи */$alias){//удаление страницы и комментариев к ней
-  $this->db->where('alias',$alias)->delete($this->_prefix().'_pages');
-  //удаление комментариев этого раздела
+ function del_page($alias){
+  $this->db->where('alias',$alias)->delete($this->_prefix().'pages');
+  //удаление комментариев
   $url=$alias;
-  $this->db->where('url',$url)->delete($this->_prefix().'_comments');
+  $this->db->where('url',$url)->delete($this->_prefix().'comments');
+  //удаление связанных ссылок
+  $this->links_url_del('/'.$alias);
  }
 
 }

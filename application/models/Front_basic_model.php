@@ -64,17 +64,20 @@ class Front_basic_model extends CI_Model{
 //работа с конфигурацией
 ///////////////////////////////////
 
- function my_config_data(){//таблицу _my_config в масив $data['name']='value'
-  foreach($this->db->get($this->_prefix().'_my_config')->result_array() as $row){
+ function my_config_data(){
+  //таблицу _my_config в масив $data['name']='value'
+  foreach($this->db->get($this->_prefix().'my_config')->result_array() as $row){
    $data[$row['name']]=$row['value'];
   }
+  $m=array();//массив будет хранить emailы всех модераторов
   //получаю e-mail администратора и модератора
-  foreach($this->db->get($this->_prefix().'_back_users')->result_array() as $v){
+  foreach($this->db->get($this->_prefix().'back_users')->result_array() as $v){
    switch($v['status']){
     case'administrator':$data['conf_admin_mail']=$v['email'];break;
-    case'moderator':$data['conf_moderator_mail']=$v['email'];break;
+    case'moderator':array_push($m,$v['email']);break;
    }
   }
+  $data['conf_moderator_mail']=implode(',',$m);//emailы всех модераторов в строку через запятую
   return $data;
  }
 
@@ -98,7 +101,7 @@ class Front_basic_model extends CI_Model{
    */
   $m_tree=array();
   $this->db->order_by('order','ASC');//порядок пунктов
-  $m_query=$this->db->where('public','on')->get($this->_prefix().'_menu')->result_array();
+  $m_query=$this->db->where('public','on')->get($this->_prefix().'menu')->result_array();
   if(empty($m_query)){return $m_tree;}
   $m_nodes=array();
   $m_keys=array();

@@ -24,7 +24,7 @@ window.addEventListener('load',function(){
  
 //////////////////////////////////////////////////////////////плавный скроллинг
  if(window.location.hash){//если в строке запроса есть # — скролю на него
-  $('body').animate({scrollTop:$(window.location.hash).offset().top},800);
+  $('body,html').animate({scrollTop:$(window.location.hash).offset().top},800);
  }
  
 ////////////////////////////////////////////////////////////////TABS
@@ -120,7 +120,7 @@ function tt(trig,e_hide){
 }
 
 //////////////////////////////////////////////////////////////скрол страницы по событию к targ
-function scrll(targ){$('body').animate({scrollTop:$('#'+targ).offset().top},800);}
+function scrll(targ){$('body,html').animate({scrollTop:$('#'+targ).offset().top},800);}
 
 //////////////////////////////////////////////////////////////свертывание/развертывание контента
 function opn_cls(el/*id елемента*/){$('#'+el).slideToggle(200);}

@@ -8,7 +8,7 @@
 <!--####### Основные настройки #######-->
   <dt class="tab_active">Основные настройки</dt>
   <dd>
-   <form method="POST" action="<?=base_url('admin/setting/set_my_config')?>" onsubmit="subm(this);return false">
+   <form method="POST" action="<?=base_url('admin/setting/set_my_config')?>" onsubmit="subm(this,s_opts);return false">
     <div class="tab_content">
      <p>— Это панель настроек конфигурации. Здесь Вы можете управлять главными настройками сайта.<br>Редактируя настройки Вы можете использовать кириллицу, но рекомендуется использовать латинские символы.<br>Не забывайте сохранять настройки после изменения.</p>
      <div class="row">
@@ -43,7 +43,7 @@ E-mail на который будут приходить
 Например: со страницы «Контакты».
 <b class="red">Обязательно для заполнения!</b></pre>
         <label class="input">
-         <input type="email" name="conf_site_mail" value="<?=$conf_site_mail?>">
+         <input type="text" name="conf_site_mail" value="<?=$conf_site_mail?>">
         </label>
         Путь к библиотеке JQuery <i class="fa-info-circle red" onmouseover="tt(this,'c');"></i>
         <pre class="tt">
@@ -73,12 +73,12 @@ JQuery — подключаемый скрипт для правильной
           <optgroup label="Без премодерации">
            <option value="site_mail">На e-mail сайта</option>
            <option value="admin_mail">На e-mail администратора</option>
-           <option value="moderator_mail">На e-mail модератора</option>
+           <option value="moderator_mail">На e-mail всем модераторам</option>
           </optgroup>
           <optgroup label="С премодерацией">
            <option value="premod_site_mail">На e-mail сайта</option>
            <option value="premod_admin_mail">На e-mail администратора</option>
-           <option value="premod_moderator_mail">На e-mail модератора</option>
+           <option value="premod_moderator_mail">На e-mail всем модераторам</option>
           </optgroup>
          </select>
         </label>
@@ -219,21 +219,25 @@ JQuery — подключаемый скрипт для правильной
   <?php if($conf_status==='administrator'){?>
    <dt>Администратор</dt>
    <dd>
-    <form method="POST" action="<?=base_url('admin/setting/set_user')?>" onsubmit="subm(this);return false">
-     <div class="tab_content">
-      <p>Администратор — это статус с полными правами доступа к административной части сайта. Он может управлять главными (конфигурационными) настройками сайта: назначать модератора, устанавливать пароли и так далее. Если Вы сейчас читаете эти строки, значит у Вас полные права доступа и администратор — это Вы.</p>
-      Новый логин администратора <i class="fa-info-circle blue" onmouseover="tt(this);"></i>
+    <div class="tab_content">
+     <p>Администратор — это статус с полными правами доступа к административной части сайта. Он может управлять главными (конфигурационными) настройками сайта: назначать модератора, устанавливать пароли и так далее. Администратор в системе может быть только один. Если Вы сейчас читаете эти строки, значит у Вас полные права доступа и администратор — это Вы.</p>
+     <form id="edit_a_form">
+      Новый логин <i class="fa-info-circle blue" onmouseover="tt(this);"></i>
       <pre class="tt">
+Оставьте поле пустым если
+не хотите менять логин.
 Строка длиной 5-20 символов
 которыми могут быть строчные,
 прописные латинские буквы,
 цифры, специальные символы.
 Пример: Va$ya_Pupkin</pre>
       <label class="input">
-       <input type="text" name="admin_login" value="">
+       <input type="text" name="login">
       </label>
-      Новый пароль администратора <i class="fa-info-circle blue" onmouseover="tt(this);"></i>
+      Новый пароль <i class="fa-info-circle blue" onmouseover="tt(this);"></i>
     <pre class="tt">
+Оставьте поле пустым если
+не хотите менять пароль.
 Строка длиной 8-20 символов
 которыми могут быть строчные,
 прописные латинские буквы,
@@ -243,79 +247,270 @@ JQuery — подключаемый скрипт для правильной
 или генирируйте его!</b></pre>
       <a href="#" onclick="gen_pass('admin_pass');return false" class="fa-refresh" title="Генерировать новый пароль"></a>
       <label class="input">
-       <input type="text" name="admin_pass" id="admin_pass" value="">
+       <input type="text" name="password" id="admin_pass">
       </label>
-      E-mail администратора <i class="fa-info-circle red" onmouseover="tt(this);"></i>
+      E-mail <i class="fa-info-circle red" onmouseover="tt(this);"></i>
     <pre class="tt">
 На этот е-mail будут высланы логины
 и пароли, если Вы их забудите.
 Указывайте надежный почтовый ящик.
 <b class="red">Обязательно для заполнения!</b></pre>
       <label class="input">
-       <input type="email" name="admin_mail" value="<?=$conf_admin_mail?>">
+       <input type="text" name="email" value="<?=$conf_admin_mail?>">
       </label>
+      <div class="_msg"></div>
       <div class="button">
-       <input type="submit" value="Сохранить настройки администратора">
+       <button type="button" onclick="edit_administrator()">Сохранить</button>
       </div>
-     </div>
-    </form>
+     </form>
+    </div>
    </dd>
    
-<!--####### Настройки модератора #######-->
-   <dt>Модератор</dt>
+<!--####### Настройки модераторов #######-->
+   <dt>Модераторы</dt>
    <dd>
-    <form method="POST" action="<?=base_url('admin/setting/set_user')?>" onsubmit="subm(this);return false">
-     <div class="tab_content">
-      <p>Модератор — это статус с неполными правами доступа к административной части сайта. Ему не доступны главные (конфигурационные) настройки сайта но он имеет доступ к остальной административной части сайта. Модератор может добавлять, изменять, удалять страницы сайта, управлять меню и так далее.</p>
-      Новый логин модератора <i class="fa-info-circle blue" onmouseover="tt(this);"></i>
-    <pre class="tt">
+    <div class="tab_content">
+     <p>Модератор — это статус с неполными правами доступа к административной части сайта. Ему не доступны главные (конфигурационные) настройки сайта но он имеет доступ к остальной административной части сайта. Модератор может добавлять, изменять, удалять страницы сайта, управлять меню и так далее.</p>
+     <!--добавить модератора-->
+     <div class="touch">
+      <h2>Добавить модератора</h2>
+      <hr>
+      <form id="add_m_form">
+       Логин <i class="fa-info-circle red" onmouseover="tt(this);"></i>
+       <pre class="tt">
 Строка длиной 5-20 символов
 которыми могут быть строчные,
 прописные латинские буквы,
 цифры, специальные символы.
-Пример: Va$ya_Pupkin</pre>
-      <label class="input">
-       <input type="text" name="moder_login" value="">
-      </label>
-      Новый пароль модератора <i class="fa-info-circle blue" onmouseover="tt(this);"></i>
-      <pre class="tt">
+Пример: Va$ya_Pupkin
+<b class="red">Обязательно для заполнения!</b></pre>
+       <label class="input">
+        <input type="text" name="login">
+       </label>
+       Пароль <i class="fa-info-circle red" onmouseover="tt(this);"></i>
+       <pre class="tt">
 Строка длиной 8-20 символов
 которыми могут быть строчные,
 прописные латинские буквы,
 цифры, специальные символы.
 Пример: o4-slOjniY
 <b class="red">Используйте сложный пароль,
-или генирируйте его!</b></pre>
-      <a href="#" onclick="gen_pass('moderator_pass');return false" class="fa-refresh" title="Генерировать новый пароль"></a>
-      <label class="input">
-       <input type="text" name="moder_pass" id="moderator_pass" value="">
-      </label>
-      E-mail модератора <i class="fa-info-circle red" onmouseover="tt(this);"></i>
-    <pre class="tt">
-Даже если модератор не назначен,
-все равно заполите это поле.
+или генирируйте его!
+Обязательно для заполнения!</b></pre>
+       <a href="#" onclick="gen_pass('moderator_pass');return false" class="fa-refresh" title="Генерировать пароль"></a>
+       <label class="input">
+        <input type="text" name="password" id="moderator_pass">
+       </label>
+       E-mail <i class="fa-info-circle red" onmouseover="tt(this);"></i>
+       <pre class="tt">
 Указывайте надежный почтовый ящик.
 <b class="red">Обязательно для заполнения!</b></pre>
-      <label class="input">
-       <input type="email" name="moder_mail" value="<?=$conf_moderator_mail?>">
-      </label>
-      <div class="button">
-       <input type="submit" value="Сохранить настройки модератора">
-      </div>
+       <label class="input">
+        <input type="text" name="email">
+       </label>
+       <div class="_msg"></div>
+       <div class="button">
+        <button type="button" onclick="add_moderator()">Добавить модератора</button>
+       </div>
+      </form>
      </div>
-    </form>
+     <!--список модераторов-->
+     <?php foreach($moderators as $v){//перебор модераторов?>
+     <div class="touch" id="moderator_item_<?=$v['id']?>">
+      <h3>
+       <i class="fa-user"></i>&nbsp;<?=$v['email']?>&nbsp;&nbsp;&nbsp;
+       <i class="fa-info-circle blue" onmouseover="tt(this);"></i>
+       <pre class="tt">
+ID: <?=$v['id'].PHP_EOL?>
+Дата добавления: <?=$v['register_date'].PHP_EOL?>
+Дата изменения: <?=$v['last_mod_date'].PHP_EOL?>
+Дата последней авторизации: <?=$v['last_login_date'].PHP_EOL?></pre>
+       <a href="#" class="fa-edit green" title="Редактировать" onclick="opn_cls('edit_m_form_<?=$v['id']?>');return false"></a>
+       <a href="#" class="fa-trash-o red" title="Удалить"onclick="del_moderator('<?=$v['id']?>');return false"></a>
+      </h3>
+      <form class="opn_cls" id="edit_m_form_<?=$v['id']?>">
+       <hr>
+       Новый логин <i class="fa-info-circle blue" onmouseover="tt(this);"></i>
+       <pre class="tt">
+Оставьте поле пустым если
+не хотите менять логин</pre>
+       <label class="input">
+        <input type="text" name="login">
+       </label>
+       Новый пароль <i class="fa-info-circle blue" onmouseover="tt(this);"></i>
+       <pre class="tt">
+Оставьте поле пустым если
+не хотите менять пароль</pre>
+       <a href="#" onclick="gen_pass('moderator_pass_<?=$v['id']?>');return false" class="fa-refresh" title="Генерировать новый пароль"></a>
+       <label class="input">
+        <input type="text" name="password" id="moderator_pass_<?=$v['id']?>">
+       </label>
+       E-mail <i class="fa-info-circle red" onmouseover="tt(this);"></i>
+       <pre class="tt">
+Указывайте надежный почтовый ящик.
+<b class="red">Обязательно для заполнения!</b></pre>
+       <label class="input">
+        <input type="text" name="email" value="<?=$v['email']?>">
+       </label>
+       <div class="_msg"></div>
+       <div class="button">
+        <button type="button" onclick="edit_moderator('<?=$v['id']?>')">Сохранить</button>
+        <button type="button" onclick="opn_cls('edit_m_form_<?=$v['id']?>')">Отмена</button>
+       </div>
+      </form>
+     </div>
+     <?php }?>
+    </div>
    </dd>
   <?php }?>
  </dl>
- 
+
 <script>
 ////////////////////////////////////////////////рег.выражения для проверки полей
- var s_opts={
-  conf_site_mail:/^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/,
-  conf_jq:/[^\s]/
- };
+var s_opts={
+ conf_site_mail:/^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/,
+ conf_jq:/[^\s]/
+};
 $(function(){
  ///////////////////////////////////////////////установка значений полей
  $('select[name="conf_comment_notific"] option[value="<?=$conf_comment_notific?>"]').attr('selected',true);
 });
+///////////////////////////////////////////////////редактировать модератора
+function edit_administrator(){
+ var form=$('#edit_a_form');
+ var btn=form.find('button');
+ var msg=form.find('._msg');
+ var email=form.find('[name="email"]');
+ form.find('input').removeClass('novalid');
+ if(!/^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/.test(email.val())){alert('В поле "E-mail" недопустимый символ либо оно не заполнено!');email.addClass('novalid');return false;}
+ btn.attr('disabled',true).html('<i class="fa fa-spin fa-spinner"></i>&nbsp;&nbsp;обработка...');//блокирую кнопку
+ $.ajax({
+   url: '<?=base_url('admin/setting/edit_administrator')?>',//путь к скрипту, который обработает запрос
+   type: 'post',
+   data: form.serialize(),
+   dataType: 'text',
+   success: function(data){//обработка ответа
+    switch(data){
+     //админ не записан в базу
+     case 'error':msg.html('<div class="notific_r">Ой! Ошибка..(<br>Возможно это временные неполадки, попробуйте снова.</div>');
+      btn.attr('disabled',false).html('Сохранить');
+      break;
+     //пароль и логин не уникальны
+     case 'nounq':msg.html('<div class="notific_r">В системе уже есть пользователь с таким логином и паролем!</div>');
+      btn.attr('disabled',false).html('Сохранить');
+      break;
+     //все пучком
+     case 'ok':btn.remove();
+      msg.html('<div class="notific_g">Администратор успешно изменен!<br><i class="fa fa-spin fa-spinner"></i>&nbsp;&nbsp;обновление страницы...</div>');  
+      setTimeout(function(){location.reload();},5000);
+      break;
+     //ошибки сценария сервера
+     default :msg.html('<div class="notific_b">'+data+'</div>');
+      btn.attr('disabled',false).html('Сохранить');
+      break;
+    }
+   }
+ });
+}
+///////////////////////////////////////////////////добавить модератора
+function add_moderator(){
+ var form=$('#add_m_form');
+ var btn=form.find('button');
+ var msg=form.find('._msg');
+ var login=form.find('[name="login"]');
+ var pass=form.find('[name="password"]');
+ var email=form.find('[name="email"]');
+ form.find('input').removeClass('novalid');
+ if(!/\S/.test(login.val())){alert('Поле "Логин" не заполнено!');login.addClass('novalid');return false;}
+ if(!/\S/.test(pass.val())){alert('Поле "Пароль" не заполнено!');pass.addClass('novalid');return false;}
+ if(!/^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/.test(email.val())){alert('В поле "E-mail" недопустимый символ либо оно не заполнено!');email.addClass('novalid');return false;}
+ btn.attr('disabled',true).html('<i class="fa fa-spin fa-spinner"></i>&nbsp;&nbsp;обработка...');//блокирую кнопку
+ $.ajax({
+   url: '<?=base_url('admin/setting/add_moderator')?>',//путь к скрипту, который обработает запрос
+   type: 'post',
+   data: form.serialize(),
+   dataType: 'text',
+   success: function(data){//обработка ответа
+    switch(data){
+     //модератор не записан в базу
+     case 'error':msg.html('<div class="notific_r">Ой! Ошибка..(<br>Возможно это временные неполадки, попробуйте снова.</div>');
+      btn.attr('disabled',false).html('Добавить модератора');
+      break;
+     //пароль и логин не уникальны
+     case 'nounq':msg.html('<div class="notific_r">В системе уже есть пользователь с таким логином и паролем!</div>');
+      btn.attr('disabled',false).html('Добавить модератора');
+      break;
+     //все пучком
+     case 'ok':btn.remove();
+      msg.html('<div class="notific_g">Модератор успешно добавлен!<br><i class="fa fa-spin fa-spinner"></i>&nbsp;&nbsp;обновление страницы...</div>');  
+      setTimeout(function(){location.reload();},5000);
+      break;
+     //ошибки сценария сервера
+     default :msg.html('<div class="notific_b">'+data+'</div>');
+      btn.attr('disabled',false).html('Добавить модератора');
+      break;
+    }
+   }
+ });
+}
+///////////////////////////////////////////////////редактировать модератора
+function edit_moderator(id){
+ var form=$('#edit_m_form_'+id);
+ var btn=form.find('button');
+ var msg=form.find('._msg');
+ var email=form.find('[name="email"]');
+ form.find('input').removeClass('novalid');
+ if(!/^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/.test(email.val())){alert('В поле "E-mail" недопустимый символ либо оно не заполнено!');email.addClass('novalid');return false;}
+ btn.attr('disabled',true).html('<i class="fa fa-spin fa-spinner"></i>&nbsp;&nbsp;обработка...');//блокирую кнопку
+ $.ajax({
+   url: '<?=base_url('admin/setting/edit_moderator')?>/'+id,//путь к скрипту, который обработает запрос
+   type: 'post',
+   data: form.serialize(),
+   dataType: 'text',
+   success: function(data){//обработка ответа
+    switch(data){
+     //модератор не записан в базу
+     case 'error':msg.html('<div class="notific_r">Ой! Ошибка..(<br>Возможно это временные неполадки, попробуйте снова.</div>');
+      btn.attr('disabled',false).html('Сохранить');
+      break;
+     //пароль и логин не уникальны
+     case 'nounq':msg.html('<div class="notific_r">В системе уже есть пользователь с таким логином и паролем!</div>');
+      btn.attr('disabled',false).html('Сохранить');
+      break;
+     //все пучком
+     case 'ok':btn.remove();
+      msg.html('<div class="notific_g">Модератор успешно изменен!<br><i class="fa fa-spin fa-spinner"></i>&nbsp;&nbsp;обновление страницы...</div>');  
+      setTimeout(function(){location.reload();},5000);
+      break;
+     //ошибки сценария сервера
+     default :msg.html('<div class="notific_b">'+data+'</div>');
+      btn.attr('disabled',false).html('Сохранить');
+      break;
+    }
+   }
+ });
+}
+///////////////////////////////////////////////////удалить модератора
+function del_moderator(id){
+ if(!confirm('Модератор будет безвозвратно удален!\nВыполнить действие?')){return false;}
+ var item=$('#moderator_item_'+id);
+ $.ajax({
+   url: '<?=base_url('admin/setting/del_moderator')?>',//путь к скрипту, который обработает запрос
+   type: 'post',
+   data: {id:id},
+   dataType: 'text',
+   success: function(data){//обработка ответа
+    switch(data){
+     //модератор не удален
+     case 'error':alert('Ой! Ошибка..(\nВозможно это временные неполадки, попробуйте снова.');break;
+     //последний модератор
+     case 'last':alert('В системе должен быть один или больше модераторов!');break;
+     //все пучком
+     case 'ok':item.remove();break;
+     //ошибки сценария сервера
+     default :alert(data);break;
+    }
+   }
+ });
+}
 </script>

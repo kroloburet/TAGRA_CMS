@@ -1,23 +1,24 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
+include_once(APPPATH.'controllers/Front_basic_control.php');
 
-class Error extends CI_Controller {
-// function __construct(){
-//  parent::__construct();
-// }
+///////////////////////////////////
+//обработка ошибок
+///////////////////////////////////
+
+class Error extends Front_basic_control{
+ function __construct(){
+  parent::__construct();
+ }
 
  function error_404() {
-  $this->load->model('Front_basic_model');
-  $data=$this->Front_basic_model->my_config_data();
-  $data['front_menu_list']=$this->Front_basic_model->get_menu();
+  $data=$this->conf;
   $data['robots']='none';
-  $data['addthis_follow']='on';
-  $data['addthis_share']='on';
-  $data['description']='';
+  $data['addthis_follow']='off';
+  $data['addthis_share']='off';
+  $data['description']='Упс! Страница не найдена';
   $data['title']='Упс! Страница не найдена';
   $this->output->set_status_header('404');
-  $this->load->view('front/blocks/header_view', $data);
-  $this->load->view('404_view', $data);
-  $this->load->view('front/blocks/footer_view', $data);
+  $this->_viewer('404_view',$data,'off');
  }
 
 }

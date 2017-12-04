@@ -14,15 +14,15 @@ class Back_basic_model extends CI_Model{
  }
 
  function add(/* значения полей */$post_arr,/* добавить в таблицу */$tabl){
-  $this->db->insert($tabl,$post_arr);
+  return $this->db->insert($tabl,$post_arr)?TRUE:FALSE;
  }
 
  function edit(/* изменения по id */$id,/* значения полей */$post_arr,/* изменения в таблице */$tabl){
-  $this->db->where('id',$id)->update($tabl,$post_arr);
+  return $this->db->where('id',$id)->update($tabl,$post_arr)?TRUE:FALSE;
  }
 
  function del(/* в таблице */$tab,/* id страницы */$id){//удаление из таблицы $tab по $id
-  $this->db->where('id',$id)->delete($tab);
+  return $this->db->where('id',$id)->delete($tab)?TRUE:FALSE;
  }
 
  function toggle_public(/* id страницы */$id,/* в таблице */$tab,/* on/off */$pub){
@@ -32,6 +32,30 @@ class Back_basic_model extends CI_Model{
   }elseif($pub==='on'){
    $this->db->where('id',$id)->update($tab,array('public'=>'off'));
    return 'off';
+  }
+ }
+ 
+ function links_url_replace(/*найти строку url*/$search,/*заменить на строку url*/$replace){//изменение связанных ссылок
+  $tables=array('index_page','pages','sections','gallerys');
+  foreach($tables as $table){//проход по таблицам с полями id,links
+   $q=$this->db->select('id,links')->like('links','"'.$search.'"')->get($this->_prefix().$table)->result_array();//вернуть записи с искомой
+   if(empty($q)){continue;}//в таблице нет записей
+   foreach($q as $k=>$v){$q[$k]['links']=str_replace('"'.$search.'"','"'.$replace.'"',$v['links']);}//перезаписать искомые url в массиве
+   $this->db->update_batch($this->_prefix().$table,$q,'id');//изменить в базе
+  }
+ }
+ 
+ function links_url_del(/*найти опцию с строкой url*/$search){//удаление связанных ссылок
+  $tables=array('index_page','pages','sections','gallerys');
+  foreach($tables as $table){//проход по таблицам с полями id,links
+   $q=$this->db->select('id,links')->like('links','"'.$search.'"')->get($this->_prefix().$table)->result_array();//вернуть записи с искомой
+   if(empty($q)){continue;}//в таблице нет записей
+   foreach($q as $k=>$v){//проход по записям
+    $links=json_decode($v['links'],true);//json опций в массив
+    foreach($links as $id=>$opt){if(is_array($opt)&&in_array($search,$opt)){unset($links[$id]);}}//проход по массиву опций, удалить искомое
+    $q[$k]['links']=count($links)<=1?'':json_encode($links,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);//массив опций в json, для отправки
+   }
+   $this->db->update_batch($this->_prefix().$table,$q,'id');//изменить в базе записи с искомым
   }
  }
 
@@ -46,9 +70,9 @@ class Back_basic_model extends CI_Model{
  }
  
  function get_where_id($tabl,$id){
-  foreach($this->db->where('id',$id)->get($tabl)->result_array() as $data){
-   foreach($data as $k=>$v){$data[$k]=$v;}
-  }
+  $q=$this->db->where('id',$id)->get($tabl)->result_array();
+  if(empty($q)){return FALSE;}
+  foreach($q as $data){foreach($data as $k=>$v){$data[$k]=$v;}}
   return $data;
  }
 
@@ -58,14 +82,14 @@ class Back_basic_model extends CI_Model{
          /* с значением (находим запись */$field_val,
          /* получить значение (из найденной записи) */$res_field
          ){
-  foreach ($this->db->get_where($tab,array($field=>$field_val))->result() as $row){
-   return $row->$res_field;
-  }
+  $q=$this->db->get_where($tab,array($field=>$field_val))->result_array();
+  if(empty($q)){return FALSE;}
+  foreach ($q as $v){return $v[$res_field];}
  }
 
  function check_title($title,$id,$tab){//проверка на уникальность title в таблице БД
   $where=$id?array('title'=>$title,'id !='=>$id):array('title'=>$title);
-  $q=$this->db->where($where)->get($this->_prefix().'_'.$tab)->result_array();
+  $q=$this->db->where($where)->get($this->_prefix().$tab)->result_array();
   return empty($q)?FALSE:TRUE;
  }
  
@@ -83,7 +107,7 @@ class Back_basic_model extends CI_Model{
    $like=$get_arr['context_search']==='content'?array('layout_t'=>$get_arr['search'],'layout_b'=>$get_arr['search'],'layout_l'=>$get_arr['search'],'layout_r'=>$get_arr['search']):array($get_arr['context_search']=>$get_arr['search']);
    $this->db->or_like($like);
   }  
-  $q['count_result']=$this->db->count_all_results($this->_prefix().'_'.$table,FALSE);
+  $q['count_result']=$this->db->count_all_results($this->_prefix().$table,FALSE);
   $this->db->limit($get_arr['pag_per_page'],$get_arr['per_page']);
   $q['result']=$this->db->get()->result_array();
   return $q;
@@ -92,19 +116,19 @@ class Back_basic_model extends CI_Model{
 ///////////////////////////////////
 //конфигурация и пользователи админки
 ///////////////////////////////////
-
+ 
  function get_back_users($email=FALSE){
   if($email){$this->db->where('email',$email);}
-  $q=$this->db->get($this->_prefix().'_back_users')->result_array();
+  $q=$this->db->get($this->_prefix().'back_users')->result_array();
   return empty($q)?FALSE:$q;
  }
-
- function set_user($id,$post_arr=array()){
-   $this->db->where('id',$id)->update($this->_prefix().'_back_users',$post_arr);
+ 
+ function edit_back_user($id,$post_arr=array()){
+   return $this->db->where('id',$id)->update($this->_prefix().'back_users',$post_arr)?TRUE:FALSE;
  }
 
  function my_config_data(){//таблицу _my_config в масив $data['name']='value'
-  foreach($this->db->get($this->_prefix().'_my_config')->result_array() as $v){$data[$v['name']]=$v['value'];}
+  foreach($this->db->get($this->_prefix().'my_config')->result_array() as $v){$data[$v['name']]=$v['value'];}
   return $data;
  }
 
@@ -113,13 +137,13 @@ class Back_basic_model extends CI_Model{
 ///////////////////////////////////
 
  function sitemap_config_data(){//таблицу _my_config в масив $data['name']='value'
-  foreach($this->db->get($this->_prefix().'_sitemap_config')->result_array() as $v){$data[$v['name']]=$v['value'];}
+  foreach($this->db->get($this->_prefix().'sitemap_config')->result_array() as $v){$data[$v['name']]=$v['value'];}
   return $data;
  }
 
  function set_sitemap_config($post_arr=array()){
   foreach($post_arr as $name=>$value){
-   $this->db->where('name',$name)->update($this->_prefix().'_sitemap_config',array('name'=>$name,'value'=>$value));
+   $this->db->where('name',$name)->update($this->_prefix().'sitemap_config',array('name'=>$name,'value'=>$value));
   }
  }
 

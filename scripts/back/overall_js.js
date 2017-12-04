@@ -5,7 +5,7 @@ $('img').on('error',function(){$(this).attr('src','/img/noimg.svg');});
  
 //////////////////////////////////////////////////////////////показать в пункте меню (комментарии) колличество новых комментов
  $('#count_new_comments').load(
-  base_url+"admin/comment/get_count_new",
+  "/admin/comment/get_count_new",
   function(data){
    var count=$('#count_new_comments');
    data>0?count.addClass('fa-bell-o red'):count.remove();
@@ -168,12 +168,8 @@ function gen_pass(pass/*поле для вставки пароля*/){
 //////////////////////////////////////////////////////////////////////////проверка на уникальность title в таблице БД
 function check_title(elem/*поле title*/,id/*id материала*/,tab/*таблица материала*/,msg/*сообщение если найдет совпадение*/){
  $.post(
-  base_url+"admin/check_title",//путь к скрипту, который обработает запрос
-  {
-    title:$(elem).val(),
-    id:id,
-    tab:tab
-  },
+  "/admin/check_title",
+  {title:$(elem).val(),id:id,tab:tab},
   function(data){
    switch(data){
     case 'ok':
@@ -197,7 +193,7 @@ function check_title(elem/*поле title*/,id/*id материала*/,tab/*т�
 ////////////////////////////////////////////////////////////////////////опубликовать\не опубликовывать аяксом
 function toggle_public(elem/*для клика и вставки ответа сервера*/,id/*id страницы*/,tab/*искать в таблице*/,pub/*текущее on или off*/){
  $(elem).parent().load(
-  base_url+"admin/toggle_public",
+  "/admin/toggle_public",
   {id:id,tab:tab,pub:pub}
  );
 }
@@ -208,7 +204,7 @@ function del_tab(elem/*для клика и вставки ответа серв
   return false;
  }else{
   $(elem).parents('tr').load(
-   base_url+"admin/del",
+   "/admin/del",
    {id:id,tab:tab}
   );
  }
@@ -220,7 +216,7 @@ function del_section(elem/*для клика и вставки ответа се
   return false;
  }else{
   $(elem).parents('tr').load(
-   base_url+'admin/section/del',
+   '/admin/section/del',
    {alias:alias}
   );
  }
@@ -232,7 +228,7 @@ function del_gallery(elem/*для клика и вставки ответа се
   return false;
  }else{
   $(elem).parents('tr').load(
-   base_url+'admin/gallery/del',
+   '/admin/gallery/del',
    {alias:alias}
   );
  }
@@ -244,7 +240,7 @@ function del_page(elem/*для клика и вставки ответа сер�
   return false;
  }else{
   $(elem).parents('tr').load(
-   base_url+'admin/page/del',
+   '/admin/page/del',
    {alias:alias}
   );
  }
@@ -272,7 +268,3 @@ function files(
  moxman.browse(opt);
  function files_notifer(){$('.moxman-window-head').after('<div style="padding:4px;background-color:#ffc0a2">Внимание! Не используйте кириллицу и пробелы в именах файлов и папок!</div>');}
 }
-
-////////////////////////////////////////////////КОНФИГУРАЦИОННЫЕ ПЕРЕМЕННЫЕ
-base_url="http://www.sub.cherezov.info/";
-////////////////////////////////////////////////КОНФИГУРАЦИОННЫЕ ПЕРЕМЕННЫЕ

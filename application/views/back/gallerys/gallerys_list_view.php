@@ -80,7 +80,7 @@
    <td><?=$item['alias']?></td>
    <td><?php section_alias_to_title($item['section'])?></td>
    <td>
-    <span><a href="#" class="<?php if($item['public']=='on'){echo'fa-eye green';}else{echo'fa-eye-slash red';}?>" title="Опубликовать/не опубликовывать" onclick="toggle_public(this,<?=$item['id']?>,'<?=$prefix?>_gallerys','<?=$item['public']?>');return false"></a></span>&nbsp;&nbsp;
+    <span><a href="#" class="<?php if($item['public']=='on'){echo'fa-eye green';}else{echo'fa-eye-slash red';}?>" title="Опубликовать/не опубликовывать" onclick="toggle_public(this,<?=$item['id']?>,'<?=$prefix?>gallerys','<?=$item['public']?>');return false"></a></span>&nbsp;&nbsp;
     <a href="<?=base_url('admin/gallery/edit_form/'.$item['id'])?>" class="fa-edit green" title="Редактировать"></a>&nbsp;&nbsp;
     <a href="<?=base_url('gallery/'.$item['alias'])?>" class="fa-external-link" target="_blank" title="Смотреть на сайте"></a>&nbsp;&nbsp;
     <a href="#" class="fa-trash-o red" title="Удалить" onclick="del_gallery(this,'<?=$item['alias']?>');return false"></a>
