@@ -112,7 +112,7 @@ $t=$db_tabl_prefix.'gallerys';
   `links` text NOT NULL,
   `section` text NOT NULL,
   `type` varchar(20) NOT NULL,
-  `opt` longtext NOT NULL,  
+  `opt` longtext NOT NULL,
   `addthis_share` varchar(20) NOT NULL DEFAULT 'off',
   `addthis_follow` varchar(20) NOT NULL DEFAULT 'off',
   `img_prev` text NOT NULL,
@@ -406,8 +406,8 @@ echo "<div class='notific_g'>Файл $f2 успешно записан</div>";
 fclose($fp2);
 echo $good_msg;
 ?>
-   
-   <div id="copy">Веб-разработка и дизайн<a href="mailto:kroloburet@gmail.com" class="js"> <img src="/UI_fraimwork/img/kroloburet_18_18.jpeg" width="18" height="18" alt="Разработка и дизайн сайтов"> kroloburet@gmail.com</a><br>
+
+   <div id="copy">Веб-разработка и дизайн<a href="mailto:kroloburet@gmail.com"> <img src="/UI_fraimwork/img/kroloburet_18_18.jpeg" width="18" height="18" alt="Разработка и дизайн сайтов"> kroloburet@gmail.com</a><br>
  <img src="/UI_fraimwork/img/logo_tagra_18_18.svg" alt="Tagra CMS"> Tagra CMS<br></div>
   </div>
  </body>

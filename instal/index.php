@@ -109,10 +109,10 @@ URL к директории в которой будет запущена сис
 echo '<p style="margin-top:1.5em;">Установите права на запись (777) и жмите <a href="index.php" class="btn">Попробовать снова</a> или обратитесь к разработчику по e-mail: <a href="mailto:kroloburet@gmail.com">kroloburet@gmail.com</a></p>';
 }
 ?>
-   <div id="copy">Веб-разработка и дизайн<a href="mailto:kroloburet@gmail.com" class="js"> <img src="/UI_fraimwork/img/kroloburet_18_18.jpeg" width="18" height="18" alt="Разработка и дизайн сайтов"> kroloburet@gmail.com</a><br>
+   <div id="copy">Веб-разработка и дизайн<a href="mailto:kroloburet@gmail.com"> <img src="/UI_fraimwork/img/kroloburet_18_18.jpeg" width="18" height="18" alt="Разработка и дизайн сайтов"> kroloburet@gmail.com</a><br>
  <img src="/UI_fraimwork/img/logo_tagra_18_18.svg" alt="Tagra CMS"> Tagra CMS<br></div>
   </div>
-  
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="/UI_fraimwork/js.js"></script>
   <script>

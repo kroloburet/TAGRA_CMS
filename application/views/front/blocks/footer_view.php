@@ -7,7 +7,7 @@
 <div id="copy">
 <?=$conf_site_name?>&nbsp;&copy;&nbsp;<?=date('Y')?><hr>
 Веб-разработка и дизайн&nbsp;<img src="<?=base_url('img/kroloburet_18_18.jpeg')?>" width="18" height="18" alt="Разработка и дизайн сайтов">
-<br><a href="mailto:kroloburet@gmail.com" class="js">kroloburet@gmail.com</a>
+<br><a href="mailto:kroloburet@gmail.com">kroloburet@gmail.com</a>
 </div>
 </div>
 <div class="col6">
