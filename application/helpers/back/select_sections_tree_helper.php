@@ -9,7 +9,7 @@ if(!function_exists('select_sections')){//вывод дерева раздело
   if(empty($query)){
    echo '<br><label class="select inline width90" style="vertical-align:baseline;"><select name="section">';
    echo '<option value="">Нет</option>';
-   echo '</select></label><a href="'.base_url('admin/sections_add_form').'"><i class="fa-plus-circle fa-lg green" title="Добавить раздел"></i></a><br>';
+   echo '</select></label><a href="'.base_url('admin/section/add_form').'"><i class="fa-plus-circle fa-lg green" title="Добавить раздел"></i></a><br>';
    return FALSE;
   }
   $nodes=array();
