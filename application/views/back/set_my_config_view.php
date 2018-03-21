@@ -4,16 +4,15 @@
 ?>
 <h1><?=$conf_title?></h1>
  <dl class="tabs">
-  
+
 <!--####### Основные настройки #######-->
   <dt class="tab_active">Основные настройки</dt>
   <dd>
    <form method="POST" action="<?=base_url('admin/setting/set_my_config')?>" onsubmit="subm(this,s_opts);return false">
     <div class="tab_content">
-     <p>— Это панель настроек конфигурации. Здесь Вы можете управлять главными настройками сайта.<br>Редактируя настройки Вы можете использовать кириллицу, но рекомендуется использовать латинские символы.<br>Не забывайте сохранять настройки после изменения.</p>
      <div class="row">
       <div class="col6">
-       
+
        <!--####### Общее #######-->
        <div class="row  touch">
         <h3>Общее</h3>
@@ -31,7 +30,7 @@
          <select name="conf_site_access">
           <option value="on" <?php if($conf_site_access=='on') echo'selected'?>>Доступ к сайту открыт</option>
           <option value="off" <?php if($conf_site_access=='off') echo'selected'?>>Доступ к сайту закрыт</option>
-         </select> 
+         </select>
         </label>
         Имя сайта
         <label class="input">
@@ -57,7 +56,7 @@ JQuery — подключаемый скрипт для правильной
          <input type="text" name="conf_jq" value="<?=$conf_jq?>">
         </label>
        </div>
-       
+
        <!--####### Уведомления #######-->
        <div class="row touch">
         <h3>Уведомления</h3>
@@ -87,7 +86,7 @@ JQuery — подключаемый скрипт для правильной
       </div>
 
       <div class="col6">
-       
+
        <!--####### Макет и редактор #######-->
        <div class="row touch">
         <h3>Макет и редактор</h3>
@@ -177,9 +176,9 @@ JQuery — подключаемый скрипт для правильной
            <option value="off" <?php if($conf_addthis_follow_def=='off') echo'selected'?>>скрыть</option>
            <option value="on" <?php if($conf_addthis_follow_def=='on') echo'selected'?>>показать</option>
           </select>
-         </label>        
+         </label>
         </div>
-       </div>      
+       </div>
       </div>
      </div>
 
@@ -215,7 +214,7 @@ JQuery — подключаемый скрипт для правильной
     </div>
    </form>
   </dd>
-  
+
 <!--####### Настройки администратора #######-->
   <?php if($conf_status==='administrator'){?>
    <dt>Администратор</dt>
@@ -266,12 +265,12 @@ JQuery — подключаемый скрипт для правильной
      </form>
     </div>
    </dd>
-   
+
 <!--####### Настройки модераторов #######-->
    <dt>Модераторы</dt>
    <dd>
     <div class="tab_content">
-     <p>Модератор — это статус с неполными правами доступа к административной части сайта. Ему не доступны главные (конфигурационные) настройки сайта но он имеет доступ к остальной административной части сайта. Модератор может добавлять, изменять, удалять страницы сайта, управлять меню и так далее.</p>
+     <p>Модератор — это статус с ограниченными правами доступа к административной части сайта, например: он не может назначать модераторов и администратора, изменять их логин, пароль. Модератор может: добавлять, изменять, удалять страницы сайта, управлять меню и так далее.</p>
      <!--добавить модератора-->
      <div class="touch">
       <h2>Добавить модератора</h2>
@@ -376,7 +375,7 @@ $(function(){
  ///////////////////////////////////////////////установка значений полей
  $('select[name="conf_comment_notific"] option[value="<?=$conf_comment_notific?>"]').attr('selected',true);
 });
-///////////////////////////////////////////////////редактировать модератора
+///////////////////////////////////////////////////редактировать администратора
 function edit_administrator(){
  var form=$('#edit_a_form');
  var btn=form.find('button');
@@ -397,13 +396,13 @@ function edit_administrator(){
       btn.attr('disabled',false).html('Сохранить');
       break;
      //пароль и логин не уникальны
-     case 'nounq':msg.html('<div class="notific_r">В системе уже есть пользователь с таким логином и паролем!</div>');
+     case 'nounq':msg.html('<div class="notific_r">В системе уже есть пользователь с такими данными!</div>');
       btn.attr('disabled',false).html('Сохранить');
       break;
      //все пучком
      case 'ok':btn.remove();
-      msg.html('<div class="notific_g">Администратор успешно изменен!<br><i class="fa fa-spin fa-spinner"></i>&nbsp;&nbsp;обновление страницы...</div>');  
-      setTimeout(function(){location.reload();},5000);
+      msg.html('<div class="notific_g">Администратор успешно изменен!<br><i class="fa fa-spin fa-spinner"></i>&nbsp;&nbsp;обновление страницы...</div>');
+      setTimeout(function(){location.reload();},3000);
       break;
      //ошибки сценария сервера
      default :msg.html('<div class="notific_b">'+data+'</div>');
@@ -438,13 +437,13 @@ function add_moderator(){
       btn.attr('disabled',false).html('Добавить модератора');
       break;
      //пароль и логин не уникальны
-     case 'nounq':msg.html('<div class="notific_r">В системе уже есть пользователь с таким логином и паролем!</div>');
+     case 'nounq':msg.html('<div class="notific_r">В системе уже есть пользователь с такими данными!</div>');
       btn.attr('disabled',false).html('Добавить модератора');
       break;
      //все пучком
      case 'ok':btn.remove();
-      msg.html('<div class="notific_g">Модератор успешно добавлен!<br><i class="fa fa-spin fa-spinner"></i>&nbsp;&nbsp;обновление страницы...</div>');  
-      setTimeout(function(){location.reload();},5000);
+      msg.html('<div class="notific_g">Модератор успешно добавлен!<br><i class="fa fa-spin fa-spinner"></i>&nbsp;&nbsp;обновление страницы...</div>');
+      setTimeout(function(){location.reload();},3000);
       break;
      //ошибки сценария сервера
      default :msg.html('<div class="notific_b">'+data+'</div>');
@@ -457,12 +456,13 @@ function add_moderator(){
 ///////////////////////////////////////////////////редактировать модератора
 function edit_moderator(id){
  var form=$('#edit_m_form_'+id);
- var btn=form.find('button');
+ var btn=form.find('.button');
+ var btn_html=btn.html();
  var msg=form.find('._msg');
  var email=form.find('[name="email"]');
  form.find('input').removeClass('novalid');
  if(!/^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/.test(email.val())){alert('В поле "E-mail" недопустимый символ либо оно не заполнено!');email.addClass('novalid');return false;}
- btn.attr('disabled',true).html('<i class="fa fa-spin fa-spinner"></i>&nbsp;&nbsp;обработка...');//блокирую кнопку
+ btn.html('<i class="fa fa-spin fa-spinner"></i>&nbsp;&nbsp;обработка...');//блокирую кнопку
  $.ajax({
    url: '<?=base_url('admin/setting/edit_moderator')?>/'+id,//путь к скрипту, который обработает запрос
    type: 'post',
@@ -472,20 +472,20 @@ function edit_moderator(id){
     switch(data){
      //модератор не записан в базу
      case 'error':msg.html('<div class="notific_r">Ой! Ошибка..(<br>Возможно это временные неполадки, попробуйте снова.</div>');
-      btn.attr('disabled',false).html('Сохранить');
+      btn.html(btn_html);
       break;
      //пароль и логин не уникальны
-     case 'nounq':msg.html('<div class="notific_r">В системе уже есть пользователь с таким логином и паролем!</div>');
-      btn.attr('disabled',false).html('Сохранить');
+     case 'nounq':msg.html('<div class="notific_r">В системе уже есть пользователь с такими данными!</div>');
+      btn.html(btn_html);
       break;
      //все пучком
      case 'ok':btn.remove();
-      msg.html('<div class="notific_g">Модератор успешно изменен!<br><i class="fa fa-spin fa-spinner"></i>&nbsp;&nbsp;обновление страницы...</div>');  
-      setTimeout(function(){location.reload();},5000);
+      msg.html('<div class="notific_g">Модератор успешно изменен!<br><i class="fa fa-spin fa-spinner"></i>&nbsp;&nbsp;обновление страницы...</div>');
+      setTimeout(function(){location.reload();},3000);
       break;
      //ошибки сценария сервера
      default :msg.html('<div class="notific_b">'+data+'</div>');
-      btn.attr('disabled',false).html('Сохранить');
+      btn.html(btn_html);
       break;
     }
    }
