@@ -56,7 +56,7 @@
      <h1>Справка по системе и UI-фреймворк</h1>
      <p>Система управления контентом &laquo;Tagra CMS&raquo;, далее просто система, создана для реализации веб-ресурсов (корпоративных, визиток, промо) с адаптивным дизайном и высокой производительностью. Также система может служить базой для разработки более масштабных и сложных веб-проектов. В отличии от более &laquo;тяжеловесных&raquo; CMS (Joomla, WordPress и т.д), использует меньше программного кода, библиотек, не перегружена лишним и проста в администрировании.</p>
      <h2>Структура и шаблон</h2>
-     <p>В системе используются адаптивные шаблоны для комфортной работы и просмотра сайта на разнообразных устройствах. Чтобы ваш контент также был адаптивен, воспользуйтесь услугами профессионального верстальщика. С целью упрощения адаптивной верстки, в основном CSS-файле предусмотрена 12-ти колоночная модульная сетка, речь о которой пойдет ниже &mdash; в &laquo;Верстальщику&raquo;</p>
+     <p>В системе используются адаптивные шаблоны для комфортной работы и просмотра сайта на разнообразных устройствах. Чтобы ваш контент также был адаптивен, воспользуйтесь услугами профессионального верстальщика. С целью упрощения адаптивной верстки, в системе предусмотрена 12-ти колоночная модульная сетка, речь о которой пойдет ниже &mdash; в &laquo;Верстальщику&raquo;</p>
      В системе предусмотрена возможность создавать: &laquo;страницы&raquo;, &laquo;разделы&raquo; и &laquo;галереи&raquo;.
      <br> <b>Страница </b>&mdash; контент, оформленный с помощью текстового редактора, HTML, CSS, JS (JQuery), выводимый в шаблон системы (/application/views/front/page_view.php)
      <br> <b>Раздел </b>&mdash; контент, оформленный с помощью текстового редактора, HTML, CSS, JS (JQuery), выводимый в шаблон системы (/application/views/front/section_view.php). После контента пользователя следует перечень входящих в данный раздел страниц, галерей и других разделов с кратким описанием и ссылкой. В каждом разделе может быть неограниченное число подразделов, но с целью улучшения структуры сайта не следует злоупотреблять этой возможностью
@@ -99,7 +99,7 @@
    </div>
    <div class="row">
     <div class="col12">
-     <h2>Верстальщику</h2>
+     <h2 id="verstalscheku">Верстальщику</h2>
      <p>Система оснащена UI-фрейворком в котором предусмотрен CSS файл для стилистического оформления системы, и облегчения адаптивной верстки. А так же небольшой javasript файл. Эти файлы система использует повсеместно. Все файлы доступны в папке <a href="/UI_fraimwork/" target="_blank">/UI_fraimwork</a>. <span class="red">Внимание! Не изменяйте и не удаляйте файлы UI-фреймворка.</span> Если вы хотите изменить стилевое оформление или javasript сценарий, редактируйте соответствующие файлы в /css/front и /scripts/front директориях или обратитесь к разаботчику по email в конце страницы. Далее представленны примеры работы с UI-фрейворком.</p>
      <h4>Адаптивная модульная сетка</h4>
      <p>Чтобы посетители могли комфортно просматривать контент на вашем сайте на разных устройствах, будь то смартфон или домашний кинотеатр &mdash; верстайте его, используя модульную сетку. Сетка может иметь неограниченное количество строк (row), каждая из которых может содержать до 12-ти колонок (col). 12 колонок = 100% от ширины шаблона сайта (устанавливается в админке &mdash; меню/конфигурация), 3 колоноки = 25% и так далее. Сделав поначалу каркас из сетки и разместив в нем контент, вы будете уверены в том, что при разной ширине устройств контент будет оставаться в рамках вашего каркаса, и ничто никуда не &laquo;поплывет&raquo;. При ширине устройства &gt;=600px все колонки сетки трансформируются в строки. Верстать в текстовом редакторе админки каркас из сетки и размещать в нем контент лучше в представлении &laquo;исходный код&raquo;.</p>
@@ -453,6 +453,63 @@ Dolores, aliquid consequuntur harum, quia voluptatem</pre>
 &lt;button type=&quot;button&quot; onclick=&quot;popup(&#39;pop&#39;)&quot;&gt;Кнопка&lt;/button&gt;
 &lt;div id=&quot;pop&quot; class=&quot;popup&quot;&gt;
  Привет, Мир!
+&lt;/div&gt;
+        </pre>
+       </div>
+      </dd>
+     </dl>
+
+     <dl class="tabs">
+      <dt class="tab_active">Переход к элементу</dt>
+      <dd>
+       <div class="tab_content">
+        Чтобы плавно &laquo;прокрутить&raquo; страницу к желаемому элементу используйте функцию scrll(). Параметром она принимает строку - id элемента к которому нужно &laquo;прокрутить&raquo; и срабатывает по событию. Например: чтобы <a href="#" onclick="scrll('verstalscheku');return false">перейти к заголовку &laquo;Верстальщику&raquo;</a> на этой странице, используется ссылка с onclick="scrll('verstalscheku')", а сам заголовок имеет id="verstalscheku". При переходе по ссылке которая имеет вид http://www.вашсайт/страница#idэлемента после загрузки страница будет плавно &laquo;прокручена&raquo; к элементу с id="idэлемента".
+       </div>
+      </dd>
+      <dt>Пример кода</dt>
+      <dd>
+       <div class="tab_content">
+        <pre>
+&lt;h2 id=&quot;h2_header&quot;&gt;Заголовок&lt;/h2&gt;
+&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vitae, consectetur,
+labore voluptates natus commodi nemo asperiores cumque magnam iste unde quaerat officia
+praesentium aspernatur qui laborum in accusantium quae facilis illo eos animi minus est
+sequi totam optio enim quos nihil corporis numquam rem quod neque error tempore.
+Aspernatur, facere, nihil, inventore repudiandae eum recusandae accusamus soluta nemo est
+libero expedita perferendis incidunt possimus ut esse cumque consequatur aliquid similique
+totam praesentium impedit fuga deserunt dolorum numquam rerum omnis dolore quibusdam
+assumenda quas qui hic fugiat labore repellendus quos voluptatibus autem dolorem...&lt;/p&gt;
+И еще много-много всякого...
+&lt;button type=&quot;button&quot; onclick=&quot;scrll(&#39;h2_header&#39;)&quot;&gt;Перейти к заголовку&lt;/button&gt;
+        </pre>
+       </div>
+      </dd>
+     </dl>
+
+     <dl class="tabs">
+      <dt class="tab_active">Сворачивание\разворачивание елемента</dt>
+      <dd>
+       <div class="tab_content">
+        <p>Функция opn_cls() &laquo;сворачивает\разворачивает&raquo; елемент.</p>
+        <button type="button" onclick="opn_cls('hid_elem')">Подробнее</button>
+        <div class="opn_cls" id="hid_elem">
+         Обработчик кнопки запускает функцию opn_cls('hid_elem') в которую передан id елемента который должен сворачиваться\разворачиваться - в данном случае &lt;div id="hid_elem"&gt;. Чтобы елемент был скрыт по умолчанию назначте ему class="opn_cls" или style="display:none".<br>
+         <a href="#" onclick="opn_cls('hid_elem');return false">Скрыть подробности</a>
+        </div>
+       </div>
+      </dd>
+      <dt>Пример кода</dt>
+      <dd>
+       <div class="tab_content">
+        <pre>
+&lt;button type=&quot;button&quot; onclick=&quot;opn_cls(&#39;hid_elem&#39;)&quot;&gt;Подробнее&lt;/button&gt;
+&lt;div class=&quot;opn_cls&quot; id=&quot;hid_elem&quot;&gt;
+ Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cum, quidem,
+ quod, numquam est sit ad aut doloremque earum libero perspiciatis nostrum
+ distinctio vero sunt modi rem omnis veritatis obcaecati reprehenderit
+ itaque aliquam error beatae facilis enim eveniet repellendus placeat
+ impedit ex alias repellat eos dolorum mollitia nemo quibusdam.&lt;br&gt;
+ &lt;a href=&quot;#&quot; onclick=&quot;opn_cls(&#39;hid_elem&#39;);return false&quot;&gt;Скрыть подробности&lt;/a&gt;
 &lt;/div&gt;
         </pre>
        </div>

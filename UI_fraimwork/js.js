@@ -14,24 +14,24 @@ window.addEventListener('load',function(){
 //////////////////////////////////////////////////меню
  var mobile_menu=$('.mobile_menu'),menu=$('.menu');
  $('.sub_menu').prev('a,span').addClass('sub_menu_link').end().after('<i class="sub_icon">&#8801;</i>');
- mobile_menu.on('click',function(){menu.slideToggle(200);});//показать\скрыть меню
- $(window).on('load resize',function(){mobile_menu.is(':hidden')?menu.show():menu.hide();});//
- $('.sub_icon').on('click',function(){$(this).prev('.sub_menu').slideToggle(200);});//показать\скрыть субменю
+ mobile_menu.on('click.UIF',function(){menu.slideToggle(200);});//показать\скрыть меню
+ $(window).on('load.UIF resize.UIF',function(){mobile_menu.is(':hidden')?menu.show():menu.hide();});//
+ $('.sub_icon').on('click.UIF',function(){$(this).prev('.sub_menu').slideToggle(200);});//показать\скрыть субменю
  menu.find('a').each(function(){//выделение ссылок с url совпавшими с url текущей страницы
   var l=window.location,h=$(this).attr('href');
   if(l.pathname===h||l.pathname+l.search===h||l.href===h){$(this).parents('li').addClass('active');}
  });
- 
+
 //////////////////////////////////////////////////////////////плавный скроллинг
  if(window.location.hash){//если в строке запроса есть # — скролю на него
   $('body,html').animate({scrollTop:$(window.location.hash).offset().top},800);
  }
- 
+
 ////////////////////////////////////////////////////////////////TABS
- $('dl.tabs').on('click','dt',function(){
+ $('dl.tabs').on('click.UIF','dt',function(){
   $(this).siblings().removeClass('tab_active').end().next('dd').addBack().addClass('tab_active');
  });
- 
+
 //////////////////////////////////////////////////////////////построитель модальных окон
  $('.popup').each(function(){
   var popup=$(this),
@@ -39,9 +39,9 @@ window.addEventListener('load',function(){
       close_popup=$('<span/>',{class:'close_popup fa-times-circle'});
   popup.prepend(close_popup).wrapAll(popup_lay).css('display','inline-block');
  });
- 
+
 //////////////////////////////////////////////////input type="file"
- $('input[type="file"]').on('change',function(){
+ $('input[type="file"]').on('change.UIF',function(){
   var label=$(this).parent().find('span');
   if(typeof(this.files)!=='undefined'){//fucking IE
    if(this.files.length===0){
@@ -60,12 +60,12 @@ window.addEventListener('load',function(){
    label.addClass('withFile').text(name[name.length-1]);
   }
  });
- 
+
 //////////////////////////////////////////////////input type="range"
- $('.range input[type="range"]').on('change',function(){
+ $('.range input[type="range"]').on('change.UIF',function(){
   $(this).parent().find('.range_val').html($(this).val());
  });
- 
+
 //////////////////////////////////////////////////tables
  $('table').each(function(){
   var $table=$(this),$bodyRows=$table.find('tbody tr'),$headCells=$table.find('thead th,thead td');
@@ -85,8 +85,8 @@ function popup(el){
  var popup=$('#'+el),
      popup_lay=popup.parent('.popup_lay'),
      close_popup=popup.find('.close_popup');
- popup_lay.fadeIn().on('click',function(e){var e=e||window.event;if(e.target===this){popup_lay.fadeOut();}});
- close_popup.on('click',function(){popup_lay.fadeOut();});
+ popup_lay.fadeIn().on('click.UIF',function(e){var e=e||window.event;if(e.target===this){popup_lay.fadeOut();}});
+ close_popup.on('click.UIF',function(){popup_lay.fadeOut();});
 }
 
 ////////////////////////////////////////////////////////////всплывающая подсказка
@@ -135,7 +135,7 @@ function lim(elm/*this*/,lim/*(число) - лимит символов в по
   var l_c=$('<i/>',{class:'lim_count',html:parseInt(lim,10)-val.length}),//контейнер подсчета в счетчике
       l=$('<span/>',{title:'Доступно символов',class:'lim fa-angle-left',html:l_c});//счетчик
   //вставка в DOM, при потере фокуса поля обрезать в ней строку и удалить счетчик
-  el.after(l).on('blur',function(){el.val(el.val().substr(0,parseInt(lim,10)));l.remove();});
+  el.after(l).on('blur.UIF',function(){el.val(el.val().substr(0,parseInt(lim,10)));l.remove();});
  }
  if(val.length<=parseInt(lim,10)){//лимит не превышен
   l_c.html(parseInt(lim,10)-val.length);//обновить контейнер подсчета
