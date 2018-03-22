@@ -36,7 +36,10 @@ if(//если файлы и папки доступны для записи
      <div class="touch">
       <h2>База данных</h2>
       <label for="db_name">Имя базы данных:</label>
-      <input type="text" name="db_name" id="db_name" class="width40" required><br>
+      <input type="text" name="db_name" id="db_name" class="width40" required>&nbsp;
+      <i class="fa-info-circle red" onmouseover="tt(this);"></i>
+<pre class="tt">
+База с этим именем уже должна существовать</pre><br>
       <label for="db_host">Хост базы данных:</label>
       <input type="text" name="db_host" id="db_host" class="width40" value="localhost" required><br>
       <label for="db_user">Пользлватель базы данных:</label>
