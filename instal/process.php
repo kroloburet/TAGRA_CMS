@@ -50,11 +50,14 @@ $moder_salt=$salt_pref.'10$'.substr(str_replace('+', '.', base64_encode(pack('N4
 $moder_name=crypt($_POST['moder_name'],$moder_salt);
 $moder_pass=crypt($_POST['moder_pass'],$moder_salt);
 
-//сообщения пользователю
+//сообщения пользователю о статусе установки
 $good_msg='<h2 style="margin-top:1.5em">Отлично, вы установили систему!</h2>Теперь, с целью безопасности системы, удалите папку <b>instal/</b> со всем ее содержимым,<br>установите права (755) на папки:<ul><li><b>application/</b></li><li><b>application/config/</b></li></ul>права (644) на файлы:<ul><li><b>application/config/config.php</b></li><li><b>application/config/database.php</b></li></ul> Для работы файлового менеджера установите права на папку <b>upload/ (777)</b>, а для генерирования карты сайта — права на файл <b>sitemap.xml (777)</b><br>Вот и все. Скорее жмите кнопку «На главную страницу»..)<p>Да, вот еще что! Часто бывает, что систему нужно расширять, модифицировать под ваши персональные нужды для повышения эффективности и конверсии сайта. Поэтому, и в целях скромной саморекламы, я, как разработчик системы, внизу страниц сайта оставил свой email, по которому со мной всегда можно связаться — пожалуйта, не удаляйте его. Приятного использования!</p><a href="'.$domen.'" class="btn">На главную страницу</a>';
 $bad_msg='<h2 style="margin-top:1.5em">Упс! Что-то пошло не так..(</h2><p>Вы можете повторить попытку, нажав кнопку «Попробовать снова», или обратиться к разработчику по e-mail: <a href="mailto:kroloburet@gmail.com">kroloburet@gmail.com</a></p><a href="index.php" class="btn">Попробовать снова</a>';
-$index_promo='<div class="row"><div class="col2 algn_c"><img src="'.$domen.'img/logo_tagra.svg" alt="Tagra CMS" title="Tagra CMS"></div><div class="col7"><p>Добро пожаловать в систему управления контентом &laquo;Tagra&raquo;!<br> Итак. Для быстрого старта вашего сайта &mdash; <a href="'.$domen.'admin/">зайдите в админку</a>, используя логин и пароль, созданный вами при установке системы, и начинайте творить..) Но прежде, чтобы облегчить работу с самой системой и верстку контента для вашего сайта, я предлагаю <a href="'.$domen.'UI_fraimwork/info.html" target="_blank">краткое знакомство с системой</a></p></div></div>
-';
+
+//промо-данные для записи в БД
+$index_title=mb_convert_encoding('Привет, Мир!','UTF-8');
+$index_body=mb_convert_encoding('<div class="row"><div class="col2 algn_c"><img src="/img/logo_tagra.svg" alt="Tagra CMS" title="Tagra CMS"></div><div class="col7"><p>Добро пожаловать в систему управления контентом &laquo;Tagra&raquo;!<br> Итак. Для быстрого старта вашего сайта &mdash; <a href="/admin">зайдите в админку</a>, используя логин и пароль, созданный вами при установке системы, и начинайте творить..) Но прежде, чтобы облегчить работу с самой системой и верстку контента для вашего сайта, я предлагаю <a href="/UI_fraimwork/info.html" target="_blank">краткое знакомство с системой</a></p></div></div>',"UTF-8");
+$contact_title=mb_convert_encoding('Контакты','UTF-8');
 
 //подключаемся к серверу
 $db=@mysql_connect($db_host, $db_user, $db_pass)
@@ -76,7 +79,8 @@ $t=$db_tabl_prefix.'sessions';
   `timestamp` int (10) unsigned DEFAULT 0 NOT NULL,
   `data` blob NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `ci_sessions_timestamp` (`timestamp`));")
+  KEY `ci_sessions_timestamp` (`timestamp`))
+  ENGINE=InnoDB DEFAULT CHARSET=utf8;")
 or die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".mysql_error()."</div>".$bad_msg);
 echo "<div class='notific_g'>Таблица « $t » успешно создана</div>";
 
@@ -90,7 +94,8 @@ $t=$db_tabl_prefix.'comments';
   `name` varchar(300) NOT NULL,
   `comment` longtext NOT NULL,
   `public` varchar(20) NOT NULL DEFAULT 'off',
-  PRIMARY KEY (`id`));")
+  PRIMARY KEY (`id`))
+  ENGINE=InnoDB DEFAULT CHARSET=utf8;")
 or die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".mysql_error()."</div>".$bad_msg);
 echo "<div class='notific_g'>Таблица « $t » успешно создана</div>";
 
@@ -118,7 +123,8 @@ $t=$db_tabl_prefix.'gallerys';
   `img_prev` text NOT NULL,
   `comments` varchar(20) NOT NULL DEFAULT 'off',
   `public` varchar(20) NOT NULL DEFAULT 'on',
-  PRIMARY KEY (`id`));")
+  PRIMARY KEY (`id`))
+  ENGINE=InnoDB DEFAULT CHARSET=utf8;")
 or die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".mysql_error()."</div>".$bad_msg);
 echo "<div class='notific_g'>Таблица « $t » успешно создана</div>";
 
@@ -144,7 +150,8 @@ $t=$db_tabl_prefix.'sections';
   `img_prev` text NOT NULL,
   `comments` varchar(20) NOT NULL DEFAULT 'off',
   `public` varchar(20) NOT NULL DEFAULT 'on',
-  PRIMARY KEY (`id`));")
+  PRIMARY KEY (`id`))
+  ENGINE=InnoDB DEFAULT CHARSET=utf8;")
 or die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".mysql_error()."</div>".$bad_msg);
 echo "<div class='notific_g'>Таблица « $t » успешно создана</div>";
 
@@ -170,7 +177,8 @@ $t=$db_tabl_prefix.'pages';
   `img_prev` text NOT NULL,
   `comments` varchar(20) NOT NULL DEFAULT 'off',
   `public` varchar(20) NOT NULL DEFAULT 'on',
-  PRIMARY KEY (`id`));")
+  PRIMARY KEY (`id`))
+  ENGINE=InnoDB DEFAULT CHARSET=utf8;")
 or die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".mysql_error()."</div>".$bad_msg);
 echo "<div class='notific_g'>Таблица « $t » успешно создана</div>";
 
@@ -184,7 +192,8 @@ $t=$db_tabl_prefix.'menu';
   `target` varchar(20) NOT NULL DEFAULT '_self',
   `order` int(20) NOT NULL,
   `public` varchar(20) NOT NULL DEFAULT 'on',
-  PRIMARY KEY (`id`));")
+  PRIMARY KEY (`id`))
+  ENGINE=InnoDB DEFAULT CHARSET=utf8;")
 or die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".mysql_error()."</div>".$bad_msg);
 echo "<div class='notific_g'>Таблица « $t » успешно создана</div>";
 
@@ -206,9 +215,10 @@ $q_c=@mysql_query("CREATE TABLE IF NOT EXISTS `$t` (
   `addthis_share` varchar(20) NOT NULL DEFAULT 'off',
   `addthis_follow` varchar(20) NOT NULL DEFAULT 'off',
   `img_prev` text NOT NULL,
-  PRIMARY KEY (`id`));");
+  PRIMARY KEY (`id`))
+  ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 $q_i=@mysql_query("INSERT INTO `$t` (`title`, `description`, `robots`, `css`, `js`, `layout_t`, `layout_l`, `layout_r`, `layout_b`, `layout_l_width`, `links`, `addthis_share`, `addthis_follow`) VALUES
-('Привет, Мир!', 'Привет, Мир!', 'all', '', '', '$index_promo', '', '', '', 60, '',  'off', 'off');");
+('$index_title', '$index_title', 'all', '', '', '$index_body', '', '', '', 60, '',  'off', 'off');");
 if(!$q_c && !$q_i){
 die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".mysql_error()."</div>".$bad_msg);
 }
@@ -232,9 +242,10 @@ $q_c=@mysql_query("CREATE TABLE IF NOT EXISTS `$t` (
   `addthis_share` varchar(20) NOT NULL DEFAULT 'off',
   `addthis_follow` varchar(20) NOT NULL DEFAULT 'off',
   `contact_form` varchar(20) NOT NULL DEFAULT 'on',
-  PRIMARY KEY (`id`));");
+  PRIMARY KEY (`id`))
+  ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 $q_i=@mysql_query("INSERT INTO `$t` (`title`, `description`, `robots`, `css`, `js`, `layout_t`, `mail`, `tel`, `skype`, `qr`, `address`, `addthis_share`, `addthis_follow`, `contact_form`) VALUES
-('Контакты', 'Мои контакты', 'all', '', '', '', '$admin_mail', '', '', '', '', 'off', 'off', 'on');");
+('$contact_title', '$contact_title', 'all', '', '', '', '$admin_mail', '', '', '', '', 'off', 'off', 'on');");
 if(!$q_c && !$q_i){
 die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".mysql_error()."</div>".$bad_msg);
 }
@@ -246,7 +257,8 @@ $q_c=@mysql_query("CREATE TABLE IF NOT EXISTS `$t` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` text NOT NULL,
   `value` text NOT NULL,
-  PRIMARY KEY (`id`));");
+  PRIMARY KEY (`id`))
+  ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 $q_i=@mysql_query("INSERT INTO `$t` (`name`, `value`) VALUES
 ('conf_site_access', 'on'),
 ('conf_jq', 'https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'),
@@ -274,7 +286,8 @@ $q_c=@mysql_query("CREATE TABLE IF NOT EXISTS `$t` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` text NOT NULL,
   `value` text NOT NULL,
-  PRIMARY KEY (`id`));");
+  PRIMARY KEY (`id`))
+  ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 $q_i=@mysql_query("INSERT INTO `$t` (`name`, `value`) VALUES
 ('allowed', 'all'),
 ('generate', 'auto');");
@@ -296,7 +309,8 @@ $q_c=@mysql_query("CREATE TABLE IF NOT EXISTS `$t` (
   `register_date` varchar(20) NOT NULL,
   `last_mod_date` varchar(20) NOT NULL,
   `last_login_date` varchar(20) NOT NULL,
-  PRIMARY KEY (`id`));");
+  PRIMARY KEY (`id`))
+  ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 $q_i=@mysql_query("INSERT INTO `$t` (`ip`, `status`, `login`, `password`, `salt`, `email`, `register_date`) VALUES
 ('$ip', 'administrator', '$admin_name', '$admin_pass', '$admin_salt', '$admin_mail', '$moment'),
 ('$ip', 'moderator', '$moder_name', '$moder_pass', '$moder_salt', '$moder_mail', '$moment');");
