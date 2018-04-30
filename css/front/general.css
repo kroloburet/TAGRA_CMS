@@ -28,6 +28,7 @@ Developer:Sergey Nizhnik kroloburet@gmail.com
 #layout_t,#layout_l,#layout_r,#layout_b{padding:0 0 1.5em 0;overflow:hidden}
 #layout_l{float:left;padding-right:1em}
 #layout_r{padding-left:1em}
+#layout_b{clear:both;}
 
 /*------------------------------------------------------------------------------links block*/
 #links_block{margin-bottom:1.5em;}
@@ -61,7 +62,7 @@ input[name="fuck_bot"]{display:none;visibility:hidden}
 .contact_tabl{margin-bottom:1.5em;}
 .contact_tabl td{vertical-align: top;padding-right: 1em;}
 .addr .tab_content{padding:0;}
-.addr_list{padding:.7em 0;}
+.addr_list{padding:.7em;}
 .addr_list div i{vertical-align:baseline;}
 #send_mail_form{padding:0 0 1.5em 0}
 #send_mail input,#send_mail textarea{width:83%}
