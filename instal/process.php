@@ -52,28 +52,23 @@ $moder_pass=crypt($_POST['moder_pass'],$moder_salt);
 
 //сообщения пользователю о статусе установки
 $good_msg='<h2 style="margin-top:1.5em">Отлично, вы установили систему!</h2>Теперь, с целью безопасности системы, удалите папку <b>instal/</b> со всем ее содержимым,<br>установите права (755) на папки:<ul><li><b>application/</b></li><li><b>application/config/</b></li></ul>права (644) на файлы:<ul><li><b>application/config/config.php</b></li><li><b>application/config/database.php</b></li></ul> Для работы файлового менеджера установите права на папку <b>upload/ (777)</b>, а для генерирования карты сайта — права на файл <b>sitemap.xml (777)</b><br>Вот и все. Скорее жмите кнопку «На главную страницу»..)<p>Да, вот еще что! Часто бывает, что систему нужно расширять, модифицировать под ваши персональные нужды для повышения эффективности и конверсии сайта. Поэтому, и в целях скромной саморекламы, я, как разработчик системы, внизу страниц сайта оставил свой email, по которому со мной всегда можно связаться — пожалуйта, не удаляйте его. Приятного использования!</p><a href="'.$domen.'" class="btn">На главную страницу</a>';
-$bad_msg='<h2 style="margin-top:1.5em">Упс! Что-то пошло не так..(</h2><p>Вы можете повторить попытку, нажав кнопку «Попробовать снова», или обратиться к разработчику по e-mail: <a href="mailto:kroloburet@gmail.com">kroloburet@gmail.com</a></p><a href="index.php" class="btn">Попробовать снова</a>';
+$bad_msg='<h2 style="margin-top:1.5em">Упс! Что-то пошло не так..(</h2><p>Возможно Вы допустили ошибку при заполнении полей с данными доступа к базе, а может это какие-то проблемы с сервером. Вы можете вернуться назад и повторить попытку или обратиться к разработчику по e-mail: <a href="mailto:kroloburet@gmail.com">kroloburet@gmail.com</a></p><a href="#" class="btn" onclick="window.history.back();return false">Вернуться назад</a>';
 
 //промо-данные для записи в БД
 $index_title=mb_convert_encoding('Привет, Мир!','UTF-8');
 $index_body=mb_convert_encoding('<div class="row"><div class="col2 algn_c"><img src="/img/logo_tagra.svg" alt="Tagra CMS" title="Tagra CMS"></div><div class="col7"><p>Добро пожаловать в систему управления контентом &laquo;Tagra&raquo;!<br> Итак. Для быстрого старта вашего сайта &mdash; <a href="/admin">зайдите в админку</a>, используя логин и пароль, созданный вами при установке системы, и начинайте творить..) Но прежде, чтобы облегчить работу с самой системой и верстку контента для вашего сайта, я предлагаю <a href="/UI_fraimwork/info.html" target="_blank">краткое знакомство с системой</a></p></div></div>',"UTF-8");
 $contact_title=mb_convert_encoding('Контакты','UTF-8');
 
-//подключаемся к серверу
-$db=@mysql_connect($db_host, $db_user, $db_pass)
-or die("<div class='notific_r'>Не удалось соединиться с сервером: ".mysql_error()."</div>".$bad_msg);
+//подключаемся к серверу и базе
+$db=new mysqli($db_host, $db_user, $db_pass, $db_name);
+if(mysqli_connect_error()){die("<div class='notific_r'>Не удалось соединиться с сервером: ".mysqli_connect_error()."</div>".$bad_msg);}
 echo "<div class='notific_g'>Соединение с сервером успешно установлено</div>";
-
-//подключаемся к базе
-@mysql_select_db($db_name, $db)
-or die("<div class='notific_r'>Не удалось соединиться с базой: ".mysql_error()."</div>".$bad_msg);
-echo "<div class='notific_g'>Соединение с базой « $db_name » успешно установлено</div>";
 
 //создаем таблицы:
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////_sessions
 $t=$db_tabl_prefix.'sessions';
-@mysql_query("CREATE TABLE IF NOT EXISTS `$t` (
+$db->query("CREATE TABLE IF NOT EXISTS `$t` (
   `id` varchar(40) NOT NULL,
   `ip_address` varchar(45) NOT NULL,
   `timestamp` int (10) unsigned DEFAULT 0 NOT NULL,
@@ -81,12 +76,12 @@ $t=$db_tabl_prefix.'sessions';
   PRIMARY KEY (`id`),
   KEY `ci_sessions_timestamp` (`timestamp`))
   ENGINE=InnoDB DEFAULT CHARSET=utf8;")
-or die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".mysql_error()."</div>".$bad_msg);
+or die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".$db->error."</div>".$bad_msg);
 echo "<div class='notific_g'>Таблица « $t » успешно создана</div>";
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////_comments
 $t=$db_tabl_prefix.'comments';
-@mysql_query("CREATE TABLE IF NOT EXISTS `$t` (
+$db->query("CREATE TABLE IF NOT EXISTS `$t` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `premod_code` text NOT NULL,
   `url` text NOT NULL,
@@ -96,12 +91,12 @@ $t=$db_tabl_prefix.'comments';
   `public` varchar(20) NOT NULL DEFAULT 'off',
   PRIMARY KEY (`id`))
   ENGINE=InnoDB DEFAULT CHARSET=utf8;")
-or die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".mysql_error()."</div>".$bad_msg);
+or die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".$db->error."</div>".$bad_msg);
 echo "<div class='notific_g'>Таблица « $t » успешно создана</div>";
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////_gallerys
 $t=$db_tabl_prefix.'gallerys';
-@mysql_query("CREATE TABLE IF NOT EXISTS `$t` (
+$db->query("CREATE TABLE IF NOT EXISTS `$t` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `alias` text NOT NULL,
   `title` text NOT NULL,
@@ -125,12 +120,12 @@ $t=$db_tabl_prefix.'gallerys';
   `public` varchar(20) NOT NULL DEFAULT 'on',
   PRIMARY KEY (`id`))
   ENGINE=InnoDB DEFAULT CHARSET=utf8;")
-or die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".mysql_error()."</div>".$bad_msg);
+or die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".$db->error."</div>".$bad_msg);
 echo "<div class='notific_g'>Таблица « $t » успешно создана</div>";
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////_sections
 $t=$db_tabl_prefix.'sections';
-@mysql_query("CREATE TABLE IF NOT EXISTS `$t`  (
+$db->query("CREATE TABLE IF NOT EXISTS `$t`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `alias` text NOT NULL,
   `title` text NOT NULL,
@@ -152,12 +147,12 @@ $t=$db_tabl_prefix.'sections';
   `public` varchar(20) NOT NULL DEFAULT 'on',
   PRIMARY KEY (`id`))
   ENGINE=InnoDB DEFAULT CHARSET=utf8;")
-or die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".mysql_error()."</div>".$bad_msg);
+or die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".$db->error."</div>".$bad_msg);
 echo "<div class='notific_g'>Таблица « $t » успешно создана</div>";
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////_pages
 $t=$db_tabl_prefix.'pages';
-@mysql_query("CREATE TABLE IF NOT EXISTS `$t` (
+$db->query("CREATE TABLE IF NOT EXISTS `$t` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `alias` text NOT NULL,
   `title` text NOT NULL,
@@ -179,12 +174,12 @@ $t=$db_tabl_prefix.'pages';
   `public` varchar(20) NOT NULL DEFAULT 'on',
   PRIMARY KEY (`id`))
   ENGINE=InnoDB DEFAULT CHARSET=utf8;")
-or die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".mysql_error()."</div>".$bad_msg);
+or die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".$db->error."</div>".$bad_msg);
 echo "<div class='notific_g'>Таблица « $t » успешно создана</div>";
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////_menu
 $t=$db_tabl_prefix.'menu';
-@mysql_query("CREATE TABLE IF NOT EXISTS `$t` (
+$db->query("CREATE TABLE IF NOT EXISTS `$t` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `pid` bigint(20) NOT NULL,
   `title` text NOT NULL,
@@ -194,12 +189,12 @@ $t=$db_tabl_prefix.'menu';
   `public` varchar(20) NOT NULL DEFAULT 'on',
   PRIMARY KEY (`id`))
   ENGINE=InnoDB DEFAULT CHARSET=utf8;")
-or die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".mysql_error()."</div>".$bad_msg);
+or die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".$db->error."</div>".$bad_msg);
 echo "<div class='notific_g'>Таблица « $t » успешно создана</div>";
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////_index_page
 $t=$db_tabl_prefix.'index_page';
-$q_c=@mysql_query("CREATE TABLE IF NOT EXISTS `$t` (
+$q_c=$db->query("CREATE TABLE IF NOT EXISTS `$t` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `title` text NOT NULL,
   `description` text NOT NULL,
@@ -217,16 +212,16 @@ $q_c=@mysql_query("CREATE TABLE IF NOT EXISTS `$t` (
   `img_prev` text NOT NULL,
   PRIMARY KEY (`id`))
   ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-$q_i=@mysql_query("INSERT INTO `$t` (`title`, `description`, `robots`, `css`, `js`, `layout_t`, `layout_l`, `layout_r`, `layout_b`, `layout_l_width`, `links`, `addthis_share`, `addthis_follow`) VALUES
+$q_i=$db->query("INSERT INTO `$t` (`title`, `description`, `robots`, `css`, `js`, `layout_t`, `layout_l`, `layout_r`, `layout_b`, `layout_l_width`, `links`, `addthis_share`, `addthis_follow`) VALUES
 ('$index_title', '$index_title', 'all', '', '', '$index_body', '', '', '', 60, '',  'off', 'off');");
 if(!$q_c && !$q_i){
-die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".mysql_error()."</div>".$bad_msg);
+die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".$db->error."</div>".$bad_msg);
 }
 echo "<div class='notific_g'>Таблица « $t » успешно создана</div>";
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////_contact_page
 $t=$db_tabl_prefix.'contact_page';
-$q_c=@mysql_query("CREATE TABLE IF NOT EXISTS `$t` (
+$q_c=$db->query("CREATE TABLE IF NOT EXISTS `$t` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `title` text NOT NULL,
   `description` text NOT NULL,
@@ -244,22 +239,22 @@ $q_c=@mysql_query("CREATE TABLE IF NOT EXISTS `$t` (
   `contact_form` varchar(20) NOT NULL DEFAULT 'on',
   PRIMARY KEY (`id`))
   ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-$q_i=@mysql_query("INSERT INTO `$t` (`title`, `description`, `robots`, `css`, `js`, `layout_t`, `mail`, `tel`, `skype`, `qr`, `address`, `addthis_share`, `addthis_follow`, `contact_form`) VALUES
+$q_i=$db->query("INSERT INTO `$t` (`title`, `description`, `robots`, `css`, `js`, `layout_t`, `mail`, `tel`, `skype`, `qr`, `address`, `addthis_share`, `addthis_follow`, `contact_form`) VALUES
 ('$contact_title', '$contact_title', 'all', '', '', '', '$admin_mail', '', '', '', '', 'off', 'off', 'on');");
 if(!$q_c && !$q_i){
-die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".mysql_error()."</div>".$bad_msg);
+die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".$db->error."</div>".$bad_msg);
 }
 echo "<div class='notific_g'>Таблица « $t » успешно создана</div>";
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////_my_config
 $t=$db_tabl_prefix.'my_config';
-$q_c=@mysql_query("CREATE TABLE IF NOT EXISTS `$t` (
+$q_c=$db->query("CREATE TABLE IF NOT EXISTS `$t` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` text NOT NULL,
   `value` text NOT NULL,
   PRIMARY KEY (`id`))
   ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-$q_i=@mysql_query("INSERT INTO `$t` (`name`, `value`) VALUES
+$q_i=$db->query("INSERT INTO `$t` (`name`, `value`) VALUES
 ('conf_site_access', 'on'),
 ('conf_jq', 'https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'),
 ('conf_site_name', '$site_name'),
@@ -276,29 +271,29 @@ $q_i=@mysql_query("INSERT INTO `$t` (`name`, `value`) VALUES
 ('conf_emmet', 'off'),
 ('conf_comment_notific', 'off');");
 if(!$q_c && !$q_i){
-die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".mysql_error()."</div>".$bad_msg);
+die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".$db->error."</div>".$bad_msg);
 }
 echo "<div class='notific_g'>Таблица « $t » успешно создана</div>";
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////_sitemap_config
 $t=$db_tabl_prefix.'sitemap_config';
-$q_c=@mysql_query("CREATE TABLE IF NOT EXISTS `$t` (
+$q_c=$db->query("CREATE TABLE IF NOT EXISTS `$t` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` text NOT NULL,
   `value` text NOT NULL,
   PRIMARY KEY (`id`))
   ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-$q_i=@mysql_query("INSERT INTO `$t` (`name`, `value`) VALUES
+$q_i=$db->query("INSERT INTO `$t` (`name`, `value`) VALUES
 ('allowed', 'all'),
 ('generate', 'auto');");
 if(!$q_c && !$q_i){
-die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".mysql_error()."</div>".$bad_msg);
+die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".$db->error."</div>".$bad_msg);
 }
 echo "<div class='notific_g'>Таблица « $t » успешно создана</div>";
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////_back_users
 $t=$db_tabl_prefix.'back_users';
-$q_c=@mysql_query("CREATE TABLE IF NOT EXISTS `$t` (
+$q_c=$db->query("CREATE TABLE IF NOT EXISTS `$t` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `ip` varchar(200) NOT NULL,
   `status` varchar(200) NOT NULL,
@@ -311,13 +306,15 @@ $q_c=@mysql_query("CREATE TABLE IF NOT EXISTS `$t` (
   `last_login_date` varchar(20) NOT NULL,
   PRIMARY KEY (`id`))
   ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-$q_i=@mysql_query("INSERT INTO `$t` (`ip`, `status`, `login`, `password`, `salt`, `email`, `register_date`) VALUES
+$q_i=$db->query("INSERT INTO `$t` (`ip`, `status`, `login`, `password`, `salt`, `email`, `register_date`) VALUES
 ('$ip', 'administrator', '$admin_name', '$admin_pass', '$admin_salt', '$admin_mail', '$moment'),
 ('$ip', 'moderator', '$moder_name', '$moder_pass', '$moder_salt', '$moder_mail', '$moment');");
 if(!$q_c && !$q_i){
-die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".mysql_error()."</div>".$bad_msg);
+die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".$db->error."</div>".$bad_msg);
 }
 echo "<div class='notific_g'>Таблица « $t » успешно создана</div>";
+
+$db->close();
 
 //перезаписываем файлы
 //открываем файл в режиме чтения
