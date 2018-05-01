@@ -24,12 +24,12 @@ class Back_basic_control extends CI_Controller {
 ///////////////////////////////////
 //приватные методы
 ///////////////////////////////////
- 
+
  function _get_admin_param($param){
   $q=$this->db->where('status','administrator')->get($this->_prefix().'back_users')->result_array();
   return $q[0][$param];
  }
- 
+
  function _get_moderator_param($id_mail,$param){
  //$id_mail='basic_email'||'id'
   $mail=(!ctype_digit($id_mail))?$id_mail:FALSE;
@@ -46,11 +46,11 @@ class Back_basic_control extends CI_Controller {
    return $q[0][$param];
   }else{return FALSE;}
  }
- 
+
  function _prefix(){//получение префикса таблиц базы данных из конфигурационного файла
   return $this->config->item('db_tabl_prefix');
  }
- 
+
  function _format_data($data=array(),$trim=TRUE){//форматирование post\get данных перед записью в базу
   //$data массив post\get
   //$trim использовать ли функцию trim() для значений
@@ -81,12 +81,6 @@ class Back_basic_control extends CI_Controller {
   $this->load->view('back/blocks/header_view',$data);
   $this->load->view($url,$data);
   $this->load->view('back/blocks/footer_view',$data);
- }
- 
- function _gen_salt(){//генерирует соль
-  $salt_pref='$2a$';//префикс соли по умолчанию
-  $salt_pref=(version_compare(PHP_VERSION,'5.3.7')>=0)?'$2y$':'$2a$';//если версия не ниже 5.3.7
-  return $salt_pref.'10$'.substr(str_replace('+','.',base64_encode(pack('N4',mt_rand(),mt_rand(),mt_rand(),mt_rand()))),0,22).'$';
  }
 
  function _gen_pass($lenght=10){//генерирует пароль длинной $lenght
@@ -132,7 +126,7 @@ class Back_basic_control extends CI_Controller {
    $l=$input['login'];
    $p=$input['password'];
    foreach ($this->back_basic_model->get_back_users() as $v){
-    if($v['password']===crypt($p,$v['salt'])&&$v['login']===crypt($l,$v['salt'])){
+    if(password_verify($l,$v['login'])&&password_verify($p,$v['password'])){
      $this->session->set_userdata($v['status'], $v['password'].$v['login']);//стартует сессия
      $this->back_basic_model->edit_back_user($v['id'],array('last_login_date'=>date('Y-m-d H:i:s'),'ip'=>$this->input->server('REMOTE_ADDR')));//фиксирую дату авторизации, ip
      redirect('admin');
@@ -166,9 +160,8 @@ class Back_basic_control extends CI_Controller {
   foreach($q as $v){//проход по выборке
    $login=(strstr($mail,'@',TRUE))?strstr($mail,'@',TRUE):$this->_gen_pass(8);//имя пользователя из email или генерим как пароль
    $pass=$this->_gen_pass();//генерим новый пароль
-   $data['salt']=$this->_gen_salt();//генерим новую соль
-   $data['login']=crypt($login,$data['salt']);//шифруем логин для БД
-   $data['password']=crypt($pass,$data['salt']);//шифруем пароль для БД
+   $data['login']=password_hash($login,PASSWORD_BCRYPT);//шифруем логин для БД
+   $data['password']=password_hash($pass,PASSWORD_BCRYPT);//шифруем пароль для БД
    $data['last_mod_date']=date('Y-m-d H:i:s');
    $this->back_basic_model->edit_back_user($v['id'],$data);//перезаписываем данные пользователя
    //отправляем новые данные пользователю

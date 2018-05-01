@@ -15,7 +15,7 @@ class Back_setting_control extends Back_basic_control{
   $q=$this->back_basic_model->get_back_users();//выборка пользователей админки
   if(!$q){return TRUE;}//нет пользователей
   foreach($q as $v){
-   if($v['login']===crypt($login,$v['salt'])&&$v['password']===crypt($pass,$v['salt'])){return FALSE;}//логин и пароль не уникальны
+   if(password_verify($login,$v['login'])&&password_verify($pass,$v['password'])){return FALSE;}//логин и пароль не уникальны
    if($mail&&$v['email']===$mail&&$v['status']==='moderator'){//модератор с таким email уже есть
     if(!$id||$id!==$v['id']){return FALSE;}//это не текущий модератор (который сейчас редактируется)
    }
@@ -28,15 +28,13 @@ class Back_setting_control extends Back_basic_control{
   $p=array_map('trim',$this->input->post());//убираем пробелы в начале и в конце
   $this->_check_back_user($p['login'],$p['password'])?TRUE:exit('nounq');//проверка на уникальность логина и пароля
   $p['last_mod_date']=date('Y-m-d H:i:s');
-  //если пароль и логин не заполнены или не заполнен хоть один из них - используем старую соль, иначе - генерим новую
-  $p['salt']=(($p['login']===''&&$p['password']==='')||($p['login']===''||$p['password']===''))?$this->_get_admin_param('salt'):$this->_gen_salt();
-  //если логин не заполнен используем старый, иначе - генерим новый
-  $p['login']=($p['login']==='')?$this->_get_admin_param('login'):crypt($p['login'],$p['salt']);
-  //если пароль не заполнен используем старый, иначе - генерим новый
-  $p['password']=($p['password']==='')?$this->_get_admin_param('password'):crypt($p['password'],$p['salt']);
+  //если логин не заполнен используем старый, иначе - шифруем новый
+  $p['login']=($p['login']==='')?$this->_get_admin_param('login'):password_hash($p['login'],PASSWORD_BCRYPT);
+  //если пароль не заполнен используем старый, иначе - шифруем новый
+  $p['password']=($p['password']==='')?$this->_get_admin_param('password'):password_hash($p['password'],PASSWORD_BCRYPT);
   //перезаписываю администратора
   $this->back_basic_model->edit_back_user($this->_get_admin_param('id'),$p)?TRUE:exit('error');
-  //перезаписываю сессию чтобы не выбрасывало с админки
+  //перезаписываю сессию чтобы не выбрасывало из админки
   $this->session->administrator?$this->session->set_userdata('administrator',$p['password'].$p['login']):TRUE;
   exit('ok');
  }
@@ -47,9 +45,8 @@ class Back_setting_control extends Back_basic_control{
   $this->_check_back_user($p['login'],$p['password'],$p['email'])?TRUE:exit('nounq');//проверка на уникальность логина и пароля
   $p['register_date']=date('Y-m-d H:i:s');
   $p['status']='moderator';
-  $p['salt']=$this->_gen_salt();
-  $p['login']=crypt($p['login'],$p['salt']);
-  $p['password']=crypt($p['password'],$p['salt']);
+  $p['login']=password_hash($p['login'],PASSWORD_BCRYPT);
+  $p['password']=password_hash($p['password'],PASSWORD_BCRYPT);
   $this->back_basic_model->add($p,$this->_prefix().'back_users')?exit('ok'):exit('error');
  }
 
@@ -58,12 +55,10 @@ class Back_setting_control extends Back_basic_control{
   $p=array_map('trim',$this->input->post());//убираем пробелы в начале и в конце
   $this->_check_back_user($p['login'],$p['password'],$p['email'],$id)?TRUE:exit('nounq');//проверка на уникальность логина и пароля
   $p['last_mod_date']=date('Y-m-d H:i:s');
-  //если пароль и логин не заполнены или не заполнен хоть один из них - используем старую соль, иначе - генерим новую
-  $p['salt']=(($p['login']===''&&$p['password']==='')||($p['login']===''||$p['password']===''))?$this->_get_moderator_param($id,'salt'):$this->_gen_salt();
-  //если логин не заполнен используем старый, иначе - генерим новый
-  $p['login']=($p['login']==='')?$this->_get_moderator_param($id,'login'):crypt($p['login'],$p['salt']);
-  //если пароль не заполнен используем старый, иначе - генерим новый
-  $p['password']=($p['password']==='')?$this->_get_moderator_param($id,'password'):crypt($p['password'],$p['salt']);
+  //если логин заполнен - шифруем его
+  if(!$p['login']===''){$p['login']=password_hash($p['login'],PASSWORD_BCRYPT);}else{unset($p['login']);}
+  //если пароль заполнен - шифруем его
+  if(!$p['password']===''){$p['password']=password_hash($p['password'],PASSWORD_BCRYPT);}else{unset($p['password']);}
   //перезаписываю модератора
   $this->back_basic_model->edit_back_user($id,$p)?exit('ok'):exit('error');
  }
