@@ -63,7 +63,7 @@
     <img src="<?=base_url('img/logo_tagra_18_18.svg')?>" alt="Tagra CMS"> Tagra CMS<br>
    </div>
   </div>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script>
    ////////////////////////////////////////показать скрыть пароль в поле
     $('#see_pass').on('click',function(e){
@@ -78,13 +78,13 @@
       btn.removeClass('fa fa-eye-slash').attr('title','Показать пароль');
      }
     });
-    
+
     //////////////////////////////////////показать скрыть форму "забыл пароль"
     $('#show_sand_pass,#no_subm_pass').on('click',function(e){
      e.preventDefault();
      $('#login_form,#sand_pass').slideToggle();
     });
-    
+
     //////////////////////////////////////отправить новые логин\пароль пользователю
     $('#sand_pass').on('submit',function(e){
      e.preventDefault();
