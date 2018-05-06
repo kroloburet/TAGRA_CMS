@@ -24,18 +24,18 @@
 <script>
 var doc_head=document.getElementsByTagName("head")[0];
 var ms=document.createElement("link");ms.rel="stylesheet";//UI_fraimwork
-ms.href="/UI_fraimwork/fonts/FontAwesome/style.css";doc_head.insertBefore(ms, doc_head.firstChild);
+ms.href="/UI_fraimwork/fonts/FontAwesome/style.css";doc_head.insertBefore(ms,doc_head.firstChild);
 var ms=document.createElement("link");ms.rel="stylesheet";//главная таблица стилей
-ms.href="/css/front/general.css";doc_head.insertBefore(ms, doc_head.firstChild);
+ms.href="/css/front/general.css";doc_head.insertBefore(ms,doc_head.firstChild);
 var ms=document.createElement("link");ms.rel="stylesheet";//иконочный шрифт
-ms.href="/UI_fraimwork/css.css";doc_head.insertBefore(ms, doc_head.firstChild);
+ms.href="/UI_fraimwork/css.css";doc_head.insertBefore(ms,doc_head.firstChild);
 <?php if(isset($type)&&$type){//если галерея
 if($type==='foto_folder'||$type==='foto_desc'||$type==='video_yt'){//фото или видео?>
 var ms=document.createElement("link");ms.rel="stylesheet";//
-ms.href="/scripts/libs/FVGallery/FVGallery.css";doc_head.insertBefore(ms, doc_head.firstChild);
+ms.href="/scripts/libs/FVGallery/FVGallery.css";doc_head.insertBefore(ms,doc_head.firstChild);
 <?php }if($type==='audio'){//аудио?>
 var ms=document.createElement("link");ms.rel="stylesheet";//
-ms.href="/scripts/libs/html5_audio/html5_audio.css";doc_head.insertBefore(ms, doc_head.firstChild);
+ms.href="/scripts/libs/html5_audio/html5_audio.css";doc_head.insertBefore(ms,doc_head.firstChild);
 <?php }}?>
 </script>
 
@@ -47,7 +47,7 @@ if($type==='foto_folder'||$type==='foto_desc'||$type==='video_yt'){//фото и
 <script src="/scripts/libs/FVGallery/FVGallery.js" defer></script>
 <?php }?>
 <?php if($type==='audio'){//если галерея видео или аудио - поддержка старыми браузерами <audio> и <video>?>
-<script src="/scripts/libs/html5_audio/html5media_1.1.8_min.js" defer></script>
+<script src="/scripts/libs/html5_audio/html5media_1.2.2_min.js" defer></script>
 <?php }}?>
 
 <?php if(isset($js)&&$js){echo '<!--####### Пользовательский JS к этому документу #######-->'.PHP_EOL.$js.PHP_EOL;}?>
@@ -65,7 +65,7 @@ window.addEventListener('load',function(){
 <!--####### JS для аудио галереи #######-->
 <script>
 // html5media enables <video> and <audio> tags in all major browsers
-// External File: http://api.html5media.info/1.1.8/html5media.min.js
+// External File: http://api.html5media.info/1.2.2/html5media.min.js
 // Add user agent as an attribute on the <html> tag...
 // Inspiration: http://css-tricks.com/ie-10-specific-styles/
 var b=document.documentElement;
