@@ -17,17 +17,9 @@
  <body>
   <div id="content">
 <?php
-$cms_path=str_replace('/instal', '', dirname(__FILE__));//абсолютный путь к директории с CMS
-$f1='/application/';
-$f2='/application/config/';
-$f3='/application/config/config.php';
-$f4='/application/config/database.php';
-if(//если файлы и папки доступны для записи
-   @is_writable($cms_path.$f1)&&
-   @is_writable($cms_path.$f2)&&
-   @is_writable($cms_path.$f3)&&
-   @is_writable($cms_path.$f4)
-  ){
+$cms_path=str_replace('/instal','',dirname(__FILE__));//абсолютный путь к директории с CMS
+$dir='/application/config/';
+if(@is_writable($cms_path.$dir)){//если доступны для записи
 ?>
    <h1>Установка системы управления контентом</h1>
    <p>Заполните все поля (одиночные и двойные кавычки не допускаются) и нажмите на кнопку «Установить систему» Если ви все правильно сделали и не возникло каких-либо программных сбоев, вы перейдете на страницу, где сможете увидеть статус установки. Если на этом или другом этапе у вас возникли проблемы — вы можете обратиться к разработчику по e-mail: <a href="mailto:kroloburet@gmail.com">kroloburet@gmail.com</a></p>
@@ -88,42 +80,22 @@ URL к директории в которой будет запущена сис
     </form>
    </div>
 <?php }else{
-  echo '<h2>Все папки и файлы ниже должны быть доступны для записи!</h2>';
- if(@is_writable($cms_path.$f1)){
-  echo '<div><i class="fa-check-circle green"></i> Папка <b>'.$f1.'</b> доступна для записи</div>';
- }else{
-  echo '<div><i class="fa-times-circle red"></i> Папка <b>'.$f1.'</b> не доступна для записи</div>';
- }
- if(@is_writable($cms_path.$f2)){
-  echo '<div><i class="fa-check-circle green"></i> Папка <b>'.$f2.'</b> доступна для записи</div>';
- }else{
-  echo '<div><i class="fa-times-circle red"></i> Папка <b>'.$f2.'</b> не доступна для записи</div>';
- }
- if(@is_writable($cms_path.$f3)){
-  echo '<div><i class="fa-check-circle green"></i> Файл <b>'.$f3.'</b> доступен для записи</div>';
- }else{
-  echo '<div><i class="fa-times-circle red"></i> Файл <b>'.$f3.'</b> не доступен для записи</div>';
- }
- if(@is_writable($cms_path.$f4)){
-  echo '<div><i class="fa-check-circle green"></i> Файл <b>'.$f4.'</b> доступен для записи</div>';
- }else{
-  echo '<div><i class="fa-times-circle red"></i> Файл <b>'.$f4.'</b> не доступен для записи</div>';
- }
-echo '<p style="margin-top:1.5em;">Установите права на запись (777) и жмите <a href="index.php" class="btn">Попробовать снова</a> или обратитесь к разработчику по e-mail: <a href="mailto:kroloburet@gmail.com">kroloburet@gmail.com</a></p>';
+echo '<div><i class="fa-check-circle green"></i> Папка <b>'.$dir.'</b> доступна для записи</div>';
+echo '<p style="margin-top:1.5em;">Установите права на запись (0750) и жмите <a href="index.php" class="btn">Попробовать снова</a> или обратитесь к разработчику по e-mail: <a href="mailto:kroloburet@gmail.com">kroloburet@gmail.com</a></p>';
 }
 ?>
    <div id="copy">Веб-разработка и дизайн<a href="mailto:kroloburet@gmail.com"> <img src="/UI_fraimwork/img/kroloburet_18_18.jpeg" width="18" height="18" alt="Разработка и дизайн сайтов"> kroloburet@gmail.com</a><br>
- <img src="/UI_fraimwork/img/logo_tagra_18_18.svg" alt="Tagra CMS"> Tagra CMS<br></div>
+ <img src="/UI_fraimwork/img/logo_tagra_18_18.svg" alt="Tagra CMS"> Tagra CMS</div>
   </div>
 
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="/UI_fraimwork/js.js"></script>
   <script>
   /////////////////////////////////////////////////////////////////////////генерирование пароля с вставкой в поле
   function gen_pass(pass/*поле для вставки пароля*/){
    var passwd='',
        chars='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789~@#$[]_-';
-   for(i=1;i<11;i++){
+   for(var i=1;i<11;i++){
     var c=Math.floor(Math.random()*chars.length + 1);
     passwd+=chars.charAt(c);
    }
