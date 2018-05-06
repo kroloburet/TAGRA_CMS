@@ -7,23 +7,36 @@ $sections=$CI->db->select('title,alias,section')->order_by('title','ASC')->get($
 $gallerys=$CI->db->select('title,alias,section')->order_by('title','ASC')->get($prefix.'gallerys')->result_array();
 ?>
 
-<script src="<?=base_url('scripts/tinymce_4.6.1/tinymce.min.js')?>"></script>
+<script src="<?=base_url('scripts/tinymce_4.7.11/tinymce.min.js')?>"></script>
 <script>
 //////////////////////////////////////////////////настройки текстового редактора
 tinymce.init({
  language:"ru",//язык редактора
  content_css:"/css/back/redactor.css",//стили для редактируемого контента
  selector:"#layout_t,#layout_l,#layout_r,#layout_b",
- theme:"modern",
- menubar:false,
- plugins:"advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code textcolor insertdatetime media table contextmenu paste nonbreaking moxiemanager fullscreen",
- toolbar:"undo redo | styleselect | bold italic | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table charmap link insertfile image media | fullscreen code",
  inline:true,//редактор появляется после клика в елементе
+ menubar:false,
+ element_format:"html",//теги в формате
  code_dialog_width:800,
- schema:"html5",
- element_format:"html",//теги в формате html | xhtml
- relative_urls:false,// относительные или абсолютные урлы
+ relative_urls:false,//относительные или абсолютные урлы
  remove_script_host:true,
+ style_formats_merge:true,//добавлять или нет свои классы к классам по умолчанию в меню "формат"
+ browser_spellcheck:true,//проверка орфографии
+ valid_elements:"*[*]",//разрешенные
+ //allow_script_urls: true,//разрешить\запретить внешние скрипты
+ //invalid_elements:"strong,em",//запрещенные
+ //extended_valid_elements:"img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name]",//добавить разрешенные
+ image_advtab:true,//расширенный диалог вставки изображения
+ image_title: true,
+ image_class_list:[//предустановленные классы для картинок
+  {title:'Нет применять',value:''},
+  {title:'По центру',value:'to_c'},
+  {title:'Справа',value:'to_r'},
+  {title:'Слева',value:'to_l'},
+  {title:'Не обтекать',value:'to_none'}
+ ],
+ plugins:"advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code textcolor media table contextmenu paste nonbreaking moxiemanager fullscreen",
+ toolbar:"undo redo | styleselect | bold italic | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table charmap link image media insertfile | fullscreen code",
  link_list:[//выпадающий список ссылок на страницы сайта
  <?php if($pages){?>
   {title:'Страницы',menu:[
@@ -43,40 +56,10 @@ tinymce.init({
   {title:'Главная',value:'/'},
   {title:'Контакты',value:'/contact'}
  ],
- style_formats_merge:true,//добавлять или нет свои классы к классам по умолчанию в меню "формат"
- style_formats:[//свои классы и стили в меню "формат"
-  {title:'Мои классы',items:[
-   {title:'Важное',block:'div',classes:'warn'},
-    {title:'Выравнивание',items:[
-     {title:'Справа',selector:'*',classes:'to_r'},
-     {title:'Слева',selector:'*',classes:'to_l'},
-     {title:'По центру',selector:'*',classes:'to_c'}
-    ]}
-   ]
-  }
- ],
- //invalid_elements:"strong,em",//запрещенные
- valid_elements:"*[*]",//разрешенные
- //extended_valid_elements:"img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name]",//добавить разрешенные
- image_advtab:true,//расширенный диалог вставки изображения
- image_class_list:[//предустановленные классы для картинок
-  {title:'Нет применять',value:''},
-  {title:'По центру',value:'to_c'},
-  {title:'Справа',value:'to_r'},
-  {title:'Слева',value:'to_l'},
-  {title:'Не обтекать',value:'to_none'}
- ],
- autosave_ask_before_unload:false,
- browser_spellcheck:true,//проверка орфографии
- forced_root_block:false,//обворачивать указанным тегом блок. например "div"
- force_p_newlines:true,//с новой строки в <p>
- force_br_newlines:false,//сновой строки <br>
  ////////////////////////настройки файлового менеджера
  moxiemanager_rootpath:'/upload/',
  moxiemanager_title:'Mенеджер файлов',
- moxiemanager_leftpanel:false,
- moxiemanager_width:720,
- moxiemanager_height:400,
+ moxiemanager_leftpanel:false
 });
 //////////////////////////////////////////////////////////////////////////////////////инициализация текстового редактора
 $(function(){//готовность DOM
