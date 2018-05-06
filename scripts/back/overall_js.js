@@ -1,8 +1,8 @@
 $(function(){//готовность DOM
- 
-//////////////////////////////////////////////////////////////загрузка альтернативного изображения 
+
+//////////////////////////////////////////////////////////////загрузка альтернативного изображения
 $('img').on('error',function(){$(this).attr('src','/img/noimg.svg');});
- 
+
 //////////////////////////////////////////////////////////////показать в пункте меню (комментарии) колличество новых комментов
  $('#count_new_comments').load(
   "/admin/comment/get_count_new",
@@ -11,7 +11,7 @@ $('img').on('error',function(){$(this).attr('src','/img/noimg.svg');});
    data>0?count.addClass('fa-bell-o red'):count.remove();
   }
  );
- 
+
 });//готовность DOM
 
 ////////////////////////////////////////////////превью изображения по url из поля
@@ -50,7 +50,7 @@ localStorage.getItem('notific_work_info')?off_notific():true;
         val,//значение в поле поиска
         opt;//результат поиска (отфильтрованные элементы списка)
     self.before(search);//прикрепляю поле поиска к списку
-    search.on('keyup',function(){//искать в списке 
+    search.on('keyup',function(){//искать в списке
      val=$(this).val();
      opt=options.map(function(){//запись в переменную всех найденных элементов
       if($(this).text().indexOf(val)+1){return this;}
@@ -70,7 +70,7 @@ localStorage.getItem('notific_work_info')?off_notific():true;
    return methods[method].apply(this,Array.prototype.slice.call(arguments,1));
   }else if(typeof method==='object'||!method){
    return methods.init.apply(this,arguments);
-  }else{$.error('Метод с именем '+method+' не существует');} 
+  }else{$.error('Метод с именем '+method+' не существует');}
  };
 })(jQuery);
 window.addEventListener('load',function(){
@@ -143,7 +143,7 @@ function translit(kiril,latin,prefix){
   'а':'a','б':'b','в':'v','г':'g','д':'d','е':'e','ё':'yo','ж':'zh','з':'z','и':'i','й':'y','к':'k','л':'l','м':'m','н':'n','о':'o','п':'p','р':'r','с':'s','т':'t','у':'u','ф':'f','х':'kh','ц':'ts','ч':'ch','ш':'sh','щ':'shch','ъ':'','ы':'y','ь':'','э':'e','ю':'yu','я':'ya','є':'e','і':'i','ї':'yi','ґ':'g'
  };
  var result='';
- for(var i=0;i<text.length;i++){  
+ for(var i=0;i<text.length;i++){
   if(char[text[i]]!==undefined){//символ найден - заменить его
     result+=char[text[i]];
   }else{//символ не найден - оставить как есть
@@ -260,7 +260,7 @@ function files(
   rootpath:'/upload/',
   fields:field,
   insert:insert,
-  onopen:setTimeout(files_notifer,1500)
+  onopen:setTimeout(files_notifer,500)
  };
  if(typeof other_opt==='object'){//параметр - объект
   $.extend(true,opt,other_opt);//объединение объектов
