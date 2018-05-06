@@ -1,7 +1,7 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 //Зарезервированные роуты должны определяться выше любого шаблона или регулярного выражения
 $route["default_controller"]="front_home_control";
-$route["404_override"]="error/error_404";
+$route["404_override"]="errors/error_404";
 $route["translate_uri_dashes"]=FALSE;
 //Роуты для админки
 $route["admin"]="back_basic_control";
