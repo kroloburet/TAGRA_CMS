@@ -7,7 +7,13 @@ body{margin:0;padding:0;color:#000;border:none}
 .touch{padding:1em;margin:1em 0}
 .touch:hover{background:#eee}
 .container{background-color:#fff;padding:1em;border:1px solid #bbb;margin-bottom:2em}
-.notific_r,.notific_g{display:block;margin:0 0 .3em}
+.notific_r,.notific_g,.notific_y,.notific_b{display:block;padding:0 0 0 2em;margin:0 0 .3em 0;background-color:#fff!important;}
+.notific_g:before,.notific_r:before,.notific_y:before,.notific_b:before{display:none;}
+.notific_g:after,.notific_r:after,.notific_y:after,.notific_b:after{left:0;}
+.notific_r:after{color:#FF3636;}
+.notific_g:after{color:#6ca200;}
+.notific_y:after{color:#e5ca00;}
+.notific_b:after{color:#0E7AA9;}
 #copy{text-align:center}
 
 /*------------------------------------------------------------------------------FORM---*/
