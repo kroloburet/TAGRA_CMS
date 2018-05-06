@@ -19,12 +19,12 @@
 <script src="<?= base_url('UI_fraimwork/js.js'); ?>"></script>
 <script src="<?= base_url('scripts/back/overall_js.js'); ?>"></script>
 <?php $this->load->helper('back/redactor');?>
-<script src="<?=base_url('scripts/tinymce_4.6.1/plugins/moxiemanager/js/moxman.loader.min.js')?>"></script>
+<script src="<?=base_url('scripts/tinymce_4.7.11/plugins/moxiemanager/js/moxman.loader.min.js')?>"></script>
 <?php if($conf_emmet=='on'){?>
 <script src="<?=base_url('scripts/libs/emmet.min.js')?>"></script>
 <script>
 emmet.require('textarea').setup({//Emmet plugin for <textarea> https://github.com/emmetio/textarea
- pretty_break: true,// enable formatted line breaks (when inserting between opening and closing tag) 
+ pretty_break: true,// enable formatted line breaks (when inserting between opening and closing tag)
  use_tab: true// expand abbreviations by Tab key
 });
 </script>
