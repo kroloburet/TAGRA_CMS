@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="<?=$robots?>">
 <meta name="description" content="<?=$description?>">
-<?php if($img_prev){//метатеги для соцсетей?>
+<?php if(!empty($img_prev)){//метатеги для соцсетей?>
 <!--Google-->
 <meta itemprop="name" content="<?=$conf_site_name?>">
 <meta itemprop="description" content="<?=$description?>">
