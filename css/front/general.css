@@ -7,7 +7,13 @@ Developer:Sergey Nizhnik kroloburet@gmail.com
 
 /*
 ///////////////////////////////////////////////////////////
-//overall css
+// override UI_fraimwork styles
+///////////////////////////////////////////////////////////
+*/
+
+/*
+///////////////////////////////////////////////////////////
+//template styles
 ///////////////////////////////////////////////////////////
 */
 
@@ -21,8 +27,8 @@ Developer:Sergey Nizhnik kroloburet@gmail.com
 /*------------------------------------------------------------------------------headline*/
 #headline{margin:0;padding:0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap}
 
-/*------------------------------------------------------------------------------content & layouts*/
-#content{padding:0 1%;margin:0 auto}
+/*------------------------------------------------------------------------------container & layouts*/
+.container{padding:0 1%;margin:0 auto}
 #layouts{text-align:justify;}
 #layouts:after,#layouts:before{content:'';display:table;clear:both}
 #layout_t,#layout_l,#layout_r,#layout_b{padding:0 0 1.5em 0;overflow:hidden}

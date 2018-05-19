@@ -8,7 +8,7 @@ nav{background:#E7D977}
 .active,.menu li a:hover,.menu li span:hover,.menu li:hover>a,.menu li:hover>span{background:rgba(0,0,0,0.05)}
 .user_nav{float:right}
 @media(max-width:950px){.user_nav{float:none}}
-#content{max-width:1100px;padding:0 1%;margin:0 auto 2em}
+.container{max-width:1100px;padding:0 1%;margin:0 auto 2em}
 br{clear:both!important}
 .nowrap_float_l{white-space:nowrap;float:left;margin:0 7px 7px 0}
 .float_l_50{overflow:hidden;display:block;float:left;width:48%;margin:0 2% 5px 0}
@@ -17,7 +17,7 @@ br{clear:both!important}
 input[name="fuck_bot"]{display:none;visibility:hidden}
 .touch{padding:1em}
 .touch:hover{background:#eee}
-.container{background-color:#fff;padding:1em;border:1px solid #bbb;margin-bottom:1.5em}
+.sheath{background-color:#fff;padding:1em;border:1px solid #bbb;margin-bottom:1.5em}
 #copy{text-align:center;margin:2em auto}
 .layout_l_width_input{border:solid 1px #4a76be;border-radius:3px;padding:.2em;text-align:center;width:3em}
 .nav_layout_t,.nav_layout_b,.nav_layout_l,.nav_layout_r{border:solid 1px #4a76be;border-radius:3px;background-color:#fff;margin:0 0 .5em;padding:.5em;height:40px;overflow:hidden;cursor:pointer}
@@ -34,7 +34,7 @@ input[name="fuck_bot"]{display:none;visibility:hidden}
 #prev_links{max-height:200px;overflow-x:auto;margin-top:.3em;}
 .remove_link{display:inline-block;margin:0 .3em .3em 0;padding:.5em;border:1px solid;border-radius:3px;cursor:url(/img/remove.png),pointer!important;color:#0E7AA9}
 .remove_link:hover{opacity:.4;}
- 
+
 /*----------------------------------------------------------------------------gallery--*/
 .type_section{display:none}
 .g_preview{max-height:200px;overflow-x:auto;margin-top:.7em}
