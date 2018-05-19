@@ -7,11 +7,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="<?=$robots?>">
 <meta name="description" content="<?=$description?>">
-<?php if(!empty($img_prev)){//метатеги для соцсетей?>
-<meta itemprop="image" content="<?=$img_prev//картинка для google+?>">
-<meta property="og:image" content="<?=$img_prev//картинка для facebook?>">
-<meta name="twitter:image:src" content="<?=$img_prev//картинка для twitter?>">
-<link rel="image_src" href="<?=$img_prev//картинка для vk?>">
+<?php if($img_prev){//метатеги для соцсетей?>
+<!--Google-->
+<meta itemprop="name" content="<?=$conf_site_name?>">
+<meta itemprop="description" content="<?=$description?>">
+<meta itemprop="image" content="<?=$img_prev?>">
+<!--Twitter-->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="<?=$conf_site_name?>">
+<meta name="twitter:title" content="<?=$title?>">
+<meta name="twitter:description" content="<?=$description?>">
+<meta name="twitter:image:src" content="<?=$img_prev?>">
+<meta name="twitter:domain" content="<?=base_url()?>">
+<!--Facebook-->
+<meta property="og:title" content="<?=$title?>">
+<meta property="og:description" content="<?=$description?>">
+<meta property="og:image" content="<?=$img_prev?>">
+<meta property="og:url" content="<?=current_url()?>">
+<meta property="og:site_name" content="<?=$conf_site_name?>">
+<!--Другие-->
+<link rel="image_src" href="<?=$img_prev?>">
 <?php }?>
 <title><?=$title?> | <?=$conf_site_name?></title>
 
@@ -30,18 +45,16 @@
 
 <div id="preload_lay"><div id="preload"></div></div>
 <noscript><div class="notific_y">Внимание! В вашем браузере выключен Javascript. Для корректной работы сайта рекоммендуем включить Javascript.</div></noscript>
- 
+
 <?php if(!empty($front_menu_list)){//если массив меню не пустой?>
 <!--####### Главное меню #######-->
 <span class="mobile_menu noprint">&#8801;</span>
 <nav><ul class="menu noprint" style="max-width:<?=$conf_body_width?>px">
-<?php 
+<?php
 $this->load->helper('front/menu');
 display_menu_list($front_menu_list);
 ?>
 </ul></nav>
 <?php }?>
 
-<!--####### Контент #######-->
-<div id="content" style="max-width:<?=$conf_body_width?>px">
- 
+<div class="container" style="max-width:<?=$conf_body_width?>px">
