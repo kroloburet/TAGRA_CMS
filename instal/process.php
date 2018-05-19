@@ -269,6 +269,7 @@ $q_i=$db->query("INSERT INTO `$t` (`name`, `value`) VALUES
 ('conf_addthis_follow', ''),
 ('conf_addthis_share_def', 'off'),
 ('conf_addthis_follow_def', 'off'),
+('conf_img_prev_def', ''),
 ('conf_breadcrumbs_public', 'on'),
 ('conf_breadcrumbs_home', 'Home'),
 ('conf_emmet', 'off'),
