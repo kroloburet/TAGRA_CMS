@@ -15,7 +15,7 @@
  <img src="<?=base_url('UI_fraimwork/img/logo_tagra_18_18.svg')?>" alt="Tagra CMS"> Tagra CMS <sup><?=$this->config->item('tagra_version')?></sup><br>
 </div>
 </div>
-<!--########### END CONTENT ###########-->
+<!--########### END CONTAINER ###########-->
 <script src="<?= base_url('UI_fraimwork/js.js'); ?>"></script>
 <script src="<?= base_url('scripts/back/overall_js.js'); ?>"></script>
 <?php $this->load->helper('back/redactor');?>

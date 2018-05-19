@@ -1,7 +1,7 @@
 <h1><?=$conf_title?></h1>
 
 <!--####### Настройки вывода, поиск, иные опции #######-->
-<form id="filter" class="container" method="GET" action="<?=current_url()?>">
+<form id="filter" class="sheath" method="GET" action="<?=current_url()?>">
  <div class="button algn_r">
   <a href="<?=base_url('admin/section/add_form')?>" class="btn_lnk">Добавить раздел</a>
  </div>
@@ -56,7 +56,7 @@
 </form>
 
 <?php if(empty($sections)){?>
-<div class="container">
+<div class="sheath">
  <p>Ничего не найдено. Запрос не дал результатов..(</p>
 </div>
 <?php }else{?>
@@ -72,7 +72,7 @@
   </tr>
  </thead>
  <tbody>
-  <?php 
+  <?php
   $this->load->helper('back/section_alias_to_title');
   foreach($sections as $item){?>
   <tr>

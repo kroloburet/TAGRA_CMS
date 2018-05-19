@@ -2,7 +2,7 @@
 //Кнопка отправки формы не должна отправлятся (иметь имя), имена полей не менять.
 ?>
 <h1><?=$conf_title?></h1>
-<div class="container">
+<div class="sheath">
  <form method="POST" action="<?=base_url('admin/contact/edit')?>" onsubmit="subm(this,s_opts);return false">
 
   <!--####### Title, description... #######-->
@@ -179,7 +179,7 @@ JAVASCRIPT-код без тегов script
     <a href="#" class="fa-folder-open fa-lg blue" onclick="files('qr');return false"></a>
    </label>
   </div>
-  
+
   <!--####### Адреса #######-->
   <div class="touch" id="addr">
    <h3 class="float_l">Адреса</h3> <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
@@ -286,7 +286,7 @@ function del_mail(el){
      _a_cancel_btn=_a.find('.addr_cancel_btn'),//кнопка "отмена"
      _gps_reg=/(^-?)[0-9]+(?:\.[0-9]*)?,-?[0-9]+(?:\.[0-9]*)?$/,//регулярка проверки gps
      _opt=!_a_opt.val()?{}:JSON.parse(_a_opt.val());//объект адресов
- 
+
  //////////////////////////////////////////////////////////
  //приватные методы
  //////////////////////////////////////////////////////////
@@ -401,13 +401,13 @@ function del_mail(el){
    });
   });
  };
- 
+
  //////////////////////////////////////////////////////////
  //события
  //////////////////////////////////////////////////////////
  _a_add_btn.on('click.Addr',function(){_get_add_form();});//открыть блок полей
  _a_cancel_btn.on('click.Addr',function(){_clear();});//скрыть, очистить блок полей
- 
+
  //////////////////////////////////////////////////////////
  //после загрузки модуля
  //////////////////////////////////////////////////////////

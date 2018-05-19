@@ -24,13 +24,13 @@
    <script src="<?=base_url('scripts/libs/respond.min.js')?>"></script>
   <![endif]-->
   <title><?=$conf_title?> | <?=$conf_site_name?></title>
-  
+
 <!--####### Презагрузка страницы #######-->
 <style>#preload_lay{display:block;position:fixed;z-index:99999;top:0;left:0;width:100%;height:100%;background:#fff}#preload{box-sizing:border-box;margin:-50px;position:absolute;top:50%;left:50%;border:7px solid rgba(180,180,180,0.2);border-left-color:#E7D977;-webkit-transform:translateZ(0);-ms-transform:translateZ(0);transform:translateZ(0);-webkit-animation:load 1.1s infinite linear;animation:load 1.1s infinite linear}#preload,#preload:after{border-radius:50%;width:100px;height:100px}@-webkit-keyframes load{0%{-webkit-transform:rotate(0deg);transform:rotate(0deg)}100%{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}@keyframes load{0%{-webkit-transform:rotate(0deg);transform:rotate(0deg)}100%{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}</style><script>window.onload=function(){document.getElementById("preload_lay").style.display="none";};</script>
-  
+
  </head>
  <body id="body">
-  
+
   <div id="preload_lay"><div id="preload"></div></div>
   <noscript><div class="notific_y">Внимание! В вашем браузере выключен Javascript. Для корректной работы сайта рекоммендуем включить Javascript.</div></noscript>
 
@@ -79,8 +79,8 @@
    </li>
   </ul>
  </nav>
-<!--########### CONTENT ###########-->
-<div id="content">
+<!--########### CONTAINER ###########-->
+<div class="container">
  <!--Короткая справка по работе с системой-->
  <div class="notific_b" id="notific_work_info">Здравствуйте, <?=$conf_status?>!<br>Это короткая справка-рекомендация о том, как начать работу в системе.<br>
   <a href="#" onclick="opn_cls('work_info');return false">Показать справку</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#" onclick="off_notific();return false">Не сейчас</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#" onclick="localStorage.setItem('notific_work_info','off');off_notific();return false">Больше не предлагать</a>

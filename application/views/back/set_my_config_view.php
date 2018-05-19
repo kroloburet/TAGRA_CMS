@@ -95,7 +95,7 @@ JQuery — подключаемый скрипт для правильной
         <label class="input">
          <input type="text" name="conf_body_width" value="<?=$conf_body_width?>">
         </label>
-        Ширина левой колонки макета (в процентах)
+        Ширина левой колонки макета «Контент» (в процентах)
         <label class="input">
          <input type="text" name="conf_layout_l_width" value="<?=$conf_layout_l_width?>">
         </label>
@@ -112,55 +112,42 @@ JQuery — подключаемый скрипт для правильной
          </select>
         </label>
        </div>
-      </div>
-     </div>
 
- <!--####### Кнопки соцсетей #######-->
-     <div class="touch">
-      <h3 class="nowrap float_l">Кнопки «поделиться»</h3> <span><i class="fa-question-circle blue" onmouseover="tt(this,'c');"></i>
-       <pre class="tt">
-Сервис <a href="https://www.addthis.com" target="_blank">AddThis</a> предоставляет возможность после регистрации
-размещать на страницах вашего сайта кнопки социальных сетей,
-с помощью которых посетители вашего сайта могут поделиться
-информацией о вашем сайте или странице в своих соц-сетях.
-А так же, они могут посетить ваши странички соц-сетей.
-— Это хороший способ рассказать о себе и своем сайте.</pre>
-       <a href="#" onclick="opn_cls('addthis_opt');
-       return false">Настройки <i class="fa-angle-down"></i></a>
-      </span>
-      <hr>
-      <div id="addthis_opt" class="opn_cls">
-       JAVASCRIPT-код подключения к сервису <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
-       <pre class="tt">
+       <!--####### Кнопки соцсетей #######-->
+       <div class="row touch">
+        <h3 class="float_l">Соцсиальные сети</h3>
+        <a href="#" onclick="opn_cls('addthis_opt');return false">Настройки <i class="fa-angle-down"></i></a>
+        <hr>
+        <div id="addthis_opt" class="opn_cls">
+         JAVASCRIPT-код подключения к сервису <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+         <pre class="tt">
 После регистрации в сервисе AddThis вы получаете
 небольшой код который нужно разместить на вашем сайте.
 После этого вы можете управлять кнопками «поделиться»
 с вашего аккаунта в сервисе.</pre>
-       <label class="textarea">
-        <textarea class="no-emmet" name="conf_addthis_js" placeholder="<script src='//s7.addthis.com/js/300/addthis_widget.js#pubid=XXXXXXXXXXXXXXX'></script>" rows="2"><?=$conf_addthis_js?></textarea>
-       </label>
-       HTML-код кнопок «Share» <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
-       <pre class="tt">
+         <label class="textarea">
+          <textarea class="no-emmet" name="conf_addthis_js" placeholder="<script src='//s7.addthis.com/js/300/addthis_widget.js#pubid=XXXXXXXXXXXXXXX'></script>" rows="2"><?=$conf_addthis_js?></textarea>
+         </label>
+         HTML-код кнопок «Share» <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+         <pre class="tt">
 Создайте в разделе «Share» сервиса «AddThis» набор
 кнопок для вашего сайта и скопируйте полученный HTML-код
 в это поле. Созданные вами кнопки будут показанны на страницах.
 С их помощью посетители вашего сайта смогут поделиться ссылкой
 и информацией о вашей странице в своих соц-сетях.</pre>
-       <label class="textarea">
-        <textarea class="no-emmet" name="conf_addthis_share" placeholder="<div class='addthis_sharing_toolbox'></div>" rows="2"><?=$conf_addthis_share?></textarea>
-       </label>
-       HTML-код кнопок «Follow» <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
-       <pre class="tt">
+         <label class="textarea">
+          <textarea class="no-emmet" name="conf_addthis_share" placeholder="<div class='addthis_sharing_toolbox'></div>" rows="2"><?=$conf_addthis_share?></textarea>
+         </label>
+         HTML-код кнопок «Follow» <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+         <pre class="tt">
 Создайте в разделе «Follow» сервиса «AddThis» набор
 кнопок для вашего сайта и скопируйте полученный HTML-код
 в это поле. Созданные вами кнопки будут показанны на страницах.
 С их помощью посетители вашего сайта смогут посетить
 ваши страницы соц-сетей.</pre>
-       <label class="textarea">
-        <textarea class="no-emmet" name="conf_addthis_follow" placeholder="<div class='addthis_horizontal_follow_toolbox'></div>" rows="2"><?=$conf_addthis_follow?></textarea>
-       </label>
-       <div class="row">
-        <div class="col6">
+         <label class="textarea">
+          <textarea class="no-emmet" name="conf_addthis_follow" placeholder="<div class='addthis_horizontal_follow_toolbox'></div>" rows="2"><?=$conf_addthis_follow?></textarea>
+         </label>
          Кнопки «Share» в системе по умолчанию
          <label class="select">
           <select name="conf_addthis_share_def">
@@ -168,8 +155,6 @@ JQuery — подключаемый скрипт для правильной
            <option value="on" <?php if($conf_addthis_share_def=='on') echo'selected'?>>показать</option>
           </select>
          </label>
-        </div>
-        <div class="col6">
          Кнопки «Follow» в системе по умолчанию
          <label class="select">
           <select name="conf_addthis_follow_def">
@@ -177,37 +162,50 @@ JQuery — подключаемый скрипт для правильной
            <option value="on" <?php if($conf_addthis_follow_def=='on') echo'selected'?>>показать</option>
           </select>
          </label>
+         Превью для соцсетей <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+         <pre class="tt">
+Ссылка на изображение доступное из Интернета
+или выбранное в менеджере файлов. Изображение
+будет использовано по умолчанию во всех
+вновь создаваемых материалах как привью на
+материал в соцсетях и в списке материалов раздела.</pre><br>
+         <label class="input inline width80">
+          <input type="text" name="conf_img_prev_def" id="conf_img_prev_def" value="<?=$conf_img_prev_def?>">
+         </label>
+         <a href="#" class="fa-folder-open fa-lg blue" onclick="files('conf_img_prev_def');return false"></a>&nbsp;<i class="fa-eye fa-lg blue" onmouseover="img_prev(this,'conf_img_prev_def')"></i>
+         <pre class="tt"></pre>
         </div>
        </div>
-      </div>
-     </div>
 
- <!--####### Навигация «хлебные крошки» #######-->
-     <div class="touch">
-      <h3 class="nowrap float_l">Навигация «хлебные крошки»</h3><span>
-       <a href="#" onclick="opn_cls('bc_opt');return false">Настройки <i class="fa-angle-down"></i></a>
-      </span>
-      <hr>
-      <div id="bc_opt" class="opn_cls">
-       <label class="select">
-        <select name="conf_breadcrumbs_public">
-         <option value="on" <?php if($conf_breadcrumbs_public=='on') echo'selected'?>>Показать «хлебные крошки»</option>
-         <option value="off" <?php if($conf_breadcrumbs_public=='off') echo'selected'?>>Скрыть «хлебные крошки»</option>
-        </select>
-       </label>
-       Ссылка на главную  <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
-       <pre class="tt">
+       <!--####### Навигация «хлебные крошки» #######-->
+       <div class="row touch">
+        <h3 class="float_l">Навигация «хлебные крошки»</h3><span>
+         <a href="#" onclick="opn_cls('bc_opt');return false">Настройки <i class="fa-angle-down"></i></a>
+        </span>
+        <hr>
+        <div id="bc_opt" class="opn_cls">
+         <label class="select">
+          <select name="conf_breadcrumbs_public">
+           <option value="on" <?php if($conf_breadcrumbs_public=='on') echo'selected'?>>Показать «хлебные крошки»</option>
+           <option value="off" <?php if($conf_breadcrumbs_public=='off') echo'selected'?>>Скрыть «хлебные крошки»</option>
+          </select>
+         </label>
+         Ссылка на главную  <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+         <pre class="tt">
 Текст или HTML который будет отображаться как
 ссылка на главную в начале цепочки «хлебных крошек».
 Оставьте поле пустым чтобы не отображать ссылку.
 ВНИМАНИЕ! В HTML-коде используйте двойные кавычки
 Пример: &lt;span class=&quot;home&quot;&gt;Home&lt;/span&gt;
-       </pre>
-       <label class="input">
-        <input type="text" name="conf_breadcrumbs_home" value='<?=$conf_breadcrumbs_home?>'>
-       </label>
+         </pre>
+         <label class="input">
+          <input type="text" name="conf_breadcrumbs_home" value='<?=$conf_breadcrumbs_home?>'>
+         </label>
+        </div>
+       </div>
       </div>
      </div>
+
      <div class="button">
       <input type="submit" value="Сохранить все настройки">
      </div>

@@ -2,9 +2,9 @@
 //Кнопка отправки формы не должна отправлятся (иметь имя), имена полей не менять.
 ?>
 <h1><?=$conf_title?></h1>
-<div class="container">
+<div class="sheath">
  <form method="POST" action="<?=base_url('admin/home/edit')?>" onsubmit="subm(this,s_opts);return false">
-  
+
 <!--####### Title, description... #######-->
   <div class="touch">
    Заголовок страницы <i class="fa-info-circle red" onmouseover="tt(this);"></i>

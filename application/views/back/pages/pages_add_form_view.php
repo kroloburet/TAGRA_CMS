@@ -2,9 +2,9 @@
 //Кнопка отправки формы не должна отправлятся (иметь имя), имена полей не менять
 ?>
 <h1><?=$conf_title?></h1>
-<div class="container">
+<div class="sheath">
  <form method="POST" action="<?=base_url('admin/page/add')?>" onsubmit="subm(this,s_opts);return false">
-  
+
 <!--####### Title, description... #######-->
   <div class="touch">
    Заголовок страницы <i class="fa-info-circle red" onmouseover="tt(this);"></i>
@@ -119,7 +119,7 @@ JAVASCRIPT-код без тегов script
     <div id="layout_b" class="nav_layout_b"></div>
    </div>
   </div>
-  
+
 <!--####### Связанные ссылки #######-->
   <div class="touch">
    <?php
@@ -140,7 +140,7 @@ JAVASCRIPT-код без тегов script
    <hr>
    Путь к файлу<br>
    <label class="input inline width90">
-    <input type="text" name="img_prev" id="img_prev">
+    <input type="text" name="img_prev" id="img_prev" value="<?=$conf_img_prev_def?>">
    </label>
    <a href="#" class="fa-folder-open fa-lg blue" onclick="files('img_prev');return false"></a>&nbsp;<i class="fa-eye fa-lg blue" onmouseover="img_prev(this,'img_prev')"></i>
    <pre class="tt"></pre>
@@ -153,7 +153,7 @@ JAVASCRIPT-код без тегов script
      <select name="comments">
       <option value="off">Запретить комментарии</option>
       <option value="on">Разрешить комментарии</option>
-     </select>    
+     </select>
     </label>
    </div>
    <div class="col6">
@@ -161,7 +161,7 @@ JAVASCRIPT-код без тегов script
      <select name="public">
       <option value="on">Опубликовать</option>
       <option value="off">Не опубликовывать</option>
-     </select>     
+     </select>
     </label>
    </div>
   </div>

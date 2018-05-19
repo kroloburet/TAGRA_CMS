@@ -18,9 +18,9 @@
 Карта сайта будет перезаписана учитывая
 новые настройки конфигурации</pre>
 </h1>
-<div class="container">
+<div class="sheath">
 <?php if(is_writable(getcwd().'/sitemap.xml')){//если sitemap.xml доступен для записи?>
- 
+
 <!--####### настройки карты сайта #######-->
 <form method="POST" action="<?=base_url('admin/set_sitemap_config')?>" onsubmit="subm(this);return false">
  <div class="touch">
@@ -42,8 +42,8 @@
      <select name="generate">
       <option value="auto">Автоматически</option>
       <option value="manually">Вручную</option>
-     </select>  
-    </label>    
+     </select>
+    </label>
    </div>
    <div class="col6">
     Включать в карту сайта <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
@@ -55,7 +55,7 @@
       <option value="all">Все материалы</option>
       <option value="public">Только опубликованные материалы</option>
      </select>
-    </label>    
+    </label>
    </div>
   </div>
   <div class="button">
@@ -63,8 +63,8 @@
   </div>
  </div>
 </form>
- 
-<!--####### обзор карты сайта #######--> 
+
+<!--####### обзор карты сайта #######-->
 <div class="touch">
  <div>
   <a href="#" onclick="opn_cls('sitemap_view');return false">Обзор карты сайта <i class="fa-angle-down"></i></a>&nbsp;&nbsp;&nbsp;
@@ -74,7 +74,7 @@
   <textarea rows="20" readonly><?=file_get_contents(getcwd().'/sitemap.xml')?></textarea>
  </label>
 </div>
- 
+
 <?php }else{//если sitemap.xml не доступен для записи?>
  <h3 class="red">Ошибка! Файл sitemap.xml не доступен для записи.</h3>
  <p>Установите права на запись (777) для файла sitemap.xml в корневой директории вашего сайта</p>

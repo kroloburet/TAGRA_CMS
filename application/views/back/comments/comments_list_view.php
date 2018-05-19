@@ -2,7 +2,7 @@
 
 <?php if(!empty($new_comments)){?>
 <!--####### Новые комментарии #######-->
-<div class="container">
+<div class="sheath">
  <h3>Новые комментарии</h3>
  <hr>
  <?php foreach($new_comments as $item){?>
@@ -25,7 +25,7 @@
 <?php }?>
 
 <!--####### Настройки вывода, поиск, иные опции #######-->
-<form id="filter" class="container" method="GET" action="<?=current_url()?>">
+<form id="filter" class="sheath" method="GET" action="<?=current_url()?>">
  <div class="row">
   <div class="col6">
    Сортировать
@@ -74,7 +74,7 @@
 </form>
 
 <?php if(empty($comments)){?>
-<div class="container">
+<div class="sheath">
  <p>Ничего не найдено. Запрос не дал результатов..(</p>
 </div>
 <?php }else{?>

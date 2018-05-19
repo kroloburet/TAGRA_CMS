@@ -2,9 +2,9 @@
 //Кнопка отправки формы не должна отправлятся (иметь имя), имена полей не менять
 ?>
 <h1><?=$conf_title?></h1>
-<div class="container">
+<div class="sheath">
  <form method="POST" action="<?=base_url('admin/section/edit/'.$id.'/'.$alias)?>" onsubmit="subm(this,s_opts);return false">
-  
+
 <!--####### Title, description... #######-->
   <div class="touch">
    Заголовок раздела <i class="fa-info-circle red" onmouseover="tt(this);"></i>
@@ -44,8 +44,8 @@
     <textarea name="description" class="width90 no-emmet" placeholder="Описание раздела (description)" onkeyup="lim(this,250)" rows="3"><?=$description?></textarea>
    </label>
   </div>
-  
-  
+
+
 <!--####### JS, CSS, кнопки соцсетей... #######-->
   <div class="algn_r"><a href="#" onclick="opn_cls('more_opt');return false">Дополнительно (JS, CSS, кнопки соцсетей...) <i class="fa-angle-down"></i></a></div>
   <div id="more_opt" class="opn_cls touch">
@@ -104,7 +104,7 @@ JAVASCRIPT-код без тегов script
     </div>
    </div>
   </div>
-  
+
 <!--####### Контент #######-->
   <div class="touch">
    <h3>Контент</h3>
@@ -154,7 +154,7 @@ JAVASCRIPT-код без тегов script
      <select name="comments">
       <option value="off" <?php if($comments=='off')echo'selected'?>>Запретить комментарии</option>
       <option value="on" <?php if($comments=='on')echo'selected'?>>Разрешить комментарии</option>
-     </select>    
+     </select>
     </label>
    </div>
    <div class="col6">
@@ -162,7 +162,7 @@ JAVASCRIPT-код без тегов script
      <select name="public">
       <option value="on" <?php if($public=='on')echo'selected'?>>Опубликовать</option>
       <option value="off" <?php if($public=='off')echo'selected'?>>Не опубликовывать</option>
-     </select>     
+     </select>
     </label>
    </div>
   </div>

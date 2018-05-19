@@ -41,7 +41,7 @@ $GLOBALS['menu']=&$menu;
   $select_pid.='</select>';
   return $select_pid;
  }
- 
+
 ////////////////////////////////////////////////Вывод дерева меню
  function get_menu_tree(/*массив меню*/$list) {
   if(empty($list)){//если передан пустой массив
@@ -129,7 +129,7 @@ $GLOBALS['menu']=&$menu;
  ?>
 
 <h1><?=$conf_title?></h1>
-<div class="container">
+<div class="sheath">
  <div class="touch">
  <h3>Добавить пункт меню</h3>
  <hr>
@@ -189,7 +189,7 @@ $GLOBALS['menu']=&$menu;
      <select name="public">
       <option value="on" selected>Опубликовать пункт</option>
       <option value="off">Не опубликовывать пункт</option>
-     </select> 
+     </select>
     </label>
    </div>
   </div>
@@ -208,7 +208,7 @@ $GLOBALS['menu']=&$menu;
  var pages='<?php if(empty($pages)){echo'<option value="">На сайте нет страниц</option>';}else{foreach($pages as $i){?><option value="/<?=$i['alias']?>"><?=$i['title']?></option><?php }}?>',
      sections='<?php if(empty($sections)){echo'<option value="">На сайте нет разделов</option>';}else{foreach($sections as $i){?><option value="/<?='section/'.$i['alias']?>"><?=$i['title']?></option><?php }}?>',
      gallerys='<?php if(empty($gallerys)){echo'<option value="">На сайте нет галерей</option>';}else{foreach($gallerys as $i){?><option value="/<?='gallery/'.$i['alias']?>"><?=$i['title']?></option><?php }}?>';
- 
+
 //////////////////////////выпадающий список материалов для выбора
  function select_link(select/*this*/,input_url/*поле для вставки ссылки*/,viewer/*список ссылок для добавления в input_url*/){
   var url=$('#'+input_url),
@@ -231,7 +231,7 @@ viewer.find('select').SelectSearch();
    break;
   }
  }
- 
+
 ////////////////////////загрузка списка порядкового номера
  var menu=<?=json_encode($menu)?>;//массив меню в объект (json)
  function get_order_menu_select(
@@ -254,7 +254,7 @@ viewer.find('select').SelectSearch();
    elem.children('option').last().attr('selected','selected');
   }
  }
-  
+
 ////////////////////////побликовать\не публиковать пункт меню
  function public_item(el,id,pub){
   $(el).parent().load(
