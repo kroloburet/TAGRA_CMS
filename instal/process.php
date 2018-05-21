@@ -24,6 +24,7 @@
 ///////////////////////////////////////////////////////////////////////////
 
 $_POST=array_map('trim',$_POST);//убираем пробелы в начале и в конце
+$date=date('Y-m-d');//текущая дата
 $moment=date('Y-m-d H:i:s');//текущая дата и время
 $ip=$_SERVER["REMOTE_ADDR"];//текущий IP
 
@@ -101,6 +102,7 @@ echo"<div class='notific_g'>Таблица « $t » успешно создан�
 $t=$db_tabl_prefix.'gallerys';
 $db->query("CREATE TABLE IF NOT EXISTS `$t` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `last_mod_date` varchar(20) NOT NULL,
   `alias` text NOT NULL,
   `title` text NOT NULL,
   `description` text NOT NULL,
@@ -130,6 +132,7 @@ echo"<div class='notific_g'>Таблица « $t » успешно создан�
 $t=$db_tabl_prefix.'sections';
 $db->query("CREATE TABLE IF NOT EXISTS `$t`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `last_mod_date` varchar(20) NOT NULL,
   `alias` text NOT NULL,
   `title` text NOT NULL,
   `description` text NOT NULL,
@@ -157,6 +160,7 @@ echo"<div class='notific_g'>Таблица « $t » успешно создан�
 $t=$db_tabl_prefix.'pages';
 $db->query("CREATE TABLE IF NOT EXISTS `$t` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `last_mod_date` varchar(20) NOT NULL,
   `alias` text NOT NULL,
   `title` text NOT NULL,
   `description` text NOT NULL,
@@ -199,6 +203,7 @@ echo"<div class='notific_g'>Таблица « $t » успешно создан�
 $t=$db_tabl_prefix.'index_page';
 $q_c=$db->query("CREATE TABLE IF NOT EXISTS `$t` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `last_mod_date` varchar(20) NOT NULL,
   `title` text NOT NULL,
   `description` text NOT NULL,
   `robots` varchar(100) NOT NULL DEFAULT 'all',
@@ -215,8 +220,8 @@ $q_c=$db->query("CREATE TABLE IF NOT EXISTS `$t` (
   `img_prev` text NOT NULL,
   PRIMARY KEY (`id`))
   ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-$q_i=$db->query("INSERT INTO `$t` (`title`, `description`, `robots`, `css`, `js`, `layout_t`, `layout_l`, `layout_r`, `layout_b`, `layout_l_width`, `links`, `addthis_share`, `addthis_follow`) VALUES
-('$index_title', '$index_title', 'all', '', '', '$index_body', '', '', '', 60, '',  'off', 'off');");
+$q_i=$db->query("INSERT INTO `$t` (`last_mod_date`, `title`, `description`, `robots`, `css`, `js`, `layout_t`, `layout_l`, `layout_r`, `layout_b`, `layout_l_width`, `links`, `addthis_share`, `addthis_follow`) VALUES
+('$date', '$index_title', '$index_title', 'all', '', '', '$index_body', '', '', '', 60, '',  'off', 'off');");
 if(!$q_c && !$q_i){
 die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".$db->error."</div>".$bad_msg);
 }
@@ -226,6 +231,7 @@ echo"<div class='notific_g'>Таблица « $t » успешно создан�
 $t=$db_tabl_prefix.'contact_page';
 $q_c=$db->query("CREATE TABLE IF NOT EXISTS `$t` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `last_mod_date` varchar(20) NOT NULL,
   `title` text NOT NULL,
   `description` text NOT NULL,
   `robots` varchar(100) NOT NULL DEFAULT 'all',
@@ -242,8 +248,8 @@ $q_c=$db->query("CREATE TABLE IF NOT EXISTS `$t` (
   `contact_form` varchar(20) NOT NULL DEFAULT 'on',
   PRIMARY KEY (`id`))
   ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-$q_i=$db->query("INSERT INTO `$t` (`title`, `description`, `robots`, `css`, `js`, `layout_t`, `mail`, `tel`, `skype`, `qr`, `address`, `addthis_share`, `addthis_follow`, `contact_form`) VALUES
-('$contact_title', '$contact_title', 'all', '', '', '', '$admin_mail', '', '', '', '', 'off', 'off', 'on');");
+$q_i=$db->query("INSERT INTO `$t` (`last_mod_date`, `title`, `description`, `robots`, `css`, `js`, `layout_t`, `mail`, `tel`, `skype`, `qr`, `address`, `addthis_share`, `addthis_follow`, `contact_form`) VALUES
+('$date', '$contact_title', '$contact_title', 'all', '', '', '', '$admin_mail', '', '', '', '', 'off', 'off', 'on');");
 if(!$q_c && !$q_i){
 die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".$db->error."</div>".$bad_msg);
 }
