@@ -4,6 +4,7 @@
 <h1><?=$conf_title?></h1>
 <div class="sheath">
  <form method="POST" action="<?=base_url('admin/section/add')?>" onsubmit="subm(this,s_opts);return false">
+  <input type="hidden" name="last_mod_date" value="<?=date('Y-m-d')?>">
 
 <!--####### Title, description... #######-->
   <div class="touch">
