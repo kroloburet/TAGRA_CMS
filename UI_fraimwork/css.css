@@ -110,17 +110,17 @@ mark{background:#ffef78;padding:0.1em}
 .notific_g:before,.notific_r:before,.notific_y:before,.notific_b:before{content:' ';position:absolute;top:0;bottom:0;left:3.5em;display:inline-block;border-right:1px solid rgba(255,255,255,0.7)}
 .notific_g:after,.notific_r:after,.notific_y:after,.notific_b:after{position:absolute;top:50%;left:1em;min-width:1em;text-align:center;font-family:FontAwesome;font-style:normal;font-weight:normal;font-size:1.3em;line-height:0}
 .notific_g{background-color:#8CF097}
-.notific_g:before{}
 .notific_g:after{content:"\f00c"}
 .notific_y{background-color:#f4f097}
-.notific_y:before{}
 .notific_y:after{content:"\f071"}
 .notific_r{background-color:#F0AC8C}
-.notific_r:before{}
 .notific_r:after{content:"\f00d"}
 .notific_b{background-color:#cfe1ff}
-.notific_b:before{}
 .notific_b:after{content:"\f129"}
+/*mini notifications*/
+.notific_g.mini,.notific_r.mini,.notific_y.mini,.notific_b.mini{font-size:75%;line-height:1.3em;padding:0.5em 0.5em 0.5em 3.3em;}
+.notific_g.mini:before,.notific_r.mini:before,.notific_y.mini:before,.notific_b.mini:before{left:2.5em;}
+.notific_g.mini:after,.notific_r.mini:after,.notific_y.mini:after,.notific_b.mini:after{left:0.5em;}
 
 /*расчет:((100/кол.ячеек) - margin-left)+(margin-left/кол.ячеек)-----------GRID----*/
 .row{padding:0;margin:0 0 1.5em 0;display:block;width:100%;*zoom:1}
