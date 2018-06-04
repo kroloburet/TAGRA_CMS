@@ -17,7 +17,6 @@ if(!function_exists('breadcrumbs')){
    $prefix=$CI->config->item('db_tabl_prefix');
    $seg1=$CI->uri->segment(1);//первый сегмент урл после домена
    $seg2=$CI->uri->segment(2);//второй сегмент урл после домена
-   echo PHP_EOL.'<!--####### Навигация "хлебные крошки" #######-->'.PHP_EOL;
    $home!==''?$home=PHP_EOL.'<li><a href="'.base_url().'" class="bc_home">'.$home.'</a>'.PHP_EOL:FALSE;//отображение главной в цепи
    ////////////////////////если раздел
    if($seg1==='section'){
