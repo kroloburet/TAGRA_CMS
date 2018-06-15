@@ -1,3 +1,8 @@
+<!--####### Mine #######-->
+<div class="mine_wrapper">
+<div class="container" style="max-width:<?=$conf_body_width?>px">
+
+<!--####### Breadcrumbs #######-->
 <?php
 if($conf_breadcrumbs_public=='on'){
  $this->load->helper('front/breadcrumbs');
@@ -44,7 +49,7 @@ echo '</div>'.PHP_EOL;
 <div id="FVGallery_layout">
 <?php
 switch($type){
- 
+
  case 'foto_folder'://галерея из папки с изображениями
   if($opt){//есть опции
    $opt=json_decode($opt,true);
@@ -70,7 +75,7 @@ switch($type){
    closedir($dir_handle);//закрыть папку
   }else{echo '<div class="notific_b">Галерея не может быть отображена! В галерее нет ни одного изображения</div>'.PHP_EOL;}
  break;
-  
+
  case 'foto_desc'://галерея изображений с описаниями
   if($opt){//есть опции
    foreach(json_decode($opt,true) as $v){//читаю json и строю костяк html
@@ -82,7 +87,7 @@ switch($type){
    }
   }else{echo '<div class="notific_b">Галерея не может быть отображена! В галерее нет ни одного изображения</div>'.PHP_EOL;}
  break;
- 
+
  case 'video_yt'://галерея youtube
   if($opt){//есть опции
    foreach(json_decode($opt,true) as $v){
@@ -136,4 +141,14 @@ switch($type){
   </div>
  </div>
 <?php }}?>
+</div>
+
+<!--####### Comments #######-->
+<?php
+$this->load->helper('front/comments');
+get_comments($comments);
+get_comments_form($comments);
+?>
+
+</div>
 </div>

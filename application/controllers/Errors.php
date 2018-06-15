@@ -18,7 +18,7 @@ class Errors extends Front_basic_control{
   $data['description']='Упс! Страница не найдена';
   $data['title']='Упс! Страница не найдена';
   $this->output->set_status_header('404');
-  $this->_viewer('404_view',$data,'off');
+  $this->_viewer('404_view',$data);
  }
 
 }

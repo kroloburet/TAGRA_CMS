@@ -3,7 +3,7 @@
 /*------------------------------------------------------------------------------basic---*/
 html{min-height:100%}
 body{background:url(/img/bg.svg) no-repeat center center fixed;background-size:cover;color:#000;border-top:none}
-nav{background:#E7D977}
+nav{background:#E7D977;margin-bottom:2em;}
 .menu{margin:0 auto;max-width:1100px}
 .active,.menu li a:hover,.menu li span:hover,.menu li:hover>a,.menu li:hover>span{background:rgba(0,0,0,0.05)}
 .user_nav{float:right}
@@ -86,4 +86,3 @@ ul.menu_tree li{list-style:none;margin:20px 0;padding:0 10px;color:#000;position
 .edit_menu_item{display:none;margin:7px 0;padding:5px;border:1px solid #bbb}
 ul.menu_tree ul li:before{content:"";display:block;width:10px;height:0;border-top:1px solid #bbb;position:absolute;top:10px;left:0}
 ul.menu_tree ul li:last-child:before{background:#fff;height:auto;top:10px;bottom:0}
-

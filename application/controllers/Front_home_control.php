@@ -13,7 +13,7 @@ class Front_home_control extends Front_basic_control{
 
  function index(){
   $data=array_merge($this->conf,$this->front_home_model->get_home_page());//соединение массивов
-  $this->_viewer('front/home_view',$data,'off');
+  $this->_viewer('front/home_view',$data);
  }
 
 }

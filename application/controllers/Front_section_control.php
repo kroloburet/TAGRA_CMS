@@ -18,7 +18,7 @@ class Front_section_control extends Front_basic_control{
    $data['sub_sections']=$this->front_section_model->get_sub_sections($alias);
    $data['sub_gallerys']=$this->front_section_model->get_sub_gallerys($alias);
    $data['sub_pages']=$this->front_section_model->get_sub_pages($alias);
-   $this->_viewer('front/section_view',$data,$data['comments']);
+   $this->_viewer('front/section_view',$data);
   }else{//нет такого алиаса
    redirect('404_override');
   }

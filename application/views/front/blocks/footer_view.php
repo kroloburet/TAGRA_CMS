@@ -1,23 +1,19 @@
+<!--####### Footer #######-->
+<div class="footer_wrapper">
+ <footer class="container noprint" style="max-width:<?=$conf_body_width?>px">
+  <div class="copy">
+   <?=$conf_site_name?>&nbsp;&copy;&nbsp;<?=date('Y')?><hr>
+   Веб-разработка и дизайн&nbsp;<img src="<?=base_url('img/kroloburet_18_18.jpeg')?>" width="18" height="18" alt="Разработка и дизайн сайтов">
+   <br><a href="mailto:kroloburet@gmail.com">kroloburet@gmail.com</a>
+  </div>
+  <div class="follow_box">
+   <?php if($conf_addthis_follow&&$addthis_follow=='on'){?>
+    <h5>Мы в соцсетях</h5><hr>
+    <?=$conf_addthis_follow?>
+   <?php }?>
+  </div>
+ </footer>
 </div>
-
-<!--####### Футер #######-->
-<footer class="clear noprint">
-<div class="row footer_row" style="max-width:<?=$conf_body_width?>px">
-<div class="col6">
-<div id="copy">
-<?=$conf_site_name?>&nbsp;&copy;&nbsp;<?=date('Y')?><hr>
-Веб-разработка и дизайн&nbsp;<img src="<?=base_url('img/kroloburet_18_18.jpeg')?>" width="18" height="18" alt="Разработка и дизайн сайтов">
-<br><a href="mailto:kroloburet@gmail.com">kroloburet@gmail.com</a>
-</div>
-</div>
-<div class="col6">
-<?php if($conf_addthis_follow&&$addthis_follow=='on'){?>
-<h5>Мы в соцсетях</h5><hr>
-<?=$conf_addthis_follow?>
-<?php }?>
-</div>
-</div>
-</footer>
 <div id="scrol_btn" onclick="scrll('body');" class="fa-angle-up noprint"></div>
 
 <!--####### Отложенная загрузка CSS #######-->

@@ -46,15 +46,20 @@
 <div id="preload_lay"><div id="preload"></div></div>
 <noscript><div class="notific_y">Внимание! В вашем браузере выключен Javascript. Для корректной работы сайта рекоммендуем включить Javascript.</div></noscript>
 
-<?php if(!empty($front_menu_list)){//если массив меню не пустой?>
-<!--####### Главное меню #######-->
-<span class="mobile_menu noprint">&#8801;</span>
-<nav><ul class="menu noprint" style="max-width:<?=$conf_body_width?>px">
-<?php
-$this->load->helper('front/menu');
-display_menu_list($front_menu_list);
-?>
-</ul></nav>
-<?php }?>
+<!--####### Header #######-->
+<div class="header_wrapper">
+ <div class="container" style="max-width:<?=$conf_body_width?>px">
 
-<div class="container" style="max-width:<?=$conf_body_width?>px">
+  <?php if(!empty($front_menu_list)){//если массив меню не пустой?>
+  <!--####### Главное меню #######-->
+  <span class="mobile_menu noprint">&#8801;</span>
+  <nav><ul class="menu noprint">
+  <?php
+  $this->load->helper('front/menu');
+  display_menu_list($front_menu_list);
+  ?>
+  </ul></nav>
+  <?php }?>
+
+ </div>
+</div>

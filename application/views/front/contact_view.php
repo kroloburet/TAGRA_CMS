@@ -1,3 +1,7 @@
+<!--####### Mine #######-->
+<div class="mine_wrapper">
+<div class="container" style="max-width:<?=$conf_body_width?>px">
+
 <!--####### Headline #######-->
 <div id="headline">
  <h1><?=$title?></h1>
@@ -63,9 +67,9 @@
   <div class="tab_content">
    <?php foreach(json_decode($address,TRUE) as $v){?>
    <div class="addr_list">
-    <div><i class="fa-home"></i> <?=$v['address']?></div> 
-    <div><i class="fa-crosshairs"></i> <?=$v['gps']?></div> 
-    <div><i class="fa-compass"></i> <a href="https://www.google.com.ua/maps/place/<?=$v['gps']?>" target="_blank">Показать на большой карте</a></div> 
+    <div><i class="fa-home"></i> <?=$v['address']?></div>
+    <div><i class="fa-crosshairs"></i> <?=$v['gps']?></div>
+    <div><i class="fa-compass"></i> <a href="https://www.google.com.ua/maps/place/<?=$v['gps']?>" target="_blank">Показать на большой карте</a></div>
    </div>
    <?php }?>
   </div>
@@ -73,7 +77,7 @@
 </dl>
 <?php }?>
 
- 
+
 <?php if($contact_form==='on'){?>
 <!--####### Форма обратной связи #######-->
 <div id="send_mail_form" class="noprint">
@@ -93,7 +97,10 @@
  <button type="submit">Отправить сообщение</button>
 </form>
 </div>
- 
+
+</div>
+</div>
+
 <script>
 window.addEventListener('load',function(){
  $('#send_mail').on('submit',function(e){

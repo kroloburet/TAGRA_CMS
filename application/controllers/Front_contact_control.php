@@ -13,7 +13,7 @@ class Front_contact_control extends Front_basic_control{
 
  function contact(){
   $data=array_merge($this->conf,$this->front_contact_model->get_contact_page());//соединение массивов
-  $this->_viewer('front/contact_view',$data,'off');
+  $this->_viewer('front/contact_view',$data);
  }
 
  function send_mail(){//отправка сообщения аяксом

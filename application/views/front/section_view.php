@@ -1,3 +1,8 @@
+<!--####### Mine #######-->
+<div class="mine_wrapper">
+<div class="container" style="max-width:<?=$conf_body_width?>px">
+
+<!--####### Breadcrumbs #######-->
 <?php
 if($conf_breadcrumbs_public=='on'){
  $this->load->helper('front/breadcrumbs');
@@ -100,3 +105,13 @@ if($v['type']=='video_yt'){$icon='fa-file-movie-o';}
 </div>
 <?php }?>
 <?php }?>
+
+<!--####### Comments #######-->
+<?php
+$this->load->helper('front/comments');
+get_comments($comments);
+get_comments_form($comments);
+?>
+
+</div>
+</div>

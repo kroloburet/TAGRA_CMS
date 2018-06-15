@@ -12,7 +12,7 @@ class Front_basic_control extends CI_Controller{
   $this->conf=$this->front_basic_model->my_config_data();
   $this->_is_site_access();
  }
- 
+
  function _is_site_access(){//доступ к пользовательской части ресурса
   if($this->conf['conf_site_access']==='off'){//если в админке увтановлена опция "Доступ к сайту закрыт"
    $ip=$this->input->server('REMOTE_ADDR');//получаю текущий ip
@@ -25,11 +25,10 @@ class Front_basic_control extends CI_Controller{
   return $this->config->item('db_tabl_prefix');
  }
 
- function _viewer($url,$data,$comments='off'){
+ function _viewer($url,$data){
   $data['front_menu_list']=$this->front_basic_model->get_menu();
   $this->load->view('front/blocks/header_view',$data);
   $this->load->view($url,$data);
-  ($comments==='on')?$this->load->view('front/blocks/comments_view'):FALSE;
   $this->load->view('front/blocks/footer_view',$data);
  }
 

@@ -17,29 +17,50 @@ Developer:Sergey Nizhnik kroloburet@gmail.com
 ///////////////////////////////////////////////////////////
 */
 
-/*------------------------------------------------------------------------------breadcrumbs*/
-#breadcrumbs{padding:0 0 1.5em;color:#000;margin:0}
-#breadcrumbs li{display:inline-block;line-height:1.7em}
-.bc_end{color:#999}
-#breadcrumbs li:after{content:'/';padding:0 .25em;color:#999}
-#breadcrumbs li.bc_end:after,#breadcrumbs li.bc_end:before{display:none}
+/*------------------------------------------------------------------------------html, body*/
+html{height:100%}
+body{height:100%;display:flex;flex-direction:column;}
 
-/*------------------------------------------------------------------------------headline*/
-#headline{margin:0;padding:0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap}
-
-/*------------------------------------------------------------------------------container & layouts*/
+/*------------------------------------------------------------------------------header, maine, layouts, footer*/
+/*header*/
+.header_wrapper{flex:0 0 auto;margin-bottom:2em;background:#E7D977;}
+/*mine*/
+.mine_wrapper{flex:1 0 auto;}
 .container{padding:0 1%;margin:0 auto}
+/*layouts*/
 #layouts{text-align:justify;}
 #layouts:after,#layouts:before{content:'';display:table;clear:both}
 #layout_t,#layout_l,#layout_r,#layout_b{padding:0 0 1.5em 0;overflow:hidden}
 #layout_l{float:left;padding-right:1em}
 #layout_r{padding-left:1em}
 #layout_b{clear:both;}
+@media(max-width:600px){#layout_t,#layout_l,#layout_r,#layout_b{width:100%!important;float:none;margin:0;padding:0 0 1.5em 0!important}#layouts{text-align:left}}
+/*footer*/
+.footer_wrapper{flex:0 0 auto;border-top:2px solid #E7D977}
+footer{padding:1.5em 1%!important;display:flex;}
+#scrol_btn{display:none;line-height:1em;font-size:410%;background-color:#20b2af;color:#fff;text-align:center;cursor:pointer;}
+.copy{opacity:0.5}
+.copy:hover{opacity:1}
+@media(max-width:600px){footer{flex-direction:column;text-align:center;}#scrol_btn{display:block}}
+
+/*------------------------------------------------------------------------------breadcrumbs*/
+#breadcrumbs{padding:0 0 1em;color:#000;margin:0}
+#breadcrumbs li{display:inline-block;line-height:1.7em}
+.bc_end{color:#999}
+#breadcrumbs li:after{content:'/';padding:0 .25em;color:#999}
+#breadcrumbs li.bc_end:after,#breadcrumbs li.bc_end:before{display:none}
+@media(max-width:400px){#breadcrumbs{font-size:115%}}
+
+/*------------------------------------------------------------------------------headline*/
+#headline{margin:0;padding:0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap}
+@media(max-width:800px){#headline{padding:0 0 1em 0}#headline h1{float:none;padding:0 0 0.5em 0}}
 
 /*------------------------------------------------------------------------------links block*/
 #links_block{margin-bottom:1.5em;}
 #links_block h3{padding-bottom:.4em;}
 .links_item{margin-right:1em;}
+@media(max-width:600px){#links_block,#links_block h3{text-align:center!important}}
+@media(max-width:800px){.links_item{margin:0 .5em .5em 0;padding:.5em;border:1px solid;border-radius:3px;cursor:pointer;}}
 
 /*------------------------------------------------------------------------------helpers*/
 .float_l{overflow:hidden;float:left;margin:0 2% 0 0}
@@ -51,14 +72,21 @@ input[name="fuck_bot"]{display:none;visibility:hidden}
 .section_sub_item{margin:0;padding:0 0 1.5em}
 .section_sub_item_prev{width:200px;height:120px;margin-right:2%;float:left;font-size:6em;text-align:center;color:#E7D977;padding:10px;border:none;background:center center no-repeat #efefef;background-size:cover}
 .section_sub_item_desc{overflow:hidden}
+@media(max-width:800px){.section_sub_item_prev{width:150px;height:100px;font-size:4.5em}}
+@media(max-width:400px){.section_sub_item_prev{display:none!important}}
 
 /*------------------------------------------------------------------------------comments*/
+/*comments list*/
 #comments_layout{}
-#header_comments{border-bottom:solid #301000 2px;padding:0 0 1em 0;margin:0 0 1em 0}
-#comments_layout .comment_name{cursor:default}
-#comments_layout .comment_text{margin:0 0 1em 0;padding:0.5em 0 1em 1em;border-bottom:solid #301000 1px;text-align:justify}
+#header_comments{border-bottom:solid #301000 2px;margin:0 0 1em 0;display:flex;}
+#header_comment{display:flex;}
+#header_comments h2,#header_comment .comment_name{flex-grow:1;}
+#header_comments .count_comments,#header_comment .comment_date{color:#999;}
+#comments_layout .comment_text{margin:0 0 1em 0;padding:0.5em 0 1em 1em;border-bottom:solid #301000 1px;}
+@media(max-width:600px){#comments_layout .comment_text{padding-left:0;}}
+/*comments form*/
 #add_comment{padding:0 0 1.5em 0}
-#add_com input,#add_com textarea{width:83%}
+#add_com input,#add_com textarea{width:87%}
 #comments_more_btn{background-color:#E7D977;text-align:center;cursor:pointer;padding:0.7em;margin:-1em 0 1.5em 0;border:1px #301000 solid;border-top:none;border-radius:0 0 5px 5px}
 #comments_more_btn:hover{background-color:#FAEB85}
 #comments_more{display:none}
@@ -72,24 +100,14 @@ input[name="fuck_bot"]{display:none;visibility:hidden}
 .addr_list div i{vertical-align:baseline;}
 #send_mail_form{padding:0 0 1.5em 0}
 #send_mail input,#send_mail textarea{width:83%}
+@media(max-width:800px){#print_btn,#qr{display:none}}
 
 /*------------------------------------------------------------------------------404 page*/
-.div_404{}
-.img_404{float:left;margin-right:1.5em}
-.content_404{overflow:hidden;margin-bottom:2em}
-
-/*------------------------------------------------------------------------------footer*/
-footer{border-top:2px solid #E7D977}
-.footer_row{margin:0 auto;padding:1.5em 1%;}
-#scrol_btn{display:none;line-height:1em;font-size:410%;background-color:#E7D977;text-align:center;cursor:pointer;}
-#copy{filter:alpha(opacity=50);opacity:0.5}
-#copy:hover{filter:alpha(opacity=100);opacity:1}
+.div_404,.div_404 h1{text-align:center;}
+.content_404{overflow:hidden;max-width:450px;margin:1.5em auto;}
 
 /*------------------------------------------------------------------------------------max-device-width:800px*/
-@media(max-width:800px){body{font-size:105%}#headline{padding:0 0 1em 0}#headline h1{float:none;padding:0 0 0.5em 0}.addthis_layout{text-align:left}#print_btn,#qr{display:none}.to_r{float:none}.img_404{float:none;margin:0 0 1.5em 0}.content_404{overflow:auto;width:100%}.section_sub_item_prev{width:150px;height:100px;font-size:4.5em}.links_item{margin:0 .5em .5em 0;padding:.5em;border:1px solid;border-radius:3px;cursor:pointer;}}
-
-/*------------------------------------------------------------------------------------max-device-width:600px*/
-@media(max-width:600px){#layout_t,#layout_l,#layout_r,#layout_b{width:100%!important;float:none;margin:0;padding:0 0 1.5em 0!important}footer{text-align:center}#scrol_btn{display:block}#links_block,#links_block h3{text-align:center!important}}
+@media(max-width:800px){body{font-size:105%}.to_r{float:none}}
 
 /*------------------------------------------------------------------------------------max-device-width:400px*/
-@media(max-width:400px){body{font-size:115%;line-height:1.3em}#layouts{text-align:left}.section_sub_item_prev{display:none!important}#breadcrumbs{font-size:115%}}
+@media(max-width:400px){body{font-size:115%;line-height:1.3em}}

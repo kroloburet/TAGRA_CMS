@@ -15,7 +15,7 @@ class Front_gallery_control extends Front_basic_control{
   $q=$this->front_gallery_model->get_gallery($alias);
   if($q){//eсли есть такой алиас в галереях
    $data=array_merge($this->conf,$q);//соединение массивов
-   $this->_viewer('front/gallery_view',$data,$data['comments']);
+   $this->_viewer('front/gallery_view',$data);
   }else{//нет такого алиаса
    redirect('404_override');
   }

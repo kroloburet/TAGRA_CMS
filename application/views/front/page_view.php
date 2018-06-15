@@ -1,3 +1,8 @@
+<!--####### Mine #######-->
+<div class="mine_wrapper">
+<div class="container" style="max-width:<?=$conf_body_width?>px">
+
+<!--####### Breadcrumbs #######-->
 <?php
 if($conf_breadcrumbs_public=='on'){
  $this->load->helper('front/breadcrumbs');
@@ -39,3 +44,13 @@ foreach($l_opt as $k=>$v){
 }
 echo '</div>'.PHP_EOL;
 }?>
+
+<!--####### Comments #######-->
+<?php
+$this->load->helper('front/comments');
+get_comments($comments);
+get_comments_form($comments);
+?>
+
+</div>
+</div>

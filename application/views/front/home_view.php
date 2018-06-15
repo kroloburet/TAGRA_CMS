@@ -1,3 +1,7 @@
+<!--####### Mine #######-->
+<div class="mine_wrapper">
+<div class="container" style="max-width:<?=$conf_body_width?>px">
+
 <!--####### Headline #######-->
 <div id="headline">
 <h1><?=$title?></h1>
@@ -32,3 +36,6 @@ foreach($l_opt as $k=>$v){
 }
 echo '</div>'.PHP_EOL;
 }?>
+
+</div>
+</div>
