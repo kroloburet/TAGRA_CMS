@@ -1,7 +1,7 @@
 $(function(){//готовность DOM
 
 //////////////////////////////////////////////////////////////загрузка альтернативного изображения
-$('img').on('error',function(){$(this).attr('src','/img/noimg.svg');});
+ $('img').on('error',function(){$(this).attr('src','/img/noimg.svg');});
 
 //////////////////////////////////////////////////////////////показать в пункте меню (комментарии) колличество новых комментов
  $('#count_new_comments').load(
@@ -11,6 +11,10 @@ $('img').on('error',function(){$(this).attr('src','/img/noimg.svg');});
    data>0?count.addClass('fa-bell-o red'):count.remove();
   }
  );
+
+//////////////////////////////////////////////////////////////замена двойных кавычек в полях
+ var f=$('textarea[name="description"]');
+ f.on('blur',function(){$(this).val($(this).val().replace(/"([^"]+)"/g,"«$1»").replace(/"/g,"'"));});
 
 });//готовность DOM
 
