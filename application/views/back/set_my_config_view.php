@@ -115,7 +115,7 @@ JQuery — подключаемый скрипт для правильной
 
        <!--####### Кнопки соцсетей #######-->
        <div class="row touch">
-        <h3 class="float_l">Соцсиальные сети</h3>
+        <h3 class="float_l">Социальные сети</h3>
         <a href="#" onclick="opn_cls('addthis_opt');return false">Настройки <i class="fa-angle-down"></i></a>
         <hr>
         <div id="addthis_opt" class="opn_cls">
