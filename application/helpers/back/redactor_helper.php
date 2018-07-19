@@ -9,12 +9,28 @@ $gallerys=$CI->db->select('title,alias,section')->order_by('title','ASC')->get($
 
 <script src="<?=base_url('scripts/tinymce_4.7.11/tinymce.min.js')?>"></script>
 <script>
-//////////////////////////////////////////////////настройки текстового редактора
-tinymce.init({
+var mce_link_list=[//выпадающий список ссылок на страницы сайта
+ <?php if($pages){?>
+  {title:'Страницы',menu:[
+   <?php foreach($pages as $i){?>{title:'<?=$i['title']?>',value:'<?='/'.$i['alias']?>'},<?php }?>
+  ]},
+ <?php }?>
+ <?php if($sections){?>
+  {title:'Разделы',menu:[
+   <?php foreach($sections as $i){?>{title:'<?=$i['title']?>',value:'<?='/section/'.$i['alias']?>'},<?php }?>
+  ]},
+ <?php }?>
+ <?php if($gallerys){?>
+  {title:'Галереи',menu:[
+   <?php foreach($gallerys as $i){?>{title:'<?=$i['title']?>',value:'<?='/gallery/'.$i['alias']?>'},<?php }?>
+  ]},
+ <?php }?>
+  {title:'Главная',value:'/'},
+  {title:'Контакты',value:'/contact'}
+ ];
+var mce_overall_conf={//глобальная конфигурация редактора
  language:"ru",//язык редактора
  content_css:"/css/back/redactor.css",//стили для редактируемого контента
- selector:"#layout_t,#layout_l,#layout_r,#layout_b",
- inline:true,//редактор появляется после клика в елементе
  menubar:false,
  element_format:"html",//теги в формате
  code_dialog_width:800,
@@ -37,30 +53,17 @@ tinymce.init({
  ],
  plugins:"advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code textcolor media table contextmenu paste nonbreaking moxiemanager fullscreen",
  toolbar:"undo redo | styleselect | bold italic | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table charmap link image media insertfile | fullscreen code",
- link_list:[//выпадающий список ссылок на страницы сайта
- <?php if($pages){?>
-  {title:'Страницы',menu:[
-   <?php foreach($pages as $i){?>{title:'<?=$i['title']?>',value:'<?='/'.$i['alias']?>'},<?php }?>
-  ]},
- <?php }?>
- <?php if($sections){?>
-  {title:'Разделы',menu:[
-   <?php foreach($sections as $i){?>{title:'<?=$i['title']?>',value:'<?='/section/'.$i['alias']?>'},<?php }?>
-  ]},
- <?php }?>
- <?php if($gallerys){?>
-  {title:'Галереи',menu:[
-   <?php foreach($gallerys as $i){?>{title:'<?=$i['title']?>',value:'<?='/gallery/'.$i['alias']?>'},<?php }?>
-  ]},
- <?php }?>
-  {title:'Главная',value:'/'},
-  {title:'Контакты',value:'/contact'}
- ],
+ link_list:mce_link_list,
  ////////////////////////настройки файлового менеджера
  moxiemanager_rootpath:'/upload/',
  moxiemanager_title:'Mенеджер файлов',
  moxiemanager_leftpanel:false
-});
+}
+//////////////////////////////////////////////////настройки текстового редактора по умолчанию
+tinymce.init(Object.assign({},mce_overall_conf,{
+ selector: "#layout_t,#layout_l,#layout_r,#layout_b,#conf_special,#special",
+ inline: true//редактор появляется после клика в елементе
+}));
 //////////////////////////////////////////////////////////////////////////////////////инициализация текстового редактора
 $(function(){//готовность DOM
 var layouts=$("#layout_t,#layout_l,#layout_r,#layout_b");
