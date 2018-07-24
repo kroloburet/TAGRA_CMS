@@ -38,6 +38,7 @@ var mce_overall_conf={//глобальная конфигурация редак
  remove_script_host:true,
  style_formats_merge:true,//добавлять или нет свои классы к классам по умолчанию в меню "формат"
  browser_spellcheck:true,//проверка орфографии
+ forced_root_block:false,//оборачивать или нет в <p>
  valid_elements:"*[*]",//разрешенные
  //allow_script_urls: true,//разрешить\запретить внешние скрипты
  //invalid_elements:"strong,em",//запрещенные
