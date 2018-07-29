@@ -52,7 +52,7 @@ footer{padding:1.5em 1%!important;display:flex;}
 @media(max-width:400px){#breadcrumbs{font-size:115%}}
 
 /*------------------------------------------------------------------------------headline*/
-#headline{margin:0;padding:0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap}
+#headline{margin:0;padding:0;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap}
 @media(max-width:800px){#headline{padding:0 0 1em 0}#headline h1{float:none;padding:0 0 0.5em 0}}
 
 /*------------------------------------------------------------------------------links block*/
