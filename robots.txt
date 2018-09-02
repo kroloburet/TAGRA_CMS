@@ -1,13 +1,11 @@
 User-agent: *
 Disallow:
+Disallow: /UI_fraimwork/
 Disallow: /instal/
 Disallow: /admin/
-Disallow: /upload/
-Disallow: /system/
-Disallow: /source/
-Disallow: /scripts/
 Disallow: /img/
 Disallow: /css/
+Disallow: /scripts/
 Disallow: .htaccess
 Disallow: 403.html
 Disallow: plug.html
