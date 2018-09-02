@@ -9,4 +9,3 @@ Disallow: /scripts/
 Disallow: .htaccess
 Disallow: 403.html
 Disallow: plug.html
-Sitemap: sitemap.xml
