@@ -11,7 +11,8 @@
    <label class="select">
     <select name="order" onchange="submit()">
      <option value="id">по идентификатору</option>
-     <option value="last_mod_date">по дате создания\изменения</option>
+     <option value="creation_date">по дате создания</option>
+     <option value="last_mod_date">по дате изменения</option>
      <option value="alias">по алиасу</option>
      <option value="title">по заголовку</option>
      <option value="section">по разделу</option>
