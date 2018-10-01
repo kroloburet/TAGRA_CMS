@@ -93,14 +93,12 @@ input[name="fuck_bot"]{display:none;visibility:hidden}
 
 /*------------------------------------------------------------------------------contact page*/
 .num{font-family:Arial,Helvetica}
-.contact_tabl{margin-bottom:1.5em;}
-.contact_tabl td{vertical-align: top;padding-right: 1em;}
-.addr .tab_content{padding:0;}
-.addr_list{padding:.7em;}
-.addr_list div i{vertical-align:baseline;}
+.contacts .tab_content{padding:0;}
+.contacts_list{padding:.7em;}
+.contacts_list div i{vertical-align:baseline;}
 #send_mail_form{padding:0 0 1.5em 0}
 #send_mail input,#send_mail textarea{width:83%}
-@media(max-width:800px){#print_btn,#qr{display:none}}
+@media(max-width:900px){#print_btn{display:none}}
 
 /*------------------------------------------------------------------------------404 page*/
 .div_404,.div_404 h1{text-align:center;}

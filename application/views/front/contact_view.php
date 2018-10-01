@@ -17,66 +17,35 @@
 </div>
 <?php }?>
 
+<?php if($contacts){?>
 <!--####### Контакты #######-->
-<div class="row">
-<div class="col9">
- <table class="contact_tabl">
-  <?php if($tel){?>
-  <tr>
-   <td><b>Телефон: </b></td>
-   <td class="num">
-    <?php foreach(explode(',',$tel) as $t){echo $t.'<br>';}?>
-   </td>
-  </tr>
-  <?php }?>
-  <?php if($mail){?>
-  <tr>
-   <td><b>E-mail: </b></td>
-   <td class="num">
-    <?php foreach(explode(',',$mail) as $m){echo $m.'<br>';}?>
-   </td>
-  </tr>
-  <?php }?>
-  <?php if($skype){?>
-  <tr>
-   <td><b>Skype: </b></td>
-   <td class="num"><?=$skype?></td>
-  </tr>
-  <?php }?>
- </table>
- <?php if($conf_addthis_follow&&$addthis_follow=='on'){?><div class="noprint"><?=$conf_addthis_follow?></div><?php }?>
-</div>
-<div class="col3">
- <?php if($qr){?>
- <img src="<?=$qr?>" style="border: solid 1px #000" id="qr" alt="QR-код">
- <?php }?>
-</div>
-</div>
-
-<?php if($address){?>
-<!--####### Адреса и карта #######-->
-<dl class="tabs addr">
- <dt class="tab_active">Адреса на карте</dt>
+<dl class="tabs contacts">
+ <dt class="tab_active">Контакты списком</dt>
+ <dd>
+  <div class="tab_content">
+   <?php foreach(json_decode($contacts,TRUE) as $v){$gps=$v['gps']?TRUE:FALSE?>
+   <div class="contacts_list">
+    <?=$v['title']?'<h2>'.$v['title'].'</h2>':FALSE?>
+    <?=$v['mail']?'<div><i class="fa-envelope"></i> '.$v['mail'].'</div>':FALSE?>
+    <?=$v['tel']?'<div><i class="fa-phone"></i> '.$v['tel'].'</div>':FALSE?>
+    <?=$v['skype']?'<div><i class="fa-skype"></i> '.$v['skype'].'</div>':FALSE?>
+    <?=$v['address']?'<div><i class="fa-home"></i> '.$v['address'].'</div>':FALSE?>
+    <?=$v['gps']?'<div><i class="fa-crosshairs"></i> '.$v['gps'].'</div>':FALSE?>
+    <?=$v['gps']?'<div><i class="fa-compass"></i> <a href="https://www.google.com.ua/maps/place/'.$v['gps'].'" target="_blank">Показать на большой карте</a></div>':FALSE?>
+   </div>
+   <?php }?>
+  </div>
+ </dd>
+ <?php if($gps){?>
+ <dt>Контакты на карте</dt>
  <dd>
   <div class="tab_content">
    <div id="map" style="height:500px;"></div>
   </div>
  </dd>
- <dt>Адреса списком</dt>
- <dd>
-  <div class="tab_content">
-   <?php foreach(json_decode($address,TRUE) as $v){?>
-   <div class="addr_list">
-    <div><i class="fa-home"></i> <?=$v['address']?></div>
-    <div><i class="fa-crosshairs"></i> <?=$v['gps']?></div>
-    <div><i class="fa-compass"></i> <a href="https://www.google.com.ua/maps/place/<?=$v['gps']?>" target="_blank">Показать на большой карте</a></div>
-   </div>
-   <?php }?>
-  </div>
- </dd>
+ <?php }?>
 </dl>
 <?php }?>
-
 
 <?php if($contact_form==='on'){?>
 <!--####### Форма обратной связи #######-->
@@ -97,7 +66,6 @@
  <button type="submit">Отправить сообщение</button>
 </form>
 </div>
-
 </div>
 </div>
 
@@ -148,11 +116,11 @@ window.addEventListener('load',function(){
  });
 });
 </script>
-<?php }if($address){?>
+<?php }if($contacts && $gps){?>
 <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDdOpnwYxfTmWEIYDqbU4_4lrWfD9v_TUI&language=ru"></script>
 <script>
 window.addEventListener('load',function(){
- var data=JSON.parse('<?=$address?>'),//объект данных
+ var data=JSON.parse('<?=$contacts?>'),//объект данных
      mapOptions={zoom:6,scrollwheel:false,center:new google.maps.LatLng(49.303,31.203),streetViewControl:true,mapTypeControlOptions:{style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}},
      map=new google.maps.Map($('#map')[0],mapOptions),
      infowindow=new google.maps.InfoWindow(),//создаю инфоокно
@@ -165,7 +133,7 @@ window.addEventListener('load',function(){
     map:map,
     position:new google.maps.LatLng(LL[0],LL[1])
    });
-   iw(markers[k],data[k].marker_desc);
+   iw(markers[k],data[k].address+(data[k].marker_desc?'<hr>'+data[k].marker_desc:''));
   }
  };
  /////////////////////////////////////////////////показываю\скрываю инфоокно маркера по клику
