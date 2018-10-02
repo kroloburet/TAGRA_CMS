@@ -77,19 +77,42 @@ input[name="fuck_bot"]{display:none;visibility:hidden}
 
 /*------------------------------------------------------------------------------comments*/
 /*comments list*/
-#comments_layout{}
-#header_comments{border-bottom:solid #301000 2px;margin:0 0 1em 0;display:flex;}
+.comment_item{margin:0 0 1em 0;border-bottom:solid 1px;}
+#header_comments{border-bottom:solid 2px;margin:0 0 1em 0;display:flex;}
 #header_comment{display:flex;}
-#header_comments h2,#header_comment .comment_name{flex-grow:1;}
-#header_comments .count_comments,#header_comment .comment_date{color:#999;}
-#comments_layout .comment_text{margin:0 0 1em 0;padding:0.5em 0 1em 1em;border-bottom:solid #301000 1px;}
-@media(max-width:600px){#comments_layout .comment_text{padding-left:0;}}
-/*comments form*/
-#add_comment{padding:0 0 1.5em 0}
-#add_com input,#add_com textarea{width:87%}
+#header_comments h2,.comment_name{flex-grow:1;}
 #comments_more_btn{background-color:#E7D977;text-align:center;cursor:pointer;padding:0.7em;margin:-1em 0 1.5em 0;border:1px #301000 solid;border-top:none;border-radius:0 0 5px 5px}
 #comments_more_btn:hover{background-color:#FAEB85}
 #comments_more{display:none}
+.count_comments,.comment_date{color:#999;}
+.comment_text{padding:0.5em 0;}
+.comment_rating_box{display:flex;justify-content:flex-end;flex-wrap:wrap;}
+.comment_rating_like{margin:0 1em 1em 0;}
+.comment_rating_dislike{margin:0 0 1em 0;}
+.comment_rating_total{color:#999;}
+.comment_rating_like:before,.comment_rating_dislike:before{font-size:1.3em;}
+.comment_rating_like,.comment_rating_dislike{color:#0081A2;cursor:pointer;}
+.comment_rating_like:hover,.comment_rating_dislike:hover{color:#FF3636;}
+.comment_rating_box .mini{margin-left:1em;}
+/*disable*/
+.comment_rating_disable{color:#999!important;cursor:default;}
+/*process*/
+.comment_rating_process{color:#999!important;cursor:progress!important;animation:spin 2s infinite linear;}
+.comment_rating_process:before{content:'\f110'!important;}
+.comment_rating_process .comment_rating_total{display:none;}
+/*good msg*/
+.comment_rating_good_msg{color:#6ca200!important;cursor:default;}
+.comment_rating_good_msg:before{content:'\f00c'!important;}
+.comment_rating_good_msg .comment_rating_total{display:none;}
+/*bad msg*/
+.comment_rating_bad_msg{color:#F0AC8C!important;cursor:default;}
+.comment_rating_bad_msg:before{content:'\f00d'!important;}
+.comment_rating_bad_msg .comment_rating_total{display:none;}
+@media(max-width:400px){.comment_rating_like{margin-right:1.5em;}}
+
+/*comments form*/
+#add_comment{padding:0 0 1.5em 0}
+#add_com input,#add_com textarea{width:87%}
 
 /*------------------------------------------------------------------------------contact page*/
 .num{font-family:Arial,Helvetica}

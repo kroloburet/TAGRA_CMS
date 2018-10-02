@@ -92,6 +92,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `$t` (
   `date` varchar(100) NOT NULL,
   `name` varchar(300) NOT NULL,
   `comment` longtext NOT NULL,
+  `rating` text NOT NULL,
   `public` varchar(20) NOT NULL DEFAULT 'off',
   PRIMARY KEY (`id`))
   ENGINE=InnoDB DEFAULT CHARSET=utf8;")

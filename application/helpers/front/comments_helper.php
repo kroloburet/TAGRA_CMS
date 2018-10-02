@@ -13,26 +13,84 @@ if($c>0){//есть комментарии
 ?>
 <!--####### Комментарии к материалу #######-->
 <div id="comments_layout">
-<div id="header_comments">
-<h2>Комментарии</h2>
-<div class="count_comments"><i class="fa fa-comment">&nbsp;<?=$c?></i></div>
-</div>
+ <div id="header_comments">
+  <h2>Комментарии</h2>
+  <div class="count_comments"><i class="fa fa-comment">&nbsp;<?=$c?></i></div>
+ </div>
 <?php foreach($q as $k=>$v){if($c>$vsbl&&$k===$vsbl){?>
-<div id="comments_more">
+ <div id="comments_more">
 <?php }?>
-<div id="header_comment">
-<div class="comment_name"><i class="fa fa-user"></i>&nbsp;<b><?=$v['name']?></b></div>
-<div class="comment_date"><time class="fa fa-clock-o">&nbsp;<?=$v['date']?></time></div>
-</div>
-<div class="comment_text">
-<sup class="fa fa-quote-left"></sup>&nbsp;&nbsp;<?=$v['comment']?>&nbsp;&nbsp;<sub class="fa fa-quote-right"></sub>
-</div>
+ <div class="comment_item">
+  <div id="header_comment">
+   <div class="comment_name">
+    <i class="fa fa-user"></i>&nbsp;<b><?=$v['name']?></b>
+   </div>
+   <div class="comment_date">
+    <time class="fa fa-clock-o">&nbsp;<?=$v['date']?></time>
+   </div>
+  </div>
+  <div class="comment_text">
+   <sup class="fa fa-quote-left"></sup>
+    &nbsp;&nbsp;<span><?=$v['comment']?></span>&nbsp;&nbsp;
+   <sub class="fa fa-quote-right"></sub>
+  </div>
+  <?php
+  if(!$v['rating']){$like=$dislike=0;$disable=FALSE;}else{
+   $opt=json_decode($v['rating'],TRUE);
+   $like=$opt['like'];
+   $dislike=$opt['dislike'];
+   $cookie=$CI->input->cookie(md5('comment_rating_').$v['id']);
+   $disable=$cookie&&$cookie===$_SERVER['REMOTE_ADDR']?'comment_rating_disable':FALSE;
+  }
+  ?>
+  <div class="comment_rating_box">
+   <div class="comment_rating_like fa-thumbs-up <?=$disable?>" data-comment_id="<?=$v['id']?>" title="Мне нравится">
+    <span class="comment_rating_total"><?=$like?></span>
+   </div>
+   <div class="comment_rating_dislike fa-thumbs-down <?=$disable?>" data-comment_id="<?=$v['id']?>" title="Мне не нравится">
+    <span class="comment_rating_total"><?=$dislike?></span>
+   </div>
+  </div>
+ </div>
 <?php if($c>$vsbl&&$k===$c-1){?>
-</div>
+ </div>
 <?php }}if($c>$vsbl){?>
  <div id="comments_more_btn" onclick="opn_cls('comments_more')" class="noprint">Показать/скрыть еще <?=($c-$vsbl)?></div>
 <?php }?>
 </div>
+
+<script>
+//////////////////////////////////////рейтинг комментария
+window.addEventListener('load',function(){
+ $('.comment_rating_like,.comment_rating_dislike').on('click.Comment_Rating',function(){
+  for(var i=0,a=['comment_rating_disable','comment_rating_process','comment_rating_good_msg','comment_rating_bad_msg'];i<a.length;i++){if($(this).hasClass(a[i]))return false;}
+  var self=$(this),
+      id=self.data('comment_id'),
+      box=self.parent('.comment_rating_box'),
+      all=box.find('.comment_rating_like,.comment_rating_dislike'),
+      action=self.hasClass('comment_rating_like')?'like':'dislike',
+      err_msg=$('<p/>',{class:'notific_r mini',html:'Ой! Ошибка..( Возможно это временные неполадки. Попробуйте снова!'}),
+      clear=function(){self.removeClass('comment_rating_process comment_rating_good_msg comment_rating_bad_msg');err_msg.remove();return self;},
+      err=function(){clear().addClass('comment_rating_bad_msg');box.append(err_msg);setTimeout(function(){clear();all.removeClass('comment_rating_disable');},4000);},
+      ok=function(total){clear().addClass('comment_rating_good_msg').find('.comment_rating_total').text(total);setTimeout(clear,2000);};
+  all.addClass('comment_rating_disable');
+  self.addClass('comment_rating_process');
+  $.ajax({
+   url: '<?=base_url('do/comment_rating')?>',
+   type: 'post',
+   data: {id:id,hash:'<?=md5('comment_rating_')?>'+id,action:action},
+   dataType: 'json',
+   success: function(resp){
+    switch(resp.status){
+     case 'ok':ok(resp.rating[action]);break;
+     case 'error':err();break;
+     default :err();console.log(resp);break;
+    }
+   }
+  });
+ });
+});
+</script>
 <?php }}}
 /////////////////////////////////////////////////////////////////
 if(!function_exists('get_comments_form')){
@@ -57,6 +115,7 @@ if(!$access||$access==='off'){return FALSE;}
 </div>
 
 <script>
+//////////////////////////////////////отправка комментария
 window.addEventListener('load',function(){
  $('#add_com').on('submit',function(e){
   e.preventDefault();

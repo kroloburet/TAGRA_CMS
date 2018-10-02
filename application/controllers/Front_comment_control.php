@@ -78,7 +78,7 @@ class Front_comment_control extends Front_basic_control{
   $send?TRUE:exit('error');
   $data['public']==='on'?exit('onpublic'):exit('premod');
  }
- 
+
  function comment_action($action,$code){//публикация\удаление комментария по ссылке из уведомления
   $data['msg_class']='notific_r';
   $data['msg']='Ой! Ошибка..(<br>Возможно это временные неполадки, побробуйте снова.<br><i class="fa fa-spin fa-spinner"></i>&nbsp;&nbsp;завершение сценария...';
@@ -100,6 +100,21 @@ class Front_comment_control extends Front_basic_control{
   }
   //////////////////////вывод
   $this->load->view('front/do/comment_action_view',$data);
+ }
+
+ function comment_rating(){//рейтинг комментариев
+  if(!$this->input->post()){$resp['status']='error';}else{
+   $p=array_map('strip_tags',array_map('trim',$this->input->post()));
+   $q=$this->db->select('rating')->get_where($this->_prefix().'comments',array('id'=>$p['id']))->result_array();
+   if(empty($q)){$resp['status']='error';}else{
+    $arr=!$q[0]['rating']?array('like'=>0,'dislike'=>0):json_decode($q[0]['rating'],TRUE);
+    $arr[$p['action']]++;
+    $resp['status']=$this->front_comment_model->add_comment_rating($p['id'],json_encode($arr,JSON_FORCE_OBJECT))?'ok':'error';
+    $resp['status']==='ok'?$this->input->set_cookie($p['hash'],$_SERVER['REMOTE_ADDR'],0):FALSE;
+    $resp['rating']=$arr;
+   }
+  }
+  exit(json_encode($resp,JSON_FORCE_OBJECT));
  }
 
 }
