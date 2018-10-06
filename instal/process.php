@@ -272,6 +272,7 @@ $q_i=$db->query("INSERT INTO `$t` (`name`, `value`) VALUES
 ('conf_site_mail', '$admin_mail'),
 ('conf_body_width', '1000'),
 ('conf_layout_l_width', '60'),
+('conf_markup_data', 'on'),
 ('conf_addthis_js', ''),
 ('conf_addthis_share', ''),
 ('conf_addthis_follow', ''),
@@ -335,7 +336,7 @@ $cms_path=str_replace('/instal','',dirname(__FILE__));//абсолютный п�
 
 //config.php
 $conf='<?php defined("BASEPATH") OR exit("No direct script access allowed");'.PHP_EOL
-      . '$config["tagra_version"]="2.0";'.PHP_EOL
+      . '$config["tagra_version"]="2.1";'.PHP_EOL
       . '$config["tagra_instal_date"]=\''.$moment.'\';'.PHP_EOL
       . '$config["base_url"]=\''.$domen.'\';'.PHP_EOL
       . '$config["db_tabl_prefix"]=\''.$db_tabl_prefix.'\';'.PHP_EOL

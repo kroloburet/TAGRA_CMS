@@ -27,6 +27,7 @@ class Front_basic_control extends CI_Controller{
 
  function _viewer($url,$data){
   $data['front_menu_list']=$this->front_basic_model->get_menu();
+  $data['data']=$data;
   $this->load->view('front/blocks/header_view',$data);
   $this->load->view($url,$data);
   $this->load->view('front/blocks/footer_view',$data);

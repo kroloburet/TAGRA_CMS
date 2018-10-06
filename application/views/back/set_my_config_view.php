@@ -28,8 +28,8 @@
 открыт доступ к пользовательской части сайта.</pre>
         <label class="select">
          <select name="conf_site_access">
-          <option value="on" <?php if($conf_site_access=='on') echo'selected'?>>Доступ к сайту открыт</option>
-          <option value="off" <?php if($conf_site_access=='off') echo'selected'?>>Доступ к сайту закрыт</option>
+          <option value="on" <?=$conf_site_access=='on'?'selected':''?>>Доступ к сайту открыт</option>
+          <option value="off" <?=$conf_site_access=='off'?'selected':''?>>Доступ к сайту закрыт</option>
          </select>
         </label>
         Имя сайта
@@ -107,8 +107,25 @@ JQuery — подключаемый скрипт для правильной
  <a href="http://docs.emmet.io" target="_blank">Документация и синтаксис emmet</a></pre>
         <label class="select">
          <select name="conf_emmet">
-          <option value="on" <?php if($conf_emmet=='on') echo'selected'?>>Emmet включен</option>
-          <option value="off" <?php if($conf_emmet=='off') echo'selected'?>>Emmet выключен</option>
+          <option value="on" <?=$conf_emmet=='on'?'selected':''?>>Emmet включен</option>
+          <option value="off" <?=$conf_emmet=='off'?'selected':''?>>Emmet выключен</option>
+         </select>
+        </label>
+       </div>
+
+       <!--####### Вывод #######-->
+       <div class="row touch">
+        <h3>Вывод</h3>
+        <hr>
+        Микроразметка <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+        <pre class="tt">
+Микроразметка предназначена для улучшения
+отображения результатов поиска, делая процесс
+поиска правильных веб-страниц проще для людей.</pre>
+        <label class="select">
+         <select name="conf_markup_data">
+          <option value="on" <?=$conf_markup_data=='on'?'selected':''?>>Микроразметка включена</option>
+          <option value="off" <?=$conf_markup_data=='off'?'selected':''?>>Микроразметка выключена</option>
          </select>
         </label>
        </div>
@@ -151,15 +168,15 @@ JQuery — подключаемый скрипт для правильной
          Кнопки «Share» в системе по умолчанию
          <label class="select">
           <select name="conf_addthis_share_def">
-           <option value="off" <?php if($conf_addthis_share_def=='off') echo'selected'?>>скрыть</option>
-           <option value="on" <?php if($conf_addthis_share_def=='on') echo'selected'?>>показать</option>
+           <option value="off" <?=$conf_addthis_share_def=='off'?'selected':''?>>скрыть</option>
+           <option value="on" <?=$conf_addthis_share_def=='on'?'selected':''?>>показать</option>
           </select>
          </label>
          Кнопки «Follow» в системе по умолчанию
          <label class="select">
           <select name="conf_addthis_follow_def">
-           <option value="off" <?php if($conf_addthis_follow_def=='off') echo'selected'?>>скрыть</option>
-           <option value="on" <?php if($conf_addthis_follow_def=='on') echo'selected'?>>показать</option>
+           <option value="off" <?=$conf_addthis_follow_def=='off'?'selected':''?>>скрыть</option>
+           <option value="on" <?=$conf_addthis_follow_def=='on'?'selected':''?>>показать</option>
           </select>
          </label>
          Превью для соцсетей <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
@@ -187,8 +204,8 @@ JQuery — подключаемый скрипт для правильной
         <div id="bc_opt" class="opn_cls">
          <label class="select">
           <select name="conf_breadcrumbs_public">
-           <option value="on" <?php if($conf_breadcrumbs_public=='on') echo'selected'?>>Показать «хлебные крошки»</option>
-           <option value="off" <?php if($conf_breadcrumbs_public=='off') echo'selected'?>>Скрыть «хлебные крошки»</option>
+           <option value="on" <?=$conf_breadcrumbs_public=='on'?'selected':''?>>Показать «хлебные крошки»</option>
+           <option value="off" <?=$conf_breadcrumbs_public=='off'?'selected':''?>>Скрыть «хлебные крошки»</option>
           </select>
          </label>
          Ссылка на главную  <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
@@ -215,7 +232,7 @@ JQuery — подключаемый скрипт для правильной
   </dd>
 
 <!--####### Настройки администратора #######-->
-  <?php if($conf_status==='administrator'){?>
+  <?php if($conf_status=='administrator'){?>
    <dt>Администратор</dt>
    <dd>
     <div class="tab_content">
@@ -361,15 +378,7 @@ ID: <?=$v['id'].PHP_EOL?>
      <?php }?>
     </div>
    </dd>
-  <?php }?>
- </dl>
-
 <script>
-////////////////////////////////////////////////рег.выражения для проверки полей
-var s_opts={
- conf_site_mail:/^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/,
- conf_jq:/[^\s]/
-};
 $(function(){
  ///////////////////////////////////////////////установка значений полей
  $('select[name="conf_comment_notific"] option[value="<?=$conf_comment_notific?>"]').attr('selected',true);
@@ -513,4 +522,14 @@ function del_moderator(id){
    }
  });
 }
+</script>
+  <?php }?>
+ </dl>
+
+<script>
+////////////////////////////////////////////////рег.выражения для проверки полей
+var s_opts={
+ conf_site_mail:/^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/,
+ conf_jq:/[^\s]/
+};
 </script>
