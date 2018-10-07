@@ -89,8 +89,8 @@ JAVASCRIPT-код без тегов script
      Кнопки «Share»
      <label class="select">
       <select name="addthis_share">
-       <option value="off" <?php if($addthis_share=='off') echo'selected'?>>скрыть</option>
-       <option value="on" <?php if($addthis_share=='on') echo'selected'?>>показать</option>
+       <option value="off" <?=$addthis_share=='off'?'selected':''?>>скрыть</option>
+       <option value="on" <?=$addthis_share=='on'?'selected':''?>>показать</option>
       </select>
      </label>
     </div>
@@ -98,8 +98,8 @@ JAVASCRIPT-код без тегов script
      Кнопки «Follow»
      <label class="select">
       <select name="addthis_follow">
-       <option value="off" <?php if($addthis_follow=='off') echo'selected'?>>скрыть</option>
-       <option value="on" <?php if($addthis_follow=='on') echo'selected'?>>показать</option>
+       <option value="off" <?=$addthis_follow=='off'?'selected':''?>>скрыть</option>
+       <option value="on" <?=$addthis_follow=='on'?'selected':''?>>показать</option>
       </select>
      </label>
     </div>
@@ -161,16 +161,16 @@ JAVASCRIPT-код без тегов script
    <div class="col6">
     <label class="select">
      <select name="comments">
-      <option value="off" <?php if($comments=='off')echo'selected'?>>Запретить комментарии</option>
-      <option value="on" <?php if($comments=='on')echo'selected'?>>Разрешить комментарии</option>
+      <option value="off" <?=$comments=='off'?'selected':''?>>Запретить комментарии</option>
+      <option value="on" <?=$comments=='on'?'selected':''?>>Разрешить комментарии</option>
      </select>
     </label>
    </div>
    <div class="col6">
     <label class="select">
      <select name="public">
-      <option value="on" <?php if($public=='on')echo'selected'?>>Опубликовать</option>
-      <option value="off" <?php if($public=='off')echo'selected'?>>Не опубликовывать</option>
+      <option value="on" <?=$public=='on'?'selected':''?>>Опубликовать</option>
+      <option value="off" <?=$public=='off'?'selected':''?>>Не опубликовывать</option>
      </select>
     </label>
    </div>

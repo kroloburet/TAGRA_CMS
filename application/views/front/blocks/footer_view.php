@@ -39,16 +39,16 @@ ms.href="/scripts/libs/html5_audio/html5_audio.css";doc_head.insertBefore(ms,doc
 <script src="<?=$conf_jq?>"></script>
 <script src="/UI_fraimwork/js.js" defer></script>
 <?php if(isset($type)&&$type){//если галерея
-if($type==='foto_folder'||$type==='foto_desc'||$type==='video_yt'){//фото или видео?>
+if($type=='foto_folder'||$type=='foto_desc'||$type=='video_yt'){//фото или видео?>
 <script src="/scripts/libs/FVGallery/FVGallery.js" defer></script>
 <?php }?>
-<?php if($type==='audio'){//если галерея видео или аудио - поддержка старыми браузерами <audio> и <video>?>
+<?php if($type=='audio'){//если галерея видео или аудио - поддержка старыми браузерами <audio> и <video>?>
 <script src="/scripts/libs/html5_audio/html5media_1.2.2_min.js" defer></script>
 <?php }}?>
 
 <?php if(isset($js)&&$js){echo '<!--####### Пользовательский JS к этому документу #######-->'.PHP_EOL.$js.PHP_EOL;}?>
 
-<?php if(isset($type)&&($type==='foto_folder'||$type==='foto_desc'||$type==='video_yt')){//если галерея: фото или видео?>
+<?php if(isset($type)&&($type=='foto_folder'||$type=='foto_desc'||$type=='video_yt')){//если галерея: фото или видео?>
 
 <!--####### JS для фото или видео галереи #######-->
 <script>
@@ -56,7 +56,7 @@ window.addEventListener('load',function(){
  $('.FVG_item').FVGallery({type:'<?=$type?>'});
 });
 </script>
-<?php }if(isset($type)&&$type==='audio'){//аудио галерея?>
+<?php }if(isset($type)&&$type=='audio'){//аудио галерея?>
 
 <!--####### JS для аудио галереи #######-->
 <script>
@@ -75,11 +75,7 @@ if(supportsAudio){
  var index=0,
  playing=false,
  tracks=[
-<?php
-if($opt){
- $num=1;
- foreach(json_decode($opt,true) as $v){
-?>
+<?php if($opt){$num=1;foreach(json_decode($opt,true) as $v){?>
   {
    "track":<?=$num?>,
    "name":"<?=$v['a_title']?>",

@@ -5,20 +5,20 @@
 <div class="sheath">
  <h3>Новые комментарии</h3>
  <hr>
- <?php foreach($new_comments as $item){?>
+ <?php foreach($new_comments as $v){?>
   <div class="touch">
-   <div class="float_l"><i class="fa-user"></i>&nbsp;<b><?=$item['name']?></b></div>
+   <div class="float_l"><i class="fa-user"></i>&nbsp;<b><?=$v['name']?></b></div>
    <div class="algn_r">
-    <a href="<?=base_url('admin/comment/public_new/'.$item['id'])?>" class="fa-check-circle green" title="Опубликовать комментарий"></a>&nbsp;&nbsp;
-    <a href="<?=base_url('admin/comment/del_new/'.$item['id'])?>" class="fa-trash-o red" title="Удалить комментарий" onclick="if(!confirm('Комментарий будет удален!\nВыполнить действие?')){return false;}"></a>&nbsp;&nbsp;
-      <a href="<?=base_url($item['url'])?>" target="_blank" class="fa-external-link" title="Перейти на страницу"></a>&nbsp;&nbsp;
+    <a href="<?=base_url('admin/comment/public_new/'.$v['id'])?>" class="fa-check-circle green" title="Опубликовать комментарий"></a>&nbsp;&nbsp;
+    <a href="<?=base_url('admin/comment/del_new/'.$v['id'])?>" class="fa-trash-o red" title="Удалить комментарий" onclick="if(!confirm('Комментарий будет удален!\nВыполнить действие?')){return false;}"></a>&nbsp;&nbsp;
+      <a href="<?=base_url($v['url'])?>" target="_blank" class="fa-external-link" title="Перейти на страницу"></a>&nbsp;&nbsp;
     <span class="blue fa-info-circle" onmouseover="tt(this);"></span>
     <pre class="tt">
- <b>Дата: </b><?=$item['date'].PHP_EOL?>
- <b>URL: </b>/<?=$item['url']?>
+ <b>Дата: </b><?=$v['date'].PHP_EOL?>
+ <b>URL: </b>/<?=$v['url']?>
     </pre>
    </div>
-   <div><sup class="fa-quote-left"></sup>&nbsp;&nbsp;<?=$item['comment']?>&nbsp;&nbsp;<sub class="fa-quote-right"></sub></div>
+   <div><sup class="fa-quote-left"></sup>&nbsp;&nbsp;<?=$v['comment']?>&nbsp;&nbsp;<sub class="fa-quote-right"></sub></div>
   </div>
  <?php }?>
 </div>
@@ -90,15 +90,15 @@
   </tr>
  </thead>
  <tbody>
-  <?php foreach($comments as $item){?>
+  <?php foreach($comments as $v){?>
   <tr>
-   <td><?=$item['date']?></td>
-   <td><?=$item['name']?></td>
-   <td>/<?=$item['url']?></td>
+   <td><?=$v['date']?></td>
+   <td><?=$v['name']?></td>
+   <td>/<?=$v['url']?></td>
    <td>
-    <a href="<?=base_url($item['url'])?>" target="_blank" class="fa fa-external-link" title="Перейти на страницу"></a>&nbsp;&nbsp;
-    <span class="blue fa fa-info-circle" onmouseover="tt(this);"></span><pre class="tt" style="max-width:400px;white-space:normal;"><?=$item['comment']?></pre>&nbsp;&nbsp;
-    <a href="#" class="fa fa-trash-o red" title="Удалить" onclick="del_tab(this,<?=$item['id']?>,'<?=$prefix?>comments');return false"></a>
+    <a href="<?=base_url($v['url'])?>" target="_blank" class="fa fa-external-link" title="Перейти на страницу"></a>&nbsp;&nbsp;
+    <span class="blue fa fa-info-circle" onmouseover="tt(this);"></span><pre class="tt" style="max-width:400px;white-space:normal;"><?=$v['comment']?></pre>&nbsp;&nbsp;
+    <a href="#" class="fa fa-trash-o red" title="Удалить" onclick="del_tab(this,<?=$v['id']?>,'<?=$prefix?>comments');return false"></a>
    </td>
   </tr>
   <?php }?>

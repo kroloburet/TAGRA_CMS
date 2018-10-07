@@ -47,7 +47,7 @@
 </dl>
 <?php }?>
 
-<?php if($contact_form==='on'){?>
+<?php if($contact_form=='on'){?>
 <!--####### Форма обратной связи #######-->
 <div id="send_mail_form" class="noprint">
 <h2>Форма обратной связи</h2>

@@ -89,8 +89,8 @@ JAVASCRIPT-код без тегов script
      Кнопки «Share»
      <label class="select">
       <select name="addthis_share">
-       <option value="off" <?php if($conf_addthis_share_def=='off') echo'selected'?>>скрыть</option>
-       <option value="on" <?php if($conf_addthis_share_def=='on') echo'selected'?>>показать</option>
+       <option value="off" <?=$conf_addthis_share_def=='off'?'selected':''?>>скрыть</option>
+       <option value="on" <?=$conf_addthis_share_def=='on'?'selected':''?>>показать</option>
       </select>
      </label>
     </div>
@@ -98,8 +98,8 @@ JAVASCRIPT-код без тегов script
      Кнопки «Follow»
      <label class="select">
       <select name="addthis_follow">
-       <option value="off" <?php if($conf_addthis_follow_def=='off') echo'selected'?>>скрыть</option>
-       <option value="on" <?php if($conf_addthis_follow_def=='on') echo'selected'?>>показать</option>
+       <option value="off" <?=$conf_addthis_follow_def=='off'?'selected':''?>>скрыть</option>
+       <option value="on" <?=$conf_addthis_follow_def=='on'?'selected':''?>>показать</option>
       </select>
      </label>
     </div>

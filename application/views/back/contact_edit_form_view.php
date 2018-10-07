@@ -77,8 +77,8 @@ JAVASCRIPT-код без тегов script
      Кнопки «Share»
      <label class="select">
       <select name="addthis_share">
-       <option value="off" <?php if($addthis_share=='off') echo'selected'?>>скрыть</option>
-       <option value="on" <?php if($addthis_share=='on') echo'selected'?>>показать</option>
+       <option value="off" <?=$addthis_share=='off'?'selected':''?>>скрыть</option>
+       <option value="on" <?=$addthis_share=='on'?'selected':''?>>показать</option>
       </select>
      </label>
     </div>
@@ -86,8 +86,8 @@ JAVASCRIPT-код без тегов script
      Кнопки «Follow»
      <label class="select">
       <select name="addthis_follow">
-       <option value="off" <?php if($addthis_follow=='off') echo'selected'?>>скрыть</option>
-       <option value="on" <?php if($addthis_follow=='on') echo'selected'?>>показать</option>
+       <option value="off" <?=$addthis_follow=='off'?'selected':''?>>скрыть</option>
+       <option value="on" <?=$addthis_follow=='on'?'selected':''?>>показать</option>
       </select>
      </label>
     </div>
@@ -195,8 +195,8 @@ GPS-координаты (широта,долгота).
    <hr>
    <label class="select">
     <select name="contact_form">
-     <option value="on" <?php if($contact_form=='on') echo'selected'?>>Показать форму обратной связи</option>
-     <option value="off" <?php if($contact_form=='off') echo'selected'?>>Скрыть форму обратной связи</option>
+     <option value="on" <?=$contact_form=='on'?'selected':''?>>Показать форму обратной связи</option>
+     <option value="off" <?=$contact_form=='off'?'selected':''?>>Скрыть форму обратной связи</option>
     </select>
    </label>
   </div>
