@@ -75,6 +75,22 @@ input[name="fuck_bot"]{display:none;visibility:hidden}
 @media(max-width:800px){.section_sub_item_prev{width:150px;height:100px;font-size:4.5em}}
 @media(max-width:400px){.section_sub_item_prev{display:none!important}}
 
+/*------------------------------------------------------------------------------audio gallery*/
+#a_player{position:relative;margin:0 auto 1.5em auto;border:1px solid #ddd;background-color:#fff;}
+#a_player .a_controls{margin:0;padding:0;background-color:rgba(0,0,0,0.05);}
+#a_player .a_now_play{display:flex;justify-content:space-between;}
+#a_player .a_action,#a_player .a_title{padding:1em;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;}
+#a_player .a_box{margin:0 auto;}
+#a_player audio{border:0;font:inherit;font-size:100%;margin:0;padding:0;vertical-align:baseline;width:100%;}
+#a_player .a_nav{display:flex;justify-content:center;}
+#a_player .a_next,#a_player .a_prev{margin:0;padding:.4em;cursor:pointer;font-size:50px;text-decoration:none;}
+#a_player .a_items{margin:0;padding:0;list-style:none;}
+#a_player .a_item{display:flex;margin:0;padding:1em;cursor:pointer;list-style:none;}
+#a_player .a_item:hover{background-color:rgba(0,0,0,0.05);}
+#a_player .a_item_num{margin-right:1em;}
+#a_player .a_item_title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+#a_player .a_ready,#a_player .a_ready:hover{background-color:rgba(0,0,0,0.05)!important;cursor:default!important;}
+
 /*------------------------------------------------------------------------------comments*/
 /*comments list*/
 .comment_item{margin:0 0 1em 0;border-bottom:solid 1px;}

@@ -25,138 +25,72 @@ var ms=document.createElement("link");ms.rel="stylesheet";//главная та�
 ms.href="/css/front/general.css";doc_head.insertBefore(ms,doc_head.firstChild);
 var ms=document.createElement("link");ms.rel="stylesheet";//иконочный шрифт
 ms.href="/UI_fraimwork/css.css";doc_head.insertBefore(ms,doc_head.firstChild);
-<?php if(isset($type)&&$type){//если галерея
-if($type==='foto_folder'||$type==='foto_desc'||$type==='video_yt'){//фото или видео?>
+<?php if((isset($gallery_type)&&$gallery_type)&&(isset($gallery_opt)&&$gallery_opt)){//если галерея
+if($gallery_type=='foto_folder'||$gallery_type=='foto_desc'||$gallery_type=='video_yt'){//фото или видео?>
 var ms=document.createElement("link");ms.rel="stylesheet";//
 ms.href="/scripts/libs/FVGallery/FVGallery.css";doc_head.insertBefore(ms,doc_head.firstChild);
-<?php }if($type==='audio'){//аудио?>
-var ms=document.createElement("link");ms.rel="stylesheet";//
-ms.href="/scripts/libs/html5_audio/html5_audio.css";doc_head.insertBefore(ms,doc_head.firstChild);
 <?php }}?>
 </script>
 
 <!--####### Отложенная загрузка JS #######-->
 <script src="<?=$conf_jq?>"></script>
 <script src="/UI_fraimwork/js.js" defer></script>
-<?php if(isset($type)&&$type){//если галерея
-if($type=='foto_folder'||$type=='foto_desc'||$type=='video_yt'){//фото или видео?>
-<script src="/scripts/libs/FVGallery/FVGallery.js" defer></script>
-<?php }?>
-<?php if($type=='audio'){//если галерея видео или аудио - поддержка старыми браузерами <audio> и <video>?>
-<script src="/scripts/libs/html5_audio/html5media_1.2.2_min.js" defer></script>
-<?php }}?>
 
 <?php if(isset($js)&&$js){echo '<!--####### Пользовательский JS к этому документу #######-->'.PHP_EOL.$js.PHP_EOL;}?>
 
-<?php if(isset($type)&&($type=='foto_folder'||$type=='foto_desc'||$type=='video_yt')){//если галерея: фото или видео?>
-
+<?php if((isset($gallery_type)&&$gallery_type)&&(isset($gallery_opt)&&$gallery_opt)){//если галерея
+if($gallery_type=='foto_folder'||$gallery_type=='foto_desc'||$gallery_type=='video_yt'){//фото или видео?>
 <!--####### JS для фото или видео галереи #######-->
+<script src="/scripts/libs/FVGallery/FVGallery.js" defer></script>
 <script>
-window.addEventListener('load',function(){
- $('.FVG_item').FVGallery({type:'<?=$type?>'});
-});
+window.addEventListener('load',function(){$('.FVG_item').FVGallery({type:'<?=$gallery_type?>'});});
 </script>
-<?php }if(isset($type)&&$type=='audio'){//аудио галерея?>
-
+<?php }?>
+<?php if($gallery_type=='audio'){//аудио?>
 <!--####### JS для аудио галереи #######-->
 <script>
-// html5media enables <video> and <audio> tags in all major browsers
-// External File: http://api.html5media.info/1.2.2/html5media.min.js
-// Add user agent as an attribute on the <html> tag...
-// Inspiration: http://css-tricks.com/ie-10-specific-styles/
-var b=document.documentElement;
-b.setAttribute('data-useragent',navigator.userAgent);
-b.setAttribute('data-platform',navigator.platform );
-// HTML5 audio player + playlist controls...
-// Inspiration: http://jonhall.info/how_to/create_a_playlist_for_html5_audio
-jQuery(function($){
-var supportsAudio=!!document.createElement('audio').canPlayType;
-if(supportsAudio){
- var index=0,
+;(function($){
+ var
+ i=0,
  playing=false,
+ p=$('#a_player'),
+ action=p.find('.a_action'),
+ title=p.find('.a_title'),
  tracks=[
-<?php if($opt){$num=1;foreach(json_decode($opt,true) as $v){?>
+ <?php if($gallery_opt){$num=1;foreach(json_decode($gallery_opt,true)as$v){?>
   {
    "track":<?=$num?>,
    "name":"<?=$v['a_title']?>",
-   //"length":"time",
    "file":"<?=$v['a_file']?>"
   },
-<?php }}?>
+ <?php }}?>
  ],
- trackCount=tracks.length,
- npAction=$('#npAction'),
- npTitle=$('#npTitle'),
- audio=$('#audio1').on('play',function(){
-  playing=true;
-  npAction.text('Воспроизводится...');
-  }).on('pause',function(){
-   playing=false;
-   npAction.text('Пауза...');
-  }).on('ended',function(){
-   npAction.text('Пауза...');
-   if((index+1)<trackCount){
-    index++;
-    loadTrack(index);
-    audio.play();
-   }else{
-    audio.pause();
-    index=0;
-    loadTrack(index);
-   }
-  }).get(0),
-  btnPrev=$('#a_btnPrev').click(function(){
-   if((index-1)>-1){
-    index--;
-    loadTrack(index);
-    if(playing){
-     audio.play();
-    }
-   }else{
-    audio.pause();
-    index=0;
-    loadTrack(index);
-   }
-  }),
-  btnNext=$('#a_btnNext').click(function(){
-   if((index+1)<trackCount){
-    index++;
-    loadTrack(index);
-    if(playing){
-     audio.play();
-    }
-   }else{
-    audio.pause();
-    index=0;
-    loadTrack(index);
-   }
-  }),
-  li=$('#plList li').click(function(){
-   var id=parseInt($(this).index());
-   if(id!==index){
-    playTrack(id);
-   }
-  }),
-  loadTrack=function(id){
-   $('.plSel').removeClass('plSel');
-   $('#plList li:eq(' + id + ')').addClass('plSel');
-   npTitle.text(tracks[id].name);
-   index = id;
-   $('#source_ogg').attr('src',tracks[id].file+'.ogg');
-   $('#source_mp3').attr('src',tracks[id].file+'.mp3');
-   $('#source_wav').attr('src',tracks[id].file+'.wav');
-   audio.load();
-  },
-  playTrack=function(id){
-   loadTrack(id);
-   audio.play();
-  };
-  loadTrack(index);
-  audio.volume=0.3;
-}
-});
+ count=tracks.length,
+ audio=p.find('.a_audio')
+  .on('play',function(){playing=true;action.text('Воспроизводится...');})
+  .on('pause',function(){playing=false;action.text('Пауза...');})
+  .on('ended',function(){action.text('Пауза...');if((i+1)<count){i++;loadTrack(i);audio.play();}else{audio.pause();i=0;loadTrack(i);}}).get(0),
+ btnPrev=p.find('.a_prev')
+  .on('click',function(){if((i-1)>-1){i--;loadTrack(i);if(playing){audio.play();}}else{audio.pause();i=0;loadTrack(i);}}),
+ btnNext=p.find('.a_next')
+  .on('click',function(){if((i+1)<count){i++;loadTrack(i);if(playing){audio.play();}}else{audio.pause();i=0;loadTrack(i);}}),
+ li=p.find('.a_item')
+  .on('click',function(){var id=parseInt($(this).index());if(id!==i){playTrack(id);}}),
+ loadTrack=function(id){
+  p.find('.a_ready').removeClass('a_ready');
+  p.find('.a_item:eq('+id+')').addClass('a_ready');
+  title.text(tracks[id].name);
+  i=id;
+  p.find('.a_ogg').attr('src',tracks[id].file+'.ogg');
+  p.find('.a_mp3').attr('src',tracks[id].file+'.mp3');
+  p.find('.a_wav').attr('src',tracks[id].file+'.wav');
+  audio.load();
+ },
+ playTrack=function(id){loadTrack(id);audio.play();};
+ loadTrack(i);
+}(jQuery));
 </script>
-<?php }?>
+<?php }}?>
 
 <!--####### HTML5-теги и медиа-запросы для IE9 и ниже #######-->
 <!--[if lt IE 9]>
