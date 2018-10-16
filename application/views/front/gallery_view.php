@@ -48,13 +48,13 @@ echo '</div>'.PHP_EOL;
 <!--####### Галерея #######-->
 <div id="FVGallery_layout">
 <?php
-switch($type){
+switch($gallery_type){
 
  case 'foto_folder'://галерея из папки с изображениями
-  if($opt){//есть опции
-   $opt=json_decode($opt,true);
+  if($gallery_opt){//есть опции
+   $opt=json_decode($gallery_opt,true);
    $directory=$opt['f_folder'];//папка с изображениями
-   $allowed_types=array('jpg','jpeg','gif','png','svg');//разрешеные типы изображений
+   $allowed_types=array('png','jpg','jpeg','gif','webp','svg');//разрешеные типы изображений
    $file_parts=array();
    $ext='';
    $i=0;
@@ -77,8 +77,8 @@ switch($type){
  break;
 
  case 'foto_desc'://галерея изображений с описаниями
-  if($opt){//есть опции
-   foreach(json_decode($opt,true) as $v){//читаю json и строю костяк html
+  if($gallery_opt){//есть опции
+   foreach(json_decode($gallery_opt,true) as $v){//читаю json и строю костяк html
     echo '<div class="FVG_item FVG_item_f_desc">'.PHP_EOL;
     echo $v['f_title']||$v['f_desc']?'<div class="FVG_item_f_desc_preview"><h3>'.$v['f_title'].'</h3>'.$v['f_desc'].'</div>'.PHP_EOL:FALSE;
     echo '<img src="'.$v['f_url'].'" alt="'.$v['f_title'].'">'.PHP_EOL;
@@ -89,8 +89,8 @@ switch($type){
  break;
 
  case 'video_yt'://галерея youtube
-  if($opt){//есть опции
-   foreach(json_decode($opt,true) as $v){
+  if($gallery_opt){//есть опции
+   foreach(json_decode($gallery_opt,true) as $v){
     echo '<div class="FVG_item FVG_item_v_yt">'.PHP_EOL;
     echo '<img src="http://img.youtube.com/vi/'.$v['yt_id'].'/mqdefault.jpg">'.PHP_EOL;
     echo '<textarea class="opt" hidden>'.json_encode($v).'</textarea>'.PHP_EOL;
@@ -100,47 +100,36 @@ switch($type){
   break;
 
  case 'audio'://галерея audio
-  if($opt){//есть опции?>
- <div class="a_container">
-  <div id="a_controls">
-   <div id="nowPlay">
-    <span class="a_left" id="npAction"></span>
-    <span class="a_right" id="npTitle"></span>
+  if($gallery_opt){//есть опции?>
+ <div id="a_player">
+  <div class="a_controls">
+   <div class="a_now_play">
+    <span class="a_action"></span>
+    <span class="a_title"></span>
    </div>
-   <div id="audiowrap">
-    <div id="audio0">
-     <audio preload id="audio1" controls="controls">
-      <source id="source_ogg" type="audio/ogg">
-      <source id="source_mp3" type="audio/mpeg">
-      <source id="source_wav" type="audio/wav">
-      Ваш браузер устарел и не поддерживает HTML5 Audio!
-     </audio>
-    </div>
-    <div id="tracks">
-     <a id="a_btnPrev">&laquo;</a>
-     <a id="a_btnNext">&raquo;</a>
+   <div class="a_box">
+    <audio class="a_audio" preload controls>
+     <source class="a_ogg" type="audio/ogg">
+     <source class="a_mp3" type="audio/mpeg">
+     <source class="a_wav" type="audio/wav">
+     Ваш браузер устарел и не поддерживает HTML5 Audio!
+    </audio>
+    <div class="a_nav">
+     <a class="a_prev">&laquo;</a>
+     <a class="a_next">&raquo;</a>
     </div>
    </div>
   </div>
-  <div id="plwrap">
-   <ul id="plList">
-    <?php
-    $num=1;
-    foreach(json_decode($opt,true) as $v){
-     $num_=$num<=9?'0'.$num++.'.':$num++.'.';
-    ?>
-    <li>
-     <div class="plItem">
-      <div class="plNum"><?=$num_?></div>
-      <div class="plTitle"><?=$v['a_title']?></div>
-      <!--<div class="plLength"><a href="#">time</a></div>-->
-     </div>
-    </li>
-    <?php }?>
-   </ul>
-  </div>
+  <ul class="a_items">
+   <?php $num=1;foreach(json_decode($gallery_opt,true)as$v){$num_=$num<=9?'0'.$num++.'.':$num++.'.';?>
+   <li class="a_item">
+    <div class="a_item_num"><?=$num_?></div>
+    <div class="a_item_title"><?=$v['a_title']?></div>
+   </li>
+   <?php }?>
+  </ul>
  </div>
-<?php }}?>
+<?php }else{echo '<div class="notific_b">Галерея не может быть отображена! В галерее нет ни одного аудио</div>'.PHP_EOL;}}?>
 </div>
 
 <!--####### Comments #######-->
