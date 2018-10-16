@@ -3,7 +3,7 @@
 ?>
 <h1><?=$conf_title?></h1>
 <div class="sheath">
- <form method="POST" action="<?=base_url('admin/section/add')?>" onsubmit="subm(this,s_opts);return false">
+ <form method="POST" action="<?=base_url('admin/section/add')?>">
   <input type="hidden" name="last_mod_date" value="<?=date('Y-m-d')?>">
   <input type="hidden" name="creation_date" value="<?=date('Y-m-d')?>">
 
@@ -168,8 +168,8 @@ JAVASCRIPT-код без тегов script
    </div>
   </div>
 
-  <div class="button">
-   <input type="submit" value="Добавить раздел"><a href="<?=base_url('admin/section/get_list')?>" class="btn_lnk">Отменить</a>
+  <div class="button this_form_control">
+   <button type="button" onclick="subm(form,s_opts)">Добавить раздел</button><a href="<?=base_url('admin/section/get_list')?>" class="btn_lnk">Отменить</a>
   </div>
  </form>
 </div>

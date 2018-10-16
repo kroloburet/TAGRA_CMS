@@ -22,7 +22,7 @@
 <?php if(is_writable(getcwd().'/sitemap.xml')){//если sitemap.xml доступен для записи?>
 
 <!--####### настройки карты сайта #######-->
-<form method="POST" action="<?=base_url('admin/set_sitemap_config')?>" onsubmit="subm(this);return false">
+<form method="POST" action="<?=base_url('admin/set_sitemap_config')?>">
  <div class="touch">
   <div class="row">
    <div class="col6">
@@ -58,8 +58,8 @@
     </label>
    </div>
   </div>
-  <div class="button">
-   <input type="submit" value="Сохранить настройки и обновить карту">
+  <div class="button this_form_control">
+   <button type="button" onclick="subm(form)">Сохранить настройки и обновить карту</button>
   </div>
  </div>
 </form>

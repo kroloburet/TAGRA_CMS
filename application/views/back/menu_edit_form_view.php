@@ -61,7 +61,7 @@ $GLOBALS['menu']=&$menu;
          <a href="#" class="fa-edit green" title="Редактировать" onclick="opn_cls(\'edit_item_'.$v['id'].'\');return false"></a>
         </span>
         <div class="edit_menu_item" id="edit_item_'.$v['id'].'">
-         <form action="'.base_url('admin/menu/edit_item/'.$v['id']).'" method="POST" onsubmit="subm(this);return false">
+         <form action="'.base_url('admin/menu/edit_item/'.$v['id']).'" method="POST">
           <div class="row">
            <div class="col6">
             Родительский пункт
@@ -111,8 +111,8 @@ $GLOBALS['menu']=&$menu;
             </select>
            </label>
           </div>
-          <div class="button inline">
-           <input type="submit" value="Редактировать">
+          <div class="button inline this_form_control">
+           <button type="button" onclick="subm(form)">Редактировать</button>
            <a href="#" class="btn_lnk" onclick="opn_cls(\'edit_item_'.$v['id'].'\');return false">Отменить</a>
           </div>
          </form>
@@ -133,7 +133,7 @@ $GLOBALS['menu']=&$menu;
  <div class="touch">
  <h3>Добавить пункт меню</h3>
  <hr>
- <form method="POST" action="<?=base_url('admin/menu/add_item')?>" onsubmit="subm(this);return false">
+ <form method="POST" action="<?=base_url('admin/menu/add_item')?>">
   <div class="row">
    <div class="col6">
     Родительский пункт
@@ -193,8 +193,8 @@ $GLOBALS['menu']=&$menu;
     </label>
    </div>
   </div>
-  <div class="button">
-   <input type="submit" value="Добавить пункт меню">
+  <div class="button this_form_control">
+   <button type="button" onclick="subm(form)">Добавить пункт меню</button>
   </div>
  </form>
  </div>

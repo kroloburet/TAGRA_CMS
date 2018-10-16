@@ -8,7 +8,7 @@
 <!--####### Основные настройки #######-->
   <dt class="tab_active">Основные настройки</dt>
   <dd>
-   <form method="POST" action="<?=base_url('admin/setting/set_my_config')?>" onsubmit="subm(this,s_opts);return false">
+   <form method="POST" action="<?=base_url('admin/setting/set_my_config')?>">
     <div class="tab_content">
      <div class="row">
       <div class="col6">
@@ -224,8 +224,8 @@ JQuery — подключаемый скрипт для правильной
       </div>
      </div>
 
-     <div class="button">
-      <input type="submit" value="Сохранить все настройки">
+     <div class="button this_form_control">
+      <button type="button" onclick="subm(form,s_opts)">Сохранить все настройки</button>
      </div>
     </div>
    </form>

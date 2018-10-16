@@ -3,7 +3,7 @@
 ?>
 <h1><?=$conf_title?></h1>
 <div class="sheath">
- <form method="POST" action="<?=base_url('admin/contact/edit')?>" onsubmit="subm(this,s_opts);return false">
+ <form method="POST" action="<?=base_url('admin/contact/edit')?>">
   <input type="hidden" name="last_mod_date" value="<?=date('Y-m-d')?>">
 
   <!--####### Title, description... #######-->
@@ -201,8 +201,8 @@ GPS-координаты (широта,долгота).
    </label>
   </div>
 
-  <div class="button">
-   <input type="submit" value="Сохранить изменения"><a href="#" class="btn_lnk" onclick="window.history.back();return false">Отменить</a>
+  <div class="button this_form_control">
+   <button type="button" onclick="subm(form,s_opts)">Сохранить изменения</button><a href="#" class="btn_lnk" onclick="window.history.back();return false">Отменить</a>
   </div>
  </form>
 </div>
