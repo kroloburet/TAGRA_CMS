@@ -68,9 +68,9 @@ echo '</div>'.PHP_EOL;
 <!--####### Раздел содержит галереи #######-->
 <h2>Раздел содержит галереи:</h2>
 <?php foreach($sub_gallerys as $v){
-if($v['type']=='foto_folder'||$v['type']=='foto_desc'){$icon='fa-file-photo-o';}
-if($v['type']=='audio'){$icon='fa-file-sound-o';}
-if($v['type']=='video_yt'){$icon='fa-file-movie-o';}
+if($v['gallery_type']=='foto_folder'||$v['gallery_type']=='foto_desc'){$icon='fa-file-photo-o';}
+if($v['gallery_type']=='audio'){$icon='fa-file-sound-o';}
+if($v['gallery_type']=='video_yt'){$icon='fa-file-movie-o';}
 ?>
 <div class="section_sub_item clear">
 <?php if($v['img_prev']){?>

@@ -38,7 +38,7 @@ body{height:100%;display:flex;flex-direction:column;}
 /*footer*/
 .footer_wrapper{flex:0 0 auto;border-top:2px solid #E7D977}
 footer{padding:1.5em 1%!important;display:flex;}
-#scrol_btn{display:none;line-height:1em;font-size:410%;background-color:#20b2af;color:#fff;text-align:center;cursor:pointer;}
+#scrol_btn{display:none;line-height:1em;font-size:410%;background:#E7D977;text-align:center;cursor:pointer;}
 .copy{opacity:0.5}
 .copy:hover{opacity:1}
 @media(max-width:600px){footer{flex-direction:column;text-align:center;}#scrol_btn{display:block}}

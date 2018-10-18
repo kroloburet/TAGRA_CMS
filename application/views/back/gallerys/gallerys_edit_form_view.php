@@ -126,7 +126,7 @@ JAVASCRIPT-код без тегов script
   <div class="touch">
    <?php
    $this->load->helper('back/gallery');
-   gallery($type,$opt);
+   gallery($gallery_type,$gallery_opt);
    ?>
   </div>
 
