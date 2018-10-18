@@ -49,7 +49,7 @@ $GLOBALS['menu']=&$menu;
   }
   foreach($list as $v){
    echo '<li>';
-   //содержимое елемента списка
+   //содержимое элемента списка
    $_self=$_blank='';
    $ext_link=$v['url']?'<a href="'.$v['url'].'" target="_blank" class="fa-external-link" title="Перейти на страницу"></a>&nbsp;&nbsp;':'<i class="fa-external-link gray"></i>&nbsp;&nbsp;';
    $eye=$v['public']=='on'?'fa-eye green':'fa-eye-slash red';
@@ -118,7 +118,7 @@ $GLOBALS['menu']=&$menu;
          </form>
         </div>
         ';
-   if(isset($v['nodes'])){//если есть вложенные елементы
+   if(isset($v['nodes'])){//если есть вложенные элементы
     echo '<ul>';
     get_menu_tree($v['nodes']);//рекурсия
     echo '</ul>';

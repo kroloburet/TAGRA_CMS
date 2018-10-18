@@ -123,13 +123,13 @@ function tt(trig,e_hide){
 function scrll(targ){$('body,html').animate({scrollTop:$('#'+targ).offset().top},800);}
 
 //////////////////////////////////////////////////////////////свертывание/развертывание контента
-function opn_cls(el/*id елемента*/){$('#'+el).slideToggle(200);}
+function opn_cls(el/*id элемента*/){$('#'+el).slideToggle(200);}
 
 //////////////////////////////////////////////////////////////лимит ввода символов в поле
 function lim(elm/*this*/,lim/*(число) - лимит символов в поле*/){
  var el=$(elm),//поле
      val=el.val(),//значение поля
-     l=el.next('span.lim').get(0),//существующий елемент счетчика
+     l=el.next('span.lim').get(0),//существующий элемент счетчика
      l_c=$(l).find('.lim_count');//контейнер подсчета в счетчике
  if(!l){//если счетчик еще не создан
   var l_c=$('<i/>',{class:'lim_count',html:parseInt(lim,10)-val.length}),//контейнер подсчета в счетчике
