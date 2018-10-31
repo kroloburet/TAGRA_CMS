@@ -14,6 +14,7 @@ $prefix=$CI->config->item('db_tabl_prefix');
 $seg1=$CI->uri->segment(1);//первый сегмент урл после домена
 $seg2=$CI->uri->segment(2);//второй сегмент урл после домена
 $img_prev=empty($img_prev)?empty($conf_img_prev_def)?base_url('img/noimg.svg'):$conf_img_prev_def:$img_prev;
+$img_prev_size=@getimagesize($img_prev);
 $creation_date=!empty($creation_date)?$creation_date:date('Y-m-d');
 $last_mod_date=!empty($last_mod_date)?$last_mod_date:date('Y-m-d');
 $layout=@$layout_l.@$layout_r.@$layout_t.@$layout_b;
@@ -154,6 +155,8 @@ if($q=$CI->db->get($prefix.'contact_page')->result_array()[0]['contacts']){//е�
 <meta property="og:title" content="<?=$title?>">
 <meta property="og:description" content="<?=$description?>">
 <meta property="og:image" content="<?=$img_prev?>">
+<meta property="og:image:width" content="<?=@$img_prev_size[0]?@$img_prev_size[0]:'1200'?>">
+<meta property="og:image:height" content="<?=@$img_prev_size[1]?@$img_prev_size[1]:'630'?>">
 <meta property="og:url" content="<?=current_url()?>">
 <meta property="og:site_name" content="<?=$conf_site_name?>">
 <!--Другие-->
