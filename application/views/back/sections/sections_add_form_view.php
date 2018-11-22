@@ -15,7 +15,7 @@
 содержать ключевые слова.
 <b class="red">Обязательно для заполнения!</b></pre>
    <label class="input">
-   <input type="text" class="width90" name="title" placeholder="Заголовок раздела. Пример: Книги о море" onkeyup="lim(this,100)" onchange="translit(this,'#alias');check_title(this,null,'sections','Раздел с таким заголовком уже существует!\nИзмените заголовок и продолжайте.')">
+   <input type="text" name="title" placeholder="Заголовок раздела. Пример: Книги о море" onkeyup="lim(this,100)" onchange="translit(this,'#alias');check_title(this,null,'sections','Раздел с таким заголовком уже существует!\nИзмените заголовок и продолжайте.')">
    </label>
    Алиас раздела <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
    <pre class="tt">
@@ -23,7 +23,7 @@
 Будет использоваться как часть ссылки на раздел.
 Генерируется автоматически.</pre>
    <label class="input">
-    <input type="text" class="width90" name="alias" id="alias" readonly>
+    <input type="text" name="alias" id="alias" readonly>
    </label>
    Родительский раздел <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
    <pre class="tt">
@@ -43,7 +43,7 @@
 содержать ключевые слова.
 <b class="red">Обязательно для заполнения!</b></pre>
    <label class="textarea">
-    <textarea name="description" class="width90 no-emmet" placeholder="Описание раздела (description)" onkeyup="lim(this,250)" rows="3"></textarea>
+    <textarea name="description" class="no-emmet" placeholder="Описание раздела (description)" onkeyup="lim(this,250)" rows="3"></textarea>
    </label>
   </div>
 

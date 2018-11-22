@@ -129,18 +129,23 @@ function opn_cls(el/*id элемента*/){$('#'+el).slideToggle(200);}
 function lim(elm/*this*/,lim/*(число) - лимит символов в поле*/){
  var el=$(elm),//поле
      val=el.val(),//значение поля
-     l=el.next('span.lim').get(0),//существующий элемент счетчика
+     l=el.next('span.lim').get(0),//существующий елемент счетчика
      l_c=$(l).find('.lim_count');//контейнер подсчета в счетчике
  if(!l){//если счетчик еще не создан
-  var l_c=$('<i/>',{class:'lim_count',html:parseInt(lim,10)-val.length}),//контейнер подсчета в счетчике
-      l=$('<span/>',{title:'Доступно символов',class:'lim fa-angle-left',html:l_c});//счетчик
-  //вставка в DOM, при потере фокуса поля обрезать в ней строку и удалить счетчик
-  el.after(l).on('blur.UIF',function(){el.val(el.val().substr(0,parseInt(lim,10)));l.remove();});
+  var l_c=$('<i/>',{class:'lim_count',text:parseInt(lim,10)-val.length}),//контейнер подсчета в счетчике
+      l=$('<span/>',{title:'Доступно символов',class:'lim fa-angle-left',html:l_c}),//счетчик
+      el_p=el.css('padding-right');//отступ в поле (начальный)
+  el.after(l).on('blur.UIF',function(){//вставка в DOM и потеря фокуса
+   el.val(el.val().substr(0,parseInt(lim,10)));//обрезка строки если лимит превышен
+   l.remove();//удаление счетчика
+   el.css('padding-right',el_p);//вернуть начальный отступ в поле
+  }).css('padding-right',parseInt(el_p,10)+l.outerWidth(true));//отступ в поле на длину счетчика
+  l.css('margin-left','-'+l.outerWidth(true)+'px');//отрицательный отступ счетчика чтобы сдвинуть его в поле
  }
  if(val.length<=parseInt(lim,10)){//лимит не превышен
-  l_c.html(parseInt(lim,10)-val.length);//обновить контейнер подсчета
+  l_c.text(parseInt(lim,10)-val.length);//обновить контейнер подсчета
  }else{//лимит превышен
   el.val(el.val().substr(0,parseInt(lim,10)));//обрезать строку
-  l_c.html('0');//подсчет 0
+  l_c.text('0');//подсчет 0
  }
 }

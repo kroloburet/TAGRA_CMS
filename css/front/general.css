@@ -136,7 +136,6 @@ input[name="fuck_bot"]{display:none;visibility:hidden}
 .contacts_list{padding:.7em;}
 .contacts_list div i{vertical-align:baseline;}
 #send_mail_form{padding:0 0 1.5em 0}
-#send_mail input,#send_mail textarea{width:83%}
 @media(max-width:900px){#print_btn{display:none}}
 
 /*------------------------------------------------------------------------------404 page*/

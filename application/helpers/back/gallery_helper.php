@@ -59,11 +59,11 @@ function gallery($type='',$opt=''){//Тип галереи и добавлени
  </div>
  Заголовок
  <label class="input">
-  <input type="text" class="width90 g_field" id="g_f_title" onkeyup="lim(this,75)" placeholder="Заголовок описания изображения">
+  <input type="text" class="g_field" id="g_f_title" onkeyup="lim(this,75)" placeholder="Заголовок описания изображения">
  </label>
  Описание
  <label class="textarea">
-  <textarea class="no-emmet width90 g_field" id="g_f_desc" rows="4" onkeyup="lim(this,1000)" placeholder="Описание изображения"></textarea>
+  <textarea class="no-emmet g_field" id="g_f_desc" rows="4" onkeyup="lim(this,1000)" placeholder="Описание изображения"></textarea>
  </label>
  <div class="g_control">
   <button type="button" class="g_add_btn">Добавить изображение</button>
@@ -132,7 +132,7 @@ function gallery($type='',$opt=''){//Тип галереи и добавлени
  </div>
  Название трека
  <label class="input">
-  <input type="text" id="g_a_title" class="width90 g_field" onkeyup="lim(this,75)" placeholder="Пример: Лунная соната">
+  <input type="text" id="g_a_title" class="g_field" onkeyup="lim(this,75)" placeholder="Пример: Лунная соната">
  </label>
  <div class="g_control">
   <button type="button" class="g_add_btn">Добавить трек</button>

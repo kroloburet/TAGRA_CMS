@@ -14,7 +14,7 @@
 содержать ключевые слова.
 <b class="red">Обязательно для заполнения!</b></pre>
    <label class="input">
-    <input type="text" class="width90" name="title" placeholder="Заголовок страницы. Пример: Мой персональный веб-сайт" value="<?=$title?>" onkeyup="lim(this,100)">
+    <input type="text" name="title" placeholder="Заголовок страницы. Пример: Мой персональный веб-сайт" value="<?=$title?>" onkeyup="lim(this,100)">
    </label>
    Описание <i class="fa-info-circle red" onmouseover="tt(this);"></i>
    <pre class="tt">
@@ -26,7 +26,7 @@
 содержать ключевые слова.
 <b class="red">Обязательно для заполнения!</b></pre>
    <label class="textarea">
-    <textarea name="description" class="no-emmet width90" placeholder="Описание страницы (description)" onkeyup="lim(this,250)" rows="3"><?=$description?></textarea>
+    <textarea name="description" class="no-emmet" placeholder="Описание страницы (description)" onkeyup="lim(this,250)" rows="3"><?=$description?></textarea>
    </label>
   </div>
 
