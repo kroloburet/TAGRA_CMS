@@ -34,7 +34,7 @@ class Back_basic_model extends CI_Model{
    return 'off';
   }
  }
- 
+
  function links_url_replace(/*найти строку url*/$search,/*заменить на строку url*/$replace){//изменение связанных ссылок
   $tables=array('index_page','pages','sections','gallerys');
   foreach($tables as $table){//проход по таблицам с полями id,links
@@ -44,7 +44,7 @@ class Back_basic_model extends CI_Model{
    $this->db->update_batch($this->_prefix().$table,$q,'id');//изменить в базе
   }
  }
- 
+
  function links_url_del(/*найти опцию с строкой url*/$search){//удаление связанных ссылок
   $tables=array('index_page','pages','sections','gallerys');
   foreach($tables as $table){//проход по таблицам с полями id,links
@@ -62,13 +62,13 @@ class Back_basic_model extends CI_Model{
 ///////////////////////////////////
 //получение, проверка, фильтр данных
 ///////////////////////////////////
- 
+
 
  function get_tabl($tabl){
   $q=$this->db->get($tabl)->result_array();
   return empty($q)?FALSE:$q;
  }
- 
+
  function get_where_id($tabl,$id){
   $q=$this->db->where('id',$id)->get($tabl)->result_array();
   if(empty($q)){return FALSE;}
@@ -92,7 +92,7 @@ class Back_basic_model extends CI_Model{
   $q=$this->db->where($where)->get($this->_prefix().$tab)->result_array();
   return empty($q)?FALSE:TRUE;
  }
- 
+
  function get_result_list($table,$get_arr=array()){//получаю выборку, сортирую, фильтрую, поиск
  //$table=таблица для запроса "pages", "sections"...
  //$get_arr=get-массив формы фильтра (отсутствующие значения должны быть установлены по умолчанию)
@@ -105,24 +105,24 @@ class Back_basic_model extends CI_Model{
   //поиск $get_arr['search'] в поле $get_arr['context_search']
   if($get_arr['search']!==''){
    $like=$get_arr['context_search']==='content'?array('layout_t'=>$get_arr['search'],'layout_b'=>$get_arr['search'],'layout_l'=>$get_arr['search'],'layout_r'=>$get_arr['search']):array($get_arr['context_search']=>$get_arr['search']);
-   $this->db->or_like($like);
-  }  
+   $table==='comments'?$this->db->like($like):$this->db->or_like($like);
+  }
   $q['count_result']=$this->db->count_all_results($this->_prefix().$table,FALSE);
   $this->db->limit($get_arr['pag_per_page'],$get_arr['per_page']);
   $q['result']=$this->db->get()->result_array();
   return $q;
  }
- 
+
 ///////////////////////////////////
 //конфигурация и пользователи админки
 ///////////////////////////////////
- 
+
  function get_back_users($email=FALSE){
   if($email){$this->db->where('email',$email);}
   $q=$this->db->get($this->_prefix().'back_users')->result_array();
   return empty($q)?FALSE:$q;
  }
- 
+
  function edit_back_user($id,$post_arr=array()){
    return $this->db->where('id',$id)->update($this->_prefix().'back_users',$post_arr)?TRUE:FALSE;
  }
