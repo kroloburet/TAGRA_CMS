@@ -123,7 +123,7 @@ function tt(trig,e_hide){
 function scrll(targ){$('body,html').animate({scrollTop:$('#'+targ).offset().top},800);}
 
 //////////////////////////////////////////////////////////////свертывание/развертывание контента
-function opn_cls(el/*id элемента*/){$('#'+el).slideToggle(200);}
+function opn_cls(el/*id елемента*/){$('#'+el).slideToggle(200);}
 
 //////////////////////////////////////////////////////////////лимит ввода символов в поле
 function lim(elm/*this*/,lim/*(число) - лимит символов в поле*/){

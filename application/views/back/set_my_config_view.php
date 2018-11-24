@@ -56,33 +56,6 @@ JQuery — подключаемый скрипт для правильной
          <input type="text" name="conf_jq" value="<?=$conf_jq?>">
         </label>
        </div>
-
-       <!--####### Уведомления #######-->
-       <div class="row touch">
-        <h3>Уведомления</h3>
-        <hr>
-        Уведомления о новых комментариях <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
-        <pre class="tt">
-Выберите e-mail на который система будет
-отправлять уведомления о новых комментариях
-к материалам, или если комментарии нуждаются в
-премодерации перед публикацией.</pre>
-        <label class="select">
-         <select name="conf_comment_notific">
-          <option value="off">Не уведомлять и публиковать по умолчанию</option>
-          <optgroup label="Без премодерации">
-           <option value="site_mail">На e-mail сайта</option>
-           <option value="admin_mail">На e-mail администратора</option>
-           <option value="moderator_mail">На e-mail всем модераторам</option>
-          </optgroup>
-          <optgroup label="С премодерацией">
-           <option value="premod_site_mail">На e-mail сайта</option>
-           <option value="premod_admin_mail">На e-mail администратора</option>
-           <option value="premod_moderator_mail">На e-mail всем модераторам</option>
-          </optgroup>
-         </select>
-        </label>
-       </div>
       </div>
 
       <div class="col6">
@@ -379,10 +352,6 @@ ID: <?=$v['id'].PHP_EOL?>
     </div>
    </dd>
 <script>
-$(function(){
- ///////////////////////////////////////////////установка значений полей
- $('select[name="conf_comment_notific"] option[value="<?=$conf_comment_notific?>"]').attr('selected',true);
-});
 ///////////////////////////////////////////////////редактировать администратора
 function edit_administrator(){
  var form=$('#edit_a_form');

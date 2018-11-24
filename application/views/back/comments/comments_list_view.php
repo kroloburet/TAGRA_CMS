@@ -1,77 +1,218 @@
 <h1><?=$conf_title?></h1>
 
 <?php if(!empty($new_comments)){?>
+
 <!--####### Новые комментарии #######-->
 <div class="sheath">
  <h3>Новые комментарии</h3>
  <hr>
  <?php foreach($new_comments as $v){?>
   <div class="touch">
-   <div class="float_l"><i class="fa-user"></i>&nbsp;<b><?=$v['name']?></b></div>
+   <div class="float_l">
+    <b><?=$v['name']?></b>
+    <?=$v['pid']>0?' в ответ на <a href="'.base_url($v['url'].'#comment_'.$v['pid']).'" target="_blank">комментарий</a>':FALSE?>
+   </div>
    <div class="algn_r">
-    <a href="<?=base_url('admin/comment/public_new/'.$v['id'])?>" class="fa-check-circle green" title="Опубликовать комментарий"></a>&nbsp;&nbsp;
-    <a href="<?=base_url('admin/comment/del_new/'.$v['id'])?>" class="fa-trash-o red" title="Удалить комментарий" onclick="if(!confirm('Комментарий будет удален!\nВыполнить действие?')){return false;}"></a>&nbsp;&nbsp;
+    <a href="<?=base_url('admin/comment/public_new/'.$v['premod_code'])?>" class="fa-check-circle green" title="Опубликовать комментарий"></a>&nbsp;&nbsp;
+    <a href="<?=base_url('admin/comment/del_new/'.$v['premod_code'])?>" class="fa-trash-o red" title="Удалить комментарий" onclick="if(!confirm('Комментарий будет удален!\nВыполнить действие?')){return false;}"></a>&nbsp;&nbsp;
       <a href="<?=base_url($v['url'])?>" target="_blank" class="fa-external-link" title="Перейти на страницу"></a>&nbsp;&nbsp;
     <span class="blue fa-info-circle" onmouseover="tt(this);"></span>
     <pre class="tt">
- <b>Дата: </b><?=$v['date'].PHP_EOL?>
- <b>URL: </b>/<?=$v['url']?>
+<b>ID: </b><?=$v['id'].PHP_EOL?>
+<b>URL: </b>/<?=$v['url'].PHP_EOL?>
+<b>Дата: </b><?=$v['date']?>
     </pre>
    </div>
-   <div><sup class="fa-quote-left"></sup>&nbsp;&nbsp;<?=$v['comment']?>&nbsp;&nbsp;<sub class="fa-quote-right"></sub></div>
+   <div><?=$v['comment']?></div>
   </div>
  <?php }?>
 </div>
 <?php }?>
 
-<!--####### Настройки вывода, поиск, иные опции #######-->
-<form id="filter" class="sheath" method="GET" action="<?=current_url()?>">
- <div class="row">
-  <div class="col6">
-   Сортировать
-   <label class="select">
-    <select name="order" onchange="submit()">
-     <option value="id">по идентификатору</option>
-     <option value="name">по имени комментатора</option>
-     <option value="date">по дате</option>
-     <option value="url">по URL</option>
-    </select>
-   </label>
+<dl class="tabs">
+ <dt class="tab_active">Фильтры</dt>
+ <dd>
+  <div class="tab_content">
+
+   <!--####### Настройки вывода, поиск, иные опции #######-->
+   <form id="filter" method="GET" action="<?=current_url()?>">
+    <div class="row">
+     <div class="col6">
+      Сортировать
+      <label class="select">
+       <select name="order" onchange="submit()">
+        <option value="id">по идентификатору</option>
+        <option value="name">по имени комментатора</option>
+        <option value="date">по дате</option>
+        <option value="url">по URL</option>
+       </select>
+      </label>
+     </div>
+     <div class="col6">
+      Выводить записей
+      <label class="select">
+       <select name="pag_per_page" onchange="submit()">
+        <option value="20">20</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+        <option value="300">300</option>
+        <option value="500">500</option>
+        <option value="1000">1000</option>
+        <option value="all">все</option>
+       </select>
+      </label>
+     </div>
+    </div>
+    <div class="row">
+     <div class="col4">
+      Контекст поиска
+      <label class="select">
+       <select name="context_search">
+        <option value="comment">текст комментария</option>
+        <option value="name">имя комментатора</option>
+       </select>
+      </label>
+     </div>
+     <div class="col8">
+      Искать в контексте
+      <label class="search">
+       <input type="text" name="search" placeholder="строка запроса">
+       <a href="#" class="btn_lnk" onclick="form.submit();return false">Поиск</a>
+      </label>
+     </div>
+    </div>
+   </form>
   </div>
-  <div class="col6">
-   Выводить записей
-   <label class="select">
-    <select name="pag_per_page" onchange="submit()">
-     <option value="20">20</option>
-     <option value="50">50</option>
-     <option value="100">100</option>
-     <option value="300">300</option>
-     <option value="500">500</option>
-     <option value="1000">1000</option>
-     <option value="all">все</option>
-    </select>
-   </label>
+ </dd>
+ <dt>Настройки</dt>
+ <dd>
+  <div class="tab_content">
+
+   <!--####### Настройки комментариев #######-->
+   <form method="POST" action="<?=base_url('admin/comment/set_comments_config')?>">
+    <div class="row">
+     <div class="col6">
+      <!--####### Вывод #######-->
+      <div class="row touch">
+       <h3>Вывод</h3>
+       <hr>
+       Форма комментирования по умолчанию <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+       <pre class="tt">
+Настройка будет применена по умолчанию
+во всех вновь создаваемых материалах.
+Вы сможете изменить ее индивидуально
+на страницах добавления и редактирования
+материалов.</pre>
+       <label class="select">
+        <select name="form">
+         <option value="on">Разрешить комментировать и отвечать</option>
+         <option value="on_comment">Разрешить только комментировать</option>
+         <option value="off">Запретить комментировать и отвечать</option>
+        </select>
+       </label>
+       Зарезервированные имена <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+       <pre class="tt">
+Здесь вы можете перечислить через точку с запятой (;)
+имена и e-mail которые смогут использовать только
+администратор и модераторы системы. Эта настройка не
+позволит никому кроме вас комментировать и отвечать от
+имени, к примеру, администратора. Валидация имен
+не чувствительна к регистру (Админ = админ) но
+чувствительна к символам разной локали ([eng A]дмин &ne; админ)</pre>
+       <label class="input">
+        <input type="text" name="reserved_names" value="<?=$conf['reserved_names']?>">
+       </label>
+       Рейтинг комментариев <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+       <pre class="tt">
+Комментарии и ответы могут быть оценены
+пользователями «лайками» и «дизлайками».</pre>
+       <label class="select">
+        <select name="rating">
+         <option value="on">Разрешить рейтинг</option>
+         <option value="off">Запретить рейтинг</option>
+        </select>
+       </label>
+       Лимит в поле «Ваше имя» <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+       <pre class="tt">
+Лимит символов в поле «Ваше имя»
+форм комментирования и ответа.
+Если "0" - лимит безграничный.
+<b class="red">Целое, положительное число!</b></pre>
+       <label class="input">
+        <input name="name_limit" type="number" min="0" value="<?=$conf['name_limit']?>">
+       </label>
+       Лимит в поле «Ваш комментарий» <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+       <pre class="tt">
+Лимит символов в поле «Ваш комментарий»
+и «Ваш ответ» формы комментирования и ответа.
+Если "0" - лимит безграничный.
+<b class="red">Целое, положительное число!</b></pre>
+       <label class="input">
+        <input name="text_limit" type="number" min="0" value="<?=$conf['text_limit']?>">
+       </label>
+       Кнопка «Еще комментарии» <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+       <pre class="tt">
+Установите число комментариев после которых
+в списке будет выведена кнопка «Еще комментарии»,
+а остальной список будет скрыт.
+Если "0" - не скрывать комментарии.
+<b class="red">Целое, положительное число!</b></pre>
+       <label class="input">
+        <input name="show" type="number" min="0" value="<?=$conf['show']?>">
+       </label>
+      </div>
+     </div>
+     <div class="col6">
+      <!--####### Уведомления #######-->
+      <div class="row touch">
+       <h3>Уведомления</h3>
+       <hr>
+       Уведомления о новых комментариях <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+       <pre class="tt">
+Выберите e-mail на который система будет
+отправлять уведомления о новых комментариях
+к материалам, или если комментарии нуждаются в
+премодерации перед публикацией.</pre>
+       <label class="select">
+        <select name="notific">
+         <option value="off">Не уведомлять и публиковать по умолчанию</option>
+         <optgroup label="Без премодерации">
+          <option value="site_mail">На e-mail сайта</option>
+          <option value="admin_mail">На e-mail администратора</option>
+          <option value="moderator_mail">На e-mail всем модераторам</option>
+         </optgroup>
+         <optgroup label="С премодерацией">
+          <option value="premod_site_mail">На e-mail сайта [премодерация]</option>
+          <option value="premod_admin_mail">На e-mail администратора [премодерация]</option>
+          <option value="premod_moderator_mail">На e-mail всем модераторам [премодерация]</option>
+         </optgroup>
+        </select>
+       </label>
+       Обратная связь с комментатором <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+       <pre class="tt">
+Опция позволяет уведомлять пользователей
+об ответах на их комментарии. Система
+предлагает указать e-mail в поле «Ваше имя»
+и отправляет уведомление об ответе. Система
+скрывает в списке комментариев e-mail,
+выводит только имя пользователя e-mail.
+Например: «pupkin» из «pupkin@gmail.com»</pre>
+       <label class="select">
+        <select name="feedback">
+         <option value="on">Разрешить обратную связь</option>
+         <option value="off">Запретить обратную связь</option>
+        </select>
+       </label>
+      </div>
+     </div>
+    </div>
+    <div class="button this_form_control">
+     <button type="button" onclick="subm(form,s_opts)">Сохранить все настройки</button>
+    </div>
+   </form>
   </div>
- </div>
- <div class="row">
-  <div class="col4">
-   Контекст поиска
-   <label class="select">
-    <select name="context_search">
-     <option value="comment">текст комментария</option>
-     <option value="name">имя комментатора</option>
-    </select>
-   </label>
-  </div>
-  <div class="col8">
-   Искать в контексте
-   <label class="search">
-    <input type="text" name="search" placeholder="строка запроса">
-    <a href="#" class="btn_lnk" onclick="form.submit();return false">Поиск</a>
-   </label>
-  </div>
- </div>
-</form>
+ </dd>
+</dl>
 
 <?php if(empty($comments)){?>
 <div class="sheath">
@@ -90,18 +231,24 @@
   </tr>
  </thead>
  <tbody>
-  <?php foreach($comments as $v){?>
-  <tr>
+ <?php
+ $tree_arr=array();
+ foreach($comments as $v){$tree_arr[$v['pid']][]=$v;}//получить многомерный массив
+ function build_tree($tree_arr,$pid=0){//построение дерева
+  if(!is_array($tree_arr) || !isset($tree_arr[$pid])){return false;}//нет данных
+  foreach($tree_arr[$pid] as $v){?>
+  <tr id="<?=$v['id']?>">
    <td><?=$v['date']?></td>
-   <td><?=$v['name']?></td>
+   <td><?=$v['pid']>0?'<a href="'.base_url($v['url'].'#comment_'.$v['pid']).'" class="fa-level-up" target="_blank" title="Перейти к родительскому комментарию"></a> '.$v['name']:$v['name']?></td>
    <td>/<?=$v['url']?></td>
    <td>
-    <a href="<?=base_url($v['url'])?>" target="_blank" class="fa fa-external-link" title="Перейти на страницу"></a>&nbsp;&nbsp;
     <span class="blue fa fa-info-circle" onmouseover="tt(this);"></span><pre class="tt" style="max-width:400px;white-space:normal;"><?=$v['comment']?></pre>&nbsp;&nbsp;
-    <a href="#" class="fa fa-trash-o red" title="Удалить" onclick="del_tab(this,<?=$v['id']?>,'<?=$prefix?>comments');return false"></a>
+    <a href="<?=base_url($v['url'].'#comment_'.$v['id'])?>" target="_blank" class="fa fa-external-link" title="Перейти к комментарию на странице"></a>&nbsp;&nbsp;
+    <a href="#" class="fa fa-trash-o red" title="Удалить с дочерней ветвью" onclick="del_branch('<?=$v['id']?>','<?=$v['url']?>');return false"></a>
    </td>
   </tr>
-  <?php }?>
+  <?php build_tree($tree_arr,$v['id']);}}
+  build_tree($tree_arr);//вывод дерева?>
  </tbody>
 </table>
 
@@ -117,12 +264,39 @@ $def['context_search']=!$this->input->get('context_search')?'comment':$this->inp
 $def['search']=($this->input->get('search')==='')?'':$this->input->get('search');
 ?>
 <script>
-//устанавливаю значеня полей фильтра
-var form=$('#filter');
+var form=$('#filter'),
+    s_opts={//рег.выражения для проверки полей
+     name_limit:/^\d+$/,
+     text_limit:/^\d+$/,
+     show:/^\d+$/
+    };
 $(function(){
+ //////////////////////////устанавливаю значеня полей фильтра
  form.find('select[name="order"] option[value="<?=$def['order']?>"]').attr('selected',true);
  form.find('select[name="pag_per_page"] option[value="<?=$def['pag_per_page']?>"]').attr('selected',true);
  form.find('select[name="context_search"] option[value="<?=$def['context_search']?>"]').attr('selected',true);
  form.find('input[name="search"]').val('<?=$def['search']?>');
+ //////////////////////////установка значений полей настроек
+ $('select[name="form"] option[value="<?=$conf['form']?>"]').attr('selected',true);
+ $('select[name="rating"] option[value="<?=$conf['rating']?>"]').attr('selected',true);
+ $('select[name="notific"] option[value="<?=$conf['notific']?>"]').attr('selected',true);
+ $('select[name="feedback"] option[value="<?=$conf['feedback']?>"]').attr('selected',true);
 });
+//////////////////////////удаление опубликованого комментария с дочерней ветвью
+function del_branch(id,url){
+ if(!confirm('Комментарий и его дочерняя ветвь будут удалены!\nВыполнить действие?')){return false;}
+ $.ajax({
+   url:'<?=base_url('admin/comment/del_branch')?>',
+   type:'post',
+   data:{id:id,url:url},
+   dataType:'json',
+   success:function(resp){
+    switch(resp.status){
+     case 'ok':for(var i in resp.ids){$('#'+resp.ids[i]).remove();}break;
+     case 'error':alert('Ошибка!\nВозможно это временные неполадки, попробуйте снова');break;
+     default :console.log(resp);
+    }
+   }
+ });
+}
 </script>

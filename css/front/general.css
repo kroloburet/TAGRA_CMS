@@ -93,23 +93,25 @@ input[name="fuck_bot"]{display:none;visibility:hidden}
 
 /*------------------------------------------------------------------------------comments*/
 /*comments list*/
-.comment_item{margin:0 0 1em 0;border-bottom:solid 1px;}
-#header_comments{border-bottom:solid 2px;margin:0 0 1em 0;display:flex;}
-#header_comment{display:flex;}
-#header_comments h2,.comment_name{flex-grow:1;}
-#comments_more_btn{background-color:#E7D977;text-align:center;cursor:pointer;padding:0.7em;margin:-1em 0 1.5em 0;border:1px #301000 solid;border-top:none;border-radius:0 0 5px 5px}
-#comments_more_btn:hover{background-color:#FAEB85}
-#comments_more{display:none}
-.count_comments,.comment_date{color:#999;}
-.comment_text{padding:0.5em 0;}
-.comment_rating_box{display:flex;justify-content:flex-end;flex-wrap:wrap;}
-.comment_rating_like{margin:0 1em 1em 0;}
-.comment_rating_dislike{margin:0 0 1em 0;}
+#header_comments{margin:0;display:flex;align-items:baseline;}
+.comment_item{padding-top:.5em;border-top:solid 1px;}
+.reply_item{margin-left:2.2em;}
+.header_comment{display:flex;flex-wrap:wrap;align-items:center;}
+.comment_text{margin:.2em 0 .5em 0;}
+#header_comments h2,.comment_user{flex-grow:1;display:flex;flex-wrap:wrap;align-items:center;margin-right:1em;}
+.count_comments,.comment_date,.reply_to{color:#999;}
+.show_reply_form,.hide_reply_form,.reply_to a{cursor:pointer;}
+.comment_pic{display:flex;align-items:center;justify-content:center;margin:0 .5em 0 0;width:1.5em;height:1.5em;color:#fff;line-height:0;font-size:110%;font-weight:bold;border-radius:50%;background-color:#999;}
+.comment_name{font-size:110%;font-weight:bold;margin-right:.5em;}
+.comment_action_box{display:flex;justify-content:flex-end;flex-wrap:wrap;}
+
+/*rating*/
+.comment_rating_like,.comment_rating_dislike,.show_reply_form{margin:0 1em .5em 0;}
 .comment_rating_total{color:#999;}
 .comment_rating_like:before,.comment_rating_dislike:before{font-size:1.3em;}
 .comment_rating_like,.comment_rating_dislike{color:#0081A2;cursor:pointer;}
 .comment_rating_like:hover,.comment_rating_dislike:hover{color:#FF3636;}
-.comment_rating_box .mini{margin-left:1em;}
+.comment_action_box *:last-child{margin-right:0;}
 /*disable*/
 .comment_rating_disable{color:#999!important;cursor:default;}
 /*process*/
@@ -124,11 +126,24 @@ input[name="fuck_bot"]{display:none;visibility:hidden}
 .comment_rating_bad_msg{color:#F0AC8C!important;cursor:default;}
 .comment_rating_bad_msg:before{content:'\f00d'!important;}
 .comment_rating_bad_msg .comment_rating_total{display:none;}
-@media(max-width:400px){.comment_rating_like{margin-right:1.5em;}}
 
-/*comments form*/
-#add_comment{padding:0 0 1.5em 0}
-#add_com input,#add_com textarea{width:87%}
+/*more button*/
+.comments_more_btn{background-color:#E7D977;text-align:center;cursor:pointer;padding:0.7em;margin:-1px 0 1.5em 0;border-radius:0 0 4px 4px;}
+.comments_more_btn:hover{background-color:#FAEB85;}
+
+/*comment form*/
+.add_comment_box{margin-bottom:1.5em;}
+.add_comment_form label{margin:0;padding:0;line-height:0;}
+.add_comment_form input{border-radius:3px 3px 0 0!important;}
+.add_comment_form .input .lim{top:auto;bottom:1.1em;}
+.add_comment_form textarea{margin:-1px 0px 0px;border-radius:0 0 3px 0;}
+.add_comment_form button{margin-top:-1px;border-radius:0 0 3px 3px;}
+.reply_form{margin-bottom:.3em}
+.reply_form textarea{height:4em}
+.reply_form button{font-weight:normal;margin-right:1em;padding:.3em .5em;}
+.comment_form_actions .mini{font-size:100%;border-radius:0 0 3px 3px;}
+.feedback_msg{font-size:11px;color:#444;line-height:1.2;padding:.5em;margin-bottom:-2px;position:relative;background-color:#e8e8e8;border-radius:3px 3px 0 0;border:1px solid #4a76be;z-index:1;}
+@media(max-width:400px){.reply_item{margin-left:1.5em;}.comment_rating_like,.comment_rating_dislike,.show_reply_form{margin-right:1.5em;}}
 
 /*------------------------------------------------------------------------------contact page*/
 .num{font-family:Arial,Helvetica}

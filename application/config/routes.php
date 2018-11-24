@@ -22,6 +22,7 @@ $route["gallery/(.+)"]="front_gallery_control/gallery/$1";
 $route["do/send_mail"]="front_contact_control/send_mail";
 $route["do/add_comment"]="front_comment_control/add_comment";
 $route["do/comment_action/(.+)"]="front_comment_control/comment_action/$1";
+$route["do/comment_unfeedback"]="front_comment_control/comment_unfeedback";
 $route["do/comment_rating"]="front_comment_control/comment_rating";
 //Роут на универсальный метод (если url - страница - отбразить ее) !!!ДОЛЖЕН НАХОДИТЬСЯ В КОНЦЕ МАССИВА!!!
 $route["(.+)"]="front_page_control/is_page/$1";

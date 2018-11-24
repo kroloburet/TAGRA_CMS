@@ -161,8 +161,9 @@ JAVASCRIPT-код без тегов script
    <div class="col6">
     <label class="select">
      <select name="comments">
-      <option value="off" <?=$comments=='off'?'selected':''?>>Запретить комментарии</option>
-      <option value="on" <?=$comments=='on'?'selected':''?>>Разрешить комментарии</option>
+      <option value="on">Разрешить комментировать и отвечать</option>
+      <option value="on_comment">Разрешить только комментировать</option>
+      <option value="off">Запретить комментировать и отвечать</option>
      </select>
     </label>
    </div>
@@ -182,12 +183,13 @@ JAVASCRIPT-код без тегов script
  </form>
 </div>
 <script>
- var s_opts={//рег.выражения для проверки полей
-  title:/^[^><]+$/i,
-  description:/^[^><]+$/i
- };
- $(function(){
-  /////////////////установка значений полей
-  $('select[name="robots"] option[value="<?=$robots?>"]').attr('selected',true);
- });
+var s_opts={//рег.выражения для проверки полей
+ title:/^[^><]+$/i,
+ description:/^[^><]+$/i
+};
+$(function(){
+ /////////////////установка значений полей
+ $('select[name="robots"] option[value="<?=$robots?>"]').attr('selected',true);
+ $('select[name="comments"] option[value="<?=$comments?>"]').attr('selected',true);
+});
 </script>

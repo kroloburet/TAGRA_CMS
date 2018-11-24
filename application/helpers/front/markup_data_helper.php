@@ -81,17 +81,27 @@ if(isset($gallery_opt)&&$gallery_opt){
  }
 }
 
-if(isset($comments)&&$comments==='on'){
+if(isset($comments)&&$comments!=='off'){
 ////////////////////////////////////////////////
 //обработка комментариев
 ////////////////////////////////////////////////
- $url=uri_string();
- $q=$CI->db->where(array('public'=>'on','url'=>$url))->get($prefix.'comments')->result_array();//выборка комментариев
- if(!empty($q)){//комментарии есть
-  $cmnts_count=count($q);//всего комментариев
-  foreach($q as $v){//проход по комментариям
-   $cmnts.='{"@type":"Comment","datePublished":"'.$v['date'].'","text":"'.$v['comment'].'","creator":{"@type":"Person","name":"'.$v['name'].'"}}';
+$url=uri_string();
+$q=$CI->db->where(array('public'=>'on','url'=>$url))->get($prefix.'comments')->result_array();//выборка комментариев
+if(!empty($q)){//комментарии есть
+ $tree_arr=array();
+ foreach(array_reverse($q) as $v){$tree_arr[$v['pid']][]=$v;}//получить многомерный массив
+ function build_tree($tree_arr,$pid=0){//построение дерева
+  if(!is_array($tree_arr) || !isset($tree_arr[$pid])){return false;}//нет данных
+  $tree='';
+  foreach($tree_arr[$pid] as $v){
+   $name=filter_var($v['name'],FILTER_VALIDATE_EMAIL)?explode('@',$v['name'])[0]:$v['name'];
+   $tree.='{"@type":"Comment","datePublished":"'.$v['date'].'","text":"'.$v['comment'].'","creator":{"@type":"Person","name":"'.$name.'"}}';
+   $tree.=build_tree($tree_arr,$v['id']);
   }
+  return $tree;
+ }
+ $cmnts_count=count($q);//всего комментариев
+ $cmnts=build_tree($tree_arr);
  }
 }
 

@@ -33,13 +33,4 @@ class Front_basic_control extends CI_Controller{
   $this->load->view('front/blocks/footer_view',$data);
  }
 
- function _replace_urls($text=null){//метод находит в строке урлы и заменяет их на ссылки HTML (nofollow)
-  $regex='/((http|ftp|https):\/\/)?[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/';
-  return preg_replace_callback($regex,function($m){
-   $link=$name=$m[0];
-   if(empty($m[1])){$link="http://".$link;}
-   return '<a href="'.$link.'" target="_blank" rel="nofollow">'.$name.'</a>';
-  },$text);
- }
-
 }

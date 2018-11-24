@@ -19,7 +19,7 @@ $(function(){//готовность DOM
 });//готовность DOM
 
 ////////////////////////////////////////////////превью изображения по url из поля
-function img_prev(targ,input){//превью изображения по url из поля input, по событию на элементе targ
+function img_prev(targ,input){//превью изображения по url из поля input, по событию на елементе targ
  var self=targ,
      e=$('#'+input),
      prev=$(targ).next('.tt');

@@ -9,16 +9,33 @@ class Back_comment_model extends Back_basic_model{
   parent::__construct();
  }
 
- function get_new_comments(){
-  return $this->db->where('public','off')->get($this->_prefix().'comments')->result_array();
+ function get_new(){
+  return $this->db->where(array('premod_code !='=>'','public'=>'off'))->get($this->_prefix().'comments')->result_array();
  }
 
- function del_new_comment($id){
-  $this->db->where('id',$id)->delete($this->_prefix().'comments');
+ function public_new($code){
+  return $this->db->where(array('premod_code'=>$code,'public'=>'off'))->update($this->_prefix().'comments',array('public'=>'on','date'=>date('Y-m-d'),'premod_code'=>''))?TRUE:FALSE;
  }
 
- function public_new_comment($id){
-  $this->db->where('id',$id)->update($this->_prefix().'comments',array('public'=>'on','premod_code'=>''));
+ function del_new($code){
+  return $this->db->where(array('premod_code'=>$code,'public'=>'off'))->delete($this->_prefix().'comments')?TRUE:FALSE;
+ }
+
+ function del_branch($id,$url){
+  global $ids;
+  $q=$this->db->where('url',$url)->get($this->_prefix().'comments')->result_array();
+  $ids[]=$id;
+  function get_branch_ids($arr,$id){
+   global $ids;
+   foreach($arr as $v){
+    if($id===$v['pid']){
+     $ids[]=$v['id'];
+     get_branch_ids($arr,$v['id']);
+    }
+   }
+  }
+  get_branch_ids($q,$id);
+  return $this->db->where_in('id',$ids)->delete($this->_prefix().'comments')?$ids:FALSE;
  }
 
 }

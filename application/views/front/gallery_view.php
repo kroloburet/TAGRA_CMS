@@ -132,11 +132,11 @@ switch($gallery_type){
 <?php }else{echo '<div class="notific_b">Галерея не может быть отображена! В галерее нет ни одного аудио</div>'.PHP_EOL;}}?>
 </div>
 
-<!--####### Comments #######-->
 <?php
+//комментарии
 $this->load->helper('front/comments');
-get_comments($comments);
-get_comments_form($comments);
+$comm=new Comments(array_replace(json_decode($conf_comments,TRUE),array('form'=>$comments)));
+$comm->print_comments();
 ?>
 
 </div>

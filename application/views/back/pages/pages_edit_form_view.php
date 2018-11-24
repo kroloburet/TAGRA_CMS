@@ -153,8 +153,9 @@ JAVASCRIPT-код без тегов script
    <div class="col6">
     <label class="select">
      <select name="comments">
-      <option value="off" <?=$comments=='off'?'selected':''?>>Запретить комментарии</option>
-      <option value="on" <?=$comments=='on'?'selected':''?>>Разрешить комментарии</option>
+      <option value="on">Разрешить комментировать и отвечать</option>
+      <option value="on_comment">Разрешить только комментировать</option>
+      <option value="off">Запретить комментировать и отвечать</option>
      </select>
     </label>
    </div>
@@ -179,7 +180,8 @@ var s_opts={//рег.выражения для проверки полей
  description:/^[^><]+$/i
 };
 $(function(){
- //////////////////////установка значений полей
+ /////////////////установка значений полей
  $('select[name="robots"] option[value="<?=$robots?>"]').attr('selected',true);
+ $('select[name="comments"] option[value="<?=$comments?>"]').attr('selected',true);
 });
 </script>

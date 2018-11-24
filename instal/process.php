@@ -86,13 +86,15 @@ echo"<div class='notific_g'>Таблица « $t » успешно создан�
 //comments
 $t=$db_tabl_prefix.'comments';
 $db->query("CREATE TABLE IF NOT EXISTS `$t` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL,
+  `pid` bigint(20) NOT NULL,
   `premod_code` text NOT NULL,
   `url` text NOT NULL,
   `date` varchar(100) NOT NULL,
   `name` varchar(300) NOT NULL,
   `comment` longtext NOT NULL,
   `rating` text NOT NULL,
+  `feedback` varchar(20) NOT NULL DEFAULT 'off',
   `public` varchar(20) NOT NULL DEFAULT 'off',
   PRIMARY KEY (`id`))
   ENGINE=InnoDB DEFAULT CHARSET=utf8;")
@@ -282,7 +284,7 @@ $q_i=$db->query("INSERT INTO `$t` (`name`, `value`) VALUES
 ('conf_breadcrumbs_public', 'on'),
 ('conf_breadcrumbs_home', 'Home'),
 ('conf_emmet', 'off'),
-('conf_comment_notific', 'off');");
+('conf_comments', '{\"form\":\"on\",\"reserved_names\":\"\",\"rating\":\"on\",\"name_limit\":\"50\",\"text_limit\":\"500\",\"show\":\"3\",\"notific\":\"off\",\"feedback\":\"on\"}');");
 if(!$q_c && !$q_i){
 die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".$db->error."</div>".$bad_msg);
 }
@@ -336,7 +338,7 @@ $cms_path=str_replace('/instal','',dirname(__FILE__));//абсолютный п�
 
 //config.php
 $conf='<?php defined("BASEPATH") OR exit("No direct script access allowed");'.PHP_EOL
-      . '$config["tagra_version"]="2.1";'.PHP_EOL
+      . '$config["tagra_version"]="2.2";'.PHP_EOL
       . '$config["tagra_instal_date"]=\''.$moment.'\';'.PHP_EOL
       . '$config["base_url"]=\''.$domen.'\';'.PHP_EOL
       . '$config["db_tabl_prefix"]=\''.$db_tabl_prefix.'\';'.PHP_EOL
@@ -443,7 +445,7 @@ echo"<div class='notific_g'>Файл карты сайта « /sitemap.xml » у
 if(!copy($cms_path.'/instal/root_index.php',$cms_path.'/index.php')){
 die("<div class='notific_r'>Не удалось создать файл индекса CMS « /index.php »</div>".$bad_msg);
 }
-echo"<div class='notific_g'>Файл файл индекса CMS « /index.php » успешно создан</div>";
+echo"<div class='notific_g'>Файл индекса CMS « /index.php » успешно создан</div>";
 
 ///////////////////////////////////////////////////////////////////////////
 //установка завершена

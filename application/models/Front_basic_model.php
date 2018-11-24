@@ -70,8 +70,10 @@ class Front_basic_model extends CI_Model{
    $data[$row['name']]=$row['value'];
   }
   $m=array();//массив будет хранить emailы всех модераторов
-  //получаю e-mail администратора и модератора
+  $ip=$this->input->server('REMOTE_ADDR');//текущий ip
+  $data['back_user']=FALSE;//это не админ или модератор
   foreach($this->db->get($this->_prefix().'back_users')->result_array() as $v){
+   if($v['ip']===$ip){$data['back_user']=TRUE;}//это админ или модератор
    switch($v['status']){
     case'administrator':$data['conf_admin_mail']=$v['email'];break;
     case'moderator':array_push($m,$v['email']);break;
