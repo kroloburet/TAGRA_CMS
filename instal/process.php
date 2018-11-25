@@ -269,9 +269,10 @@ $q_c=$db->query("CREATE TABLE IF NOT EXISTS `$t` (
   ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 $q_i=$db->query("INSERT INTO `$t` (`name`, `value`) VALUES
 ('conf_site_access', 'on'),
-('conf_jq', 'https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'),
 ('conf_site_name', '$site_name'),
 ('conf_site_mail', '$admin_mail'),
+('conf_jq', 'https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'),
+('conf_gapi_key', 'AIzaSyAdiy2QBgRf7lQwoVqy2y3s9LElfsw1E3Y'),
 ('conf_body_width', '1000'),
 ('conf_layout_l_width', '60'),
 ('conf_markup_data', 'on'),
