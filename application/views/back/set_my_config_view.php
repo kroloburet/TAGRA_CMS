@@ -45,7 +45,7 @@ E-mail на который будут приходить
         <label class="input">
          <input type="text" name="conf_site_mail" value="<?=$conf_site_mail?>">
         </label>
-        Путь к библиотеке JQuery <i class="fa-info-circle red" onmouseover="tt(this,'c');"></i>
+        Путь к библиотеке JQuery <i class="fa-question-circle red" onmouseover="tt(this,'c');"></i>
         <pre class="tt">
 JQuery — подключаемый скрипт для правильной
 работы всего сайта. Подробную информацию и
@@ -54,6 +54,19 @@ JQuery — подключаемый скрипт для правильной
 <b class="red">Обязательно для заполнения!</b></pre>
         <label class="input">
          <input type="text" name="conf_jq" value="<?=$conf_jq?>">
+        </label>
+        Ключ Google map API <i class="fa-question-circle red" onmouseover="tt(this);"></i>
+        <pre class="tt">
+Система использует сервис Google map чтобы вы могли
+указать расположение и отобразить карту на странице
+«Контакты» или других страницах. Чтобы это работало,
+необходимо иметь аккаунт в Google, вкрючить API
+и получить ключ. Если у вас возникли трудности
+связанные с получением ключа или отображением карт,
+обратитесь к разработчику или веб-мастеру.
+<b class="red">Обязательно для заполнения!</b></pre>
+        <label class="input">
+         <input type="text" name="conf_gapi_key" value="<?=$conf_gapi_key?>">
         </label>
        </div>
       </div>
@@ -499,6 +512,7 @@ function del_moderator(id){
 ////////////////////////////////////////////////рег.выражения для проверки полей
 var s_opts={
  conf_site_mail:/^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/,
- conf_jq:/[^\s]/
+ conf_jq:/[^\s]/,
+ conf_gapi_key:/[^\s]/
 };
 </script>

@@ -16,7 +16,7 @@
   <?php if(current_url()==base_url('admin/contact/edit_form')){//если текущая страница — "Контакты"?>
   <link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.min.css" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" defer></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAdiy2QBgRf7lQwoVqy2y3s9LElfsw1E3Y&language=ru"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?language=ru&key=<?=$conf_gapi_key?>"></script>
   <?php }?>
   <!--HTML5-теги и медиа-запросы для IE9 и ниже-->
   <!--[if lt IE 9]>

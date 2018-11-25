@@ -117,7 +117,7 @@ window.addEventListener('load',function(){
 });
 </script>
 <?php }if($contacts && $gps){?>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAdiy2QBgRf7lQwoVqy2y3s9LElfsw1E3Y&language=ru"></script>
+<script src="https://maps.googleapis.com/maps/api/js?language=ru&key=<?=$conf_gapi_key?>"></script>
 <script>
 window.addEventListener('load',function(){
  var data=JSON.parse('<?=$contacts?>'),//объект данных
