@@ -181,6 +181,6 @@ var s_opts={//рег.выражения для проверки полей
 };
 $(function(){
  /////////////////установка значений полей
- $('select[name="comments"] option[value="<?=json_decode($conf_comments,TRUE)['form']?>"]').attr('selected',true);
+ $('select[name="comments"] option[value="<?=$conf_comments['form']?>"]').attr('selected',true);
 });
 </script>

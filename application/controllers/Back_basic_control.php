@@ -101,16 +101,12 @@ class Back_basic_control extends CI_Controller {
   foreach($this->back_basic_model->get_back_users() as $v){
    if($v['status']==='administrator'&&$v['password'].$v['login']===$this->session->administrator){
     $data=$this->back_basic_model->my_config_data();
-    $data['sitemap']=$this->back_basic_model->sitemap_config_data();
-    $data['prefix']=$this->_prefix();//префикс таблиц БД
     $data['conf_status']='administrator';
     $data['conf_admin_mail']=$this->_get_admin_param('email');
     $this->conf=$data;
     return TRUE;
    }elseif($v['status']==='moderator'&&$v['password'].$v['login']===$this->session->moderator){
     $data=$this->back_basic_model->my_config_data();
-    $data['sitemap']=$this->back_basic_model->sitemap_config_data();
-    $data['prefix']=$this->_prefix();//префикс таблиц БД
     $data['conf_status']='moderator';
     $data['conf_admin_mail']=$this->_get_admin_param('email');
     $this->conf=$data;
@@ -212,26 +208,26 @@ class Back_basic_control extends CI_Controller {
   }elseif($this->back_basic_model->toggle_public($post['id'],$post['tab'],$post['pub'])==='off'){
    echo '<a href="#" class="fa fa-eye-slash red" title="Опубликовать/не опубликовывать" onclick="toggle_public(this,\''.$post['id'].'\',\''.$post['tab'].'\',\'off\');return false"></a>';//
   }
-  ($this->conf['sitemap']['generate']==='auto')?$this->sitemap_generator():FALSE;//если карта сайта должна генерироваться автоматически
+  $this->conf['conf_sitemap']['generate']==='auto'?$this->sitemap_generator():FALSE;//если карта сайта должна генерироваться автоматически
  }
 
 ///////////////////////////////////
 //работа с картой сайта
 ///////////////////////////////////
 
- function sitemap_generator_config(){
+ function sitemap(){
   $this->_is_login()?TRUE:redirect('admin/login');
   $data=$this->conf;
-  $data['conf_title']='Конфигурация генератора карты сайта';
-  $this->_viewer('back/sitemap/sitemap_generator_config_view',$data);
+  $data['conf_title']='Генератор карты сайта';
+  $this->_viewer('back/sitemap/sitemap_view',$data);
  }
 
  function set_sitemap_config(){
   $this->_is_login()?TRUE:redirect('admin/login');
-  $conf=array_map('trim', $this->input->post());//убираем пробелы в начале и в конце
-  $this->back_basic_model->set_sitemap_config($conf);//записываем конфигурацию
-  $this->sitemap_generator();//обновляем карту сайта
-  redirect('admin/sitemap_generator_config');
+  $conf=json_encode(array_map('trim',$this->input->post()));//убираю пробелы в начале и в конце
+  $this->db->where('name','conf_sitemap')->update($this->_prefix().'my_config',array('value'=>$conf));//записываю конфигурацию
+  $this->sitemap_generator();//обновить карту сайта
+  redirect('admin/sitemap');
  }
 
  function sitemap_generator(){
@@ -240,7 +236,7 @@ class Back_basic_control extends CI_Controller {
    //инициализация переменных
    $pages=$sections=$gallerys='';
    $where=array('robots !='=>'none','robots !='=>'noindex');//только индексируемые
-   ($this->conf['sitemap']['allowed'] === 'public')?$where['public']='on':FALSE;//если включать только опубликованные материалы
+   $this->conf['conf_sitemap']['allowed']==='public'?$where['public']='on':FALSE;//если включать только опубликованные материалы
    $select='alias';//только нужные поля
    $pgs=$this->db->where($where)->select($select)->get($this->_prefix().'pages')->result_array();
    $sctns=$this->db->where($where)->select($select)->get($this->_prefix().'sections')->result_array();

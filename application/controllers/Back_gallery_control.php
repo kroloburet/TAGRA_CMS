@@ -47,14 +47,14 @@ class Back_gallery_control extends Back_basic_control{
  function add(){//добавление галереи
   $this->_is_login()?TRUE:redirect('admin/login');
   $this->back_basic_model->add(array_map('trim', $this->input->post()),$this->_prefix().'gallerys');//убираем пробелы в начале и в конце
-  ($this->conf['sitemap']['generate']==='auto')?$this->sitemap_generator():FALSE;//если карта сайта должна генерироваться автоматически
+  $this->conf['conf_sitemap']['generate']==='auto'?$this->sitemap_generator():FALSE;//если карта сайта должна генерироваться автоматически
   redirect('admin/gallery/get_list');
  }
 
  function edit($id,$alias){//изменение галереи по $id, перзапись url в комментариях, url в меню
   $this->_is_login()?TRUE:redirect('admin/login');
   $this->back_gallery_model->edit_gallery($id,array_map('trim', $this->input->post()),$alias);
-  ($this->conf['sitemap']['generate']==='auto')?$this->sitemap_generator():FALSE;//если карта сайта должна генерироваться автоматически
+  $this->conf['conf_sitemap']['generate']==='auto'?$this->sitemap_generator():FALSE;//если карта сайта должна генерироваться автоматически
   redirect('admin/gallery/get_list');
  }
 
@@ -62,9 +62,9 @@ class Back_gallery_control extends Back_basic_control{
   if($this->_is_login()){//если админ, модератор — логика
    $post=$this->input->post();
    $this->back_gallery_model->del_gallery($post['alias']);
-   ($this->conf['sitemap']['generate']==='auto')?$this->sitemap_generator():FALSE;//если карта сайта должна генерироваться автоматически
+   $this->conf['conf_sitemap']['generate']==='auto'?$this->sitemap_generator():FALSE;//если карта сайта должна генерироваться автоматически
   }
   echo '';
  }
- 
+
 }

@@ -47,14 +47,14 @@ class Back_page_control extends Back_basic_control {
  function add(){//добавление страницы
   $this->_is_login()?TRUE:redirect('admin/login');
   $this->back_basic_model->add(array_map('trim',$this->input->post()),$this->_prefix().'pages');//записываю материал
-  ($this->conf['sitemap']['generate']==='auto')?$this->sitemap_generator():FALSE;//если карта сайта должна генерироваться автоматически
+  $this->conf['conf_sitemap']['generate']==='auto'?$this->sitemap_generator():FALSE;//если карта сайта должна генерироваться автоматически
   redirect('admin/page/get_list');
  }
 
  function edit($id,$alias){//изменение страницы по $id, перзапись url в комментариях, url в меню
   $this->_is_login()?TRUE:redirect('admin/login');
   $this->back_page_model->edit_page($id,array_map('trim',$this->input->post()),$alias);//записываю материал
-  ($this->conf['sitemap']['generate']==='auto')?$this->sitemap_generator():FALSE;//если карта сайта должна генерироваться автоматически
+  $this->conf['conf_sitemap']['generate']==='auto'?$this->sitemap_generator():FALSE;//если карта сайта должна генерироваться автоматически
   redirect('admin/page/get_list');
  }
 
@@ -62,9 +62,9 @@ class Back_page_control extends Back_basic_control {
   if($this->_is_login()){//если админ, модератор — логика
    $post=$this->input->post();
    $this->back_page_model->del_page($post['alias']);
-   ($this->conf['sitemap']['generate']==='auto')?$this->sitemap_generator():FALSE;//если карта сайта должна генерироваться автоматически
+   $this->conf['conf_sitemap']['generate']==='auto'?$this->sitemap_generator():FALSE;//если карта сайта должна генерироваться автоматически
   }
   echo '';
  }
- 
+
 }

@@ -109,7 +109,7 @@ if($v['gallery_type']=='video_yt'){$icon='fa-file-movie-o';}
 <?php
 //комментарии
 $this->load->helper('front/comments');
-$comm=new Comments(array_replace(json_decode($conf_comments,TRUE),array('form'=>$comments)));
+$comm=new Comments(array_replace($conf_comments,array('form'=>$comments)));
 $comm->print_comments();
 ?>
 

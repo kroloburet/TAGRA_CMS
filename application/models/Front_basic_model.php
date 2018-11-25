@@ -66,8 +66,9 @@ class Front_basic_model extends CI_Model{
 
  function my_config_data(){
   //таблицу _my_config в масив $data['name']='value'
-  foreach($this->db->get($this->_prefix().'my_config')->result_array() as $row){
-   $data[$row['name']]=$row['value'];
+  foreach($this->db->get($this->_prefix().'my_config')->result_array() as $v){
+   $json=@json_decode($v['value'],TRUE);
+   $data[$v['name']]=$json===NULL?$v['value']:$json;//если значение - json - преобразовать в массив
   }
   $m=array();//массив будет хранить emailы всех модераторов
   $ip=$this->input->server('REMOTE_ADDR');//текущий ip

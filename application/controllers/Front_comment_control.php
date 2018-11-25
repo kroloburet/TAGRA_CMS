@@ -11,7 +11,7 @@ class Front_comment_control extends Front_basic_control{
  function __construct(){
   parent::__construct();
   $this->load->model('front_comment_model');
-  $this->c_conf=json_decode($this->conf['conf_comments'],TRUE);
+  $this->c_conf=$this->conf['conf_comments'];
   $this->domen=str_replace('www.','',$this->input->server('HTTP_HOST'));
  }
 

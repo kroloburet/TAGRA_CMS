@@ -43,7 +43,7 @@
      <ul class="menu">
       <li><a href="<?=base_url('admin')?>">Конфигурация</a>
        <ul class="sub_menu">
-        <li><a href="<?=base_url('admin/sitemap_generator_config')?>">Генератор карты сайта</a></li>
+        <li><a href="<?=base_url('admin/sitemap')?>">Генератор карты сайта</a></li>
        </ul>
       </li>
       <li><a href="<?=base_url('admin/menu/edit_form')?>">Меню</a></li>
