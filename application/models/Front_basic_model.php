@@ -64,9 +64,9 @@ class Front_basic_model extends CI_Model{
 //работа с конфигурацией
 ///////////////////////////////////
 
- function my_config_data(){
-  //таблицу _my_config в масив $data['name']='value'
-  foreach($this->db->get($this->_prefix().'my_config')->result_array() as $v){
+ function get_config(){
+  //таблицу config в масив $data['name']='value'
+  foreach($this->db->get($this->_prefix().'config')->result_array() as $v){
    $json=@json_decode($v['value'],TRUE);
    $data[$v['name']]=$json===NULL?$v['value']:$json;//если значение - json - преобразовать в массив
   }

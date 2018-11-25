@@ -100,13 +100,13 @@ class Back_basic_control extends CI_Controller {
  function _is_login(){//если в сессии есть админ или модератор и пароли совпали с БД — формирую массив conf
   foreach($this->back_basic_model->get_back_users() as $v){
    if($v['status']==='administrator'&&$v['password'].$v['login']===$this->session->administrator){
-    $data=$this->back_basic_model->my_config_data();
+    $data=$this->back_basic_model->get_config();
     $data['conf_status']='administrator';
     $data['conf_admin_mail']=$this->_get_admin_param('email');
     $this->conf=$data;
     return TRUE;
    }elseif($v['status']==='moderator'&&$v['password'].$v['login']===$this->session->moderator){
-    $data=$this->back_basic_model->my_config_data();
+    $data=$this->back_basic_model->get_config();
     $data['conf_status']='moderator';
     $data['conf_admin_mail']=$this->_get_admin_param('email');
     $this->conf=$data;
@@ -151,7 +151,7 @@ class Back_basic_control extends CI_Controller {
   if(!$q){$resp['status']='nomail';exit(json_encode($resp));}//если выборка пуста
   //////////////////////подготовка к рассылке
   $domen=str_replace('www.','',$_SERVER['HTTP_HOST']);//домен
-  $site_name=$this->back_basic_model->get_val($this->_prefix().'my_config','name','conf_site_name','value');//имя сайта
+  $site_name=$this->back_basic_model->get_val($this->_prefix().'config','name','conf_site_name','value');//имя сайта
   $this->load->library('email');//загрузка библиотеки
   foreach($q as $v){//проход по выборке
    $login=(strstr($mail,'@',TRUE))?strstr($mail,'@',TRUE):$this->_gen_pass(8);//имя пользователя из email или генерим как пароль
@@ -225,7 +225,7 @@ class Back_basic_control extends CI_Controller {
  function set_sitemap_config(){
   $this->_is_login()?TRUE:redirect('admin/login');
   $conf=json_encode(array_map('trim',$this->input->post()));//убираю пробелы в начале и в конце
-  $this->db->where('name','conf_sitemap')->update($this->_prefix().'my_config',array('value'=>$conf));//записываю конфигурацию
+  $this->db->where('name','conf_sitemap')->update($this->_prefix().'config',array('value'=>$conf));//записываю конфигурацию
   $this->sitemap_generator();//обновить карту сайта
   redirect('admin/sitemap');
  }
@@ -285,7 +285,7 @@ class Back_basic_control extends CI_Controller {
   $data=$this->conf;
   $data['moderators']=$this->db->where('status','moderator')->get($this->_prefix().'back_users')->result_array();
   $data['conf_title']='Конфигурация';
-  $this->_viewer('back/set_my_config_view',$data);
+  $this->_viewer('back/config_view',$data);
  }
 
 }

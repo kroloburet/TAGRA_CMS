@@ -9,7 +9,7 @@ class Front_basic_control extends CI_Controller{
  function __construct(){
   parent::__construct();
   $this->load->model('front_basic_model');
-  $this->conf=$this->front_basic_model->my_config_data();
+  $this->conf=$this->front_basic_model->get_config();
   $this->_is_site_access();
  }
 

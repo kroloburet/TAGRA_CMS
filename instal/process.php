@@ -260,7 +260,7 @@ die("<div class='notific_r'>Не удалось создать таблицу «
 echo"<div class='notific_g'>Таблица « $t » успешно создана</div>";
 
 //my_config
-$t=$db_tabl_prefix.'my_config';
+$t=$db_tabl_prefix.'config';
 $q_c=$db->query("CREATE TABLE IF NOT EXISTS `$t` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` text NOT NULL,

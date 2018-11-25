@@ -8,7 +8,7 @@
 <!--####### Основные настройки #######-->
   <dt class="tab_active">Основные настройки</dt>
   <dd>
-   <form method="POST" action="<?=base_url('admin/setting/set_my_config')?>">
+   <form method="POST" action="<?=base_url('admin/setting/set_config')?>">
     <div class="tab_content">
      <div class="row">
       <div class="col6">

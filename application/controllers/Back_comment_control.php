@@ -66,7 +66,7 @@ class Back_comment_control extends Back_basic_control {
  function set_comments_config(){
   $this->_is_login()?TRUE:redirect('admin/login');
   $conf=json_encode(array_map('trim',$this->input->post()));//убираю пробелы в начале и в конце
-  $this->db->where('name','conf_comments')->update($this->_prefix().'my_config',array('value'=>$conf));//записываю конфигурацию
+  $this->db->where('name','conf_comments')->update($this->_prefix().'config',array('value'=>$conf));//записываю конфигурацию
   redirect('admin/comment/get_list');
  }
 

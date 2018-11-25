@@ -71,10 +71,10 @@ class Back_setting_control extends Back_basic_control{
   $this->back_basic_model->del($this->_prefix().'back_users',$id)?exit('ok'):exit('error');
  }
 
- function set_my_config(){
+ function set_config(){
   $this->_is_login()?TRUE:redirect('admin/login');
-  $conf=array_map('trim',$this->input->post());//убираем пробелы в начале и в конце
-  $this->back_setting_model->set_my_config($conf);//записываем конфигурацию
+  $conf=array_map('trim',$this->input->post());
+  $this->back_setting_model->set_config($conf);//записать конфигурацию
   redirect('admin');
  }
 
