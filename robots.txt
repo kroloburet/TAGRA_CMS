@@ -4,6 +4,6 @@ Disallow: /instal/
 Disallow: /admin/
 Disallow: /css/back/
 Disallow: /scripts/back/
-Disallow: .htaccess
-Disallow: 403.html
-Disallow: plug.html
+Disallow: /.htaccess
+Disallow: /403.html
+Disallow: /plug.html
