@@ -34,14 +34,14 @@ class Back_page_control extends Back_basic_control {
   $this->_is_login()?TRUE:redirect('admin/login');
   $data=$this->conf;
   $data['conf_title']="Добавить страницу";
-  $this->_viewer('back/pages/pages_add_form_view',$data);
+  $this->_viewer('back/pages/pages_add_view',$data);
  }
 
  function edit_form($id){
   $this->_is_login()?TRUE:redirect('admin/login');
   $data=array_merge($this->conf,$this->back_basic_model->get_where_id($this->_prefix().'pages',$id));//соединение массивов
   $data['conf_title'] = "Редактировать страницу";
-  $this->_viewer('back/pages/pages_edit_form_view',$data);
+  $this->_viewer('back/pages/pages_edit_view',$data);
  }
 
  function add(){//добавление страницы

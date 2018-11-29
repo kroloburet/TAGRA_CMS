@@ -19,7 +19,7 @@ class Back_menu_control extends Back_basic_control{
   $data['pages']=$this->db->select('title,alias,section')->order_by('title','ASC')->get($this->_prefix().'pages')->result_array();
   $data['sections']=$this->db->select('title,alias,section')->order_by('title','ASC')->get($this->_prefix().'sections')->result_array();
   $data['gallerys']=$this->db->select('title,alias,section')->order_by('title','ASC')->get($this->_prefix().'gallerys')->result_array();
-  $this->_viewer('back/menu_edit_form_view',$data);
+  $this->_viewer('back/menu_view',$data);
  }
 
  function add_item(){
@@ -63,5 +63,5 @@ class Back_menu_control extends Back_basic_control{
    echo'<a href="#" onclick="public_item(this,\''.$p['id'].'\',\'on\');return false" class="fa-eye green" title="Опубликовать/не опубликовывать"></a>';
   }
  }
- 
+
 }

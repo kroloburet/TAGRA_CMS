@@ -34,14 +34,14 @@ class Back_section_control extends Back_basic_control{
   $this->_is_login()?TRUE:redirect('admin/login');
   $data=$this->conf;
   $data['conf_title']='Добавить раздел';
-  $this->_viewer('back/sections/sections_add_form_view',$data);
+  $this->_viewer('back/sections/sections_add_view',$data);
  }
 
  function edit_form($id){
   $this->_is_login()?TRUE:redirect('admin/login');
   $data=array_merge($this->conf,$this->back_basic_model->get_where_id($this->_prefix().'sections',$id));//соединение массивов
   $data['conf_title']='Редактировать раздел';
-  $this->_viewer('back/sections/sections_edit_form_view',$data);
+  $this->_viewer('back/sections/sections_edit_view',$data);
  }
 
  function add(){//добавление раздела

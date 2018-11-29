@@ -15,7 +15,7 @@ class Back_home_control extends Back_basic_control{
   $this->_is_login()?TRUE:redirect('admin/login');
   $data=array_merge($this->conf,$this->back_home_model->get_home_page());//соединение массивов
   $data['conf_title']='Страница «Главная»';
-  $this->_viewer('back/home_edit_form_view',$data);
+  $this->_viewer('back/home_view',$data);
  }
 
  function edit() {//изменение главной страницы
@@ -23,5 +23,5 @@ class Back_home_control extends Back_basic_control{
   $this->back_home_model->edit_home_page(array_map('trim',$this->input->post()));
   redirect('admin/home/edit_form');
  }
- 
+
 }
