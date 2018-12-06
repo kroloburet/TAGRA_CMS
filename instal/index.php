@@ -84,8 +84,8 @@ echo '<div><i class="fa-check-circle green"></i> Папка <b>'.$dir.'</b> до
 echo '<p style="margin-top:1.5em;">Установите права на запись (0750) и жмите <a href="index.php" class="btn">Попробовать снова</a> или обратитесь к разработчику по e-mail: <a href="mailto:kroloburet@gmail.com">kroloburet@gmail.com</a></p>';
 }
 ?>
-   <div id="copy">Веб-разработка и дизайн<a href="mailto:kroloburet@gmail.com"> <img src="/UI_fraimwork/img/kroloburet_18_18.jpeg" width="18" height="18" alt="Разработка и дизайн сайтов"> kroloburet@gmail.com</a><br>
- <img src="/UI_fraimwork/img/logo_tagra_18_18.svg" alt="Tagra CMS"> Tagra CMS</div>
+   <div id="copy">Веб-разработка и дизайн<a href="mailto:kroloburet@gmail.com"> <img src="/UI_fraimwork/img/i.jpg" alt="Разработка и дизайн сайтов"> kroloburet@gmail.com</a><br>
+ <img src="/UI_fraimwork/img/tagra_min.svg" alt="Tagra CMS"> Tagra CMS</div>
   </div>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>

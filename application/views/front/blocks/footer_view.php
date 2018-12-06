@@ -3,7 +3,7 @@
  <footer class="container noprint" style="max-width:<?=$conf_body_width?>px">
   <div class="copy">
    <?=$conf_site_name?>&nbsp;&copy;&nbsp;<?=date('Y')?><hr>
-   Веб-разработка и дизайн&nbsp;<img src="<?=base_url('img/kroloburet_18_18.jpeg')?>" width="18" height="18" alt="Разработка и дизайн сайтов">
+   Веб-разработка и дизайн&nbsp;<img src="<?=base_url('img/i.jpg')?>" alt="Разработка и дизайн сайтов">
    <br><a href="mailto:kroloburet@gmail.com">kroloburet@gmail.com</a>
   </div>
   <div class="follow_box">

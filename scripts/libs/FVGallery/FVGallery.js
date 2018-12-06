@@ -1,6 +1,6 @@
 /*
  ###########################################################
- # Developer: Sergey Nizhnik kroloburet@gmail.com
+ # @author Sergey Nizhnik kroloburet@gmail.com
  ###########################################################
 */
 
@@ -25,7 +25,7 @@
   $('body').append(back);//
   _insert();//
   /////////////////////////
-  back.add(close).on('click.FVG',function(e){if(e.target===this){back.remove();}});//деактивировать окно при клике 
+  back.add(close).on('click.FVG',function(e){if(e.target===this){back.remove();}});//деактивировать окно при клике
   /////////////////////////
   prev.on('click.FVG',function(e){
    e.preventDefault();
@@ -114,6 +114,6 @@
    return methods[method].apply(this,Array.prototype.slice.call(arguments,1));
   }else if(typeof method==='object'||!method){
    return methods.init.apply(this,arguments);
-  }else{$.error('Метод с именем '+method+' не существует');} 
+  }else{$.error('Метод с именем '+method+' не существует');}
  };
 })(jQuery);

@@ -1,6 +1,6 @@
 /*
  ###########################################################
- # Developer: Sergey Nizhnik kroloburet@gmail.com
+ # @author Sergey Nizhnik kroloburet@gmail.com
  ###########################################################
 */
 

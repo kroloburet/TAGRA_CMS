@@ -59,8 +59,8 @@
 
 <!--####### Копирайт #######-->
    <div id="copy">
-    Веб-разработка и дизайн<a href="mailto:kroloburet@gmail.com"> <img src="<?=base_url('img/kroloburet_18_18.jpeg')?>" alt="Разработка и дизайн сайтов"> kroloburet@gmail.com</a><br>
-    <img src="<?=base_url('img/logo_tagra_18_18.svg')?>" alt="Tagra CMS"> Tagra CMS<br>
+    Веб-разработка и дизайн<a href="mailto:kroloburet@gmail.com"> <img src="<?=base_url('img/i.jpg')?>" alt="Разработка и дизайн сайтов"> kroloburet@gmail.com</a><br>
+    <img src="<?=base_url('img/tagra_min.svg')?>" alt="Tagra CMS"> Tagra CMS<br>
    </div>
   </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
