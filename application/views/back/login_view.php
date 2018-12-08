@@ -15,9 +15,10 @@
   <title>Авторизация</title>
   <style>
    form{width:40%;margin:15% auto 11% auto;}
-   input,button{text-align: center;font-size:120% !important;}
+   .button{margin-top:0;}
+   input,button{text-align:center;font-size:120% !important;}
    button,input[type="submit"]{width:50%;float:left;}
-   button{width: auto;}
+   button{width:auto;}
    .opts_pan{text-align:right;margin-top:3px;}
    #see_pass{width:auto;margin:0 5px 0 0;}
    #sand_pass{display:none;}
@@ -28,22 +29,23 @@
   <div class="authoriz_box">
 
 <!--####### Авторизация в админке #######-->
-   <form action="<?=base_url('admin/login')?>" name="login_form" id="login_form" method="POST">
+   <form action="" method="POST" id="login_form">
     <label class="input">
-     <input type="text" name="login" placeholder="логин" required>
+     <input type="text" name="lgn" placeholder="логин" required>
     </label>
     <label class="input">
-     <input id="pass" type="password" name="password" value="" placeholder="пароль" required>
+     <input type="password" name="pswd" id="pass" placeholder="пароль" required>
     </label>
+    <div id="login_msg"><?=isset($msg)&&!empty($msg)?$msg:FALSE?></div>
     <input type="submit" value="Войти">
     <div class="opts_pan">
      <a href="#" class="fa-eye" title="Показать пароль" id="see_pass"></a>&nbsp;&nbsp;
-     <a href="#" class="fa-lock" title="Забыл логин или пароль" id="show_sand_pass"></a>&nbsp;&nbsp;
+     <a href="#" class="fa-unlock-alt" title="Восстановление доступа" id="show_sand_pass"></a>&nbsp;&nbsp;
      <a href="<?=base_url()?>" class="fa-home" title="Перейти на главную сайта"></a>
     </div>
    </form>
 
-<!--####### Отослать логины\пароли админу #######-->
+<!--####### Отослать логины\пароли на email #######-->
    <form id="sand_pass">
     Отправить логин и пароль на e-mail пользователя
     <label class="input">
@@ -79,10 +81,10 @@
      }
     });
 
-    //////////////////////////////////////показать скрыть форму "забыл пароль"
+    //////////////////////////////////////показать скрыть форму "Восстановить доступ"
     $('#show_sand_pass,#no_subm_pass').on('click',function(e){
      e.preventDefault();
-     $('#login_form,#sand_pass').slideToggle();
+     $('#login_form,#sand_pass').slideToggle(200);
     });
 
     //////////////////////////////////////отправить новые логин\пароль пользователю
@@ -95,33 +97,30 @@
      cancel.detach();
      btn.attr('disabled',true).html('<i class="fa fa-spin fa-spinner"></i>&nbsp;&nbsp;обработка...');//блокирую кнопку
      $.ajax({
-      url: '<?=base_url('admin/sand_pass')?>',
+      url: '<?=base_url('do/change_login')?>',
       type: 'post',
       data: form.serialize(),
       dataType: 'json',
       success: function(resp){
        switch(resp.status){
-        //бот или хитрожопый мудак
         case 'bot':
          form.find('[name=send_pass_mail]').val('');//сброс поля
-         msg.html('<div class="notific_r full">Ой! Вы робот!?<br>Вам здесь не рады..(</div>');
+         msg.html('<div class="notific_r mini full">Ой! Вы робот?! Вам здесь не рады..(</div>');
          btn.after(cancel).remove();//только отмена
          break;
-        //нет такого email
         case 'nomail':
-         msg.html('<div class="notific_r full">Ой! Ошибка..(<br>Пользователя с таким email нет в системе.</div>');
+         msg.html('<div class="notific_r mini full">Ой! Ошибка..(<br>Пользователя с таким email нет в системе.</div>');
          btn.attr('disabled',false).html('Отправить').after(cancel);//разблокировка кнопки
          break;
-        //все пучком
+        case 'noaccess':
+         msg.html('<div class="notific_r mini full">Упс! Администратор запретил вам вход и все действия от имени модератора.</div>');
+         btn.attr('disabled',false).html('Отправить').after(cancel);//разблокировка кнопки
+         break;
         case 'ok':
          form.find('[name=send_pass_mail]').val('');//сброс поля
-         msg.html('<div class="notific_g full">'+resp.html+'</div>');
+         msg.html('<div class="notific_g mini full">'+resp.html+'</div>');
          btn.attr('disabled',false).html('Отправить').after(cancel);//разблокировка кнопки
          setTimeout(function(){msg.empty();$('#login_form,#sand_pass').slideToggle();},5000);//очищаю сообщение об отправке, скрываю форму
-         break;
-        //ошибки сценария сервера
-        default :msg.html('<div class="notific_b full">'+resp+'</div>');
-         break;
        }
       }
      });

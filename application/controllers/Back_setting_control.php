@@ -23,48 +23,61 @@ class Back_setting_control extends Back_basic_control{
   return TRUE;//уникальный
  }
 
- function edit_administrator(){//если изменяем администратора
-  $this->_is_login()?TRUE:redirect('admin/login');
-  $p=array_map('trim',$this->input->post());//убираем пробелы в начале и в конце
-  $this->_check_back_user($p['login'],$p['password'])?TRUE:exit('nounq');//проверка на уникальность логина и пароля
+ function edit_administrator(){//изменить данные администратора
+  $p=array_map('trim',$this->input->post());
+  !filter_var($p['email'],FILTER_VALIDATE_EMAIL)?exit(json_encode(array('status'=>'nomail'),JSON_FORCE_OBJECT)):TRUE;//проверка email
+  $this->_check_back_user($p['login'],$p['password'])?TRUE:exit(json_encode(array('status'=>'nounq'),JSON_FORCE_OBJECT));//проверка на уникальность логина и пароля
   $p['last_mod_date']=date('Y-m-d H:i:s');
-  //если логин не заполнен используем старый, иначе - шифруем новый
+  //если логин не заполнен использовать старый, иначе - шифровать новый
   $p['login']=($p['login']==='')?$this->_get_admin_param('login'):password_hash($p['login'],PASSWORD_BCRYPT);
-  //если пароль не заполнен используем старый, иначе - шифруем новый
+  //если пароль не заполнен использовать старый, иначе - шифровать новый
   $p['password']=($p['password']==='')?$this->_get_admin_param('password'):password_hash($p['password'],PASSWORD_BCRYPT);
-  //перезаписываю администратора
-  $this->back_basic_model->edit_back_user($this->_get_admin_param('id'),$p)?TRUE:exit('error');
-  //перезаписываю сессию чтобы не выбрасывало из админки
+  //перезаписать данные
+  $this->back_basic_model->edit_back_user($this->_get_admin_param('id'),$p)?TRUE:exit(json_encode(array('status'=>'error'),JSON_FORCE_OBJECT));
+  //перезаписать сессию чтобы не выбрасывало из админки
   $this->session->administrator?$this->session->set_userdata('administrator',$p['password'].$p['login']):TRUE;
-  exit('ok');
+  //вернуть ok и json запись админа
+  $q=$this->db->where('status','administrator')->get($this->_prefix().'back_users')->result_array();
+  if(empty($q)){$a='{}';}else{foreach($q as $v){$a[$v['id']]=$v;}}
+  exit(json_encode(array('status'=>'ok','opt'=>$a),JSON_FORCE_OBJECT));
  }
 
  function add_moderator(){
-  $this->_is_login()?TRUE:redirect('admin/login');
-  $p=array_map('trim',$this->input->post());//убираем пробелы в начале и в конце
-  $this->_check_back_user($p['login'],$p['password'],$p['email'])?TRUE:exit('nounq');//проверка на уникальность логина и пароля
+  $p=array_map('trim',$this->input->post());
+  !filter_var($p['email'],FILTER_VALIDATE_EMAIL)?exit(json_encode(array('status'=>'nomail'),JSON_FORCE_OBJECT)):TRUE;//проверка email
+  $this->_check_back_user($p['login'],$p['password'],$p['email'])?TRUE:exit(json_encode(array('status'=>'nounq'),JSON_FORCE_OBJECT));//проверка на уникальность логина и пароля
   $p['register_date']=date('Y-m-d H:i:s');
   $p['status']='moderator';
   $p['login']=password_hash($p['login'],PASSWORD_BCRYPT);
   $p['password']=password_hash($p['password'],PASSWORD_BCRYPT);
-  $this->back_basic_model->add($p,$this->_prefix().'back_users')?exit('ok'):exit('error');
+  if($this->back_basic_model->add($p,$this->_prefix().'back_users')){//добавлен в базу
+   $q=$this->db->where('status','moderator')->get($this->_prefix().'back_users')->result_array();
+   if(empty($q)){$m='{}';}else{foreach($q as $v){$m[$v['id']]=$v;}}
+   exit(json_encode(array('status'=>'ok','opt'=>$m),JSON_FORCE_OBJECT));
+  }else{//не добавлен в базу
+   exit(json_encode(array('status'=>'error'),JSON_FORCE_OBJECT));
+  }
  }
 
- function edit_moderator($id){//если изменяем модератора
-  $this->_is_login()?TRUE:redirect('admin/login');
-  $p=array_map('trim',$this->input->post());//убираем пробелы в начале и в конце
-  $this->_check_back_user($p['login'],$p['password'],$p['email'],$id)?TRUE:exit('nounq');//проверка на уникальность логина и пароля
+ function edit_moderator($id){
+  $p=array_map('trim',$this->input->post());
+  !filter_var($p['email'],FILTER_VALIDATE_EMAIL)?exit(json_encode(array('status'=>'nomail'),JSON_FORCE_OBJECT)):TRUE;//проверка email
+  $this->_check_back_user($p['login'],$p['password'],$p['email'],$id)?TRUE:exit(json_encode(array('status'=>'nounq'),JSON_FORCE_OBJECT));//проверка на уникальность логина и пароля
   $p['last_mod_date']=date('Y-m-d H:i:s');
-  //если логин заполнен - шифруем его
-  if(!$p['login']===''){$p['login']=password_hash($p['login'],PASSWORD_BCRYPT);}else{unset($p['login']);}
-  //если пароль заполнен - шифруем его
-  if(!$p['password']===''){$p['password']=password_hash($p['password'],PASSWORD_BCRYPT);}else{unset($p['password']);}
-  //перезаписываю модератора
-  $this->back_basic_model->edit_back_user($id,$p)?exit('ok'):exit('error');
+  //если логин не заполнен использовать старый, иначе - шифровать новый
+  if($p['login']!==''){$p['login']=password_hash($p['login'],PASSWORD_BCRYPT);}else{unset($p['login']);}
+  //если пароль не заполнен использовать старый, иначе - шифровать новый
+  if($p['password']!==''){$p['password']=password_hash($p['password'],PASSWORD_BCRYPT);}else{unset($p['password']);}
+  if($this->back_basic_model->edit_back_user($id,$p)){//перезаписан
+   $q=$this->db->where('status','moderator')->get($this->_prefix().'back_users')->result_array();
+   if(empty($q)){$m='{}';}else{foreach($q as $v){$m[$v['id']]=$v;}}
+   exit(json_encode(array('status'=>'ok','opt'=>$m),JSON_FORCE_OBJECT));
+  }else{//не перезаписан
+   exit(json_encode(array('status'=>'error'),JSON_FORCE_OBJECT));
+  }
  }
 
  function del_moderator(){//удалить модератора
-  $this->_is_login()?TRUE:redirect('admin/login');
   //сколько модераторов в системе, если один - не удалять
   $this->db->where('status','moderator')->from($this->_prefix().'back_users')->count_all_results()===1?exit('last'):TRUE;
   $id=$this->input->post('id');
@@ -72,7 +85,6 @@ class Back_setting_control extends Back_basic_control{
  }
 
  function set_config(){
-  $this->_is_login()?TRUE:redirect('admin/login');
   $conf=array_map('trim',$this->input->post());
   $this->back_setting_model->set_config($conf);//записать конфигурацию
   redirect('admin');

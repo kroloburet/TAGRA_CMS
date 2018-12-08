@@ -19,6 +19,7 @@ $route["contact"]="front_contact_control/contact";
 $route["section/(.+)"]="front_section_control/section/$1";
 $route["gallery/(.+)"]="front_gallery_control/gallery/$1";
 //Роуты действий
+$route["do/change_login"]="Change_login";
 $route["do/send_mail"]="front_contact_control/send_mail";
 $route["do/add_comment"]="front_comment_control/add_comment";
 $route["do/comment_action/(.+)"]="front_comment_control/comment_action/$1";

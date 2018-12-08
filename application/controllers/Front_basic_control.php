@@ -13,12 +13,9 @@ class Front_basic_control extends CI_Controller{
   $this->_is_site_access();
  }
 
- function _is_site_access(){//доступ к пользовательской части ресурса
-  if($this->conf['conf_site_access']==='off'){//если в админке увтановлена опция "Доступ к сайту закрыт"
-   $ip=$this->input->server('REMOTE_ADDR');//получаю текущий ip
-   $q=$this->db->select('ip')->where('ip !=','')->get($this->_prefix().'back_users')->result_array();//выборка ip админа и модераторов
-   !in_array($ip,array_unique(array_column($q,'ip')))?redirect('plug.html'):TRUE;//если текущий ip не админа или модератора - не пущать
-  }
+ function _is_site_access(){//доступ к пользовательской части системы
+  //если в админке увтановлена опция "Доступ к сайту закрыт" и запрос не от админа или модератора - переправить на заглушку
+  $this->conf['conf_site_access']==='off'&&!$this->conf['back_user']?redirect('plug.html','location',302):TRUE;
  }
 
  function _prefix(){//получение префикса таблиц базы данных из конфигурационного файла

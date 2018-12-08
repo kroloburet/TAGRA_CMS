@@ -12,7 +12,6 @@ class Back_gallery_control extends Back_basic_control{
  }
 
  function get_list(){
-  $this->_is_login()?TRUE:redirect('admin/login');
   $data=$this->conf;
   //разбераю get-данные если они есть, если нет - устанавливаю по умолчанию
   $get=$this->input->get();
@@ -31,39 +30,33 @@ class Back_gallery_control extends Back_basic_control{
  }
 
  function add_form(){
-  $this->_is_login()?TRUE:redirect('admin/login');
   $data=$this->conf;
   $data['conf_title']='Добавить галерею';
   $this->_viewer('back/gallerys/gallerys_add_view',$data);
  }
 
  function edit_form($id){
-  $this->_is_login()?TRUE:redirect('admin/login');
   $data=array_merge($this->conf,$this->back_basic_model->get_where_id($this->_prefix().'gallerys',$id));//соединение массивов
   $data['conf_title']='Редактировать галерею';
   $this->_viewer('back/gallerys/gallerys_edit_view',$data);
  }
 
  function add(){//добавление галереи
-  $this->_is_login()?TRUE:redirect('admin/login');
   $this->back_basic_model->add(array_map('trim', $this->input->post()),$this->_prefix().'gallerys');//убираем пробелы в начале и в конце
   $this->conf['conf_sitemap']['generate']==='auto'?$this->sitemap_generator():FALSE;//если карта сайта должна генерироваться автоматически
   redirect('admin/gallery/get_list');
  }
 
  function edit($id,$alias){//изменение галереи по $id, перзапись url в комментариях, url в меню
-  $this->_is_login()?TRUE:redirect('admin/login');
   $this->back_gallery_model->edit_gallery($id,array_map('trim', $this->input->post()),$alias);
   $this->conf['conf_sitemap']['generate']==='auto'?$this->sitemap_generator():FALSE;//если карта сайта должна генерироваться автоматически
   redirect('admin/gallery/get_list');
  }
 
  function del(){//удаление аяксом галлерею и комментарии к ней
-  if($this->_is_login()){//если админ, модератор — логика
-   $post=$this->input->post();
-   $this->back_gallery_model->del_gallery($post['alias']);
-   $this->conf['conf_sitemap']['generate']==='auto'?$this->sitemap_generator():FALSE;//если карта сайта должна генерироваться автоматически
-  }
+  $post=$this->input->post();
+  $this->back_gallery_model->del_gallery($post['alias']);
+  $this->conf['conf_sitemap']['generate']==='auto'?$this->sitemap_generator():FALSE;//если карта сайта должна генерироваться автоматически
   echo '';
  }
 

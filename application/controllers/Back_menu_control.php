@@ -12,7 +12,6 @@ class Back_menu_control extends Back_basic_control{
  }
 
  function edit_form(){
-  $this->_is_login()?TRUE:redirect('admin/login');
   $data=$this->conf;
   $data['conf_title']='Главное меню сайта';
   $data['menu']=$this->back_menu_model->get_menu();
@@ -23,7 +22,6 @@ class Back_menu_control extends Back_basic_control{
  }
 
  function add_item(){
-  $this->_is_login()?TRUE:redirect('admin/login');
   array_map('trim',$this->input->post());//убираем пробелы в начале и в конце
   $data['pid']=$this->input->post('pid');
   $data['order']=$this->input->post('order');
@@ -36,7 +34,6 @@ class Back_menu_control extends Back_basic_control{
  }
 
  function edit_item($id){
-  $this->_is_login()?TRUE:redirect('admin/login');
   array_map('trim',$this->input->post());//убираем пробелы в начале и в конце
   $data['pid']=$this->input->post('pid');
   $data['order']=$this->input->post('order');
@@ -48,13 +45,11 @@ class Back_menu_control extends Back_basic_control{
  }
 
  function del_item($id,$pid,$order){
-  $this->_is_login()?TRUE:redirect('admin/login');
   $this->back_menu_model->del_menu_item($id,$pid,$order);
   redirect('admin/menu/edit_form');
  }
 
  function public_item(){//побликовать\не публиковать аяксом
-  $this->_is_login()?TRUE:redirect('admin/login');
   $p=$this->input->post();
   $this->back_menu_model->public_menu_item($p['id'],$p['pub']);
   if($p['pub']==='on'){

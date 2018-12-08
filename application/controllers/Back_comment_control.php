@@ -14,7 +14,6 @@ class Back_comment_control extends Back_basic_control {
  }
 
  function get_list(){
-  $this->_is_login()?TRUE:redirect('admin/login');
   $data=$this->conf;
   $data['conf']=$this->c_conf;
   $data['new_comments']=$this->back_comment_model->get_new();
@@ -35,7 +34,6 @@ class Back_comment_control extends Back_basic_control {
  }
 
  function del_branch(){
-  $this->_is_login()?TRUE:redirect('admin/login');
   $p=$this->input->post();
   !$p||!$p['id']||!$p['url']?exit(json_encode(array('status'=>'error'),JSON_FORCE_OBJECT)):TRUE;
   $ids=$this->back_comment_model->del_branch($p['id'],$p['url']);
@@ -43,13 +41,11 @@ class Back_comment_control extends Back_basic_control {
  }
 
  function del_new($code){
-  $this->_is_login()?TRUE:redirect('admin/login');
   $this->back_comment_model->del_new($code);
   redirect('admin/comment/get_list');
  }
 
  function public_new($code){
-  $this->_is_login()?TRUE:redirect('admin/login');
   $q=$this->db->where('premod_code',$code)->get($this->_prefix().'comments')->result_array();
   if(isset($q[0])&&!empty($q[0])){//комментарий существует и не опубликован
    if($this->back_comment_model->public_new($code) && $this->c_conf['feedback']=='on'){//опубликован и обратная связь разрешена
@@ -64,7 +60,6 @@ class Back_comment_control extends Back_basic_control {
  }
 
  function set_comments_config(){
-  $this->_is_login()?TRUE:redirect('admin/login');
   $conf=json_encode(array_map('trim',$this->input->post()));//убираю пробелы в начале и в конце
   $this->db->where('name','conf_comments')->update($this->_prefix().'config',array('value'=>$conf));//записываю конфигурацию
   redirect('admin/comment/get_list');

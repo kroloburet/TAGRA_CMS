@@ -77,6 +77,18 @@ h1,h2,h3,h4,h5{font-family:Helvetica,Arial;color:#000;}
 .contact_prev_edit_btn,.contact_prev_del_btn{display:flex!important;align-items:center;padding:.5em;color:#fff;background:#437de0;cursor:pointer;}
 .contact_prev_edit_btn:hover,.contact_prev_del_btn:hover{background:#237aa9;}
 
+/*-----------------------------------------------------------------------------------------back user control----*/
+.buc_box{display:none;}
+.buc_box .row{margin:0;}
+.buc_box .notific_b{margin-bottom:.5em;}
+.buc_box .button{margin-top:.3em;text-align:right;}
+.buc_box .button button:last-child{margin-right:0;}
+.buc_prev_item{margin-top:.3em;border:#4a76be solid 1px;border-radius:3px;display:flex;justify-content:space-between;}
+.buc_prev_control{display:flex;}
+.buc_prev_str_box{padding:.3em .5em;}
+.buc_prev_edit_btn,.buc_prev_del_btn{display:flex!important;align-items:center;padding:.5em;color:#fff;background:#437de0;cursor:pointer;}
+.buc_prev_edit_btn:hover,.buc_prev_del_btn:hover{background:#237aa9;}
+
 /*----------------------------------------------------------------------------------------------menu tree----*/
 ul.menu_tree,ul.menu_tree ul{list-style:none;margin:0;padding:0}
 ul.menu_tree ul{margin-left:14px;position:relative}
