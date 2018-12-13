@@ -89,6 +89,7 @@ $db->query("CREATE TABLE IF NOT EXISTS `$t` (
   `id` bigint(20) NOT NULL,
   `pid` bigint(20) NOT NULL,
   `premod_code` text NOT NULL,
+  `ip` varchar(100) NOT NULL,
   `url` text NOT NULL,
   `date` varchar(100) NOT NULL,
   `name` varchar(300) NOT NULL,
@@ -283,7 +284,7 @@ $q_i=$db->query("INSERT INTO `$t` (`name`, `value`) VALUES
 ('conf_addthis_follow_def', 'off'),
 ('conf_img_prev_def', ''),
 ('conf_breadcrumbs_public', 'on'),
-('conf_breadcrumbs_home', 'Home'),
+('conf_breadcrumbs_home', 'Главная'),
 ('conf_emmet', 'off'),
 ('conf_sitemap', '{\"generate\":\"auto\",\"allowed\":\"public\"}'),
 ('conf_comments', '{\"form\":\"on\",\"reserved_names\":\"\",\"rating\":\"on\",\"name_limit\":\"50\",\"text_limit\":\"500\",\"show\":\"3\",\"notific\":\"off\",\"feedback\":\"on\"}');");

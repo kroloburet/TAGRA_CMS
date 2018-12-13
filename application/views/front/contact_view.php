@@ -47,23 +47,24 @@
 </dl>
 <?php }?>
 
-<?php if($contact_form=='on'){?>
+<?php if($contact_form==='on'){?>
 <!--####### Форма обратной связи #######-->
 <div id="send_mail_form" class="noprint">
 <h2>Форма обратной связи</h2>
 <form id="send_mail">
  <label class="input">
-  <input type="text" name="mail" placeholder="Ваш email">
+  <input type="text" name="mail" placeholder="Ваш e-mail">
  </label>
  <label class="input">
   <input type="text" name="name" onkeyup="lim(this,50)" placeholder="Ваше имя">
  </label>
  <label class="textarea">
-  <textarea name="text" rows="5" onkeyup="lim(this,500)" maxlength="500" placeholder="Ваше сообщение"></textarea>
+  <textarea name="text" rows="5" onkeyup="lim(this,500)" placeholder="Ваше сообщение"></textarea>
  </label>
  <input type="text" name="fuck_bot">
- <div id="send_msg"></div>
- <button type="submit">Отправить сообщение</button>
+ <div class="send_mail_actions">
+  <button type="submit">Отправить сообщение</button>
+ </div>
 </form>
 </div>
 </div>
@@ -73,43 +74,35 @@
 window.addEventListener('load',function(){
  $('#send_mail').on('submit',function(e){
   e.preventDefault();
-  var form=$(this),
-      mail=form.find('[name="mail"]'),
-      name=form.find('[name="name"]'),
-      text=form.find('[name="text"]'),
-      btn=form.find(':submit'),
-      msg=$('#send_msg');
+  var f=$(this),
+      mail=f.find('[name="mail"]'),
+      name=f.find('[name="name"]'),
+      text=f.find('[name="text"]'),
+      actions_box=f.find('.send_mail_actions'),
+      actions=actions_box.html(),
+      delay=5000,
+      msg=function(m){actions_box.html(m);setTimeout(function(){actions_box.html(actions);},delay);};
   //проверка полей
-  if(!/^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/.test(mail.val())){mail.addClass('novalid').focus();return false;}else{mail.removeClass('novalid');}
-  if(!/\S/.test(name.val())){name.addClass('novalid').focus();return false;}else{name.removeClass('novalid');}
-  if(!/\S/.test(text.val())){text.addClass('novalid').focus();return false;}else{text.removeClass('novalid');}
-  btn.attr('disabled',true).html('<i class="fa fa-spin fa-spinner"></i>&nbsp;&nbsp;обработка...');//блокирую кнопку
+  if(!/^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/.test(mail.val())){
+   msg('<p class="notific_r">В поле "'+mail.attr('placeholder')+'" недопустимый символ или оно не заполнено!</p>');return false;
+  }
+  if(!/\S/.test(name.val())){msg('<p class="notific_r">Поле "'+name.attr('placeholder')+'" должно быть заполнено!</p>');return false;}
+  if(!/\S/.test(text.val())){msg('<p class="notific_r">Поле "'+text.attr('placeholder')+'" должно быть заполнено!</p>');return false;}
+  //блокировать кнопку
+  actions_box.find('button').attr('disabled',true).html('<i class="fa fa-spin fa-spinner"></i>&nbsp;&nbsp;обработка...');
   //отправка
   $.ajax({
-    url: '<?=base_url('do/send_mail')?>',//путь к скрипту, который обработает запрос
-    type: 'post',
-    data: form.serialize(),
-    dataType: 'text',
-    success: function(data){//обработка ответа
-     switch(data){
-      //бот или хитрожопый мудак
-      case 'bot':msg.html('<div class="notific_r">Ой! Вы робот!? Вам здесь не рады..(</div>');
-       btn.remove();//удаляю кнопку
-       break;
-      //комментарий не записан в базу
-      case 'error':msg.html('<div class="notific_r">Ой! Ошибка..(<br>Возможно это временные неполадки, попробуйте снова.</div>');
-       btn.attr('disabled',false).html('Отправить сообщение');
-       break;
-      //все пучком
-      case 'ok':mail.add(name).add(text).val('');
-       btn.attr('disabled',false).html('Отправить сообщение');
-       msg.html('<div class="notific_g">Ваше сообщение успешно отправлено!</div>');
-       setTimeout(function(){msg.empty();},5000);
-       break;
-      //ошибки сценария сервера
-      default :msg.html('<div class="notific_b">'+data+'</div>');
-       btn.attr('disabled',false).html('Отправить сообщение');
-       break;
+    url:'<?=base_url('do/send_mail')?>',
+    type:'post',
+    data:f.serialize(),
+    dataType:'text',
+    success:function(resp){
+     switch(resp){
+      case'bot':msg('<p class="notific_r">Ой! Вы робот!? Вам здесь не рады..(</p>');break;
+      case'nomail':msg('<p class="notific_r">Переданый e-mail некорректный!</p>');break;
+      case'error':msg('<p class="notific_r">Ой! Ошибка..(<br>Возможно это временные неполадки, попробуйте снова.</p>');break;
+      case'ok':mail.add(name).add(text).val('');msg('<p class="notific_g">Ваше сообщение успешно отправлено!</p>');break;
+      default:console.log(resp);
      }
     }
   });

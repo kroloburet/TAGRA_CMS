@@ -49,7 +49,7 @@ footer{padding:1.5em 1%!important;display:flex;}
 .bc_end{color:#999}
 #breadcrumbs li:after{content:'/';padding:0 .25em;color:#999}
 #breadcrumbs li.bc_end:after,#breadcrumbs li.bc_end:before{display:none}
-@media(max-width:400px){#breadcrumbs{font-size:115%}}
+@media(max-width:400px){#breadcrumbs{font-size:80%}}
 
 /*------------------------------------------------------------------------------headline*/
 #headline{margin:0;padding:0;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap}
@@ -143,7 +143,7 @@ input[name="fuck_bot"]{display:none;visibility:hidden}
 .reply_form button{font-weight:normal;margin-right:1em;padding:.3em .5em;}
 .comment_form_actions .mini{font-size:100%;border-radius:0 0 3px 3px;}
 .feedback_msg{font-size:11px;color:#444;line-height:1.2;padding:.5em;margin-bottom:-2px;position:relative;background-color:#e8e8e8;border-radius:3px 3px 0 0;border:1px solid #4a76be;z-index:1;}
-@media(max-width:400px){.reply_item{margin-left:1.5em;}.comment_rating_like,.comment_rating_dislike,.show_reply_form{margin-right:1.5em;}}
+@media(max-width:400px){.reply_item{margin-left:1.5em;}.comment_rating_like,.comment_rating_dislike,.show_reply_form{margin-right:1.5em;}.comment_date,.reply_to{font-size:80%;}}
 
 /*------------------------------------------------------------------------------contact page*/
 .num{font-family:Arial,Helvetica}
