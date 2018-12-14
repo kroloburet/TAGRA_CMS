@@ -19,17 +19,12 @@
 <!--####### Отложенная загрузка CSS #######-->
 <script>
 var doc_head=document.getElementsByTagName("head")[0];
-var ms=document.createElement("link");ms.rel="stylesheet";//UI_fraimwork
+var ms=document.createElement("link");ms.rel="stylesheet";//иконочный шрифт
 ms.href="/UI_fraimwork/fonts/FontAwesome/style.css";doc_head.insertBefore(ms,doc_head.firstChild);
 var ms=document.createElement("link");ms.rel="stylesheet";//главная таблица стилей
 ms.href="/css/front/general.css";doc_head.insertBefore(ms,doc_head.firstChild);
-var ms=document.createElement("link");ms.rel="stylesheet";//иконочный шрифт
+var ms=document.createElement("link");ms.rel="stylesheet";//UI_fraimwork
 ms.href="/UI_fraimwork/css.css";doc_head.insertBefore(ms,doc_head.firstChild);
-<?php if((isset($gallery_type)&&$gallery_type)&&(isset($gallery_opt)&&$gallery_opt)){//если галерея
-if($gallery_type=='foto_folder'||$gallery_type=='foto_desc'||$gallery_type=='video_yt'){//фото или видео?>
-var ms=document.createElement("link");ms.rel="stylesheet";//
-ms.href="/scripts/libs/FVGallery/FVGallery.css";doc_head.insertBefore(ms,doc_head.firstChild);
-<?php }}?>
 </script>
 
 <!--####### Отложенная загрузка JS #######-->
@@ -43,7 +38,7 @@ if($gallery_type=='foto_folder'||$gallery_type=='foto_desc'||$gallery_type=='vid
 <!--####### JS для фото или видео галереи #######-->
 <script src="/scripts/libs/FVGallery/FVGallery.js" defer></script>
 <script>
-window.addEventListener('load',function(){$('.FVG_item').FVGallery({type:'<?=$gallery_type?>'});});
+window.addEventListener('load.FVG',function(){$('.FVG_item').FVGallery({type:'<?=$gallery_type?>'});});
 </script>
 <?php }?>
 <?php if($gallery_type=='audio'){//аудио?>
@@ -57,9 +52,8 @@ window.addEventListener('load',function(){$('.FVG_item').FVGallery({type:'<?=$ga
  action=p.find('.a_action'),
  title=p.find('.a_title'),
  tracks=[
- <?php if($gallery_opt){$num=1;foreach(json_decode($gallery_opt,true)as$v){?>
+ <?php if($gallery_opt){foreach(json_decode($gallery_opt,true)as$v){?>
   {
-   "track":<?=$num?>,
    "name":"<?=$v['a_title']?>",
    "file":"<?=$v['a_file']?>"
   },
@@ -67,15 +61,12 @@ window.addEventListener('load',function(){$('.FVG_item').FVGallery({type:'<?=$ga
  ],
  count=tracks.length,
  audio=p.find('.a_audio')
-  .on('play',function(){playing=true;action.text('Воспроизводится...');})
-  .on('pause',function(){playing=false;action.text('Пауза...');})
-  .on('ended',function(){action.text('Пауза...');if((i+1)<count){i++;loadTrack(i);audio.play();}else{audio.pause();i=0;loadTrack(i);}}).get(0),
- btnPrev=p.find('.a_prev')
-  .on('click',function(){if((i-1)>-1){i--;loadTrack(i);if(playing){audio.play();}}else{audio.pause();i=0;loadTrack(i);}}),
- btnNext=p.find('.a_next')
-  .on('click',function(){if((i+1)<count){i++;loadTrack(i);if(playing){audio.play();}}else{audio.pause();i=0;loadTrack(i);}}),
- li=p.find('.a_item')
-  .on('click',function(){var id=parseInt($(this).index());if(id!==i){playTrack(id);}}),
+  .on('play.AP',function(){playing=true;action.text('Воспроизводится...');})
+  .on('pause.AP',function(){playing=false;action.text('Пауза...');})
+  .on('ended.AP',function(){if((i+1)<count){i++;audio.play();}else{audio.pause();i=0;}action.text('Пауза...');loadTrack(i);}).get(0),
+ btnPrev=p.find('.a_prev').on('click.AP',function(){i=(i-1)>-1?i-1:count-1;loadTrack(i);if(playing){audio.play();}}),
+ btnNext=p.find('.a_next').on('click.AP',function(){i=(i+1)<count?i+1:0;loadTrack(i);if(playing){audio.play();}}),
+ li=p.find('.a_item').on('click.AP',function(){var id=$(this).index();if(id!==i){playTrack(id);}}),
  loadTrack=function(id){
   p.find('.a_ready').removeClass('a_ready');
   p.find('.a_item:eq('+id+')').addClass('a_ready');

@@ -52,51 +52,41 @@ switch($gallery_type){
 
  case 'foto_folder'://галерея из папки с изображениями
   if($gallery_opt){//есть опции
-   $opt=json_decode($gallery_opt,true);
-   $directory=$opt['f_folder'];//папка с изображениями
-   $allowed_types=array('png','jpg','jpeg','gif','webp','svg');//разрешеные типы изображений
-   $file_parts=array();
-   $ext='';
-   $i=0;
-   $dir_handle=@opendir('.'.$directory) or die('Неверный путь к папке изображений!');//пробуем открыть папку
+   $dir=json_decode($gallery_opt,true)['f_folder'];//папка с изображениями
+   $dir_handle=@opendir('.'.$dir) or die('Неверный путь к папке изображений!');//попытка открыть папку
    while($file=readdir($dir_handle)){//поиск по файлам
-    if($file=='.'||$file=='..')
-     continue;//пропустить ссылки на другие папки
-    $file_parts=explode('.',$file);//разделить имя файла и поместить его в массив
-    $ext=strtolower(array_pop($file_parts));//последний элеменет - это расширение
-    if(in_array($ext,$allowed_types)){//строю костяк html
+    if($file=='.'||$file=='..')continue;//пропустить ссылки на другие папки
+    if(!preg_match('/.+(\.jpg|\.jpeg|\.gif|\.png|\.svg)$/i',$file))continue;//если тип не разрешен
      echo '<div class="FVG_item FVG_item_f_folder">'.PHP_EOL;
-     echo '<img src="'.$directory.'/'.$file.'" alt="'.$file.'">'.PHP_EOL;
-     echo '<textarea class="opt" hidden>{"f_url":"'.$directory.'/'.$file.'"}</textarea>'.PHP_EOL;
+    echo '<img src="/img/noimg.jpg" alt="'.$file.'" data-src="'.$dir.'/'.$file.'">'.PHP_EOL;
+    echo '<textarea class="opt" hidden>{"f_url":"'.$dir.'/'.$file.'"}</textarea>'.PHP_EOL;
      echo '</div>'.PHP_EOL;
-     $i++;
     }
-   }
    closedir($dir_handle);//закрыть папку
-  }else{echo '<div class="notific_b">Галерея не может быть отображена! В галерее нет ни одного изображения</div>'.PHP_EOL;}
+  }else{echo '<p class="notific_b">Галерея не может быть отображена! В галерее нет ни одного изображения</p>'.PHP_EOL;}
  break;
 
  case 'foto_desc'://галерея изображений с описаниями
   if($gallery_opt){//есть опции
-   foreach(json_decode($gallery_opt,true) as $v){//читаю json и строю костяк html
+   foreach(json_decode($gallery_opt,true) as $v){
     echo '<div class="FVG_item FVG_item_f_desc">'.PHP_EOL;
     echo $v['f_title']||$v['f_desc']?'<div class="FVG_item_f_desc_preview"><h3>'.$v['f_title'].'</h3>'.$v['f_desc'].'</div>'.PHP_EOL:FALSE;
-    echo '<img src="'.$v['f_url'].'" alt="'.$v['f_title'].'">'.PHP_EOL;
+    echo '<img src="/img/noimg.jpg" alt="'.$v['f_title'].'" data-src="'.$v['f_url'].'">'.PHP_EOL;
     echo '<textarea class="opt" hidden>'.json_encode($v).'</textarea>'.PHP_EOL;
     echo '</div>'.PHP_EOL;
    }
-  }else{echo '<div class="notific_b">Галерея не может быть отображена! В галерее нет ни одного изображения</div>'.PHP_EOL;}
+  }else{echo '<p class="notific_b">Галерея не может быть отображена! В галерее нет ни одного изображения</p>'.PHP_EOL;}
  break;
 
  case 'video_yt'://галерея youtube
   if($gallery_opt){//есть опции
    foreach(json_decode($gallery_opt,true) as $v){
     echo '<div class="FVG_item FVG_item_v_yt">'.PHP_EOL;
-    echo '<img src="http://img.youtube.com/vi/'.$v['yt_id'].'/mqdefault.jpg">'.PHP_EOL;
+    echo '<img src="/img/noimg.jpg" data-src="https://img.youtube.com/vi/'.$v['yt_id'].'/mqdefault.jpg">'.PHP_EOL;
     echo '<textarea class="opt" hidden>'.json_encode($v).'</textarea>'.PHP_EOL;
     echo '</div>'.PHP_EOL;
    }
-  }else{echo '<div class="notific_b">Галерея не может быть отображена! В галерее нет ни одного видео</div>'.PHP_EOL;}
+  }else{echo '<p class="notific_b">Галерея не может быть отображена! В галерее нет ни одного видео</p>'.PHP_EOL;}
   break;
 
  case 'audio'://галерея audio
@@ -129,7 +119,7 @@ switch($gallery_type){
    <?php }?>
   </ul>
  </div>
-<?php }else{echo '<div class="notific_b">Галерея не может быть отображена! В галерее нет ни одного аудио</div>'.PHP_EOL;}}?>
+<?php }else{echo '<p class="notific_b">Галерея не может быть отображена! В галерее нет ни одного аудио</p>'.PHP_EOL;}}?>
 </div>
 
 <?php

@@ -352,7 +352,7 @@ function gallery($type='',$opt=''){//Тип галереи и добавлени
      var edit_btn=$('<span/>',{class:'g_prev_edit_btn fa-edit',title:'Редактировать'}).data('id',k),
          del_btn=$('<span/>',{class:' g_prev_del_btn fa-trash-o',title:'Удалить'}).data('id',k),
          control=$('<span/>',{class:'g_prev_control',html:[edit_btn,del_btn]}),
-         prev_item=$('<div/>',{class:'g_prev_item',css:{'background-image':'url(http://img.youtube.com/vi/'+_opt[k].yt_id+'/mqdefault.jpg)'},html:[control]});
+         prev_item=$('<div/>',{class:'g_prev_item',css:{'background-image':'url(https://img.youtube.com/vi/'+_opt[k].yt_id+'/mqdefault.jpg)'},html:[control]});
      edit_btn.on('click.G',function(){_get_edit_form($(this).data('id'));});
      del_btn.on('click.G',function(){if(confirm('Этот элемент будет удален!\nВыполнить действие?'))_del($(this).data('id'));});
      g_preview.append(prev_item);
