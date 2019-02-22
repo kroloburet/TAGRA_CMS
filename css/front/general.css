@@ -25,7 +25,7 @@ body{height:100%;display:flex;flex-direction:column;}
 /*header*/
 .header_wrapper{flex:0 0 auto;margin-bottom:2em;background:#E7D977;}
 /*mine*/
-.mine_wrapper{flex:1 0 auto;}
+.mine_wrapper{flex:1 0 auto;overflow:hidden}
 .container{padding:0 1%;margin:0 auto}
 /*layouts*/
 #layouts{text-align:justify;}
