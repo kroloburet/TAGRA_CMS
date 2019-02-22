@@ -12,7 +12,7 @@
 */
 
 /*------------------------------------------------------------------------------BASIS---*/
-@font-face{font-family:'Lobster';src:url(fonts/Lobster.ttf)}
+@font-face{font-family:'Lobster';font-display:fallback;src:url(fonts/Lobster.ttf)}
 html{min-height:100%}
 body{min-height:100%;margin:0;padding:0;font:100%/1.5em Georgia,Helvetica,Arial;color:#291000;}
 *{box-sizing:border-box}
