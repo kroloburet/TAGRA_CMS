@@ -7,7 +7,7 @@ if(!function_exists('breadcrumbs')){
   $prefix=$CI->config->item('db_tabl_prefix');
   $seg1=$CI->uri->segment(1);//первый сегмент урл после домена
   $seg2=$CI->uri->segment(2);//второй сегмент урл после домена
-  $q=array();//будет хранить выборку
+  $q=[];//будет хранить выборку
   $home=$home?'<li><a href="'.base_url().'" class="bc_home">'.$home.'</a>'.PHP_EOL:'';//главная в цепи
   $list='<ul id="breadcrumbs" class="noprint">'.PHP_EOL.$home;//начало цепи+главная
 
@@ -24,8 +24,8 @@ if(!function_exists('breadcrumbs')){
   switch($seg1){//это:
    case'section':$q=$CI->front_basic_model->get_where_alias($prefix.'sections',$seg2);break;//раздел
    case'gallery':$q=$CI->front_basic_model->get_where_alias($prefix.'gallerys',$seg2);break;//галерея
-   case'contact':$q=array('title'=>'Контакты');break;//контакты
-   case'search':$q=array('title'=>'Поиск по сайту');break;//поиск
+   case'contact':$q=['title'=>'Контакты'];break;//контакты
+   case'search':$q=['title'=>'Поиск по сайту'];break;//поиск
    default:$q=$CI->front_basic_model->get_where_alias($prefix.'pages',$seg1);//страница
   }
   if(!empty($q)){//выборка не пуста

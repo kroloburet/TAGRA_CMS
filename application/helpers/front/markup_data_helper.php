@@ -86,9 +86,9 @@ if(isset($comments)&&$comments!=='off'){
 //обработка комментариев
 ////////////////////////////////////////////////
 $url=uri_string();
-$q=$CI->db->where(array('public'=>'on','url'=>$url))->get($prefix.'comments')->result_array();//выборка комментариев
+$q=$CI->db->where(['public'=>'on','url'=>$url])->get($prefix.'comments')->result_array();//выборка комментариев
 if(!empty($q)){//комментарии есть
- $tree_arr=array();
+ $tree_arr=[];
  foreach(array_reverse($q) as $v){$tree_arr[$v['pid']][]=$v;}//получить многомерный массив
  function build_tree($tree_arr,$pid=0){//построение дерева
   if(!is_array($tree_arr) || !isset($tree_arr[$pid])){return false;}//нет данных
@@ -110,7 +110,7 @@ if(isset($conf_breadcrumbs_public)&&$conf_breadcrumbs_public=='on'){
 //обработка "хлебных крошек"
 ////////////////////////////////////////////////
  global $breadcrumb_list;//объявляю лист
- $q=array();//будет хранить выборку
+ $q=[];//будет хранить выборку
  $home=$conf_breadcrumbs_home!==''?'{"@type":"ListItem","position":1,"name":"'.$conf_breadcrumbs_home.'","item":"'.base_url().'"}':'';//главная в цепи
  $breadcrumb_list=$home;//лист+главная
  function get_sub_sections(/*алиас родительского раздела в цепи*/$sect,/*позиция в цепочке для разметки*/$pos){//дополнить лист цепочкой подразделов
@@ -134,7 +134,7 @@ if($q=$CI->db->get($prefix.'contact_page')->result_array()[0]['contacts']){//е�
 ////////////////////////////////////////////////
 //обработка контактов
 ////////////////////////////////////////////////
- $tel=$mail=array();//будут хранить все телефоны, emailы
+ $tel=$mail=[];//будут хранить все телефоны, emailы
  foreach(json_decode($q,TRUE) as $v){//json в массив и обход
   $tel=$v['tel']?array_merge($tel,explode(',',$v['tel'])):$tel;//записать в массив
   $mail=$v['mail']?array_merge($mail,explode(',',$v['mail'])):$mail;//записать в массив

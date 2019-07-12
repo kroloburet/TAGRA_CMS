@@ -5,7 +5,7 @@
 ///////////////////////////////////
 
 class Front_basic_control extends CI_Controller{
- protected $conf=array();//массив, куда будут записана конфигурация сайта и другие данные
+ protected $conf=[];//массив, куда будут записана конфигурация сайта и другие данные
  function __construct(){
   parent::__construct();
   $this->load->model('front_basic_model');

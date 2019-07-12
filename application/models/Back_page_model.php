@@ -14,9 +14,9 @@ class Back_page_model extends Back_basic_model{
    $this->db->where('id',$id)->update($this->_prefix().'pages',$post_arr);
    $url=$alias;
    //перезапись url комментариев
-   $this->db->where('url',$url)->update($this->_prefix().'comments',array('url'=>$post_arr['alias']));
+   $this->db->where('url',$url)->update($this->_prefix().'comments',['url'=>$post_arr['alias']]);
    //перезаписать url пунктов меню
-   $this->db->where('url','/'.$url)->update($this->_prefix().'menu',array('url'=>'/'.$post_arr['alias']));
+   $this->db->where('url','/'.$url)->update($this->_prefix().'menu',['url'=>'/'.$post_arr['alias']]);
    //перезаписать связанные ссылки
    $this->links_url_replace('/'.$alias,'/'.$post_arr['alias']);
   }else{//алиас не менялся

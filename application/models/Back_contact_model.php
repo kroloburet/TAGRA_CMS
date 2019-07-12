@@ -16,7 +16,7 @@ class Back_contact_model extends Back_basic_model{
   return $data;
  }
 
- function edit_contact_page(/* значения полей */$post_arr=array()){
+ function edit_contact_page(/* значения полей */$post_arr=[]){
   $this->db->update($this->_prefix().'contact_page',$post_arr);
  }
 

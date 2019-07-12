@@ -19,7 +19,7 @@ class Front_basic_model extends CI_Model{
          /* с значением (находим запись */$field_val,
          /* получить значение (из найденной записи) */$res_field
          ){
-  foreach($this->db->get_where($tab,array($field=>$field_val))->result() as $row){
+  foreach($this->db->get_where($tab,[$field=>$field_val])->result() as $row){
    return $row->$res_field;
   }
  }
@@ -32,7 +32,7 @@ class Front_basic_model extends CI_Model{
  }
 
  function get_where_alias($tabl,$alias){
-  $q=$this->db->where(array('public'=>'on','alias'=>$alias))->get($tabl)->result_array();
+  $q=$this->db->where(['public'=>'on','alias'=>$alias])->get($tabl)->result_array();
   if(!empty($q)){
    foreach($q as $data){
     foreach($data as $k=>$v){$data[$k]=$v;}
@@ -70,7 +70,7 @@ class Front_basic_model extends CI_Model{
    $json=@json_decode($v['value'],TRUE);
    $data[$v['name']]=$json===NULL?$v['value']:$json;//если значение - json - преобразовать в массив
   }
-  $m=array();//массив будет хранить emailы всех модераторов
+  $m=[];//массив будет хранить emailы всех модераторов
   $ip=$this->input->server('REMOTE_ADDR');//текущий ip
   foreach($this->db->get($this->_prefix().'back_users')->result_array() as $v){
    $data['back_user']=$v['ip']===$ip&&$v['access']==='on'?TRUE:FALSE;//это админ/разрешенный модератор или обычный смертный
@@ -101,12 +101,10 @@ class Front_basic_model extends CI_Model{
    *   )
    * );
    */
-  $m_tree=array();
+  $m_tree=$m_nodes=$m_keys=[];
   $this->db->order_by('order','ASC');//порядок пунктов
   $m_query=$this->db->where('public','on')->get($this->_prefix().'menu')->result_array();
   if(empty($m_query)){return $m_tree;}
-  $m_nodes=array();
-  $m_keys=array();
   foreach($m_query as $m_node){
    $m_nodes[$m_node['id']]=&$m_node; //заполняем список веток записями из БД
    $m_keys[]=$m_node['id']; //заполняем список ключей(ID)
@@ -118,7 +116,7 @@ class Front_basic_model extends CI_Model{
    }else{//находим родительскую ветку и добавляем текущую ветку к дочерним элементам родит.ветки.
     if(isset($m_nodes[$m_nodes[$m_key]['pid']])){//на всякий случай, вдруг в базе есть потерянные ветки
      if(!isset($m_nodes[$m_nodes[$m_key]['pid']]['nodes'])){ //если нет поля определяющего наличие дочерних веток
-      $m_nodes[$m_nodes[$m_key]['pid']]['nodes']=array(); //то добавляем к записи узел (массив дочерних веток) на данном этапе
+      $m_nodes[$m_nodes[$m_key]['pid']]['nodes']=[]; //то добавляем к записи узел (массив дочерних веток) на данном этапе
      }
      $m_nodes[$m_nodes[$m_key]['pid']]['nodes'][]=&$m_nodes[$m_key];
     }

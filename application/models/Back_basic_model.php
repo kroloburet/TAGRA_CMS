@@ -27,16 +27,16 @@ class Back_basic_model extends CI_Model{
 
  function toggle_public(/* id страницы */$id,/* в таблице */$tab,/* on/off */$pub){
   if($pub==='off'){
-   $this->db->where('id',$id)->update($tab,array('public'=>'on'));
+   $this->db->where('id',$id)->update($tab,['public'=>'on']);
    return 'on';
   }elseif($pub==='on'){
-   $this->db->where('id',$id)->update($tab,array('public'=>'off'));
+   $this->db->where('id',$id)->update($tab,['public'=>'off']);
    return 'off';
   }
  }
 
  function links_url_replace(/*найти строку url*/$search,/*заменить на строку url*/$replace){//изменение связанных ссылок
-  $tables=array('index_page','pages','sections','gallerys');
+  $tables=['index_page','pages','sections','gallerys'];
   foreach($tables as $table){//проход по таблицам с полями id,links
    $q=$this->db->select('id,links')->like('links','"'.$search.'"')->get($this->_prefix().$table)->result_array();//вернуть записи с искомой
    if(empty($q)){continue;}//в таблице нет записей
@@ -46,7 +46,7 @@ class Back_basic_model extends CI_Model{
  }
 
  function links_url_del(/*найти опцию с строкой url*/$search){//удаление связанных ссылок
-  $tables=array('index_page','pages','sections','gallerys');
+  $tables=['index_page','pages','sections','gallerys'];
   foreach($tables as $table){//проход по таблицам с полями id,links
    $q=$this->db->select('id,links')->like('links','"'.$search.'"')->get($this->_prefix().$table)->result_array();//вернуть записи с искомой
    if(empty($q)){continue;}//в таблице нет записей
@@ -82,29 +82,29 @@ class Back_basic_model extends CI_Model{
          /* с значением (находим запись */$field_val,
          /* получить значение (из найденной записи) */$res_field
          ){
-  $q=$this->db->get_where($tab,array($field=>$field_val))->result_array();
+  $q=$this->db->get_where($tab,[$field=>$field_val])->result_array();
   if(empty($q)){return FALSE;}
   foreach ($q as $v){return $v[$res_field];}
  }
 
  function check_title($title,$id,$tab){//проверка на уникальность title в таблице БД
-  $where=$id?array('title'=>$title,'id !='=>$id):array('title'=>$title);
+  $where=$id?['title'=>$title,'id !='=>$id]:['title'=>$title];
   $q=$this->db->where($where)->get($this->_prefix().$tab)->result_array();
   return empty($q)?FALSE:TRUE;
  }
 
- function get_result_list($table,$get_arr=array()){//получаю выборку, сортирую, фильтрую, поиск
+ function get_result_list($table,$get_arr=[]){//получаю выборку, сортирую, фильтрую, поиск
  //$table=таблица для запроса "pages", "sections"...
  //$get_arr=get-массив формы фильтра (отсутствующие значения должны быть установлены по умолчанию)
  //$context_search=массив имен полей в которых будет поиск значения из $get_arr['search']
-  if(empty($get_arr)){return array();}
+  if(empty($get_arr)){return [];}
   //комментарии только опубликованные
   $table==='comments'?$this->db->where('public','on'):TRUE;
   //если сортировка по id, сортирую результат - последняя запись сверху
   ($get_arr['order']=='id')?$this->db->order_by('id','DESC'):$this->db->order_by($get_arr['order'],'ASC');
   //поиск $get_arr['search'] в поле $get_arr['context_search']
   if($get_arr['search']!==''){
-   $like=$get_arr['context_search']==='content'?array('layout_t'=>$get_arr['search'],'layout_b'=>$get_arr['search'],'layout_l'=>$get_arr['search'],'layout_r'=>$get_arr['search']):array($get_arr['context_search']=>$get_arr['search']);
+   $like=$get_arr['context_search']==='content'?['layout_t'=>$get_arr['search'],'layout_b'=>$get_arr['search'],'layout_l'=>$get_arr['search'],'layout_r'=>$get_arr['search']]:[$get_arr['context_search']=>$get_arr['search']];
    $table==='comments'?$this->db->like($like):$this->db->or_like($like);
   }
   $q['count_result']=$this->db->count_all_results($this->_prefix().$table,FALSE);
@@ -123,7 +123,7 @@ class Back_basic_model extends CI_Model{
   return empty($q)?FALSE:$q;
  }
 
- function edit_back_user($id,$post_arr=array()){
+ function edit_back_user($id,$post_arr=[]){
    return $this->db->where('id',$id)->update($this->_prefix().'back_users',$post_arr)?TRUE:FALSE;
  }
 

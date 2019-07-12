@@ -9,7 +9,7 @@ $GLOBALS['menu']=&$menu;
   $nbspCnt=0;
   $curPos=0;
   $count=count($tree);
-  $stateArray=array();
+  $stateArray=[];
   $repeat='&#183; ';
   if($pid==''){$selected='selected';}else{$selected='';}
   $select_pid.='<select name="pid">';
@@ -22,7 +22,7 @@ $GLOBALS['menu']=&$menu;
     if($id!==''){if($tree[$curPos]['id']==$id){$disabled='disabled';}}
     $select_pid.= '<option value="'.$tree[$curPos]['id'].'" '.$selected.' '.$disabled.'>'.str_repeat($repeat,$nbspCnt).$tree[$curPos]['title'].'</option>';
     if(isset($tree[$curPos]['nodes'])){
-     array_push($stateArray,array('tree'=>&$tree,'count'=>$count,'curPos'=>$curPos+1));
+     array_push($stateArray,['tree'=>&$tree,'count'=>$count,'curPos'=>$curPos+1]);
      $tree=&$tree[$curPos]['nodes'];
      $count=count($tree);
      $curPos=0;

@@ -125,7 +125,7 @@ switch($gallery_type){
 <?php
 //комментарии
 $this->load->helper('front/comments');
-$comm=new Comments(array_replace($conf_comments,array('form'=>$comments)));
+$comm=new Comments(array_replace($conf_comments,['form'=>$comments]));
 $comm->print_comments();
 ?>
 

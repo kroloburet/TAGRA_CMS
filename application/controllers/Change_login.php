@@ -18,7 +18,7 @@ class Change_login extends CI_Controller{
   $alphabet=range('a','z');
   $up_alphabet=range('A','Z');
   $digits=range('1','9');
-  $spech=array('~','@','#','$','[',']','_','-');
+  $spech=['~','@','#','$','[',']','_','-'];
   $full_array=array_merge($alphabet,$up_alphabet,$digits,$spech);
   $password='';
   for($i=0;$i<$lenght;$i++){
@@ -29,7 +29,7 @@ class Change_login extends CI_Controller{
  }
 
  function index(){//проверить в БД email и отправить на него новые логин и пароль, старые перезаписать
-  $resp=array();//массив для возврата в json
+  $resp=[];//массив для возврата в json
   $count=0;//счетчик сообщений
   $p=array_map('trim',$this->input->post());//данные
   $mail=filter_var($p['send_pass_mail'],FILTER_VALIDATE_EMAIL);//поле email

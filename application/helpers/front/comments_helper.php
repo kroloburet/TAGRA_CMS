@@ -2,14 +2,14 @@
 /////////////////////////////////////////////////////////////////
 class Comments{
  protected $_CI,$_prefix,$_conf;
- function __construct($conf=array()){
+ function __construct($conf=[]){
   $this->_CI=&get_instance();
   $this->_prefix=$this->_CI->config->item('db_tabl_prefix');
   $this->_conf=$conf;
  }
 
  function print_comments(){//вывод всех комментариев и формы комментирования
-  $q=array_reverse($this->_CI->db->where(array('public'=>'on','url'=>uri_string()))->get($this->_prefix.'comments')->result_array(),true);//выборка комментов
+  $q=array_reverse($this->_CI->db->where(['public'=>'on','url'=>uri_string()])->get($this->_prefix.'comments')->result_array(),true);//выборка комментов
   if($this->_conf['form']!=='off'||!empty($q)){?>
 <!--####### Комментарии #######-->
 <div id="comments_layout">
@@ -234,7 +234,7 @@ Comments.feedback();
 
  function _tree_arr($arr){//получить многомерный массив
   //$arr=выборка из базы
-  $tree_arr=array();
+  $tree_arr=[];
   foreach($arr as $v){$tree_arr[$v['pid']][]=$v;}
   return $tree_arr;
  }

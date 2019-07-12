@@ -35,9 +35,9 @@ class Back_comment_control extends Back_basic_control {
 
  function del_branch(){
   $p=$this->input->post();
-  !$p||!$p['id']||!$p['url']?exit(json_encode(array('status'=>'error'),JSON_FORCE_OBJECT)):TRUE;
+  !$p||!$p['id']||!$p['url']?exit(json_encode(['status'=>'error'],JSON_FORCE_OBJECT)):TRUE;
   $ids=$this->back_comment_model->del_branch($p['id'],$p['url']);
-  $ids?exit(json_encode(array('status'=>'ok','ids'=>$ids),JSON_FORCE_OBJECT)):exit(json_encode(array('status'=>'error'),JSON_FORCE_OBJECT));
+  $ids?exit(json_encode(['status'=>'ok','ids'=>$ids],JSON_FORCE_OBJECT)):exit(json_encode(['status'=>'error'],JSON_FORCE_OBJECT));
  }
 
  function del_new($code){
@@ -61,7 +61,7 @@ class Back_comment_control extends Back_basic_control {
 
  function set_comments_config(){
   $conf=json_encode(array_map('trim',$this->input->post()));//убираю пробелы в начале и в конце
-  $this->db->where('name','conf_comments')->update($this->_prefix().'config',array('value'=>$conf));//записываю конфигурацию
+  $this->db->where('name','conf_comments')->update($this->_prefix().'config',['value'=>$conf]);//записываю конфигурацию
   redirect('admin/comment/get_list');
  }
 

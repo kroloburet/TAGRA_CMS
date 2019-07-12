@@ -371,7 +371,7 @@ $conf='<?php defined("BASEPATH") OR exit("No direct script access allowed");'.PH
       . '$config["csrf_cookie_name"]="csrf_cookie_name";'.PHP_EOL
       . '$config["csrf_expire"]=7200;'.PHP_EOL
       . '$config["csrf_expire"]=TRUE;'.PHP_EOL
-      . '$config["csrf_exclude_uris"]=array();'.PHP_EOL
+      . '$config["csrf_exclude_uris"]=[];'.PHP_EOL
       . '$config["compress_output"]=FALSE;'.PHP_EOL
       . '$config["time_reference"]="local";'.PHP_EOL
       . '$config["rewrite_short_tags"]=TRUE;'.PHP_EOL
@@ -398,7 +398,7 @@ $conf_db='<?php defined("BASEPATH") OR exit("No direct script access allowed");'
          . '$db["default"]["encrypt"]=FALSE;'.PHP_EOL
          . '$db["default"]["compress"]=FALSE;'.PHP_EOL
          . '$db["default"]["stricton"]=FALSE;'.PHP_EOL
-         . '$db["default"]["failover"]=array();'.PHP_EOL
+         . '$db["default"]["failover"]=[];'.PHP_EOL
          . '$db["default"]["save_queries"]=TRUE;';
 
 //sitemap.xml

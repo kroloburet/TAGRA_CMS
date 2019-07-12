@@ -14,9 +14,9 @@ class Back_gallery_model extends Back_basic_model{
    $this->db->where('id',$id)->update($this->_prefix().'gallerys',$post_arr);
    $url='gallery/'.$alias;
    //перезаписать url комментариев
-   $this->db->where('url',$url)->update($this->_prefix().'comments',array('url'=>'gallery/'.$post_arr['alias']));
+   $this->db->where('url',$url)->update($this->_prefix().'comments',['url'=>'gallery/'.$post_arr['alias']]);
    //перезаписать url пунктов меню
-   $this->db->where('url','/'.$url)->update($this->_prefix().'menu',array('url'=>'/gallery/'.$post_arr['alias']));
+   $this->db->where('url','/'.$url)->update($this->_prefix().'menu',['url'=>'/gallery/'.$post_arr['alias']]);
    //перезаписать связанные ссылки
    $this->links_url_replace('/gallery/'.$alias,'/gallery/'.$post_arr['alias']);
   }else{//алиас не менялся

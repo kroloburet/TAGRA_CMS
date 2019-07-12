@@ -5,7 +5,7 @@
 ///////////////////////////////////
 
 class Back_basic_control extends CI_Controller {
- protected $conf=array();//массив, куда будут записана конфигурация сайта и другие данные в случае успешной авторизации
+ protected $conf=[];//массив, куда будут записана конфигурация сайта и другие данные в случае успешной авторизации
  function __construct(){
   parent::__construct();
   //////////////////подгружаем скрипты для работы класса
@@ -26,7 +26,7 @@ class Back_basic_control extends CI_Controller {
 ///////////////////////////////////
 
  function login(){
-  $d=array();
+  $d=[];
   $q=$this->back_basic_model->get_back_users();
   //////////////////////////пришли данные для входа
   if($this->input->post('lgn') && $this->input->post('pswd')){
@@ -38,7 +38,7 @@ class Back_basic_control extends CI_Controller {
       break;
      }//запретов нет - пропустить
      $this->session->set_userdata($v['status'], $v['password'].$v['login']);//стартует сессия
-     $this->back_basic_model->edit_back_user($v['id'],array('last_login_date'=>date('Y-m-d H:i:s'),'ip'=>$this->input->server('REMOTE_ADDR')));//фиксирую дату авторизации, ip
+     $this->back_basic_model->edit_back_user($v['id'],['last_login_date'=>date('Y-m-d H:i:s'),'ip'=>$this->input->server('REMOTE_ADDR')]);//фиксирую дату авторизации, ip
      break;
     }//данные неверны
     $d['msg']='<p class="notific_r mini full">Нет пользователя с такими данными!</p>';
@@ -65,7 +65,7 @@ class Back_basic_control extends CI_Controller {
  }
 
  function logout(){
-  $this->session->unset_userdata(array('administrator','moderator'));
+  $this->session->unset_userdata(['administrator','moderator']);
   redirect('admin');
  }
 
@@ -84,9 +84,9 @@ class Back_basic_control extends CI_Controller {
   $id=(ctype_digit($id_mail))?$id_mail:FALSE;
   //mail или id
   if($mail){
-   $this->db->where(array('email'=>$mail));
+   $this->db->where(['email'=>$mail]);
   }elseif($id){
-   $this->db->where(array('id'=>$id));
+   $this->db->where(['id'=>$id]);
   }else{return FALSE;}
   $q=$this->db->get($this->_prefix().'back_users')->result_array();
   //получение и возврат данных
@@ -99,7 +99,7 @@ class Back_basic_control extends CI_Controller {
   return $this->config->item('db_tabl_prefix');
  }
 
- function _format_data($data=array(),$trim=TRUE){//форматирование post\get данных перед записью в базу
+ function _format_data($data=[],$trim=TRUE){//форматирование post\get данных перед записью в базу
   //$data массив post\get
   //$trim использовать ли функцию trim() для значений
   if(!is_array($data)||empty($data)){return FALSE;}
@@ -164,7 +164,7 @@ class Back_basic_control extends CI_Controller {
 
  function set_sitemap_config(){
   $conf=json_encode(array_map('trim',$this->input->post()));//убираю пробелы в начале и в конце
-  $this->db->where('name','conf_sitemap')->update($this->_prefix().'config',array('value'=>$conf));//записываю конфигурацию
+  $this->db->where('name','conf_sitemap')->update($this->_prefix().'config',['value'=>$conf]);//записываю конфигурацию
   $this->sitemap_generator();//обновить карту сайта
   redirect('admin/sitemap');
  }
@@ -173,7 +173,7 @@ class Back_basic_control extends CI_Controller {
   if(!is_writable(getcwd().'/sitemap.xml')){return FALSE;}//если sitemap.xml не доступен для записи
   //инициализация переменных
   $pages=$sections=$gallerys='';
-  $where=array('robots !='=>'none','robots !='=>'noindex');//только индексируемые
+  $where=['robots !='=>'none','robots !='=>'noindex'];//только индексируемые
   $this->conf['conf_sitemap']['allowed']==='public'?$where['public']='on':FALSE;//если включать только опубликованные материалы
   $select='alias';//только нужные поля
   $pgs=$this->db->where($where)->select($select)->get($this->_prefix().'pages')->result_array();

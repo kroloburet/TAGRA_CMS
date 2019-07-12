@@ -232,7 +232,7 @@
  </thead>
  <tbody>
  <?php
- $tree_arr=array();
+ $tree_arr=[];
  foreach($comments as $v){$tree_arr[$v['pid']][]=$v;}//получить многомерный массив
  function build_tree($tree_arr,$pid=0){//построение дерева
   if(!is_array($tree_arr) || !isset($tree_arr[$pid])){return false;}//нет данных

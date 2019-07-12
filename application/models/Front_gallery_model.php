@@ -8,9 +8,9 @@ class Front_gallery_model extends Front_basic_model{
  function __construct(){
   parent::__construct();
  }
- 
+
  function get_gallery($alias){
-  $q=$this->db->where(array('public'=>'on','alias'=>$alias))->get($this->_prefix().'gallerys')->result_array();
+  $q=$this->db->where(['public'=>'on','alias'=>$alias])->get($this->_prefix().'gallerys')->result_array();
   if(!empty($q)){//если в базе есть запись с таким алиасом
    foreach($q as $data){//получить и сделать массив
     foreach($data as $k=>$v){$data[$k]=$v;}

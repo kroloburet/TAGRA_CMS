@@ -23,12 +23,10 @@ class Back_menu_model extends Back_basic_model{
    *   )
    * );
    */
-  $m_tree=array();
+  $m_tree=$m_nodes=$m_keys=[];
   $this->db->order_by('order','ASC');//порядок пунктов
   $m_query=$this->db->get($this->_prefix().'menu')->result_array();
   if(!$m_query){return $m_tree;}
-  $m_nodes=array();
-  $m_keys=array();
   foreach($m_query as $m_node){
    $m_nodes[$m_node['id']]=&$m_node;//заполняем список веток записями из БД
    $m_keys[]=$m_node['id'];//заполняем список ключей(ID)
@@ -40,7 +38,7 @@ class Back_menu_model extends Back_basic_model{
    }else{//находим родительскую ветку и добавляем текущую ветку к дочерним элементам родит.ветки.
     if(isset($m_nodes[$m_nodes[$m_key]['pid']])){//на всякий случай, вдруг в базе есть потерянные ветки
      if(!isset($m_nodes[$m_nodes[$m_key]['pid']]['nodes'])){//если нет поля определяющего наличие дочерних веток
-      $m_nodes[$m_nodes[$m_key]['pid']]['nodes']=array();//то добавляем к записи узел (массив дочерних веток) на данном этапе
+      $m_nodes[$m_nodes[$m_key]['pid']]['nodes']=[];//то добавляем к записи узел (массив дочерних веток) на данном этапе
      }
      $m_nodes[$m_nodes[$m_key]['pid']]['nodes'][]=&$m_nodes[$m_key];
     }
@@ -49,12 +47,12 @@ class Back_menu_model extends Back_basic_model{
   return $m_tree;
  }
 
- function add_menu_item($post_arr=array()){//добавление пункта меню
-  $this->db->where(array('pid'=>$post_arr['pid'],'order >='=>$post_arr['order']));
+ function add_menu_item($post_arr=[]){//добавление пункта меню
+  $this->db->where(['pid'=>$post_arr['pid'],'order >='=>$post_arr['order']]);
   $q=$this->db->get($this->_prefix().'menu')->result_array();
   if($q){//если в базе есть пункты того же родителя, порядок которых больше или ровно добавляемого пункта
    foreach($q as $k){//обход массива
-    $this->db->where('id',$k['id'])->update($this->_prefix().'menu',array('order'=>$k['order']+1));//порядковый номер каждого увеличить на 1
+    $this->db->where('id',$k['id'])->update($this->_prefix().'menu',['order'=>$k['order']+1]);//порядковый номер каждого увеличить на 1
    }
   }
   $this->db->insert($this->_prefix().'menu',$post_arr);//добавить пункт
@@ -62,11 +60,11 @@ class Back_menu_model extends Back_basic_model{
 
  function del_menu_item($id,$pid='',$order=''){//удаление веток меню
   if($pid!==''&&$order!==''){//чтобы в случае рекурссии не выполнять запрос к базе
-   $this->db->where(array('pid'=>$pid,'order >'=>$order));
+   $this->db->where(['pid'=>$pid,'order >'=>$order]);
    $q=$this->db->get($this->_prefix().'menu')->result_array();
    if($q){//если в базе есть пункты того же родителя, порядок которых больше удаляемого пункта
     foreach($q as $k){//обход массива
-     $this->db->where('id',$k['id'])->update($this->_prefix().'menu',array('order'=>$k['order']-1));//порядковый номер каждого уменьшить на 1
+     $this->db->where('id',$k['id'])->update($this->_prefix().'menu',['order'=>$k['order']-1]);//порядковый номер каждого уменьшить на 1
     }
    }
   }
@@ -79,9 +77,9 @@ class Back_menu_model extends Back_basic_model{
 
  function public_menu_item($id,$pub){
   if($pub==='off'){
-   return $this->db->where('id',$id)->update($this->_prefix().'menu',array('public'=>'on'));
+   return $this->db->where('id',$id)->update($this->_prefix().'menu',['public'=>'on']);
   }elseif($pub==='on'){
-   return $this->db->where('id',$id)->update($this->_prefix().'menu',array('public'=>'off'));
+   return $this->db->where('id',$id)->update($this->_prefix().'menu',['public'=>'off']);
   }
  }
 

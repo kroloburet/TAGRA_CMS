@@ -12,14 +12,14 @@ class Back_section_model extends Back_basic_model{
  function edit_section(/*изменения по id*/$id,/*значения полей*/$post_arr,$alias){
   if($post_arr['alias']!==$alias){//алиас изменился
    $this->db->where('id',$id)->update($this->_prefix().'sections',$post_arr);
-   $this->db->where('section',$alias)->update($this->_prefix().'sections',array('section'=>$post_arr['alias']));
-   $this->db->where('section',$alias)->update($this->_prefix().'pages',array('section'=>$post_arr['alias']));
-   $this->db->where('section',$alias)->update($this->_prefix().'gallerys',array('section'=>$post_arr['alias']));
+   $this->db->where('section',$alias)->update($this->_prefix().'sections',['section'=>$post_arr['alias']]);
+   $this->db->where('section',$alias)->update($this->_prefix().'pages',['section'=>$post_arr['alias']]);
+   $this->db->where('section',$alias)->update($this->_prefix().'gallerys',['section'=>$post_arr['alias']]);
    $url='section/'.$alias;
    //перезаписать url комментариев
-   $this->db->where('url',$url)->update($this->_prefix().'comments',array('url'=>'section/'.$post_arr['alias']));
+   $this->db->where('url',$url)->update($this->_prefix().'comments',['url'=>'section/'.$post_arr['alias']]);
    //перезаписать url пунктов меню
-   $this->db->where('url','/'.$url)->update($this->_prefix().'menu',array('url'=>'/section/'.$post_arr['alias']));
+   $this->db->where('url','/'.$url)->update($this->_prefix().'menu',['url'=>'/section/'.$post_arr['alias']]);
    //перезаписать связанные ссылки
    $this->links_url_replace('/section/'.$alias,'/section/'.$post_arr['alias']);
   }else{//алиас не менялся
@@ -29,9 +29,9 @@ class Back_section_model extends Back_basic_model{
 
  function del_section($alias){
   $this->db->where('alias',$alias)->delete($this->_prefix().'sections');
-  $this->db->where('section',$alias)->update($this->_prefix().'sections',array('section'=>''));
-  $this->db->where('section',$alias)->update($this->_prefix().'pages',array('section'=>''));
-  $this->db->where('section',$alias)->update($this->_prefix().'gallerys',array('section'=>''));
+  $this->db->where('section',$alias)->update($this->_prefix().'sections',['section'=>'']);
+  $this->db->where('section',$alias)->update($this->_prefix().'pages',['section'=>'']);
+  $this->db->where('section',$alias)->update($this->_prefix().'gallerys',['section'=>'']);
   //удаление комментариев
   $url='section/'.$alias;
   $this->db->where('url',$url)->delete($this->_prefix().'comments');

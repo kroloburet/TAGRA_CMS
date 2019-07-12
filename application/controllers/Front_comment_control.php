@@ -6,7 +6,7 @@ include_once(APPPATH.'controllers/Front_basic_control.php');
 ///////////////////////////////////
 
 class Front_comment_control extends Front_basic_control{
- protected $c_conf=array();//массив настроек комментариев
+ protected $c_conf=[];//массив настроек комментариев
  public $domen;
  function __construct(){
   parent::__construct();
@@ -116,14 +116,14 @@ IP пользователя: '.$data['ip'].'<br>
  }
 
  function add_comment(){//отправка комментария аяксом
-  !$this->input->post()?exit(json_encode(array('status'=>'error'),JSON_FORCE_OBJECT)):TRUE;
+  !$this->input->post()?exit(json_encode(['status'=>'error'],JSON_FORCE_OBJECT)):TRUE;
   $p=array_map('strip_tags',array_map('trim',$this->input->post()));
   ////////////////////////////////////////////////валидация имени
   if($this->c_conf['reserved_names']&&!$this->conf['back_user']){//есть зарезервированные имена и комментит не админ
-   preg_grep('/^'.$p['name'].'$/ui',array_map('trim',explode(';',$this->c_conf['reserved_names'])))?exit(json_encode(array('status'=>'reserved_name'),JSON_FORCE_OBJECT)):TRUE;
+   preg_grep('/^'.$p['name'].'$/ui',array_map('trim',explode(';',$this->c_conf['reserved_names'])))?exit(json_encode(['status'=>'reserved_name'],JSON_FORCE_OBJECT)):TRUE;
   }
   ////////////////////////////////////////////////запись данных
-  $data=array(
+  $data=[
   'id'=>$p['id'],
   'pid'=>$p['pid'],//id родительского коммента
   'name'=>$p['name'],
@@ -133,24 +133,24 @@ IP пользователя: '.$data['ip'].'<br>
   'ip'=>$this->input->server('REMOTE_ADDR'),
   'feedback'=>filter_var($p['name'],FILTER_VALIDATE_EMAIL)?'on':'off',//если в имени валидный email - подписка на ответы
   'premod_code'=>$this->c_conf['notific']!=='off'?microtime(TRUE):'',//одноразовый код коммента для быстрого управления из e-mail
-  'public'=>in_array($this->c_conf['notific'],array('off','site_mail','admin_mail','moderator_mail'))?'on':'off'//не публиковать если премодерация
-  );
+  'public'=>in_array($this->c_conf['notific'],['off','site_mail','admin_mail','moderator_mail'])?'on':'off'//не публиковать если премодерация
+  ];
   ////////////////////////////////////////////////запись в базу
   $this->input->set_cookie('comment_name',$p['name'],0);//запомнить имя комментатора
-  $this->front_comment_model->add_comment($data)?TRUE:exit(json_encode(array('status'=>'error'),JSON_FORCE_OBJECT));
+  $this->front_comment_model->add_comment($data)?TRUE:exit(json_encode(['status'=>'error'],JSON_FORCE_OBJECT));
   ////////////////////////////////////////////////уведомление админу или модераторам
   $this->_send_notific($data);
   ////////////////////////////////////////////////обратная связь
   $this->_send_feedback($data);
   ////////////////////////////////////////////////возврат
   if($data['public']=='off'){//публикация после премодерации
-   exit(json_encode(array('status'=>'premod'),JSON_FORCE_OBJECT));
+   exit(json_encode(['status'=>'premod'],JSON_FORCE_OBJECT));
   }else{//публикация сейчас
    $q=$this->db->where('id',$data['id'])->get($this->_prefix().'comments')->result_array();//публикуемый коммент
-   !isset($q[0])||empty($q[0])?exit(json_encode(array('status'=>'error'),JSON_FORCE_OBJECT)):TRUE;//если удален
+   !isset($q[0])||empty($q[0])?exit(json_encode(['status'=>'error'],JSON_FORCE_OBJECT)):TRUE;//если удален
    $this->load->helper('front/comments');
-   $comm=new Comments(array_replace($this->c_conf,array('form'=>$p['conf'])));//заменить в глобальном конфиге конфигом со страницы, передать
-   exit(json_encode(array('status'=>'onpublic','html'=>$comm->print_comment($q[0])),JSON_FORCE_OBJECT));
+   $comm=new Comments(array_replace($this->c_conf,['form'=>$p['conf']]));//заменить в глобальном конфиге конфигом со страницы, передать
+   exit(json_encode(['status'=>'onpublic','html'=>$comm->print_comment($q[0])],JSON_FORCE_OBJECT));
   }
  }
 
@@ -201,23 +201,23 @@ IP пользователя: '.$data['ip'].'<br>
   if($action && $pid && $mail && $url){//данные переданы
    switch($action){
     case 'uncomment'://отписка от коммента
-     $where=array('feedback'=>'on','id'=>$pid,'name'=>$mail,'url'=>$url);
+     $where=['feedback'=>'on','id'=>$pid,'name'=>$mail,'url'=>$url];
      $data['msg_class']='notific_g';
      $data['msg']="Успешно! На e-mail «{$mail}» больше не будут приходить уведомления об ответах на ваш комментарий. Если пожелаете получать уведомления об ответах на ваши новые комментарии, снова укажите e-mail вместо имени.<br>$close";
     break;
     case 'unpage'://отписка от всех комментов в материале
-     $where=array('feedback'=>'on','name'=>$mail,'url'=>$url);
+     $where=['feedback'=>'on','name'=>$mail,'url'=>$url];
      $data['msg_class']='notific_g';
      $data['msg']="Успешно! На e-mail «{$mail}» больше не будут приходить уведомления об ответах на ваши комментарии в материале. Если пожелаете получать уведомления об ответах на ваши новые комментарии, снова укажите e-mail вместо имени.<br>$close";
     break;
     case 'unsite'://отписка от всех комментов на сайте
-     $where=array('feedback'=>'on','name'=>$mail);
+     $where=['feedback'=>'on','name'=>$mail];
      $data['msg_class']='notific_g';
      $data['msg']="Успешно! На e-mail «{$mail}» больше не будут приходить уведомления об ответах на ваши комментарии с сайта. Если пожелаете получать уведомления об ответах на ваши новые комментарии, снова укажите e-mail вместо имени.<br>$close";
     break;
     default :$this->load->view('front/do/comment_unfeedback_view',$data);return FALSE;
    }
-   if(!$this->db->where($where)->update($this->_prefix().'comments',array('feedback'=>'off'))){//данные не изменены
+   if(!$this->db->where($where)->update($this->_prefix().'comments',['feedback'=>'off'])){//данные не изменены
     $data['msg_class']='notific_r';
     $data['msg']="Ой! Ошибка..( Возможно это временные неполадки.<br>$reload | $close";
    }
@@ -229,10 +229,10 @@ IP пользователя: '.$data['ip'].'<br>
  function comment_rating(){//рейтинг комментариев
   if(!$this->input->post()){$resp['status']='error';}else{//есть данные
    $p=array_map('strip_tags',array_map('trim',$this->input->post()));
-   $q=$this->db->select('rating')->get_where($this->_prefix().'comments',array('id'=>$p['id']))->result_array();//получить рейтинг коммента
+   $q=$this->db->select('rating')->get_where($this->_prefix().'comments',['id'=>$p['id']])->result_array();//получить рейтинг коммента
    if(empty($q)){$resp['status']='error';}else{//есть коммент
     //обновить рейтинг коммента, запомнить выбор, создать массив для возврата
-    $arr=!$q[0]['rating']?array('like'=>0,'dislike'=>0):json_decode($q[0]['rating'],TRUE);
+    $arr=!$q[0]['rating']?['like'=>0,'dislike'=>0]:json_decode($q[0]['rating'],TRUE);
     $arr[$p['action']]++;
     $resp['status']=$this->front_comment_model->add_comment_rating($p['id'],json_encode($arr,JSON_FORCE_OBJECT))?'ok':'error';
     $resp['status']==='ok'?$this->input->set_cookie($p['hash'],$this->input->server('REMOTE_ADDR'),0):FALSE;
