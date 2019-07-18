@@ -11,6 +11,11 @@
 ///////////////////////////////////////////////////////////
 */
 
+/*------------------------------------------------------------------------------menu*/
+.mobile_menu{padding:0 .2em;vertical-align:middle;font-size:3.7em;line-height:1em;border-left:1px solid #fff;}
+nav{display:inline-block;vertical-align:middle;}
+@media(max-width:800px){.mobile_menu{display:inline-block;}nav{display:block;}.menu{margin-bottom:1%;border-top:1px solid #fff}}
+
 /*
 ///////////////////////////////////////////////////////////
 //template styles
@@ -24,6 +29,8 @@ body{height:100%;display:flex;flex-direction:column;}
 /*------------------------------------------------------------------------------header, maine, layouts, footer*/
 /*header*/
 .header_wrapper{flex:0 0 auto;margin-bottom:2em;background:#E7D977;}
+.header_container{letter-spacing:-.3em;}
+@media(max-width:800px){.header_container{text-align:right;}}
 /*mine*/
 .mine_wrapper{flex:1 0 auto;overflow:hidden}
 .container{padding:0 1%;margin:0 auto}
@@ -38,10 +45,15 @@ body{height:100%;display:flex;flex-direction:column;}
 /*footer*/
 .footer_wrapper{flex:0 0 auto;border-top:2px solid #E7D977}
 footer{padding:1.5em 1%!important;display:flex;}
-#scrol_btn{display:none;line-height:1em;font-size:410%;background:#E7D977;text-align:center;cursor:pointer;}
+#scrol_btn{display:none;line-height:1em;font-size:350%;background:#E7D977;text-align:center;cursor:pointer;}
 .copy{opacity:0.5}
 .copy:hover{opacity:1}
 @media(max-width:600px){footer{flex-direction:column;text-align:center;}#scrol_btn{display:block}}
+
+/*------------------------------------------------------------------------------language_switch*/
+.l_s{display:inline-block;vertical-align:middle;letter-spacing:normal;}
+.l_s a{display:inline-block;padding:.5em .8em;font-size:1.2em;color:#fff;}
+.l_s a:first-child{padding-left:0;}
 
 /*------------------------------------------------------------------------------breadcrumbs*/
 #breadcrumbs{padding:0 0 1em;color:#000;margin:0}

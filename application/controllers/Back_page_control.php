@@ -5,59 +5,59 @@ include_once(APPPATH.'controllers/Back_basic_control.php');
 //работа с страницами
 ///////////////////////////////////
 
-class Back_page_control extends Back_basic_control {
+class Back_page_control extends Back_basic_control{
  function __construct(){
   parent::__construct();
   $this->load->model('back_page_model');
  }
 
  function get_list(){
-  $data=$this->conf;
-  //разбераю get-данные если они есть, если нет - устанавливаю по умолчанию
+  //разобрать get-данные если они есть, если нет - установить по умолчанию
   $get=$this->input->get();
   isset($get['order'])?TRUE:$get['order']='id';
   isset($get['search'])?TRUE:$get['search']='';
   isset($get['context_search'])?TRUE:$get['context_search']='title';
-  isset($get['pag_per_page'])?TRUE:$get['pag_per_page']=$this->session->pag_per_page;//
+  isset($get['pag_per_page'])?TRUE:$get['pag_per_page']=$this->session->pag_per_page;
   isset($get['per_page'])?TRUE:$get['per_page']=0;
-  //получаю выборку для страницы результата и количество всех записей
+  //получить выборку для страницы результата и количество всех записей
   $pages=$this->back_basic_model->get_result_list('pages',$get);
   //инициализация постраничной навигации
   $this->_set_pagination(current_url(),$pages['count_result']);
   $data['pages']=$pages['result'];
-  $data['conf_title'] = "Управление страницами";
+  $data['view_title']='Управление страницами';
   $this->_viewer('back/pages/pages_list_view',$data);
  }
 
  function add_form(){
-  $data=$this->conf;
-  $data['conf_title']="Добавить страницу";
+  $data['view_title']='Добавить страницу';
+  if($this->_lang_selection($data)){return false;}
   $this->_viewer('back/pages/pages_add_view',$data);
  }
 
  function edit_form($id){
-  $data=array_merge($this->conf,$this->back_basic_model->get_where_id($this->_prefix().'pages',$id));//соединение массивов
-  $data['conf_title'] = "Редактировать страницу";
+  $data=$this->back_basic_model->get_where_id('pages',$id);
+  $data['view_title']='Редактировать страницу';
   $this->_viewer('back/pages/pages_edit_view',$data);
  }
 
- function add(){//добавление страницы
-  $this->back_basic_model->add(array_map('trim',$this->input->post()),$this->_prefix().'pages');//записываю материал
-  $this->conf['conf_sitemap']['generate']==='auto'?$this->sitemap_generator():FALSE;//если карта сайта должна генерироваться автоматически
+ function add(){
+  $this->back_page_model->add_page(array_map('trim',$this->input->post()));
+  $this->app('conf.sitemap.generate')==='auto'?$this->sitemap_generator():FALSE;
   redirect('admin/page/get_list');
  }
 
- function edit($id,$alias){//изменение страницы по $id, перзапись url в комментариях, url в меню
-  $this->back_page_model->edit_page($id,array_map('trim',$this->input->post()),$alias);//записываю материал
-  $this->conf['conf_sitemap']['generate']==='auto'?$this->sitemap_generator():FALSE;//если карта сайта должна генерироваться автоматически
+ function edit($id){
+  $this->back_page_model->edit_page($id,array_map('trim',$this->input->post()));
+  $this->app('conf.sitemap.generate')==='auto'?$this->sitemap_generator():FALSE;
   redirect('admin/page/get_list');
  }
 
- function del(){//удаление аяксом страницы и комментарии к ней
-  $post=$this->input->post();
-  $this->back_page_model->del_page($post['alias']);
-  $this->conf['conf_sitemap']['generate']==='auto'?$this->sitemap_generator():FALSE;//если карта сайта должна генерироваться автоматически
-  echo '';
+ function del(){
+  $p=$this->input->post();
+  if(!$p['alias']){exit('error');}
+  $this->back_page_model->del_page($p['alias']);
+  $this->app('conf.sitemap.generate')==='auto'?$this->sitemap_generator():FALSE;
+  exit('ok');
  }
 
 }

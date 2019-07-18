@@ -1,36 +1,20 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 /////////////////////////////////////////////////////////////////
 $CI=&get_instance();
-$prefix=$this->config->item('db_tabl_prefix');
-$pages=$CI->db->select('title,alias,section')->order_by('title','ASC')->get($prefix.'pages')->result_array();
-$sections=$CI->db->select('title,alias,section')->order_by('title','ASC')->get($prefix.'sections')->result_array();
-$gallerys=$CI->db->select('title,alias,section')->order_by('title','ASC')->get($prefix.'gallerys')->result_array();
+$data=$CI->app('data');
+$pages=$CI->db->where('lang',$data['lang'])->select('title,alias,section')->order_by('title')->get('pages')->result_array();
+$sections=$CI->db->where('lang',$data['lang'])->select('title,alias,section')->order_by('title')->get('sections')->result_array();
+$gallerys=$CI->db->where('lang',$data['lang'])->select('title,alias,section')->order_by('title')->get('gallerys')->result_array();
 ?>
 
-<script src="<?=base_url('scripts/tinymce_4.7.11/tinymce.min.js')?>"></script>
+<script src="/scripts/tinymce_4.7.11/tinymce.min.js"></script>
 <script>
-var mce_link_list=[//выпадающий список ссылок на страницы сайта
- <?php if($pages){?>
-  {title:'Страницы',menu:[
-   <?php foreach($pages as $i){?>{title:'<?=$i['title']?>',value:'<?='/'.$i['alias']?>'},<?php }?>
-  ]},
- <?php }?>
- <?php if($sections){?>
-  {title:'Разделы',menu:[
-   <?php foreach($sections as $i){?>{title:'<?=$i['title']?>',value:'<?='/section/'.$i['alias']?>'},<?php }?>
-  ]},
- <?php }?>
- <?php if($gallerys){?>
-  {title:'Галереи',menu:[
-   <?php foreach($gallerys as $i){?>{title:'<?=$i['title']?>',value:'<?='/gallery/'.$i['alias']?>'},<?php }?>
-  ]},
- <?php }?>
-  {title:'Главная',value:'/'},
-  {title:'Контакты',value:'/contact'}
- ];
-var mce_overall_conf={//глобальная конфигурация редактора
+//////////////////////////////////////////////////настройки текстового редактора
+tinymce.init({
  language:"ru",//язык редактора
  content_css:"/css/back/redactor.css",//стили для редактируемого контента
+ selector:"#layout_t,#layout_l,#layout_r,#layout_b",
+ inline:true,//редактор появляется после клика в елементе
  menubar:false,
  element_format:"html",//теги в формате
  code_dialog_width:800,
@@ -38,7 +22,6 @@ var mce_overall_conf={//глобальная конфигурация редак
  remove_script_host:true,
  style_formats_merge:true,//добавлять или нет свои классы к классам по умолчанию в меню "формат"
  browser_spellcheck:true,//проверка орфографии
- forced_root_block:false,//оборачивать или нет в <p>
  valid_elements:"*[*]",//разрешенные
  //allow_script_urls: true,//разрешить\запретить внешние скрипты
  //invalid_elements:"strong,em",//запрещенные
@@ -46,7 +29,7 @@ var mce_overall_conf={//глобальная конфигурация редак
  image_advtab:true,//расширенный диалог вставки изображения
  image_title: true,
  image_class_list:[//предустановленные классы для картинок
-  {title:'Нет применять',value:''},
+  {title:'Не применять',value:''},
   {title:'По центру',value:'to_c'},
   {title:'Справа',value:'to_r'},
   {title:'Слева',value:'to_l'},
@@ -54,17 +37,30 @@ var mce_overall_conf={//глобальная конфигурация редак
  ],
  plugins:"advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code textcolor media table contextmenu paste nonbreaking moxiemanager fullscreen",
  toolbar:"undo redo | styleselect | bold italic | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table charmap link image media insertfile | fullscreen code",
- link_list:mce_link_list,
+ link_list:[//выпадающий список ссылок на страницы сайта
+ <?php if($pages){?>
+  {title:"Страницы",menu:[
+   <?php foreach($pages as $i){?>{title:"<?=addslashes($i['title'])?>",value:"<?='/'.$i['alias']?>"},<?php }?>
+  ]},
+ <?php }?>
+ <?php if($sections){?>
+  {title:"Разделы",menu:[
+   <?php foreach($sections as $i){?>{title:"<?=addslashes($i['title'])?>",value:"<?='/section/'.$i['alias']?>"},<?php }?>
+  ]},
+ <?php }?>
+ <?php if($gallerys){?>
+  {title:"Галереи",menu:[
+   <?php foreach($gallerys as $i){?>{title:"<?=addslashes($i['title'])?>",value:"<?='/gallery/'.$i['alias']?>"},<?php }?>
+  ]},
+ <?php }?>
+  {title:"Главная",value:"/"},
+  {title:"Контакты",value:"/contact"}
+ ],
  ////////////////////////настройки файлового менеджера
- moxiemanager_rootpath:'/upload/',
+ moxiemanager_rootpath:'/upload/<?=$data['lang']?>',
  moxiemanager_title:'Mенеджер файлов',
  moxiemanager_leftpanel:false
-}
-//////////////////////////////////////////////////настройки текстового редактора по умолчанию
-tinymce.init(Object.assign({},mce_overall_conf,{
- selector: "#layout_t,#layout_l,#layout_r,#layout_b,#conf_special,#special",
- inline: true//редактор появляется после клика в элементе
-}));
+});
 //////////////////////////////////////////////////////////////////////////////////////инициализация текстового редактора
 $(function(){//готовность DOM
 var layouts=$("#layout_t,#layout_l,#layout_r,#layout_b");

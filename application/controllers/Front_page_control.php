@@ -12,13 +12,8 @@ class Front_page_control extends Front_basic_control{
  }
 
  function is_page($alias){
-  $q=$this->front_page_model->is_page($alias);
-  if($q){//если в базе есть такой алиас
-  $data=array_merge($this->conf,$q);//соединение массивов
-  $this->_viewer('front/page_view',$data);
-  }else{//если нет алиаса
-   redirect('404_override');
-  }
+  $data=$this->front_page_model->is_page($alias);
+  $data?$this->_viewer('front/page_view',$data):redirect('404_override');
  }
 
 }

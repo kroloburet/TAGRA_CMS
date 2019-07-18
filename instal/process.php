@@ -27,6 +27,7 @@ $_POST=array_map('trim',$_POST);//убираем пробелы в начале 
 $date=date('Y-m-d');//текущая дата
 $moment=date('Y-m-d H:i:s');//текущая дата и время
 $ip=$_SERVER["REMOTE_ADDR"];//текущий IP
+$id=round(microtime(true)*1000);//уникальный id
 
 //база данных
 $db_name=$_POST['db_name'];
@@ -57,7 +58,8 @@ $bad_msg='<h2 style="margin-top:1.5em">Упс! Что-то пошло не та�
 
 //промо-данные для записи в БД
 $index_title='Привет, Мир!';
-$index_body='<div class="row"><div class="col2 algn_c"><img src="/img/tagra.svg" alt="Tagra CMS" title="Tagra CMS"></div><div class="col7"><p>Добро пожаловать в систему управления контентом &laquo;Tagra&raquo;!<br> Итак. Для быстрого старта вашего сайта &mdash; <a href="/admin">зайдите в админку</a>, используя логин и пароль, созданный вами при установке системы, и начинайте творить..) Но прежде, чтобы облегчить работу с самой системой и верстку контента для вашего сайта, я предлагаю <a href="/UI_fraimwork/info.html" target="_blank">краткое знакомство с системой</a></p></div></div>';
+$index_layout_l='<img src="/img/tagra.svg" alt="Tagra CMS">';
+$index_layout_r='Добро пожаловать в систему управления контентом &laquo;Tagra&raquo;!<br> Итак. Для быстрого старта вашего сайта &mdash; <a href="/admin">зайдите в админку</a>, используя логин и пароль, созданный вами при установке системы, и начинайте творить..) Но прежде, чтобы облегчить работу с самой системой и верстку контента для вашего сайта, я предлагаю <a href="/UI_fraimwork/info.html" target="_blank">краткое знакомство с системой</a>';
 $contact_title='Контакты';
 
 ///////////////////////////////////////////////////////////////////////////
@@ -72,7 +74,7 @@ echo"<div class='notific_g'>Соединение с сервером успеш�
 
 //sessions
 $t=$db_tabl_prefix.'sessions';
-$db->query("CREATE TABLE IF NOT EXISTS `$t` (
+$db->query("CREATE TABLE IF NOT EXISTS `$t`(
   `id` varchar(128) NOT NULL,
   `ip_address` varchar(45) NOT NULL,
   `timestamp` int (10) unsigned DEFAULT 0 NOT NULL,
@@ -83,20 +85,165 @@ $db->query("CREATE TABLE IF NOT EXISTS `$t` (
 or die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".$db->error."</div>".$bad_msg);
 echo"<div class='notific_g'>Таблица « $t » успешно создана</div>";
 
-//comments
-$t=$db_tabl_prefix.'comments';
-$db->query("CREATE TABLE IF NOT EXISTS `$t` (
+//languages
+$t=$db_tabl_prefix.'languages';
+$q_c=$db->query("CREATE TABLE IF NOT EXISTS `$t`(
   `id` bigint(20) NOT NULL,
-  `pid` bigint(20) NOT NULL,
-  `premod_code` text NOT NULL,
-  `ip` varchar(100) NOT NULL,
-  `url` text NOT NULL,
-  `date` varchar(100) NOT NULL,
-  `name` varchar(300) NOT NULL,
-  `comment` longtext NOT NULL,
-  `rating` text NOT NULL,
-  `feedback` varchar(20) NOT NULL DEFAULT 'off',
-  `public` varchar(20) NOT NULL DEFAULT 'off',
+  `tag` varchar(20) NOT NULL,
+  `title` varchar(20) NOT NULL,
+  `def` varchar(20) NOT NULL,
+  `public` varchar(20) NOT NULL DEFAULT 'on',
+  PRIMARY KEY (`id`))
+  ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+$q_i=$db->query("INSERT INTO `$t` (`id`, `tag`, `title`, `def`) VALUES
+($id, 'ru', 'RU', 'on');");
+if(!$q_c || !$q_i){
+die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".$db->error."</div>".$bad_msg);
+}
+echo"<div class='notific_g'>Таблица « $t » успешно создана</div>";
+
+//config
+$t=$db_tabl_prefix.'config';
+$q_c=$db->query("CREATE TABLE IF NOT EXISTS `$t`(
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` text NOT NULL,
+  `value` text NOT NULL,
+  PRIMARY KEY (`id`))
+  ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+$q_i=$db->query("INSERT INTO `$t` (`name`, `value`) VALUES
+('site_access', 'on'),
+('site_name', '$site_name'),
+('site_mail', '$admin_mail'),
+('jq', 'https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'),
+('emmet', 'off'),
+('gapi_key', ''),
+('body_width', '1000'),
+('layout_l_width', '60'),
+('addthis_js', ''),
+('addthis_share', ''),
+('addthis_follow', ''),
+('addthis_share_def', 'off'),
+('addthis_follow_def', 'off'),
+('img_prev_def', ''),
+('breadcrumbs', '{\"public\":\"on\",\"home\":\"on\"}'),
+('markup_data', 'on'),
+('sitemap', '{\"generate\":\"auto\",\"allowed\":\"public\"}'),
+('comments', '{\"form\":\"on\",\"reserved_names\":\"\",\"rating\":\"on\",\"name_limit\":\"50\",\"text_limit\":\"500\",\"show\":\"3\",\"notific\":\"off\",\"feedback\":\"on\"}');");
+if(!$q_c || !$q_i){
+die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".$db->error."</div>".$bad_msg);
+}
+echo"<div class='notific_g'>Таблица « $t » успешно создана</div>";
+
+//back_users
+$t=$db_tabl_prefix.'back_users';
+$q_c=$db->query("CREATE TABLE IF NOT EXISTS `$t`(
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `ip` varchar(200) NOT NULL,
+  `status` varchar(200) NOT NULL,
+  `login` text NOT NULL,
+  `password` text NOT NULL,
+  `email` text NOT NULL,
+  `register_date` varchar(20) NOT NULL,
+  `last_mod_date` varchar(20) NOT NULL,
+  `last_login_date` varchar(20) NOT NULL,
+  `access` varchar(20) NOT NULL DEFAULT 'on',
+  PRIMARY KEY (`id`))
+  ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+$q_i=$db->query("INSERT INTO `$t` (`ip`, `status`, `login`, `password`, `email`, `register_date`) VALUES
+('$ip', 'administrator', '$admin_name', '$admin_pass', '$admin_mail', '$moment'),
+('$ip', 'moderator', '$moder_name', '$moder_pass', '$moder_mail', '$moment');");
+if(!$q_c || !$q_i){
+die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".$db->error."</div>".$bad_msg);
+}
+echo"<div class='notific_g'>Таблица « $t » успешно создана</div>";
+
+//index_pages
+$t=$db_tabl_prefix.'index_pages';
+$q_c=$db->query("CREATE TABLE IF NOT EXISTS `$t`(
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `creation_date` varchar(20) NOT NULL,
+  `last_mod_date` varchar(20) NOT NULL,
+  `title` text NOT NULL,
+  `description` text NOT NULL,
+  `robots` varchar(100) NOT NULL DEFAULT 'all',
+  `css` text NOT NULL,
+  `js` text NOT NULL,
+  `layout_t` longtext NOT NULL,
+  `layout_l` longtext NOT NULL,
+  `layout_r` longtext NOT NULL,
+  `layout_b` longtext NOT NULL,
+  `layout_l_width` int(4) NOT NULL,
+  `links` text NOT NULL,
+  `addthis_share` varchar(20) NOT NULL DEFAULT 'off',
+  `addthis_follow` varchar(20) NOT NULL DEFAULT 'off',
+  `img_prev` text NOT NULL,
+  `lang` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`))
+  ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+$q_i=$db->query("INSERT INTO `$t` (`creation_date`, `last_mod_date`, `title`, `description`, `layout_l`, `layout_r`, `layout_l_width`, `lang`) VALUES
+('$date', '$date', '$index_title', '$index_title', '$index_layout_l', '$index_layout_r', 15, 'ru');");
+if(!$q_c || !$q_i){
+die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".$db->error."</div>".$bad_msg);
+}
+echo"<div class='notific_g'>Таблица « $t » успешно создана</div>";
+
+//contact_pages
+$t=$db_tabl_prefix.'contact_pages';
+$q_c=$db->query("CREATE TABLE IF NOT EXISTS `$t`(
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `creation_date` varchar(20) NOT NULL,
+  `last_mod_date` varchar(20) NOT NULL,
+  `title` text NOT NULL,
+  `description` text NOT NULL,
+  `robots` varchar(100) NOT NULL DEFAULT 'all',
+  `css` text NOT NULL,
+  `js` text NOT NULL,
+  `layout_t` longtext NOT NULL,
+  `layout_l` longtext NOT NULL,
+  `layout_r` longtext NOT NULL,
+  `layout_b` longtext NOT NULL,
+  `layout_l_width` int(4) NOT NULL,
+  `contacts` text NOT NULL,
+  `addthis_share` varchar(20) NOT NULL DEFAULT 'off',
+  `addthis_follow` varchar(20) NOT NULL DEFAULT 'off',
+  `img_prev` text NOT NULL,
+  `contact_form` varchar(20) NOT NULL DEFAULT 'on',
+  `lang` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`))
+  ENGINE=InnoDB DEFAULT CHARSET=utf8;");
+$q_i=$db->query("INSERT INTO `$t` (`creation_date`, `last_mod_date`, `title`, `description`, `layout_l_width`, `lang`) VALUES
+('$date', '$date', '$contact_title', '$contact_title', 60, 'ru');");
+if(!$q_c || !$q_i){
+die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".$db->error."</div>".$bad_msg);
+}
+echo"<div class='notific_g'>Таблица « $t » успешно создана</div>";
+
+//pages
+$t=$db_tabl_prefix.'pages';
+$db->query("CREATE TABLE IF NOT EXISTS `$t`(
+  `id` bigint(20) NOT NULL,
+  `creation_date` varchar(20) NOT NULL,
+  `last_mod_date` varchar(20) NOT NULL,
+  `alias` text NOT NULL,
+  `title` text NOT NULL,
+  `description` text NOT NULL,
+  `robots` varchar(100) NOT NULL DEFAULT 'all',
+  `css` text NOT NULL,
+  `js` text NOT NULL,
+  `layout_t` longtext NOT NULL,
+  `layout_l` longtext NOT NULL,
+  `layout_r` longtext NOT NULL,
+  `layout_b` longtext NOT NULL,
+  `layout_l_width` int(4) NOT NULL,
+  `links` text NOT NULL,
+  `section` text NOT NULL,
+  `addthis_share` varchar(20) NOT NULL DEFAULT 'off',
+  `addthis_follow` varchar(20) NOT NULL DEFAULT 'off',
+  `img_prev` text NOT NULL,
+  `comments` varchar(20) NOT NULL DEFAULT 'off',
+  `public` varchar(20) NOT NULL DEFAULT 'on',
+  `lang` varchar(20) NOT NULL,
+  `versions` text NOT NULL,
   PRIMARY KEY (`id`))
   ENGINE=InnoDB DEFAULT CHARSET=utf8;")
 or die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".$db->error."</div>".$bad_msg);
@@ -104,8 +251,8 @@ echo"<div class='notific_g'>Таблица « $t » успешно создан�
 
 //gallerys
 $t=$db_tabl_prefix.'gallerys';
-$db->query("CREATE TABLE IF NOT EXISTS `$t` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+$db->query("CREATE TABLE IF NOT EXISTS `$t`(
+  `id` bigint(20) NOT NULL,
   `creation_date` varchar(20) NOT NULL,
   `last_mod_date` varchar(20) NOT NULL,
   `alias` text NOT NULL,
@@ -128,6 +275,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `$t` (
   `img_prev` text NOT NULL,
   `comments` varchar(20) NOT NULL DEFAULT 'off',
   `public` varchar(20) NOT NULL DEFAULT 'on',
+  `lang` varchar(20) NOT NULL,
+  `versions` text NOT NULL,
   PRIMARY KEY (`id`))
   ENGINE=InnoDB DEFAULT CHARSET=utf8;")
 or die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".$db->error."</div>".$bad_msg);
@@ -135,8 +284,8 @@ echo"<div class='notific_g'>Таблица « $t » успешно создан�
 
 //sections
 $t=$db_tabl_prefix.'sections';
-$db->query("CREATE TABLE IF NOT EXISTS `$t`  (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+$db->query("CREATE TABLE IF NOT EXISTS `$t`(
+  `id` bigint(20) NOT NULL,
   `creation_date` varchar(20) NOT NULL,
   `last_mod_date` varchar(20) NOT NULL,
   `alias` text NOT NULL,
@@ -157,35 +306,8 @@ $db->query("CREATE TABLE IF NOT EXISTS `$t`  (
   `img_prev` text NOT NULL,
   `comments` varchar(20) NOT NULL DEFAULT 'off',
   `public` varchar(20) NOT NULL DEFAULT 'on',
-  PRIMARY KEY (`id`))
-  ENGINE=InnoDB DEFAULT CHARSET=utf8;")
-or die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".$db->error."</div>".$bad_msg);
-echo"<div class='notific_g'>Таблица « $t » успешно создана</div>";
-
-//pages
-$t=$db_tabl_prefix.'pages';
-$db->query("CREATE TABLE IF NOT EXISTS `$t` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `creation_date` varchar(20) NOT NULL,
-  `last_mod_date` varchar(20) NOT NULL,
-  `alias` text NOT NULL,
-  `title` text NOT NULL,
-  `description` text NOT NULL,
-  `robots` varchar(100) NOT NULL DEFAULT 'all',
-  `css` text NOT NULL,
-  `js` text NOT NULL,
-  `layout_t` longtext NOT NULL,
-  `layout_l` longtext NOT NULL,
-  `layout_r` longtext NOT NULL,
-  `layout_b` longtext NOT NULL,
-  `layout_l_width` int(4) NOT NULL,
-  `links` text NOT NULL,
-  `section` text NOT NULL,
-  `addthis_share` varchar(20) NOT NULL DEFAULT 'off',
-  `addthis_follow` varchar(20) NOT NULL DEFAULT 'off',
-  `img_prev` text NOT NULL,
-  `comments` varchar(20) NOT NULL DEFAULT 'off',
-  `public` varchar(20) NOT NULL DEFAULT 'on',
+  `lang` varchar(20) NOT NULL,
+  `versions` text NOT NULL,
   PRIMARY KEY (`id`))
   ENGINE=InnoDB DEFAULT CHARSET=utf8;")
 or die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".$db->error."</div>".$bad_msg);
@@ -193,127 +315,38 @@ echo"<div class='notific_g'>Таблица « $t » успешно создан�
 
 //menu
 $t=$db_tabl_prefix.'menu';
-$db->query("CREATE TABLE IF NOT EXISTS `$t` (
+$db->query("CREATE TABLE IF NOT EXISTS `$t`(
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `pid` bigint(20) NOT NULL,
+  `order` int(20) NOT NULL,
   `title` text NOT NULL,
   `url` text NOT NULL,
   `target` varchar(20) NOT NULL DEFAULT '_self',
-  `order` int(20) NOT NULL,
   `public` varchar(20) NOT NULL DEFAULT 'on',
+  `lang` varchar(20) NOT NULL,
   PRIMARY KEY (`id`))
   ENGINE=InnoDB DEFAULT CHARSET=utf8;")
 or die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".$db->error."</div>".$bad_msg);
 echo"<div class='notific_g'>Таблица « $t » успешно создана</div>";
 
-//index_page
-$t=$db_tabl_prefix.'index_page';
-$q_c=$db->query("CREATE TABLE IF NOT EXISTS `$t` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `creation_date` varchar(20) NOT NULL,
-  `last_mod_date` varchar(20) NOT NULL,
-  `title` text NOT NULL,
-  `description` text NOT NULL,
-  `robots` varchar(100) NOT NULL DEFAULT 'all',
-  `css` text NOT NULL,
-  `js` text NOT NULL,
-  `layout_t` longtext NOT NULL,
-  `layout_l` longtext NOT NULL,
-  `layout_r` longtext NOT NULL,
-  `layout_b` longtext NOT NULL,
-  `layout_l_width` int(4) NOT NULL,
-  `links` text NOT NULL,
-  `addthis_share` varchar(20) NOT NULL DEFAULT 'off',
-  `addthis_follow` varchar(20) NOT NULL DEFAULT 'off',
-  `img_prev` text NOT NULL,
+//comments
+$t=$db_tabl_prefix.'comments';
+$db->query("CREATE TABLE IF NOT EXISTS `$t`(
+  `id` bigint(20) NOT NULL,
+  `pid` bigint(20) NOT NULL,
+  `premod_code` text NOT NULL,
+  `ip` varchar(100) NOT NULL,
+  `url` text NOT NULL,
+  `date` varchar(100) NOT NULL,
+  `name` varchar(300) NOT NULL,
+  `comment` longtext NOT NULL,
+  `rating` text NOT NULL,
+  `feedback` varchar(20) NOT NULL DEFAULT 'off',
+  `public` varchar(20) NOT NULL DEFAULT 'off',
+  `lang` varchar(20) NOT NULL,
   PRIMARY KEY (`id`))
-  ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-$q_i=$db->query("INSERT INTO `$t` (`creation_date`, `last_mod_date`, `title`, `description`, `robots`, `css`, `js`, `layout_t`, `layout_l`, `layout_r`, `layout_b`, `layout_l_width`, `links`, `addthis_share`, `addthis_follow`) VALUES
-('$date', '$date', '$index_title', '$index_title', 'all', '', '', '$index_body', '', '', '', 60, '',  'off', 'off');");
-if(!$q_c && !$q_i){
-die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".$db->error."</div>".$bad_msg);
-}
-echo"<div class='notific_g'>Таблица « $t » успешно создана</div>";
-
-//contact_page
-$t=$db_tabl_prefix.'contact_page';
-$q_c=$db->query("CREATE TABLE IF NOT EXISTS `$t` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `creation_date` varchar(20) NOT NULL,
-  `last_mod_date` varchar(20) NOT NULL,
-  `title` text NOT NULL,
-  `description` text NOT NULL,
-  `robots` varchar(100) NOT NULL DEFAULT 'all',
-  `css` text NOT NULL,
-  `js` text NOT NULL,
-  `layout_t` longtext NOT NULL,
-  `contacts` text NOT NULL,
-  `addthis_share` varchar(20) NOT NULL DEFAULT 'off',
-  `addthis_follow` varchar(20) NOT NULL DEFAULT 'off',
-  `contact_form` varchar(20) NOT NULL DEFAULT 'on',
-  PRIMARY KEY (`id`))
-  ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-$q_i=$db->query("INSERT INTO `$t` (`creation_date`, `last_mod_date`, `title`, `description`, `robots`, `css`, `js`, `layout_t`, `contacts`, `addthis_share`, `addthis_follow`, `contact_form`) VALUES
-('$date', '$date', '$contact_title', '$contact_title', 'all', '', '', '', '', 'off', 'off', 'on');");
-if(!$q_c && !$q_i){
-die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".$db->error."</div>".$bad_msg);
-}
-echo"<div class='notific_g'>Таблица « $t » успешно создана</div>";
-
-//my_config
-$t=$db_tabl_prefix.'config';
-$q_c=$db->query("CREATE TABLE IF NOT EXISTS `$t` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `name` text NOT NULL,
-  `value` text NOT NULL,
-  PRIMARY KEY (`id`))
-  ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-$q_i=$db->query("INSERT INTO `$t` (`name`, `value`) VALUES
-('conf_site_access', 'on'),
-('conf_site_name', '$site_name'),
-('conf_site_mail', '$admin_mail'),
-('conf_jq', 'https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'),
-('conf_gapi_key', 'AIzaSyAdiy2QBgRf7lQwoVqy2y3s9LElfsw1E3Y'),
-('conf_body_width', '1000'),
-('conf_layout_l_width', '60'),
-('conf_markup_data', 'on'),
-('conf_addthis_js', ''),
-('conf_addthis_share', ''),
-('conf_addthis_follow', ''),
-('conf_addthis_share_def', 'off'),
-('conf_addthis_follow_def', 'off'),
-('conf_img_prev_def', ''),
-('conf_breadcrumbs_public', 'on'),
-('conf_breadcrumbs_home', 'Главная'),
-('conf_emmet', 'off'),
-('conf_sitemap', '{\"generate\":\"auto\",\"allowed\":\"public\"}'),
-('conf_comments', '{\"form\":\"on\",\"reserved_names\":\"\",\"rating\":\"on\",\"name_limit\":\"50\",\"text_limit\":\"500\",\"show\":\"3\",\"notific\":\"off\",\"feedback\":\"on\"}');");
-if(!$q_c && !$q_i){
-die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".$db->error."</div>".$bad_msg);
-}
-echo"<div class='notific_g'>Таблица « $t » успешно создана</div>";
-
-//back_users
-$t=$db_tabl_prefix.'back_users';
-$q_c=$db->query("CREATE TABLE IF NOT EXISTS `$t` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `ip` varchar(200) NOT NULL,
-  `status` varchar(200) NOT NULL,
-  `login` text NOT NULL,
-  `password` text NOT NULL,
-  `email` text NOT NULL,
-  `register_date` varchar(20) NOT NULL,
-  `last_mod_date` varchar(20) NOT NULL,
-  `last_login_date` varchar(20) NOT NULL,
-  `access` varchar(20) NOT NULL DEFAULT 'on',
-  PRIMARY KEY (`id`))
-  ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-$q_i=$db->query("INSERT INTO `$t` (`ip`, `status`, `login`, `password`, `email`, `register_date`) VALUES
-('$ip', 'administrator', '$admin_name', '$admin_pass', '$admin_mail', '$moment'),
-('$ip', 'moderator', '$moder_name', '$moder_pass', '$moder_mail', '$moment');");
-if(!$q_c && !$q_i){
-die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".$db->error."</div>".$bad_msg);
-}
+  ENGINE=InnoDB DEFAULT CHARSET=utf8;")
+or die("<div class='notific_r'>Не удалось создать таблицу « $t »: ".$db->error."</div>".$bad_msg);
 echo"<div class='notific_g'>Таблица « $t » успешно создана</div>";
 
 $db->close();
@@ -326,14 +359,14 @@ $cms_path=str_replace('/instal','',dirname(__FILE__));//абсолютный п�
 
 //config.php
 $conf='<?php defined("BASEPATH") OR exit("No direct script access allowed");'.PHP_EOL
-      . '$config["tagra_version"]="2.2";'.PHP_EOL
+      . '$config["app"]=[];'.PHP_EOL
+      . '$config["tagra_version"]="3.0";'.PHP_EOL
       . '$config["tagra_instal_date"]=\''.$moment.'\';'.PHP_EOL
       . '$config["base_url"]=\''.$domen.'\';'.PHP_EOL
-      . '$config["db_tabl_prefix"]=\''.$db_tabl_prefix.'\';'.PHP_EOL
       . '$config["index_page"]="";'.PHP_EOL
       . '$config["uri_protocol"]="REQUEST_URI";'.PHP_EOL
       . '$config["url_suffix"]="";'.PHP_EOL
-      . '$config["language"]="russian";'.PHP_EOL
+      . '$config["language"]="english";'.PHP_EOL
       . '$config["charset"]="UTF-8";'.PHP_EOL
       . '$config["enable_hooks"]=FALSE;'.PHP_EOL
       . '$config["subclass_prefix"]="MY_";'.PHP_EOL
@@ -352,7 +385,7 @@ $conf='<?php defined("BASEPATH") OR exit("No direct script access allowed");'.PH
       . '$config["error_views_path"]="";'.PHP_EOL
       . '$config["cache_path"]="";'.PHP_EOL
       . '$config["cache_query_string"]=FALSE;'.PHP_EOL
-      . '$config["encryption_key"]="'.uniqid('Kroloburet_').'";'.PHP_EOL
+      . '$config["encryption_key"]="'.uniqid('tagra_').'";'.PHP_EOL
       . '$config["sess_driver"]="database";'.PHP_EOL
       . '$config["sess_save_path"]=\''.$db_tabl_prefix.'sessions\';'.PHP_EOL
       . '$config["sess_cookie_name"]="tagra_session";'.PHP_EOL
@@ -386,8 +419,8 @@ $conf_db='<?php defined("BASEPATH") OR exit("No direct script access allowed");'
          . '$db["default"]["username"]=\''.$db_user.'\';'.PHP_EOL
          . '$db["default"]["password"]=\''.$db_pass.'\';'.PHP_EOL
          . '$db["default"]["database"]=\''.$db_name.'\';'.PHP_EOL
+         . '$db["default"]["dbprefix"]=\''.$db_tabl_prefix.'\';'.PHP_EOL
          . '$db["default"]["dbdriver"]="mysqli";'.PHP_EOL
-         . '$db["default"]["dbprefix"]="";'.PHP_EOL
          . '$db["default"]["pconnect"]=FALSE;'.PHP_EOL
          . '$db["default"]["db_debug"]=TRUE;'.PHP_EOL
          . '$db["default"]["cache_on"]=FALSE;'.PHP_EOL
@@ -403,13 +436,20 @@ $conf_db='<?php defined("BASEPATH") OR exit("No direct script access allowed");'
 
 //sitemap.xml
 $sitemap='<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL
-         .'<!-- Generator: Tagra CMS; Developer: Sergey Nizhnik kroloburet@gmail.com -->';
+          .'<!-- Developer: Sergey Nizhnik kroloburet@gmail.com -->'.PHP_EOL
+          .'<!-- Generator: Tagra CMS -->';
 
 //директория для загрузки медиа
 if(!mkdir($cms_path.'/upload',0750)){
 die("<div class='notific_r'>Не удалось создать директорию « /upload » для загрузки медиа</div>".$bad_msg);
 }
 echo"<div class='notific_g'>Директория « /upload » для загрузки медиа успешно создана</div>";
+
+//директория для языка ru (по умолчанию)
+if(!mkdir($cms_path.'/upload/ru',0750)){
+die("<div class='notific_r'>Не удалось создать директорию « /upload/ru » загрузки медиа языка по умолчанию</div>".$bad_msg);
+}
+echo"<div class='notific_g'>Директория « /upload/ru » загрузки медиа языка по умолчанию успешно создана</div>";
 
 //файл конфигурации CMS
 if(!file_put_contents($cms_path.'/application/config/config.php',$conf)){
@@ -442,7 +482,7 @@ echo"<div class='notific_g'>Файл индекса CMS « /index.php » усп�
 echo$good_msg;
 ?>
 
-   <div id="copy">Веб-разработка и дизайн<a href="mailto:kroloburet@gmail.com"> <img src="/img/i.jpg" alt="Разработка и дизайн сайтов"> kroloburet@gmail.com</a><br>
+   <div id="copy">Веб-разработка и дизайн<a href="mailto:kroloburet@gmail.com"> <img src="/img/i.jpg" alt="kroloburet"> kroloburet@gmail.com</a><br>
  <img src="/img/tagra_min.svg" alt="Tagra CMS"> Tagra CMS</div>
   </div>
  </body>

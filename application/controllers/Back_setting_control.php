@@ -37,7 +37,7 @@ class Back_setting_control extends Back_basic_control{
   //перезаписать сессию чтобы не выбрасывало из админки
   $this->session->administrator?$this->session->set_userdata('administrator',$p['password'].$p['login']):TRUE;
   //вернуть ok и json запись админа
-  $q=$this->db->where('status','administrator')->get($this->_prefix().'back_users')->result_array();
+  $q=$this->db->where('status','administrator')->get('back_users')->result_array();
   if(empty($q)){$a='{}';}else{foreach($q as $v){$a[$v['id']]=$v;}}
   exit(json_encode(['status'=>'ok','opt'=>$a],JSON_FORCE_OBJECT));
  }
@@ -50,8 +50,8 @@ class Back_setting_control extends Back_basic_control{
   $p['status']='moderator';
   $p['login']=password_hash($p['login'],PASSWORD_BCRYPT);
   $p['password']=password_hash($p['password'],PASSWORD_BCRYPT);
-  if($this->back_basic_model->add($p,$this->_prefix().'back_users')){//добавлен в базу
-   $q=$this->db->where('status','moderator')->get($this->_prefix().'back_users')->result_array();
+  if($this->back_basic_model->add($p,'back_users')){//добавлен в базу
+   $q=$this->db->where('status','moderator')->get('back_users')->result_array();
    if(empty($q)){$m='{}';}else{foreach($q as $v){$m[$v['id']]=$v;}}
    exit(json_encode(['status'=>'ok','opt'=>$m],JSON_FORCE_OBJECT));
   }else{//не добавлен в базу
@@ -69,7 +69,7 @@ class Back_setting_control extends Back_basic_control{
   //если пароль не заполнен использовать старый, иначе - шифровать новый
   if($p['password']!==''){$p['password']=password_hash($p['password'],PASSWORD_BCRYPT);}else{unset($p['password']);}
   if($this->back_basic_model->edit_back_user($id,$p)){//перезаписан
-   $q=$this->db->where('status','moderator')->get($this->_prefix().'back_users')->result_array();
+   $q=$this->db->where('status','moderator')->get('back_users')->result_array();
    if(empty($q)){$m='{}';}else{foreach($q as $v){$m[$v['id']]=$v;}}
    exit(json_encode(['status'=>'ok','opt'=>$m],JSON_FORCE_OBJECT));
   }else{//не перезаписан
@@ -79,14 +79,14 @@ class Back_setting_control extends Back_basic_control{
 
  function del_moderator(){//удалить модератора
   //сколько модераторов в системе, если один - не удалять
-  $this->db->where('status','moderator')->from($this->_prefix().'back_users')->count_all_results()===1?exit('last'):TRUE;
+  $this->db->where('status','moderator')->from('back_users')->count_all_results()===1?exit('last'):TRUE;
   $id=$this->input->post('id');
-  $this->back_basic_model->del($this->_prefix().'back_users',$id)?exit('ok'):exit('error');
+  $this->back_basic_model->del('back_users',$id)?exit('ok'):exit('error');
  }
 
  function set_config(){
-  $conf=array_map('trim',$this->input->post());
-  $this->back_setting_model->set_config($conf);//записать конфигурацию
+  $conf=$this->_format_data($this->input->post(),TRUE,'json');
+  $this->back_setting_model->set_config($conf);
   redirect('admin');
  }
 

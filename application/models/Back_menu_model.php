@@ -9,78 +9,88 @@ class Back_menu_model extends Back_basic_model{
   parent::__construct();
  }
 
- function get_menu(){
-  /*
-   * /////на входе
-   * array('id'=>'1', 'pid'=>'0', 'name'=>'главная ветка');
-   * array('id'=>'2', 'pid'=>'1', 'name'=>'дочерняя ветка1');
-   * array('id'=>'3', 'pid'=>'1', 'name'=>'дочерняя ветка2');
-   * /////на выходе
-   * array('id'=>'1', 'pid'=>'0', 'name'=>'главная ветка', 'nodes'=>
-   *   array(
-   *      array('id'=>'2', 'pid'=>'1', 'name'=>'дочерняя ветка1'),
-   *     array('id'=>'3', 'pid'=>'1', 'name'=>'дочерняя ветка2')
-   *   )
-   * );
-   */
-  $m_tree=$m_nodes=$m_keys=[];
-  $this->db->order_by('order','ASC');//порядок пунктов
-  $m_query=$this->db->get($this->_prefix().'menu')->result_array();
-  if(!$m_query){return $m_tree;}
-  foreach($m_query as $m_node){
-   $m_nodes[$m_node['id']]=&$m_node;//заполняем список веток записями из БД
-   $m_keys[]=$m_node['id'];//заполняем список ключей(ID)
-   unset($m_node);
+ function get_menu($lang){
+  $q=$this->db->where('lang',$lang)->order_by('order')->get('menu')->result_array();
+  if(empty($q)){return [];}
+  function maketree($input,$pid=0){//выборку в многомерный массив
+   $output=[];//будет содержать результирующий массив
+   foreach($input as $n=>$v){//обход входного массива
+    if($v['pid']==$pid){//родитель равен запрашиваемому
+     $bufer=$v;//записать в буфер
+     unset($input[$n]);//удалить записанный элемент из входного массива
+     $nodes=maketree($input,$v['id']);//рекурсивно выбрать дочерние элементы
+     if(count($nodes)>0){$bufer['nodes']=$nodes;}//есть дочерние - записать в буфер
+     $output[]=$bufer;//записать буфер в результирующий массив
+    }
+   }
+   return $output;
   }
-  foreach($m_keys as $m_key){//если нашли главную ветку(или одну из главных), то добавляе меё в дерево
-   if($m_nodes[$m_key]['pid']==='0'){
-    $m_tree[]=&$m_nodes[$m_key];
-   }else{//находим родительскую ветку и добавляем текущую ветку к дочерним элементам родит.ветки.
-    if(isset($m_nodes[$m_nodes[$m_key]['pid']])){//на всякий случай, вдруг в базе есть потерянные ветки
-     if(!isset($m_nodes[$m_nodes[$m_key]['pid']]['nodes'])){//если нет поля определяющего наличие дочерних веток
-      $m_nodes[$m_nodes[$m_key]['pid']]['nodes']=[];//то добавляем к записи узел (массив дочерних веток) на данном этапе
-     }
-     $m_nodes[$m_nodes[$m_key]['pid']]['nodes'][]=&$m_nodes[$m_key];
+  return maketree($q);
+ }
+
+ function add_item($data){//добавить пункт, изменить порядок пунктов
+  $q=$this->db->where(['lang'=>$data['lang'],'pid'=>$data['pid'],'order >='=>$data['order']])->get('menu')->result_array();
+  $ids=[];//массив id с новым порядком для изменения
+  if($q){//есть пункты того же родителя, порядок которых больше или равен добавляемого пункта
+   foreach($q as $v){
+    $ids[]=['id'=>$v['id'],'order'=>$v['order']+1];
+   }
+  }
+  return (
+   $this->db->insert('menu',$data)&&
+   empty($ids)?TRUE:$this->db->update_batch('menu',$ids,'id')
+  );
+ }
+
+ function edit_item($data){//изменить пункт
+  $ids=[];//будет содержать id и order для изменения порядка
+  $q=$this->db->where('lang',$data['lang'])->get('menu')->result_array();//выборка всех пунктов языка
+  foreach($q as $k=>$v){$q[$v['id']]=$v;unset($q[$k]);}//формат выборки
+  if($q[$data['id']]['pid']!==$data['pid']||$q[$data['id']]['order']!==$data['order']){//пункт перемещается
+   foreach($q as $k=>$v){
+    if($v['id']===$data['id']){continue;}
+    if($v['pid']===$q[$data['id']]['pid']&&$v['order']>$q[$data['id']]['order']){//удалить из старого места
+     $ids[]=['id'=>$v['id'],'order'=>$v['order']-1];
+    }
+    if($v['pid']===$data['pid']&&$v['order']>=$data['order']){//поместить в новое место
+     $ids[]=['id'=>$v['id'],'order'=>$v['order']+1];
     }
    }
   }
-  return $m_tree;
+  return (
+   $this->db->where('id',$data['id'])->update('menu',$data)&&
+   empty($ids)?TRUE:$this->db->update_batch('menu',$ids,'id')
+  );
  }
 
- function add_menu_item($post_arr=[]){//добавление пункта меню
-  $this->db->where(['pid'=>$post_arr['pid'],'order >='=>$post_arr['order']]);
-  $q=$this->db->get($this->_prefix().'menu')->result_array();
-  if($q){//если в базе есть пункты того же родителя, порядок которых больше или ровно добавляемого пункта
-   foreach($q as $k){//обход массива
-    $this->db->where('id',$k['id'])->update($this->_prefix().'menu',['order'=>$k['order']+1]);//порядковый номер каждого увеличить на 1
-   }
-  }
-  $this->db->insert($this->_prefix().'menu',$post_arr);//добавить пункт
- }
-
- function del_menu_item($id,$pid='',$order=''){//удаление веток меню
-  if($pid!==''&&$order!==''){//чтобы в случае рекурссии не выполнять запрос к базе
-   $this->db->where(['pid'=>$pid,'order >'=>$order]);
-   $q=$this->db->get($this->_prefix().'menu')->result_array();
-   if($q){//если в базе есть пункты того же родителя, порядок которых больше удаляемого пункта
-    foreach($q as $k){//обход массива
-     $this->db->where('id',$k['id'])->update($this->_prefix().'menu',['order'=>$k['order']-1]);//порядковый номер каждого уменьшить на 1
+ function del_item($data){//удалить ветку пунктов, изменить порядок пунктов
+  global $ids;
+  $q=$this->db->where('lang',$data['lang'])->get('menu')->result_array();
+  $ids['del'][]=$data['id'];//массив id для удаления
+  $ids['decrement']=[];//массив id с новым порядком для изменения
+  function get_del_ids($arr,$id){//рекурсивный сбор id пунктов ветки
+   global $ids;
+   foreach($arr as $v){
+    if($id===$v['pid']){
+     $ids['del'][]=$v['id'];
+     get_del_ids($arr,$v['id']);
     }
    }
   }
-  $this->db->where('id',$id)->delete($this->_prefix().'menu');//нахожу по id, удаляю
-  $w=$this->db->where('pid',$id)->get($this->_prefix().'menu')->result_array();//поиск дочерних веток
-  if($w){//если есть дочерние ветки - рекрссия
-   foreach($w as $pids){$this->del_menu_item($pids['id']);}
+  get_del_ids($q,$data['id']);
+  foreach($q as $v){//сбор id с новым порядком
+   if($data['pid']===$v['pid']&&$data['order']<$v['order']){//того же родителя, порядок которых больше удаляемого пункта
+    $ids['decrement'][]=['id'=>$v['id'],'order'=>$v['order']-1];
+   }
   }
+  return (
+   $this->db->where_in('id',$ids['del'])->delete('menu')&&
+   empty($ids['decrement'])?TRUE:$this->db->update_batch('menu',$ids['decrement'],'id')
+  );
  }
 
- function public_menu_item($id,$pub){
-  if($pub==='off'){
-   return $this->db->where('id',$id)->update($this->_prefix().'menu',['public'=>'on']);
-  }elseif($pub==='on'){
-   return $this->db->where('id',$id)->update($this->_prefix().'menu',['public'=>'off']);
-  }
+ function public_item($data){
+  return $this->db->where('id',$data['id'])->update('menu',['public'=>$data['public']==='on'?'off':'on']);
  }
 
 }

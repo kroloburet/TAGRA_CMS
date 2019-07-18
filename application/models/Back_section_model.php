@@ -9,34 +9,38 @@ class Back_section_model extends Back_basic_model{
   parent::__construct();
  }
 
- function edit_section(/*изменения по id*/$id,/*значения полей*/$post_arr,$alias){
-  if($post_arr['alias']!==$alias){//алиас изменился
-   $this->db->where('id',$id)->update($this->_prefix().'sections',$post_arr);
-   $this->db->where('section',$alias)->update($this->_prefix().'sections',['section'=>$post_arr['alias']]);
-   $this->db->where('section',$alias)->update($this->_prefix().'pages',['section'=>$post_arr['alias']]);
-   $this->db->where('section',$alias)->update($this->_prefix().'gallerys',['section'=>$post_arr['alias']]);
-   $url='section/'.$alias;
-   //перезаписать url комментариев
-   $this->db->where('url',$url)->update($this->_prefix().'comments',['url'=>'section/'.$post_arr['alias']]);
-   //перезаписать url пунктов меню
-   $this->db->where('url','/'.$url)->update($this->_prefix().'menu',['url'=>'/section/'.$post_arr['alias']]);
-   //перезаписать связанные ссылки
-   $this->links_url_replace('/section/'.$alias,'/section/'.$post_arr['alias']);
-  }else{//алиас не менялся
-   $this->db->where('id',$id)->update($this->_prefix().'sections',$post_arr);
+ function add_section($data){
+  if($this->db->insert('sections',$data)&&$data['versions']){
+   $this->set_versions('sections',$data);//добавить связи с материалом в версиях
   }
  }
 
+ function edit_section($id,$data){
+  $q=$this->db->where('id',$id)->get('sections')->result_array();//изменяемый материал
+  if($q[0]['alias']!==$data['alias']){//алиас изменился
+   $this->db->where('section',$q[0]['alias'])->update('sections',['section'=>$data['alias']]);
+   $this->db->where('section',$q[0]['alias'])->update('pages',['section'=>$data['alias']]);
+   $this->db->where('section',$q[0]['alias'])->update('gallerys',['section'=>$data['alias']]);
+   $url='section/'.$q[0]['alias'];
+   $this->db->where('url',$url)->update('comments',['url'=>'section/'.$data['alias']]);//перезаписать url комментариев
+   $this->db->where('url','/'.$url)->update('menu',['url'=>'/section/'.$data['alias']]);//перезаписать url пунктов меню
+   $this->links_url_replace('/'.$url,'/section/'.$data['alias']);//перезаписать связанные ссылки
+  }
+  if($q[0]['alias']!==$data['alias']||$q[0]['versions']!==$data['versions']){//алиас или версии изменились
+   $this->set_versions('sections',$data,$q[0]);//добавить/обновить связи с материалом в версиях
+  }
+  $this->db->where('id',$id)->update('sections',$data);
+ }
+
  function del_section($alias){
-  $this->db->where('alias',$alias)->delete($this->_prefix().'sections');
-  $this->db->where('section',$alias)->update($this->_prefix().'sections',['section'=>'']);
-  $this->db->where('section',$alias)->update($this->_prefix().'pages',['section'=>'']);
-  $this->db->where('section',$alias)->update($this->_prefix().'gallerys',['section'=>'']);
-  //удаление комментариев
+  $this->db->where('alias',$alias)->delete('sections');
+  $this->db->where('section',$alias)->update('sections',['section'=>'']);
+  $this->db->where('section',$alias)->update('pages',['section'=>'']);
+  $this->db->where('section',$alias)->update('gallerys',['section'=>'']);
   $url='section/'.$alias;
-  $this->db->where('url',$url)->delete($this->_prefix().'comments');
-  //удаление связанных ссылок
-  $this->links_url_del('/section/'.$alias);
+  $this->db->where('url',$url)->delete('comments');//удалить комментарии к материалу
+  $this->links_url_del('/'.$url);//удалить связанные ссылки на материал
+  $this->del_versions('sections','/'.$url);//удалить связи с материалом в версиях
  }
 
 }

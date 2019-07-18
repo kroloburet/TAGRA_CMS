@@ -9,28 +9,32 @@ class Back_gallery_model extends Back_basic_model{
   parent::__construct();
  }
 
- function edit_gallery(/*изменения по id*/$id,/*значения полей*/$post_arr,$alias){
-  if($post_arr['alias']!==$alias){//алиас изменился
-   $this->db->where('id',$id)->update($this->_prefix().'gallerys',$post_arr);
-   $url='gallery/'.$alias;
-   //перезаписать url комментариев
-   $this->db->where('url',$url)->update($this->_prefix().'comments',['url'=>'gallery/'.$post_arr['alias']]);
-   //перезаписать url пунктов меню
-   $this->db->where('url','/'.$url)->update($this->_prefix().'menu',['url'=>'/gallery/'.$post_arr['alias']]);
-   //перезаписать связанные ссылки
-   $this->links_url_replace('/gallery/'.$alias,'/gallery/'.$post_arr['alias']);
-  }else{//алиас не менялся
-   $this->db->where('id',$id)->update($this->_prefix().'gallerys',$post_arr);
+ function add_gallery($data){
+  if($this->db->insert('gallerys',$data)&&$data['versions']){
+   $this->set_versions('gallerys',$data);//добавить связи с материалом в версиях
   }
  }
 
+ function edit_gallery($id,$data){
+  $q=$this->db->where('id',$id)->get('gallerys')->result_array();//изменяемый материал
+  if($q[0]['alias']!==$data['alias']){//алиас изменился
+   $url='gallery/'.$q[0]['alias'];
+   $this->db->where('url',$url)->update('comments',['url'=>'gallery/'.$data['alias']]);//перезаписать url комментариев
+   $this->db->where('url','/'.$url)->update('menu',['url'=>'/gallery/'.$data['alias']]);//перезаписать url пунктов меню
+   $this->links_url_replace('/'.$url,'/gallery/'.$data['alias']);//перезаписать связанные ссылки
+  }
+  if($q[0]['alias']!==$data['alias']||$q[0]['versions']!==$data['versions']){//алиас или версии изменились
+   $this->set_versions('gallerys',$data,$q[0]);//добавить/обновить связи с материалом в версиях
+  }
+  $this->db->where('id',$id)->update('gallerys',$data);
+ }
+
  function del_gallery($alias){
-  $this->db->where('alias',$alias)->delete($this->_prefix().'gallerys');
-  //удаление комментариев
+  $this->db->where('alias',$alias)->delete('gallerys');
   $url='gallery/'.$alias;
-  $this->db->where('url',$url)->delete($this->_prefix().'comments');
-  //удаление связанных ссылок
-  $this->links_url_del('/gallery/'.$alias);
+  $this->db->where('url',$url)->delete('comments');//удалить комментарии к материалу
+  $this->links_url_del('/'.$url);//удалить связанные ссылки на материал
+  $this->del_versions('gallerys','/'.$url);//удалить связи с материалом в версиях
  }
 
 }

@@ -1,44 +1,41 @@
 <!--####### Mine #######-->
 <div class="mine_wrapper">
-<div class="container" style="max-width:<?=$conf_body_width?>px">
+<div class="container" style="max-width:<?=htmlspecialchars($conf['body_width'])?>px">
 
-<!--####### Breadcrumbs #######-->
-<?php
-if($conf_breadcrumbs_public=='on'){
+<?php if($conf['breadcrumbs']['public']=='on'){
  $this->load->helper('front/breadcrumbs');
- breadcrumbs($conf_breadcrumbs_home);
-}
-?>
+ new breadcrumbs();
+}?>
 
 <!--####### Headline #######-->
 <div id="headline">
-<h1><?=$title?></h1>
-<?php if($conf_addthis_share&&$addthis_share=='on'){?>
-<div class="addthis_layout noprint"><?=$conf_addthis_share?></div>
+<h1><?=$data['title']?></h1>
+<?php if($conf['addthis_share']&&$data['addthis_share']=='on'){?>
+<div class="addthis_layout noprint"><?=$conf['addthis_share']?></div>
 <?php }?>
 </div>
 
-<?php if($layout_l||$layout_r||$layout_t||$layout_b){//если заполнен один из сегментов макета?>
-<!--####### Контент материала #######-->
+<?php if($data['layout_l']||$data['layout_r']||$data['layout_t']||$data['layout_b']){//если заполнен один из сегментов макета?>
+<!--####### Material content #######-->
 <div id="layouts">
-<?php if($layout_t){//если заполнен верхний?>
-<div id="layout_t"><?=$layout_t?></div>
+<?php if($data['layout_t']){//если заполнен верхний?>
+<div id="layout_t"><?=$data['layout_t']?></div>
 <?php }?>
-<?php if($layout_l||$layout_r){//если заполнен правый или левый?>
-<div id="layout_l" style="width:<?=$layout_l_width?>%;"><?=$layout_l?></div>
-<div id="layout_r"><?=$layout_r?></div>
+<?php if($data['layout_l']||$data['layout_r']){//если заполнен правый или левый?>
+<div id="layout_l" style="width:<?=htmlspecialchars($data['layout_l_width'])?>%;"><?=$data['layout_l']?></div>
+<div id="layout_r"><?=$data['layout_r']?></div>
 <?php }?>
-<?php if($layout_b){//если заполнен нижний?>
-<div id="layout_b"><?=$layout_b?></div>
+<?php if($data['layout_b']){//если заполнен нижний?>
+<div id="layout_b"><?=$data['layout_b']?></div>
 <?php }?>
 </div>
 <?php }?>
 
-<?php if($links){//есть связанные ссылки
-$l_opt=json_decode($links,true);
+<?php if($data['links']){//есть связанные ссылки
+$l_opt=json_decode($data['links'],true);
 echo '<!--####### Связанные ссылки #######-->'.PHP_EOL;
 echo '<div id="links_block" class="noprint">'.PHP_EOL;
-echo $l_opt['title']?'<h3>'.$l_opt['title'].'</h3>'.PHP_EOL:FALSE;
+echo $l_opt['title']?'<h2>'.$l_opt['title'].'</h2>'.PHP_EOL:FALSE;
 foreach($l_opt as $k=>$v){
  echo $k!=='title'?'<a href="'.$v['url'].'" class="links_item fa-chain">&nbsp;'.$v['title'].'</a>'.PHP_EOL:FALSE;
 }
@@ -46,9 +43,8 @@ echo '</div>'.PHP_EOL;
 }?>
 
 <?php
-//комментарии
 $this->load->helper('front/comments');
-$comm=new Comments(array_replace($conf_comments,['form'=>$comments]));
+$comm=new Comments(array_replace($conf['comments'],['form'=>$data['comments']]));
 $comm->print_comments();
 ?>
 

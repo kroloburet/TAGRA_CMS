@@ -6,6 +6,7 @@ $route["translate_uri_dashes"]=FALSE;
 //Роуты для админки
 $route["admin"]="back_basic_control";
 $route["admin/setting/(.+)"]="back_setting_control/$1";
+$route["admin/language/(.+)"]="back_language_control/$1";
 $route["admin/menu/(.+)"]="back_menu_control/$1";
 $route["admin/section/(.+)"]="back_section_control/$1";
 $route["admin/gallery/(.+)"]="back_gallery_control/$1";
@@ -20,6 +21,7 @@ $route["section/(.+)"]="front_section_control/section/$1";
 $route["gallery/(.+)"]="front_gallery_control/gallery/$1";
 //Роуты действий
 $route["do/change_login"]="Change_login";
+$route["do/change_lang/(.+)"]="front_basic_control/change_lang/$1";
 $route["do/send_mail"]="front_contact_control/send_mail";
 $route["do/add_comment"]="front_comment_control/add_comment";
 $route["do/comment_action/(.+)"]="front_comment_control/comment_action/$1";

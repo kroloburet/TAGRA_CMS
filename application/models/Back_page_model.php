@@ -9,28 +9,32 @@ class Back_page_model extends Back_basic_model{
   parent::__construct();
  }
 
- function edit_page(/*изменения по id*/$id,/*значения полей*/$post_arr,$alias){
-  if($post_arr['alias']!==$alias){//алиас изменился
-   $this->db->where('id',$id)->update($this->_prefix().'pages',$post_arr);
-   $url=$alias;
-   //перезапись url комментариев
-   $this->db->where('url',$url)->update($this->_prefix().'comments',['url'=>$post_arr['alias']]);
-   //перезаписать url пунктов меню
-   $this->db->where('url','/'.$url)->update($this->_prefix().'menu',['url'=>'/'.$post_arr['alias']]);
-   //перезаписать связанные ссылки
-   $this->links_url_replace('/'.$alias,'/'.$post_arr['alias']);
-  }else{//алиас не менялся
-   $this->db->where('id',$id)->update($this->_prefix().'pages',$post_arr);
+ function add_page($data){
+  if($this->db->insert('pages',$data)&&$data['versions']){
+   $this->set_versions('pages',$data);//добавить связи с материалом в версиях
   }
  }
 
+ function edit_page($id,$data){
+  $q=$this->db->where('id',$id)->get('pages')->result_array();//изменяемый материал
+  if($q[0]['alias']!==$data['alias']){//алиас изменился
+   $url=$q[0]['alias'];
+   $this->db->where('url',$url)->update('comments',['url'=>$data['alias']]);//перезаписать url комментариев
+   $this->db->where('url','/'.$url)->update('menu',['url'=>'/'.$data['alias']]);//перезаписать url пунктов меню
+   $this->links_url_replace('/'.$url,'/'.$data['alias']);//перезаписать связанные ссылки
+  }
+  if($q[0]['alias']!==$data['alias']||$q[0]['versions']!==$data['versions']){//алиас или версии изменились
+   $this->set_versions('pages',$data,$q[0]);//добавить/обновить связи с материалом в версиях
+  }
+  $this->db->where('id',$id)->update('pages',$data);
+ }
+
  function del_page($alias){
-  $this->db->where('alias',$alias)->delete($this->_prefix().'pages');
-  //удаление комментариев
+  $this->db->where('alias',$alias)->delete('pages');
   $url=$alias;
-  $this->db->where('url',$url)->delete($this->_prefix().'comments');
-  //удаление связанных ссылок
-  $this->links_url_del('/'.$alias);
+  $this->db->where('url',$url)->delete('comments');//удалить комментарии к материалу
+  $this->links_url_del('/'.$url);//удалить связанные ссылки на материал
+  $this->del_versions('pages','/'.$url);//удалить связи с материалом в версиях
  }
 
 }

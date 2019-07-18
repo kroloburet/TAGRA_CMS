@@ -1,22 +1,22 @@
-<h1><?=$conf_title?></h1>
-
+<h1><?=$data['view_title']?></h1>
 <!--####### Настройки вывода, поиск, иные опции #######-->
 <form id="filter" class="sheath" method="GET" action="<?=current_url()?>">
  <div class="button algn_r">
-  <a href="<?=base_url('admin/page/add_form')?>" class="btn_lnk">Добавить страницу</a>
+  <a href="/admin/page/add_form" class="btn_lnk">Добавить страницу</a>
  </div>
  <div class="row">
   <div class="col6">
    Сортировать
    <label class="select">
     <select name="order" onchange="submit()">
-     <option value="id">по идентификатору</option>
-     <option value="creation_date">по дате создания</option>
-     <option value="last_mod_date">по дате изменения</option>
-     <option value="alias">по алиасу</option>
-     <option value="title">по заголовку</option>
-     <option value="section">по разделу</option>
-     <option value="public">по публикации</option>
+     <option value="id">По идентификатору</option>
+     <option value="creation_date">По дате создания</option>
+     <option value="last_mod_date">По дате изменения</option>
+     <option value="alias">По алиасу</option>
+     <option value="title">По заголовку</option>
+     <option value="section">По разделу</option>
+     <option value="public">По публикации</option>
+     <option value="lang">По языку</option>
     </select>
    </label>
   </div>
@@ -30,7 +30,7 @@
      <option value="300">300</option>
      <option value="500">500</option>
      <option value="1000">1000</option>
-     <option value="all">все</option>
+     <option value="all">Все</option>
     </select>
    </label>
   </div>
@@ -40,24 +40,25 @@
    Контекст поиска
    <label class="select">
     <select name="context_search">
-     <option value="title">заголовок</option>
-     <option value="alias">алиас</option>
-     <option value="description">описание</option>
-     <option value="content">контент</option>
+     <option value="title">Заголовок</option>
+     <option value="alias">Алиас</option>
+     <option value="description">Описание</option>
+     <option value="content">Контент</option>
+     <option value="lang">Язык</option>
     </select>
    </label>
   </div>
   <div class="col8">
    Искать в контексте
    <label class="search">
-    <input type="text" name="search" placeholder="строка запроса">
+    <input type="text" name="search" placeholder="Строка запроса">
     <a href="#" class="btn_lnk" onclick="form.submit();return false">Поиск</a>
    </label>
   </div>
  </div>
 </form>
 
-<?php if(empty($pages)){?>
+<?php if(empty($data['pages'])){?>
 <div class="sheath">
  <p>Ничего не найдено. Запрос не дал результатов..(</p>
 </div>
@@ -70,22 +71,25 @@
    <td>Заголовок</td>
    <td>Алиас</td>
    <td>Раздел</td>
+   <td>Язык</td>
    <td>Действия</td>
   </tr>
  </thead>
  <tbody>
   <?php
   $this->load->helper('back/section_alias_to_title');
-  foreach($pages as $item){?>
+  $satt=new Section_alias_to_title();
+  foreach($data['pages'] as $v){?>
   <tr>
-   <td><?=$item['title']?></td>
-   <td><?=$item['alias']?></td>
-   <td><?php section_alias_to_title($item['section'])?></td>
+   <td><?=mb_strimwidth($v['title'],0,40,'...')?></td>
+   <td><?=mb_strimwidth($v['alias'],0,40,'...')?></td>
+   <td><?=$satt->get_title($v['section'])?></td>
+   <td><?=$v['lang']?></td>
    <td>
-    <span><a href="#" class="<?=$item['public']=='on'?'fa-eye green':'fa-eye-slash red'?>" title="Опубликовать/не опубликовывать" onclick="toggle_public(this,<?=$item['id']?>,'<?=$prefix?>pages','<?=$item['public']?>');return false"></a></span>&nbsp;&nbsp;
-    <a href="<?=base_url('admin/page/edit_form/'.$item['id'])?>" class="fa-edit green" title="Редактировать"></a>&nbsp;&nbsp;
-    <a href="<?=base_url($item['alias'])?>" class="fa-external-link" target="_blank" title="Смотреть на сайте"></a>&nbsp;&nbsp;
-    <a href="#" class="fa-trash-o red" title="Удалить" onclick="del_page(this,'<?=$item['alias']?>');return false"></a>
+    <span><a href="#" class="<?=$v['public']=='on'?'fa-eye green':'fa-eye-slash red'?>" title="Опубликовать/не опубликовывать" onclick="toggle_public(this,<?=$v['id']?>,'pages');return false"></a></span>&nbsp;&nbsp;
+    <a href="/admin/page/edit_form/<?=$v['id']?>" class="fa-edit green" title="Редактировать"></a>&nbsp;&nbsp;
+    <a href="/<?=$v['alias']?>" class="fa-external-link" target="_blank" title="Смотреть на сайте"></a>&nbsp;&nbsp;
+    <a href="#" class="fa-trash-o red" title="Удалить" onclick="del_page(this,'<?=$v['alias']?>');return false"></a>
    </td>
   </tr>
   <?php }?>
@@ -101,7 +105,7 @@
 $def['order']=!$this->input->get('order')?'id':$this->input->get('order');
 $def['pag_per_page']=!$this->input->get('pag_per_page')?$this->session->userdata('pag_per_page'):$this->input->get('pag_per_page');
 $def['context_search']=!$this->input->get('context_search')?'title':$this->input->get('context_search');
-$def['search']=($this->input->get('search')==='')?'':$this->input->get('search');
+$def['search']=($this->input->get('search')==='')?'':addslashes($this->input->get('search'));
 ?>
 <script>
 //устанавливаю значеня полей фильтра
@@ -112,4 +116,24 @@ $(function(){
  form.find('select[name="context_search"] option[value="<?=$def['context_search']?>"]').attr('selected',true);
  form.find('input[name="search"]').val('<?=$def['search']?>');
 });
+//удалить страницу
+function del_page(el,alias){
+ if(!confirm('Страница и все комментарии к ней будет удалены!\nВыполнить действие?')){return false;}
+ $.ajax({
+  url:'/admin/page/del',
+  type:'post',
+  data:{alias:alias},
+  dataType:'text',
+  success:function(resp){
+   switch(resp){
+    case 'ok':$(el).parents('tr').remove();break;
+    case 'error':alert('Ошибка! Не удалось удалить страницу..(');break;
+    default :console.log(resp);
+   }
+  },
+  error:function(){
+   alert('Ой! Возникла ошибка соединения..( Повторите попытку.');
+  }
+ });
+}
 </script>

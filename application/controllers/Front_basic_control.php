@@ -5,29 +5,71 @@
 ///////////////////////////////////
 
 class Front_basic_control extends CI_Controller{
- protected $conf=[];//массив, куда будут записана конфигурация сайта и другие данные
  function __construct(){
   parent::__construct();
   $this->load->model('front_basic_model');
-  $this->conf=$this->front_basic_model->get_config();
   $this->_is_site_access();
  }
 
+///////////////////////////////////
+//работа с конфигурацией
+///////////////////////////////////
+
+ function app($path=NULL){//получить массив или значение конфигурации и вспомагательных данных ресурса
+  //$path-(строка) путь к значению или NULL чтобы получить весь массив app. $this->app('conf.langs')=$app['conf']['langs']
+  if(empty($this->config->item('app'))){$this->config->set_item('app',$this->front_basic_model->get_config());}//заполнить если пуст
+  if(!$path||!is_string($path)){return $this->config->item('app');}//вернуть весь массив если путь не передан
+  return array_reduce(explode('.',$path),function($i,$k){//обработать путь и вернуть значение массива
+    return isset($i[$k])?$i[$k]:NULL;
+  },$this->config->item('app'));
+ }
+
+ function set_app($data=[]){//изменение\добавление значений в массиве конфигурации
+  //$data-(массив) путь=>значение ['conf.langs.ru.title'=>'RU','lexic.basic.home'=>'Домой']
+  if(empty($data)){return false;}
+  foreach($data as $path=>$val){
+   $level=&$this->config->config['app'];
+   foreach(explode('.',$path) as $k){
+    if(!key_exists($k,$level)||!is_array($level[$k])){$level[$k]=[];}
+    $level=&$level[$k];
+   }
+   $level=$val;
+  }
+ }
+
+///////////////////////////////////
+//работа с выводом и доступом
+///////////////////////////////////
+
  function _is_site_access(){//доступ к пользовательской части системы
-  //если в админке увтановлена опция "Доступ к сайту закрыт" и запрос не от админа или модератора - переправить на заглушку
-  $this->conf['conf_site_access']==='off'&&!$this->conf['back_user']?redirect('plug.html','location',302):TRUE;
+  $this->app('conf.site_access')==='off'&&!$this->app('conf.back_user')?redirect('plug.html','location',302):TRUE;
  }
 
- function _prefix(){//получение префикса таблиц базы данных из конфигурационного файла
-  return $this->config->item('db_tabl_prefix');
+ function _viewer($path,$data){
+  if(isset($data['lang'])&&$this->app('conf.user_lang')!==$data['lang']){//установить языком пользователя язык материала
+   $this->input->set_cookie('user_lang',$data['lang'],0);
+   $this->set_app([
+   'conf.user_lang'=>$data['lang'],
+   'lexic'=>$this->lang->load('front_template',$data['lang'],TRUE)
+   ]);
+  }
+  $this->set_app([
+  'data'=>$data,
+  'data.front_menu_list'=>$this->front_basic_model->get_menu()
+  ]);
+  $this->load->view('front/blocks/header_view',$this->app());//header шаблона
+  $this->load->view($path,$this->app());//тело шаблона
+  $this->load->view('front/blocks/footer_view',$this->app());//footer шаблона
  }
 
- function _viewer($url,$data){
-  $data['front_menu_list']=$this->front_basic_model->get_menu();
-  $data['data']=$data;
-  $this->load->view('front/blocks/header_view',$data);
-  $this->load->view($url,$data);
-  $this->load->view('front/blocks/footer_view',$data);
+///////////////////////////////////
+//работа с языком
+///////////////////////////////////
+
+ function change_lang($tag,$url='/'){
+  if(!in_array($tag,array_column($this->app('conf.langs'),'tag'))){redirect('404_override');return FALSE;}
+  $this->input->set_cookie('user_lang',$tag,0);
+  redirect($url);
  }
 
 }

@@ -1,29 +1,29 @@
 <!--####### Mine #######-->
 <div class="mine_wrapper">
-<div class="container" style="max-width:<?=$conf_body_width?>px">
+<div class="container" style="max-width:<?=htmlspecialchars($conf['body_width'])?>px">
 
 <!--####### Headline #######-->
 <div id="headline">
- <h1><?=$title?></h1>
+ <h1><?=$data['title']?></h1>
  <div class="noprint">
-  <button type="button" class="fa fa-print" id="print_btn" onclick="window.print();">&nbsp;Печатать</button>
+  <button type="button" class="fa fa-print" id="print_btn" onclick="window.print();">&nbsp;<?=$lexic['contact']['print']?></button>
  </div>
 </div>
 
-<?php if($layout_t){?>
+<?php if($data['layout_t']){?>
 <!--####### Контент страницы #######-->
 <div id="layouts">
-<div id="layout_t"><?=$layout_t?></div>
+<div id="layout_t"><?=$data['layout_t']?></div>
 </div>
 <?php }?>
 
-<?php if($contacts){?>
+<?php if($data['contacts']){?>
 <!--####### Контакты #######-->
 <dl class="tabs contacts">
- <dt class="tab_active">Контакты списком</dt>
+ <dt class="tab_active"><?=$lexic['contact']['list_view']?></dt>
  <dd>
   <div class="tab_content">
-   <?php foreach(json_decode($contacts,TRUE) as $v){$gps=$v['gps']?TRUE:FALSE?>
+   <?php foreach(json_decode($data['contacts'],TRUE) as $v){$gps=$v['gps']?TRUE:FALSE?>
    <div class="contacts_list">
     <?=$v['title']?'<h2>'.$v['title'].'</h2>':FALSE?>
     <?=$v['mail']?'<div><i class="fa-envelope"></i> '.$v['mail'].'</div>':FALSE?>
@@ -31,13 +31,13 @@
     <?=$v['skype']?'<div><i class="fa-skype"></i> '.$v['skype'].'</div>':FALSE?>
     <?=$v['address']?'<div><i class="fa-home"></i> '.$v['address'].'</div>':FALSE?>
     <?=$v['gps']?'<div><i class="fa-crosshairs"></i> '.$v['gps'].'</div>':FALSE?>
-    <?=$v['gps']?'<div><i class="fa-compass"></i> <a href="https://www.google.com.ua/maps/place/'.$v['gps'].'" target="_blank">Показать на большой карте</a></div>':FALSE?>
+    <?=$v['gps']?'<div><i class="fa-compass"></i> <a href="https://www.google.com.ua/maps/place/'.$v['gps'].'" target="_blank">'.$lexic['contact']['big_map_view'].'</a></div>':FALSE?>
    </div>
    <?php }?>
   </div>
  </dd>
  <?php if($gps){?>
- <dt>Контакты на карте</dt>
+ <dt><?=$lexic['contact']['map_view']?></dt>
  <dd>
   <div class="tab_content">
    <div id="map" style="height:500px;"></div>
@@ -47,23 +47,23 @@
 </dl>
 <?php }?>
 
-<?php if($contact_form==='on'){?>
+<?php if($data['contact_form']==='on'){?>
 <!--####### Форма обратной связи #######-->
 <div id="send_mail_form" class="noprint">
-<h2>Форма обратной связи</h2>
+<h2><?=$lexic['contact']['form_title']?></h2>
 <form id="send_mail">
  <label class="input">
-  <input type="text" name="mail" placeholder="Ваш e-mail">
+  <input type="text" name="mail" placeholder="<?=htmlspecialchars($lexic['contact']['your_mail'])?>">
  </label>
  <label class="input">
-  <input type="text" name="name" onkeyup="lim(this,50)" placeholder="Ваше имя">
+  <input type="text" name="name" onkeyup="lim(this,50)" placeholder="<?=htmlspecialchars($lexic['contact']['your_name'])?>">
  </label>
  <label class="textarea">
-  <textarea name="text" rows="5" onkeyup="lim(this,500)" placeholder="Ваше сообщение"></textarea>
+  <textarea name="text" rows="5" onkeyup="lim(this,500)" placeholder="<?=htmlspecialchars($lexic['contact']['your_msg'])?>"></textarea>
  </label>
  <input type="text" name="fuck_bot">
  <div class="send_mail_actions">
-  <button type="submit">Отправить сообщение</button>
+  <button type="submit"><?=$lexic['contact']['send_form']?></button>
  </div>
 </form>
 </div>
@@ -84,36 +84,37 @@ window.addEventListener('load',function(){
       msg=function(m){actions_box.html(m);setTimeout(function(){actions_box.html(actions);},delay);};
   //проверка полей
   if(!/^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/.test(mail.val())){
-   msg('<p class="notific_r">В поле "'+mail.attr('placeholder')+'" недопустимый символ или оно не заполнено!</p>');return false;
+   msg('<p class="notific_r"><?=addslashes($lexic['contact']['novalid_field'])?>"'+mail.attr('placeholder')+'"</p>');return false;
   }
-  if(!/\S/.test(name.val())){msg('<p class="notific_r">Поле "'+name.attr('placeholder')+'" должно быть заполнено!</p>');return false;}
-  if(!/\S/.test(text.val())){msg('<p class="notific_r">Поле "'+text.attr('placeholder')+'" должно быть заполнено!</p>');return false;}
+  if(!/\S/.test(name.val())){msg('<p class="notific_r"><?=addslashes($lexic['contact']['novalid_field'])?>"'+name.attr('placeholder')+'"</p>');return false;}
+  if(!/\S/.test(text.val())){msg('<p class="notific_r"><?=addslashes($lexic['contact']['novalid_field'])?>"'+text.attr('placeholder')+'"</p>');return false;}
   //блокировать кнопку
-  actions_box.find('button').attr('disabled',true).html('<i class="fa fa-spin fa-spinner"></i>&nbsp;&nbsp;обработка...');
+  actions_box.find('button').attr('disabled',true).html('<i class="fa fa-spin fa-spinner"></i><?=addslashes($lexic['basic']['loading'])?>');
   //отправка
   $.ajax({
-    url:'<?=base_url('do/send_mail')?>',
+    url:'/do/send_mail',
     type:'post',
     data:f.serialize(),
     dataType:'text',
     success:function(resp){
      switch(resp){
-      case'bot':msg('<p class="notific_r">Ой! Вы робот!? Вам здесь не рады..(</p>');break;
-      case'nomail':msg('<p class="notific_r">Переданый e-mail некорректный!</p>');break;
-      case'error':msg('<p class="notific_r">Ой! Ошибка..(<br>Возможно это временные неполадки, попробуйте снова.</p>');break;
-      case'ok':mail.add(name).add(text).val('');msg('<p class="notific_g">Ваше сообщение успешно отправлено!</p>');break;
+      case'bot':msg('<p class="notific_r"><?=addslashes($lexic['basic']['bot'])?></p>');break;
+      case'nomail':msg('<p class="notific_r"><?=addslashes($lexic['contact']['nomail'])?></p>');break;
+      case'error':msg('<p class="notific_r"><?=addslashes($lexic['basic']['error'])?></p>');break;
+      case'ok':mail.add(name).add(text).val('');msg('<p class="notific_g"><?=addslashes($lexic['contact']['send_ok'])?></p>');break;
       default:console.log(resp);
      }
-    }
+    },
+   error:function(){msg('<p class="notific_r"><?=addslashes($lexic['basic']['server_error'])?></p>');}
   });
  });
 });
 </script>
-<?php }if($contacts && $gps){?>
-<script src="https://maps.googleapis.com/maps/api/js?language=ru&key=<?=$conf_gapi_key?>"></script>
+<?php }if($data['contacts'] && $gps){?>
+<script src="https://maps.googleapis.com/maps/api/js?language=<?=$data['lang']?>&key=<?=$conf['gapi_key']?>"></script>
 <script>
 window.addEventListener('load',function(){
- var data=JSON.parse('<?=$contacts?>'),//объект данных
+ var data=JSON.parse('<?=$data['contacts']?>'),//объект данных
      mapOptions={zoom:6,scrollwheel:false,center:new google.maps.LatLng(49.303,31.203),streetViewControl:true,mapTypeControlOptions:{style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}},
      map=new google.maps.Map($('#map')[0],mapOptions),
      infowindow=new google.maps.InfoWindow(),//создаю инфоокно

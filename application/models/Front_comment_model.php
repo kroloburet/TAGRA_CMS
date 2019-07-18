@@ -10,24 +10,24 @@ class Front_comment_model extends Front_basic_model{
  }
 
  function add_comment($data=[]){
-  return $this->db->insert($this->_prefix().'comments',$data)?TRUE:FALSE;
+  return $this->db->insert('comments',$data)?TRUE:FALSE;
  }
 
  function add_comment_rating($id,$rating=''){
-  return $this->db->where('id',$id)->update($this->_prefix().'comments',['rating'=>$rating])?TRUE:FALSE;
+  return $this->db->where('id',$id)->update('comments',['rating'=>$rating])?TRUE:FALSE;
  }
 
  function public_new($code){
-  return $this->db->where(['premod_code'=>$code,'public'=>'off'])->update($this->_prefix().'comments',['public'=>'on','date'=>date('Y-m-d'),'premod_code'=>''])?TRUE:FALSE;
+  return $this->db->where(['premod_code'=>$code,'public'=>'off'])->update('comments',['public'=>'on','date'=>date('Y-m-d'),'premod_code'=>''])?TRUE:FALSE;
  }
 
  function del_new($code){
-  return $this->db->where(['premod_code'=>$code,'public'=>'off'])->delete($this->_prefix().'comments')?TRUE:FALSE;
+  return $this->db->where(['premod_code'=>$code,'public'=>'off'])->delete('comments')?TRUE:FALSE;
  }
 
  function del_branch($id,$url){
   global $ids;
-  $q=$this->db->where('url',$url)->get($this->_prefix().'comments')->result_array();
+  $q=$this->db->where('url',$url)->get('comments')->result_array();
   $ids[]=$id;
   function get_branch_ids($arr,$id){
    global $ids;
@@ -39,7 +39,7 @@ class Front_comment_model extends Front_basic_model{
    }
   }
   get_branch_ids($q,$id);
-  return $this->db->where_in('id',$ids)->delete($this->_prefix().'comments')?$ids:FALSE;
+  return $this->db->where_in('id',$ids)->delete('comments')?$ids:FALSE;
  }
 
 }

@@ -12,7 +12,7 @@ class Front_contact_control extends Front_basic_control{
  }
 
  function contact(){
-  $data=array_merge($this->conf,$this->front_contact_model->get_contact_page());
+  $data=$this->front_contact_model->get_contact_page();
   $this->_viewer('front/contact_view',$data);
  }
 
@@ -32,8 +32,8 @@ Email отправителя: '.$p['mail'].'<br>
 Имя отправителя: '.strip_tags($p['name']).'<br>
 Текст сообщения: '.strip_tags($p['text']).'<br>
 </body></html>';
-  $this->email->from('Robot@'.$domen,$this->conf['conf_site_name']);
-  $this->email->to($this->conf['conf_site_mail']);
+  $this->email->from('Robot@'.$domen,$this->app('conf.site_name'));
+  $this->email->to($this->app('conf.site_mail'));
   $this->email->subject('Сообщение с '.$domen);
   $this->email->message($msg);
   $this->email->send()?exit('ok'):exit('error');

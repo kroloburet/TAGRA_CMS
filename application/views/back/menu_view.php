@@ -1,275 +1,307 @@
 <?php
-$GLOBALS['menu']=&$menu;
-///////////////////////////////////////////вывод выпадающего списка пунктов меню
- function get_select_menu_tree(/*массив меню*/$tree,/*id пункта*/$id='',/*id родителя*/$pid='') {
-  if (empty($tree)) {//если передан пустой массив
-   return '<select name="pid"><option value="0">Нет родителя</option></select>';
-  }
-  $select_pid='';
-  $nbspCnt=0;
-  $curPos=0;
-  $count=count($tree);
-  $stateArray=[];
-  $repeat='&#183; ';
-  if($pid==''){$selected='selected';}else{$selected='';}
-  $select_pid.='<select name="pid">';
-  $select_pid.='<option value="0" '.$selected.'>Нет родителя</option>';
-  do{
-   while($curPos<$count){
-    $selected='';
-    $disabled='';
-    if($pid==$tree[$curPos]['id']){$selected='selected';}
-    if($id!==''){if($tree[$curPos]['id']==$id){$disabled='disabled';}}
-    $select_pid.= '<option value="'.$tree[$curPos]['id'].'" '.$selected.' '.$disabled.'>'.str_repeat($repeat,$nbspCnt).$tree[$curPos]['title'].'</option>';
-    if(isset($tree[$curPos]['nodes'])){
-     array_push($stateArray,['tree'=>&$tree,'count'=>$count,'curPos'=>$curPos+1]);
-     $tree=&$tree[$curPos]['nodes'];
-     $count=count($tree);
-     $curPos=0;
-     $nbspCnt++;
-    }else{
-     $curPos++;
-    }
-   }
-   if(($a=array_pop($stateArray))!==null){
-    $curPos=$a['curPos'];
-    $count=$a['count'];
-    $tree=$a['tree'];
-    $nbspCnt--;
-   }
-  }while($a!=null);
-  $select_pid.='</select>';
-  return $select_pid;
+function print_pids_tree($input,$level=0){
+ if(empty($input)){return FALSE;}
+ foreach($input as $v){
+  echo'<option value="'.$v['id'].'">'.str_repeat('&#183; ',$level).$v['title'].'</option>'.PHP_EOL;
+  if(isset($v['nodes'])){print_pids_tree($v['nodes'],$level+1);}
  }
+}
 
-////////////////////////////////////////////////Вывод дерева меню
- function get_menu_tree(/*массив меню*/$list) {
-  if(empty($list)){//если передан пустой массив
-   return '';
+function print_menu_tree($input){
+ if(empty($input)){return FALSE;}
+ foreach($input as $v){
+  $ext_link=$v['url']?'<a href="'.$v['url'].'" target="_blank" class="fa-external-link" title="Посмотреть на сайте"></a>&nbsp;&nbsp;':'<i class="fa-external-link gray"></i>&nbsp;&nbsp;';
+  echo '<li>'.PHP_EOL;
+  echo '<div class="m_item">'.$v['title'].'&nbsp;&nbsp;'.PHP_EOL
+       .$ext_link.PHP_EOL
+       .'<a href="#" onclick="Menu.public_del(this,\'public\');return false" class="'.($v['public']=='on'?'fa-eye green':'fa-eye-slash red').'" title="Опубликовать/не опубликовывать"></a>&nbsp;&nbsp;'.PHP_EOL
+       .'<a href="#" class="fa-edit green" title="Редактировать" onclick="Menu.show_edit_form(this);return false"></a>&nbsp;&nbsp;'.PHP_EOL
+       .'<a href="#" class="fa-trash-o red" title="Удалить" onclick="Menu.public_del(this,\'del\');return false"></a>'.PHP_EOL
+       .'<textarea class="m_item_opt" hidden>'.json_encode($v,JSON_FORCE_OBJECT).'</textarea>'.PHP_EOL
+       .'</div>'.PHP_EOL;
+  if(isset($v['nodes'])){
+   echo '<ul>'.PHP_EOL;
+   print_menu_tree($v['nodes']);//рекурсия
+   echo '</ul>'.PHP_EOL;
   }
-  foreach($list as $v){
-   echo '<li>';
-   //содержимое элемента списка
-   $_self=$_blank='';
-   $ext_link=$v['url']?'<a href="'.$v['url'].'" target="_blank" class="fa-external-link" title="Перейти на страницу"></a>&nbsp;&nbsp;':'<i class="fa-external-link gray"></i>&nbsp;&nbsp;';
-   $eye=$v['public']=='on'?'fa-eye green':'fa-eye-slash red';
-   if($v['target']=='_blank'){$_blank='selected';}else{$_self='selected';}
-   echo '<span class="menu_item">'.$v['title'].'&nbsp;&nbsp;
-         '.$ext_link.'
-         <span><a href="#" onclick="public_item(this,\''.$v['id'].'\',\''.$v['public'].'\');return false" class="'.$eye.'" title="Опубликовать/не опубликовывать"></a></span>&nbsp;&nbsp;
-         <a href="'.base_url('admin/menu/del_item/'.$v['id'].'/'.$v['pid'].'/'.$v['order']).'" class="fa-trash-o red" title="Удалить" onclick="if(!confirm(\'Пункт меню будет удален вместе с вложенными пунктами!\nВыполнить действие?\')){return false;}"></a>&nbsp;&nbsp;
-         <a href="#" class="fa-edit green" title="Редактировать" onclick="opn_cls(\'edit_item_'.$v['id'].'\');return false"></a>
-        </span>
-        <div class="edit_menu_item" id="edit_item_'.$v['id'].'">
-         <form action="'.base_url('admin/menu/edit_item/'.$v['id']).'" method="POST">
-          <div class="row">
-           <div class="col6">
-            Родительский пункт
-             <label class="select">
-              '.get_select_menu_tree($GLOBALS['menu'],$v['id'],$v['pid']).'
-            </label>
-           </div>
-           <div class="col6">
-            Порядок
-            <label class="select">
-             <select name="order" id="order"></select>
-            </label>
-           </div>
-          Название пункта
-          <label class="input">
-           <input type="text" name="title" value="'.$v['title'].'" required>
-          </label>
-          </div>
-          <div class="row">
-           <div class="col6">
-            Ссылка
-            <label class="input">
-             <input type="text" name="url" id="url_'.$v['id'].'" value="'.$v['url'].'" placeholder="Оставьте пустым, если пункт — не ссылка">
-            </label>
-           </div>
-           <div class="col6">
-            Материалы ресурса
-            <label class="select">
-             <select name="link" onchange="select_link(this,\'url_'.$v['id'].'\',\'link_viewer_'.$v['id'].'\')">
-              <option selected>Выбрать из предложенных:</option>
-              <option value="page">Страница сайта</option>
-              <option value="section">Раздел сайта</option>
-              <option value="gallery">Галерея сайта</option>
-              <option value="index">Страница «Главная»</option>
-              <option value="contact">Страница «Контакты»</option>
-              <option value="file">Файл или папка</option>
-             </select>
-            </label>
-           </div>
-          </div>
-          <div class="link_viewer" id="link_viewer_'.$v['id'].'"></div>
-          <div>
-           <label class="select">
-            <select name="target">
-             <option value="_self" '.$_self.'>В текущем окне</option>
-             <option value="_blank" '.$_blank.'>В новом окне</option>
-            </select>
-           </label>
-          </div>
-          <div class="button inline this_form_control">
-           <button type="button" onclick="subm(form)">Редактировать</button>
-           <a href="#" class="btn_lnk" onclick="opn_cls(\'edit_item_'.$v['id'].'\');return false">Отменить</a>
-          </div>
-         </form>
-        </div>
-        ';
-   if(isset($v['nodes'])){//если есть вложенные элементы
-    echo '<ul>';
-    get_menu_tree($v['nodes']);//рекурсия
-    echo '</ul>';
-   }
-   echo '</li>';
-  }
+  echo '</li>'.PHP_EOL;
  }
- ?>
+}
+?>
 
-<h1><?=$conf_title?></h1>
-<div class="sheath">
+<h1><?="{$data['view_title']} [{$data['lang']}]"?></h1>
+<div class="sheath" id="m_area">
  <div class="touch">
- <h3>Добавить пункт меню</h3>
- <hr>
- <form method="POST" action="<?=base_url('admin/menu/add_item')?>">
-  <div class="row">
-   <div class="col6">
-    Родительский пункт
+  <h3>Добавить пункт меню</h3>
+  <hr>
+  <form class="m_form">
+   <div class="row">
+    <div class="col6">
+     Родительский пункт
+      <label class="select">
+       <select class="m_pid" onchange="Menu.load_order(this)">
+        <option value="0">Нет родителя</option>
+        <?php print_pids_tree($data['menu'])?>
+       </select>
+     </label>
+    </div>
+    <div class="col6">
+     Порядок
      <label class="select">
-      <?=get_select_menu_tree($menu)?>
-    </label>
+      <select class="m_order"></select>
+     </label>
+    </div>
+   Название пункта
+   <label class="input">
+    <input type="text" class="m_title">
+   </label>
    </div>
-   <div class="col6">
-    Порядок
-    <label class="select">
-     <select name="order" id="order"></select>
-    </label>
+   <div class="row">
+    <div class="col6">
+     Ссылка
+     <label class="input">
+      <input type="text" class="m_url" id="m_url" placeholder="Оставьте пустым, если пункт — не ссылка">
+     </label>
+    </div>
+    <div class="col6">
+     Материалы ресурса
+     <label class="select">
+      <select class="m_link" onchange="Menu.select_link(this)">
+       <option value="">Выбрать из предложенных:</option>
+       <option value="pages">Страница сайта</option>
+       <option value="sections">Раздел сайта</option>
+       <option value="gallerys">Галерея сайта</option>
+       <option value="home">Страница «Главная»</option>
+       <option value="contact">Страница «Контакты»</option>
+       <option value="file">Файл или папка</option>
+      </select>
+     </label>
+    </div>
    </div>
-  Название пункта
-  <label class="input">
-   <input type="text" name="title" required>
-  </label>
-  </div>
-  <div class="row">
-   <div class="col6">
-    Ссылка
-    <label class="input">
-     <input type="text" name="url" id="add_url" placeholder="Оставьте пустым, если пункт — не ссылка">
-    </label>
+   <div class="m_link_viewer"></div>
+   <div class="row">
+    <div class="col6">
+     <label class="select">
+      <select class="m_target">
+       <option value="_self">Открывать в текущем окне</option>
+       <option value="_blank">Открывать в новом окне</option>
+      </select>
+     </label>
+    </div>
+    <div class="col6">
+     <label class="select">
+      <select class="m_public">
+       <option value="on">Опубликовать пункт</option>
+       <option value="off">Не опубликовывать пункт</option>
+      </select>
+     </label>
+    </div>
    </div>
-   <div class="col6">
-    Материалы ресурса
-    <label class="select">
-     <select name="link" onchange="select_link(this,'add_url','link_viewer')">
-      <option selected>Выбрать из предложенных:</option>
-      <option value="page">Страница сайта</option>
-      <option value="section">Раздел сайта</option>
-      <option value="gallery">Галерея сайта</option>
-      <option value="index">Страница «Главная»</option>
-      <option value="contact">Страница «Контакты»</option>
-      <option value="file">Файл или папка</option>
-     </select>
-    </label>
+   <div class="button m_control">
+    <button type="button" onclick="Menu.add_edit(this,'add')">Добавить пункт меню</button>
    </div>
-  </div>
-  <div class="link_viewer" id="link_viewer"></div>
-  <div class="row">
-   <div class="col6">
-    <label class="select">
-     <select name="target">
-      <option value="_self" selected>Открывать в текущем окне</option>
-      <option value="_blank">Открывать в новом окне</option>
-     </select>
-    </label>
-   </div>
-   <div class="col6">
-    <label class="select">
-     <select name="public">
-      <option value="on" selected>Опубликовать пункт</option>
-      <option value="off">Не опубликовывать пункт</option>
-     </select>
-    </label>
-   </div>
-  </div>
-  <div class="button this_form_control">
-   <button type="button" onclick="subm(form)">Добавить пункт меню</button>
-  </div>
- </form>
+  </form>
  </div>
- <ul class="menu_tree">
- <?php get_menu_tree($menu)?>
+
+ <ul class="m_tree">
+  <?php print_menu_tree($data['menu'])?>
  </ul>
 </div>
 
 <script>
-///////////////////////////списки материалов
- var pages='<?php if(empty($pages)){echo'<option value="">На сайте нет страниц</option>';}else{foreach($pages as $i){?><option value="/<?=$i['alias']?>"><?=$i['title']?></option><?php }}?>',
-     sections='<?php if(empty($sections)){echo'<option value="">На сайте нет разделов</option>';}else{foreach($sections as $i){?><option value="/<?='section/'.$i['alias']?>"><?=$i['title']?></option><?php }}?>',
-     gallerys='<?php if(empty($gallerys)){echo'<option value="">На сайте нет галерей</option>';}else{foreach($gallerys as $i){?><option value="/<?='gallery/'.$i['alias']?>"><?=$i['title']?></option><?php }}?>';
+var Menu={
+ _mm:<?=json_encode($data['materials'],JSON_FORCE_OBJECT)?>,//материалы ресурса
+ _m:<?=json_encode($data['menu'],JSON_FORCE_OBJECT)?>,//меню
 
-//////////////////////////выпадающий список материалов для выбора
- function select_link(select/*this*/,input_url/*поле для вставки ссылки*/,viewer/*список ссылок для добавления в input_url*/){
-  var url=$('#'+input_url),
-      viewer=$('#'+viewer);
-  switch($(select).val()){
-   case 'index':url.val('/');viewer.empty();break;
+ ///////////////////////заполнение списка "Порядок"
+ load_order:function(el,id){
+  //el-список "Порядок" (this)
+  //id-id пункта исключаемого из списка в форме редактирования
+  var f=$(el.form),
+      pid=$(el),
+      order=f.find('.m_order'),
+      n=1,
+      filling=function(m){//рекурсивное наполнение пунктами родителя
+       for(var i in m){
+        if(pid.val()===m[i].pid){
+         id&&id===m[i].id?false:order.append('<option value="'+(n++)+'">После «'+m[i].title+'»</option>');
+        }else if(m[i].nodes){filling(m[i].nodes);}
+       }
+      };
+  order.html('<option value="'+(n++)+'">Первый пункт</option>');
+  if($.isEmptyObject(this._m)){return false;}
+  filling(this._m);
+  order.find('option').last().attr('selected',true);
+ },
+
+ ///////////////////////работа списка "Материалы ресурса"
+ select_link:function(el){
+  //el-список "Материалы ресурса" (this)
+  var f=$(el.form),
+      link=$(el),
+      viewer=f.find('.m_link_viewer'),
+      url=f.find('.m_url');
+  switch(link.val()){
+   case 'home':url.val('/');viewer.empty();break;
    case 'contact':url.val('/contact');viewer.empty();break;
-   case 'file':files(input_url,{no_host:true});viewer.empty();break;
-   case 'page':
-viewer.html('<label class="select"><select class="full SelectSearch" size="5" onchange="$(\'#'+input_url+'\').val($(this).val())">'+pages+'</select></label>');
-viewer.find('select').SelectSearch();
-   break;
-   case 'section':
-viewer.html('<label class="select"><select class="full SelectSearch" size="5" onchange="$(\'#'+input_url+'\').val($(this).val())">'+sections+'</select></label>');
-viewer.find('select').SelectSearch();
-   break;
-   case 'gallery':
-viewer.html('<label class="select"><select class="full SelectSearch" size="5" onchange="$(\'#'+input_url+'\').val($(this).val())">'+gallerys+'</select></label>');
-viewer.find('select').SelectSearch();
-   break;
+   case 'file':files(url.attr('id'),'<?=$data['lang']?>',{no_host:true});viewer.empty();break;
+   case 'pages':viewer.html(this.load_link_viewer('pages',url));break;
+   case 'sections':viewer.html(this.load_link_viewer('sections',url));break;
+   case 'gallerys':viewer.html(this.load_link_viewer('gallerys',url));break;
   }
- }
+ },
 
-////////////////////////загрузка списка порядкового номера
- var menu=<?=json_encode($menu)?>;//массив меню в объект (json)
- function get_order_menu_select(
-         /*объект меню*/menu,
-         /*id родительского пункта для вывода его детей*/id,
-         /*id тега select для заполнения*/elem,
-         /*значение ближайшего поля "название пункта"*/item_name
-         ){//
-  $.each(menu,function(){//перебрать объект меню
-   if(this.pid===id){//если есть дочерние пункты пункта с id
-    var dsbl=item_name===this.title?'disabled':'';
-    elem.append('<option value="'+(parseInt(this.order,10)+1)+'" '+dsbl+'>после«'+this.title+'»</option>');//наполняю ими elem
-   }else{//если нет
-    if(this.nodes)get_order_menu_select(this.nodes,id,elem,item_name);//если есть дочерняя ветка - ищем там, запускаем рекурссию
+ ///////////////////////отображение списка и выбор материала ресурса
+ load_link_viewer:function(material,url){
+  //material-строка, значение списка "Материалы ресурса"
+  //url-объект, поле "Ссылка"
+  var mm=this._mm[material],
+      label=$('<label/>',{class:'select'}),
+      section=$('<select/>',{class:'full',size:'5'}),
+      preurl='/';
+  label.html(section);
+  if(!mm||$.isEmptyObject(mm)){section.html($('<option/>',{text:'Нет материалов..('}));return label;}
+  switch(material){
+   case 'sections':preurl='/section/';break;
+   case 'gallerys':preurl='/gallery/';break;
+  }
+  for(var k in mm){section.append($('<option/>',{value:preurl+mm[k].alias,text:mm[k].title}));}
+  section.on('change.M',function(){url.val(this.value);}).SelectSearch();
+  return label;
+ },
+
+ ///////////////////////отображение формы редактирования пункта
+ show_edit_form:function(el){
+  //el-ссылка "Редактировать" (this)
+  this.hide_edit_form($('.m_item'));
+  var m_item=$(el).parent('.m_item'),
+      clone=$('.m_form').clone(true),
+      m_pid=clone.find('.m_pid'),
+      opt=$.parseJSON(m_item.find('.m_item_opt').val()),//данные редактируемого пункта с вложенными
+      set_pids=function(m){//удаление из списка "Родительский пункт" редактируемого пункта с вложенными
+       m_pid.find('option[value="'+m.id+'"]').remove();
+       if(m.nodes){for(var i in m.nodes){set_pids(m.nodes[i]);}}
+      },
+      btns=[
+       $('<button/>',{type:'button',text:'Сохранить изменения'}).on('click.M',function(){Menu.add_edit(this,'edit');}),
+       $('<button/>',{type:'button',text:'Отмена'}).on('click.M',function(){Menu.hide_edit_form(m_item);})
+      ];
+  set_pids(opt);
+  m_pid.val(opt.pid);
+  this.load_order(m_pid[0],opt.id);
+  clone.find('.m_order').val(opt.order);
+  clone.find('.m_link_viewer').empty();
+  clone.find('.m_title').val(opt.title);
+  clone.find('.m_url').attr('id',opt.id).val(opt.url);
+  clone.find('.m_target').val(opt.target);
+  clone.find('.m_public').val(opt.public);
+  clone.find('.m_control').html(btns);
+  clone.prepend($('<input/>',{class:'m_id',type:'hidden',value:opt.id}));
+  m_item.addClass('edit').append(clone);
+ },
+
+ ///////////////////////сокрытие формы редактирования пункта
+ hide_edit_form:function(item){
+  //item-объект, контейнер редактируемого пункта
+  item.removeClass('edit');
+  item.find('.m_form').remove();
+ },
+
+ ///////////////////////отображение сообщений
+ msg:function(style,msg,targ,call){
+  //style-строка, css-класс сообщения
+  //msg-строка, сообщение
+  //targ-объект, элемент для отображения сообщения
+  //call-функция, что делать после отображения сообщения
+  style=style||'notific_r';
+  msg=msg||'Поле "Название пункта" должно быть заплнено!';
+  var box=$('<p/>',{class:'full '+style,html:msg});
+  targ.html(box);
+  setTimeout(function(){box.remove();call();},3000);
+  return true;
+ },
+
+ ///////////////////////обновление страницы и данных
+ update:function(data){
+  //data-json (объект), ответ сервера
+  $('#m_area').replaceWith($(data.html).filter('#m_area'));
+  this._mm=data.materials;
+  this._m=data.menu;
+  this.load_order($('.m_form').find('.m_pid')[0]);
+ },
+
+ ///////////////////////добавление\редактирование пункта
+ add_edit:function(el,action){
+  //el-кнопка "Добавить пункт меню\Сохранить изменения" (this)
+  //action-строка (add||edit), действие
+  if(!el||(action!=='add'&&action!=='edit')){return false;}
+  var f=$(el.form),
+      title=f.find('.m_title').val(),
+      process='<i class="fa fa-spin fa-spinner"></i>&nbsp;&nbsp;обработка...',
+      control=f.find('.m_control'),
+      btn=control.html(),
+      err=action==='add'?'Ошибка! Не удалось добавить пункт меню..(':'Ошибка! Не удалось изменить пункт меню..(';
+  if(!/[^\s]/.test(title)){return this.msg(null,null,control,function(){control.html(btn);});}
+  control.html(process);
+  $.ajax({
+   url:'/admin/menu/'+(action==='add'?'add_item':'edit_item'),
+   type:'post',
+   data:{
+    lang:'<?=$data['lang']?>',
+    id:f.find('.m_id').val()||null,
+    pid:f.find('.m_pid').val(),
+    order:f.find('.m_order').val(),
+    title:title,
+    url:f.find('.m_url').val(),
+    target:f.find('.m_target').val(),
+    public:f.find('.m_public').val()
+   },
+   dataType:'json',
+   success:function(resp){
+    switch(resp.status){
+     case 'ok':Menu.update(resp);break;
+     case 'error':Menu.msg(null,err,control,function(){control.html(btn);});break;
+     default :console.log(resp);
+    }
+   },
+   error:function(){
+    Menu.msg(null,'Ой! Возникла ошибка соединения..( Повторите попытку.',control,function(){control.html(btn);});
    }
   });
-  if(item_name!==''){
-   elem.children('option:disabled').prev('option').attr('selected','selected');
-  }else{
-   elem.children('option').last().attr('selected','selected');
-  }
- }
+ },
 
-////////////////////////побликовать\не публиковать пункт меню
- function public_item(el,id,pub){
-  $(el).parent().load(
-   '<?=base_url('admin/menu/public_item')?>',
-   {id:id,pub:pub}
-  );
- }
-
-///////////////////////после загрузки страницы
- $(function(){
-  $('select[name=pid]').on('change',function(){//после выбора корневого пункта
-   var f=$(this.form);
-  f.find('select[name=order]').html('<option value="1">Первый пункт</option>');//добавить первый пункт
-  get_order_menu_select(menu,$(this).val(),f.find('select[name=order]'),f.find('input[name=title]').val());//добавить дочерние пункты, если есть
+ ///////////////////////переключение публикации\удаление пункта
+ public_del:function(el,action){
+  //el-ссылка "Удалить" или "Опубликовать/не опубликовывать"(this)
+  //action-строка (public||del), действие
+  if(!el||(action!=='public'&&action!=='del')){return false;}
+  if(action==='del'&&!confirm('Пункт меню будет удален вместе с вложенными пунктами!\nВыполнить действие?')){return false;}
+  var self=$(el),
+      process=$('<i/>',{class:'fa fa-spin fa-spinner'});
+  self.replaceWith(process);
+  $.ajax({
+   url:'/admin/menu/'+(action==='public'?'public_item':'del_item'),
+   type:'post',
+   data:$.parseJSON(process.siblings('.m_item_opt').val()),
+   dataType:'json',
+   success:function(resp){
+    switch(resp.status){
+     case 'ok':Menu.update(resp);break;
+     case 'error':
+      process.replaceWith(self);
+      alert(action==='public'?'Ошибка! Не удалось применить изменения..(':'Ошибка! Не удалось удалить пункт меню..(');
+     break;
+     default :process.replaceWith(self);console.log(resp);
+    }
+   },
+   error:function(){
+    process.replaceWith(self);
+    alert('Ой! Возникла ошибка соединения..( Повторите попытку.');
+   }
   });
-  $('select[name=pid]').change();//загрузить списоки порядкового номера по умолчанию
- });
+ }
+
+};
+///////////////////////после загрузки страницы
+Menu.load_order($('.m_form').find('.m_pid')[0]);
 </script>

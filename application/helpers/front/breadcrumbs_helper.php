@@ -1,36 +1,40 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 ///////////////////////////////////////////////////////////////////////////
-if(!function_exists('breadcrumbs')){
- function breadcrumbs($home=FALSE){//вывод "хлебных крошек"
-  global $CI,$prefix,$list;
-  $CI=&get_instance();
-  $prefix=$CI->config->item('db_tabl_prefix');
-  $seg1=$CI->uri->segment(1);//первый сегмент урл после домена
-  $seg2=$CI->uri->segment(2);//второй сегмент урл после домена
-  $q=[];//будет хранить выборку
-  $home=$home?'<li><a href="'.base_url().'" class="bc_home">'.$home.'</a>'.PHP_EOL:'';//главная в цепи
-  $list='<ul id="breadcrumbs" class="noprint">'.PHP_EOL.$home;//начало цепи+главная
+class Breadcrumbs{//вывод "хлебных крошек"
+ private $CI,$conf,$data,$lexic,$list;
+ function __construct(){
+  $this->CI=&get_instance();
+  $this->conf=$this->CI->app('conf.breadcrumbs');
+  $this->data=$this->CI->app('data');
+  $this->lexic=$this->CI->app('lexic');
+  $this->print_list();//вывод
+ }
 
-  /////////////////////////////////дополнить лист цепочкой подразделов
-  function sub_sections_list(/*алиас родительского раздела в цепи*/$sect){
-   global $CI,$prefix,$list;
-   if($d=$CI->front_basic_model->get_where_alias($prefix.'sections',$sect)){//если такой алиас есть
-    if($d['section']){sub_sections_list($d['section']);}//если есть родитель - рекурсия;
-    $list.='<li><a href="'.base_url('section/'.$d['alias']).'">'.$d['title'].'</a>'.PHP_EOL;
-   }
-  }
+ private function print_list(){//вывод всей цепи
+  if($this->conf['public']!=='on'){return FALSE;}
+  $home=isset($this->conf['home'])&&$this->conf['home']=='on'?'<li><a href="/" class="bc_home">'.$this->lexic['breadcrumbs']['home'].'</a>'.PHP_EOL:'';//главная в цепи
+  $this->list='<ul id="breadcrumbs" class="noprint">'.PHP_EOL.$home;//начало цепи+главная
+  if(@$this->data['section']){$this->get_sub_sections_list($this->data['section']);}//етсть раздел
+  echo '<!--####### Breadcrumbs #######-->'.PHP_EOL;
+  echo $this->list.'<li class="bc_end">'.$this->data['title'].PHP_EOL.'</ul>'.PHP_EOL;//вывод всей цепи
+ }
 
-  /////////////////////////////////вывод всей цепи до материала
-  switch($seg1){//это:
-   case'section':$q=$CI->front_basic_model->get_where_alias($prefix.'sections',$seg2);break;//раздел
-   case'gallery':$q=$CI->front_basic_model->get_where_alias($prefix.'gallerys',$seg2);break;//галерея
-   case'contact':$q=['title'=>'Контакты'];break;//контакты
-   case'search':$q=['title'=>'Поиск по сайту'];break;//поиск
-   default:$q=$CI->front_basic_model->get_where_alias($prefix.'pages',$seg1);//страница
-  }
-  if(!empty($q)){//выборка не пуста
-   if(@$q['section']){sub_sections_list($q['section']);}//етсть раздел
-   echo $list.'<li class="bc_end">'.$q['title'].PHP_EOL.'</ul>'.PHP_EOL;//вывод всей цепи
+ private function get_sub_sections_list($alias){//дополнить лист цепочкой подразделов
+  //$alias-алиас родительского раздела в цепи
+  $q=$this->get_data('sections',$alias);
+  if(!empty($q)){//если такой алиас есть
+   if($q['section']){$this->get_sub_sections_list($q['section']);}//если есть родитель - рекурсия;
+   $this->list.='<li><a href="/section/'.$q['alias'].'">'.$q['title'].'</a>'.PHP_EOL;
   }
  }
+
+ private function get_data($table,$alias){//получить материал
+  //$table-таблица материала в БД
+  //$alias-алиас материала в БД
+  $this->CI->db->where(['public'=>'on','alias'=>$alias]);
+  $this->CI->db->select('id,alias,title,section');
+  $q=$this->CI->db->get($table)->result_array();
+  return isset($q[0])?$q[0]:[];
+ }
+
 }

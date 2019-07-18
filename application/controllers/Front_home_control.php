@@ -2,7 +2,7 @@
 include_once(APPPATH.'controllers/Front_basic_control.php');
 
 ///////////////////////////////////
-//работа с главной страницей
+//работа с страницей "Главная"
 ///////////////////////////////////
 
 class Front_home_control extends Front_basic_control{
@@ -12,7 +12,7 @@ class Front_home_control extends Front_basic_control{
  }
 
  function index(){
-  $data=array_merge($this->conf,$this->front_home_model->get_home_page());//соединение массивов
+  $data=$this->front_home_model->get_home_page();
   $this->_viewer('front/home_view',$data);
  }
 

@@ -9,9 +9,9 @@ class Back_setting_model extends Back_basic_model{
   parent::__construct();
  }
 
- function set_config($post_arr=[]){
-  foreach($post_arr as $name=>$value){
-   $this->db->where('name',$name)->update($this->_prefix().'config',['name'=>$name,'value'=>$value]);
+ function set_config($data){
+  foreach($data as $name=>$value){
+   $this->db->where('name',$name)->update('config',['name'=>$name,'value'=>$value]);
   }
  }
 

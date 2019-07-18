@@ -10,15 +10,8 @@ class Front_gallery_model extends Front_basic_model{
  }
 
  function get_gallery($alias){
-  $q=$this->db->where(['public'=>'on','alias'=>$alias])->get($this->_prefix().'gallerys')->result_array();
-  if(!empty($q)){//если в базе есть запись с таким алиасом
-   foreach($q as $data){//получить и сделать массив
-    foreach($data as $k=>$v){$data[$k]=$v;}
-   }
-   return $data;
-  }else{//в базе нет такого алиаса
-   return FALSE;
-  }
+  $q=$this->db->where(['public'=>'on','alias'=>$alias])->get('gallerys')->result_array();
+  return isset($q[0])?$q[0]:FALSE;
  }
 
 }

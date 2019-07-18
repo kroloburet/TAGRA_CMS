@@ -10,10 +10,8 @@ class Front_contact_model extends Front_basic_model{
  }
 
  function get_contact_page(){
-  foreach($this->db->get($this->_prefix().'contact_page')->result_array() as $data){
-   foreach($data as $k=>$v){$data[$k]=$v;}
-  }
-  return $data;
+  $q=$this->db->where('lang',$this->app('conf.user_lang'))->get('contact_pages')->result_array();
+  return isset($q[0])?$q[0]:[];
  }
 
 }

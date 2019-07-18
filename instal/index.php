@@ -55,7 +55,7 @@ if(@is_writable($cms_path.$dir)){//если доступны для записи
       <label for="site_name">Имя сайта:</label>
       <input type="text" name="site_name" id="site_name" class="width40" placeholder="Пример: Фирма «Рога и копыта»" required><br>
       <label for="domen">Домен:</label>
-      <input type="url" name="domen" id="domen" class="width40" value="http://<?=$_SERVER['SERVER_NAME']?>/" required>&nbsp;
+      <input type="url" name="domen" id="domen" class="width40" value="<?='http'.(empty($_SERVER['HTTPS'])?'':'s').'://'.$_SERVER['SERVER_NAME'].'/'?>" required>&nbsp;
       <i class="fa-info-circle red" onmouseover="tt(this);"></i>
 <pre class="tt">
 URL к директории в которой будет запущена система

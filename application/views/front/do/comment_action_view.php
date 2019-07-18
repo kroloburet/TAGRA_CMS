@@ -6,10 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="none">
-  <link href="<?=base_url('UI_fraimwork/fonts/FontAwesome/style.css')?>" rel="stylesheet">
-  <link href="<?=base_url('UI_fraimwork/css.css')?>" rel="stylesheet">
+  <link href="/UI_fraimwork/fonts/FontAwesome/style.css" rel="stylesheet">
+  <link href="/UI_fraimwork/css.css" rel="stylesheet">
   <!--[if lt IE 8]><!-->
-  <link href="<?=base_url('UI_fraimwork/fonts/FontAwesome/ie7/ie7.css')?>" rel="stylesheet">
+  <link href="/UI_fraimwork/fonts/FontAwesome/ie7/ie7.css" rel="stylesheet">
   <!--<![endif]-->
   <title>Действия над комментарием</title>
   <style>
@@ -25,4 +25,3 @@
   <script>window.setTimeout(function(){window.close();},5000);</script>
  </body>
 </html>
-

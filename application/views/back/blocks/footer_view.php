@@ -1,4 +1,4 @@
-<?php if(ENVIRONMENT==='development'||ENVIRONMENT==='testing'||$conf_site_access==='off'){?>
+<?php if(ENVIRONMENT==='development'||ENVIRONMENT==='testing'||$conf['site_access']==='off'){?>
 <!--Справка по режиму "разработка\тестирование"-->
 <div class="notific_y" style="margin-top:1.5em">
  Внимание! Ресурс находится в режиме "разработка" или "тестирование". <a href="#" onclick="opn_cls('env_info');return false">Подробнее</a>
@@ -11,17 +11,16 @@
 </div>
 <?php }?>
 <div id="copy">
- Веб-разработка и дизайн<a href="mailto:kroloburet@gmail.com"> <img src="<?=base_url('img/i.jpg')?>" alt="Разработка и дизайн сайтов"> kroloburet@gmail.com</a><br>
- <img src="<?=base_url('img/tagra_min.svg')?>" alt="Tagra CMS"> Tagra CMS <sup><?=$this->config->item('tagra_version')?></sup><br>
+ Веб-разработка и дизайн<a href="mailto:kroloburet@gmail.com"> <img src="/img/i.jpg" alt="Разработка и дизайн сайтов"> kroloburet@gmail.com</a><br>
+ <img src="/img/tagra_min.svg" alt="Tagra CMS"> Tagra CMS <sup><?=$this->config->item('tagra_version')?></sup><br>
 </div>
 </div>
 <!--########### END CONTAINER ###########-->
-<script src="<?= base_url('UI_fraimwork/js.js'); ?>"></script>
-<script src="<?= base_url('scripts/back/overall_js.js'); ?>"></script>
-<?php $this->load->helper('back/redactor');?>
-<script src="<?=base_url('scripts/tinymce_4.7.11/plugins/moxiemanager/js/moxman.loader.min.js')?>"></script>
-<?php if($conf_emmet=='on'){?>
-<script src="<?=base_url('scripts/libs/emmet.min.js')?>"></script>
+<script src="/UI_fraimwork/js.js"></script>
+<script src="/scripts/back/overall_js.js"></script>
+<script src="/scripts/tinymce_4.7.11/plugins/moxiemanager/js/moxman.loader.min.js"></script>
+<?php if($conf['emmet']=='on'){?>
+<script src="/scripts/libs/emmet.min.js"></script>
 <script>
 emmet.require('textarea').setup({//Emmet plugin for <textarea> https://github.com/emmetio/textarea
  pretty_break: true,// enable formatted line breaks (when inserting between opening and closing tag)

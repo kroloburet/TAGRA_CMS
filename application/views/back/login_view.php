@@ -6,11 +6,11 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="none">
-  <link href="<?=base_url('UI_fraimwork/css.css')?>" rel="stylesheet">
-  <link href="<?=base_url('css/back/general.css')?>" rel="stylesheet">
-  <link href="<?=base_url('UI_fraimwork/fonts/FontAwesome/style.css')?>" rel="stylesheet">
+  <link href="/UI_fraimwork/css.css" rel="stylesheet">
+  <link href="/css/back/general.css" rel="stylesheet">
+  <link href="/UI_fraimwork/fonts/FontAwesome/style.css" rel="stylesheet">
   <!--[if lt IE 8]><!-->
-	<link href="<?=base_url('UI_fraimwork/fonts/FontAwesome/ie7/ie7.css')?>" rel="stylesheet">
+	<link href="/UI_fraimwork/fonts/FontAwesome/ie7/ie7.css" rel="stylesheet">
 	<!--<![endif]-->
   <title>Авторизация</title>
   <style>
@@ -41,7 +41,7 @@
     <div class="opts_pan">
      <a href="#" class="fa-eye" title="Показать пароль" id="see_pass"></a>&nbsp;&nbsp;
      <a href="#" class="fa-unlock-alt" title="Восстановление доступа" id="show_sand_pass"></a>&nbsp;&nbsp;
-     <a href="<?=base_url()?>" class="fa-home" title="Перейти на главную сайта"></a>
+     <a href="/" class="fa-home" title="Перейти на главную сайта"></a>
     </div>
    </form>
 
@@ -61,8 +61,8 @@
 
 <!--####### Копирайт #######-->
    <div id="copy">
-    Веб-разработка и дизайн<a href="mailto:kroloburet@gmail.com"> <img src="<?=base_url('img/i.jpg')?>" alt="Разработка и дизайн сайтов"> kroloburet@gmail.com</a><br>
-    <img src="<?=base_url('img/tagra_min.svg')?>" alt="Tagra CMS"> Tagra CMS<br>
+    Веб-разработка и дизайн<a href="mailto:kroloburet@gmail.com"> <img src="/img/i.jpg" alt="kroloburet"> kroloburet@gmail.com</a><br>
+    <img src="/img/tagra_min.svg" alt="Tagra CMS"> Tagra CMS<br>
    </div>
   </div>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -97,7 +97,7 @@
      cancel.detach();
      btn.attr('disabled',true).html('<i class="fa fa-spin fa-spinner"></i>&nbsp;&nbsp;обработка...');//блокирую кнопку
      $.ajax({
-      url: '<?=base_url('do/change_login')?>',
+      url: '/do/change_login',
       type: 'post',
       data: form.serialize(),
       dataType: 'json',
@@ -122,6 +122,9 @@
          btn.attr('disabled',false).html('Отправить').after(cancel);//разблокировка кнопки
          setTimeout(function(){msg.empty();$('#login_form,#sand_pass').slideToggle();},5000);//очищаю сообщение об отправке, скрываю форму
        }
+      },
+      error:function(){
+       alert('Ой! Возникла ошибка соединения..( Повторите попытку.');
       }
      });
     });

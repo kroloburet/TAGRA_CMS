@@ -10,13 +10,13 @@ class Errors extends Front_basic_control{
   parent::__construct();
  }
 
- function error_404() {
-  $data=$this->conf;
+ function error_404(){
   $data['robots']='none';
   $data['addthis_follow']='off';
   $data['addthis_share']='off';
-  $data['description']='Упс! Страница не найдена';
-  $data['title']='Упс! Страница не найдена';
+  $data['lang']=$this->app('conf.user_lang');
+  $data['description']=htmlspecialchars($this->app('lexic.404.title'));
+  $data['title']=$data['description'];
   $this->output->set_status_header('404');
   $this->_viewer('404_view',$data);
  }

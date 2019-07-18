@@ -1,7 +1,7 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
 ///////////////////////////////////
-//работа с главной страницей
+//работа с страницей "Главная"
 ///////////////////////////////////
 
 class Front_home_model extends Front_basic_model{
@@ -10,10 +10,8 @@ class Front_home_model extends Front_basic_model{
  }
 
  function get_home_page(){
-  foreach($this->db->get($this->_prefix().'index_page')->result_array() as $data){
-   foreach($data as $k=>$v){$data[$k]=$v;}
-  }
-  return $data;
+  $q=$this->db->where('lang',$this->app('conf.user_lang'))->get('index_pages')->result_array();
+  return isset($q[0])?$q[0]:[];
  }
 
 }

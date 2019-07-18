@@ -10,42 +10,23 @@ class Front_section_model extends Front_basic_model{
  }
 
  function get_section($alias){
-  $q=$this->db->where(['public'=>'on','alias'=>$alias])->get($this->_prefix().'sections')->result_array();
-  if(!empty($q)){//если в базе есть запись с таким алиасом
-   foreach($q as $data){//получить и сделать массив
-    foreach($data as $k=>$v){$data[$k]=$v;}
+  $q=$this->db->where(['public'=>'on','alias'=>$alias])->get('sections')->result_array();
+  return isset($q[0])?$q[0]:FALSE;
    }
-   return $data;
-  }else{//в базе нет такого алиаса
-   return FALSE;
-  }
- }
 
  function get_sub_sections($alias){
-  $q=$this->db->where(['public'=>'on','section'=>$alias])->get($this->_prefix().'sections')->result_array();
-  if(!empty($q)){//если в базе есть запись с таким алиасом
-   return $q;
-  }else{
-   return FALSE;
+  $q=$this->db->where(['public'=>'on','section'=>$alias])->get('sections')->result_array();
+  return !empty($q)?$q:FALSE;
   }
- }
 
  function get_sub_gallerys($alias){
-  $q=$this->db->where(['public'=>'on','section'=>$alias])->get($this->_prefix().'gallerys')->result_array();
-  if(!empty($q)){//если в базе есть запись с таким алиасом
-   return $q;
-  }else{
-   return FALSE;
+  $q=$this->db->where(['public'=>'on','section'=>$alias])->get('gallerys')->result_array();
+  return !empty($q)?$q:FALSE;
   }
- }
 
  function get_sub_pages($alias){
-  $q=$this->db->where(['public'=>'on','section'=>$alias])->get($this->_prefix().'pages')->result_array();
-  if(!empty($q)){//если в базе есть запись с таким алиасом
-   return $q;
-  }else{
-   return FALSE;
+  $q=$this->db->where(['public'=>'on','section'=>$alias])->get('pages')->result_array();
+  return !empty($q)?$q:FALSE;
   }
- }
 
 }

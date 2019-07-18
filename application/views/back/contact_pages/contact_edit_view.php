@@ -1,53 +1,44 @@
-<?php
-//Кнопка отправки формы не должна отправлятся (иметь имя), имена полей не менять.
-?>
-<h1><?=$conf_title?></h1>
+<h1><?="{$data['view_title']} [{$data['lang']}]"?></h1>
 <div class="sheath">
- <form method="POST" action="<?=base_url('admin/contact/edit')?>">
+ <form method="POST" action="/admin/contact/edit/<?=$data['id']?>">
   <input type="hidden" name="last_mod_date" value="<?=date('Y-m-d')?>">
+  <input type="hidden" name="lang" value="<?=$data['lang']?>">
 
-  <!--####### Title, description... #######-->
+<!--####### Title, description... #######-->
   <div class="touch">
    Заголовок страницы <i class="fa-info-circle red" onmouseover="tt(this);"></i>
    <pre class="tt">
-Должен быть информативным и емким,
-содержать ключевые слова.
+Должен быть информативным и емким.
 <b class="red">Обязательно для заполнения!</b></pre>
    <label class="input">
-    <input type="text" name="title" placeholder="Заголовок страницы. Пример: Мой персональный веб-сайт" value="<?=$title?>" onkeyup="lim(this,100)">
+    <input type="text" name="title" placeholder="Заголовок страницы. Пример: Мои контакты" value="<?=htmlspecialchars($data['title'])?>" onkeyup="lim(this,100)">
    </label>
    Описание <i class="fa-info-circle red" onmouseover="tt(this);"></i>
    <pre class="tt">
 Краткое (до 250 символов) описание этой страницы
 которое будет показано под заголовком (ссылкой)
-в результатах поиска в Интернете
-и разделах, подразделах сайта.
+в результатах поиска в Интернете.
 Должно быть информативным и емким,
 содержать ключевые слова.
 <b class="red">Обязательно для заполнения!</b></pre>
    <label class="textarea">
-    <textarea name="description" class="no-emmet" placeholder="Описание страницы (description)" onkeyup="lim(this,250)" rows="3"><?=$description?></textarea>
+    <textarea name="description" class="no-emmet" placeholder="Описание страницы (description)" onkeyup="lim(this,250)" rows="3"><?=$data['description']?></textarea>
    </label>
   </div>
 
-  <!--####### JS, CSS, кнопки соцсетей... #######-->
+<!--####### JS, CSS, кнопки соцсетей... #######-->
   <div class="algn_r"><a href="#" onclick="opn_cls('more_opt');return false">Дополнительно (JS, CSS, кнопки соцсетей...) <i class="fa-angle-down"></i></a></div>
   <div id="more_opt" class="opn_cls touch">
-   Для индексации поисковыми роботами
-   <script>
-    $(function(){
-     $('select[name="robots"] option[value="<?=$robots?>"]').attr('selected',true);
-    })
-   </script>
+   Индексация поисковыми роботами
    <label class="select">
     <select name="robots">
-     <option value="all">страница полностью доступна</option>
-     <option value="index">ТОЛЬКО индексировать страницу</option>
-     <option value="follow">ТОЛЬКО проходить по ссылкам на странице</option>
-     <option value="noindex">НЕ индексировать страницу</option>
-     <option value="nofollow">НЕ проходить по ссылкам на странице</option>
-     <option value="noimageindex">НЕ индексировать изображения на странице</option>
-     <option value="none">страница полностью НЕ доступна</option>
+     <option value="all">Страница полностью доступна</option>
+     <option value="index">Только индексировать страницу</option>
+     <option value="follow">Только проходить по ссылкам на странице</option>
+     <option value="noindex">Не индексировать страницу</option>
+     <option value="nofollow">Не проходить по ссылкам на странице</option>
+     <option value="noimageindex">Не индексировать изображения на странице</option>
+     <option value="none">Страница полностью недоступна</option>
     </select>
    </label>
    <div class="row">
@@ -58,17 +49,17 @@ CSS-код с тегами style
 который будет применен к этой странице.
 Можно подгружать внешние таблицы стилей.</pre>
      <label class="textarea">
-      <textarea name="css" class="emmet-syntax-css" placeholder="CSS-код с тегами <style> и </style>" rows="6"><?=$css?></textarea>
+      <textarea name="css" class="emmet-syntax-css" placeholder="CSS-код с тегами <style> и </style>" rows="6"><?=$data['css']?></textarea>
      </label>
     </div>
     <div class="col6">
-     JAVASCRIPT-код <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+     JavaScript-код <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
      <pre class="tt">
-JAVASCRIPT-код без тегов script
+JavaScript-код с тегами script
 который будет применен к этой странице.
-Можно подгружать внешние скрипты</pre>
+Можно подгружать внешние скрипты.</pre>
      <label class="textarea">
-      <textarea name="js" class="no-emmet" placeholder="JAVASCRIPT-код с тегами <script> и </script>" rows="6"><?=$js?></textarea>
+      <textarea name="js" class="no-emmet" placeholder="JavaScript-код с тегами <script> и </script>" rows="6"><?=$data['js']?></textarea>
      </label>
     </div>
    </div>
@@ -77,8 +68,8 @@ JAVASCRIPT-код без тегов script
      Кнопки «Share»
      <label class="select">
       <select name="addthis_share">
-       <option value="off" <?=$addthis_share=='off'?'selected':''?>>скрыть</option>
-       <option value="on" <?=$addthis_share=='on'?'selected':''?>>показать</option>
+       <option value="off" <?php if($data['addthis_share']=='off') echo'selected'?>>Скрыть</option>
+       <option value="on" <?php if($data['addthis_share']=='on') echo'selected'?>>Показать</option>
       </select>
      </label>
     </div>
@@ -86,23 +77,49 @@ JAVASCRIPT-код без тегов script
      Кнопки «Follow»
      <label class="select">
       <select name="addthis_follow">
-       <option value="off" <?=$addthis_follow=='off'?'selected':''?>>скрыть</option>
-       <option value="on" <?=$addthis_follow=='on'?'selected':''?>>показать</option>
+       <option value="off" <?php if($data['addthis_follow']=='off') echo'selected'?>>Скрыть</option>
+       <option value="on" <?php if($data['addthis_follow']=='on') echo'selected'?>>Показать</option>
       </select>
      </label>
     </div>
    </div>
   </div>
 
-  <!--####### Контент #######-->
+<!--####### Контент #######-->
   <div class="touch">
    <h3>Контент</h3>
    <hr>
-   <a href="#" onclick="$('#layout_t').removeClass('nav_layout_active');return false">Kомпактно <i class="fa-compress"></i></a>
-   <div id="layout_t" class="nav_layout_t"><?=$layout_t?></div>
+   Ширина левого сегмента макета&nbsp;<input type="text" name="layout_l_width" class="layout_l_width_input" value="<?=htmlspecialchars($data['layout_l_width'])?>" size="3" onkeyup="$('#layout_l').css('width',($(this).val()-2)+'%')">&nbsp;%&nbsp;&nbsp;<a href="#" onclick="$('#layout_t,#layout_l,#layout_r,#layout_b').removeClass('nav_layout_active');return false">Kомпактно <i class="fa-compress"></i></a>&nbsp;&nbsp;<a href="#" onclick="opn_cls('o_makete');return false">О макете <i class="fa-angle-down"></i></a>
+   <div id="o_makete" class="opn_cls">
+С целью улучшения визуального восприятия и компактности основной части страницы, контент представлен в виде макета. Вы можете заполнить один и более сегментов.<br>Макет разделен на 4 сегмента, в каждом из которых Вы можете размещать и редактировать свой контент(содержание). Чтобы разместить или редактировать контент в одном из сегментов, выберите его, кликнув по нему мышкой.<br>Сегмент, который не содержит контент, не будет отображен на странице. Вы можете задать ширину левого сегмента в процентном отношении, к ширине макета на странице. Значение по умолчанию, для всех страниц, устанавливается в настройках макета. Еще, вы можете "компактно" собрать макет редактирования, чтобы вернуть его сегменты к прежнему виду.
+   </div>
+   <div style="margin-top:.5em">
+    <div id="layout_t" class="nav_layout_t"><?=$data['layout_t']?></div>
+    <div id="layout_l" class="nav_layout_l" style="width:<?=$data['layout_l_width']?>%"><?=$data['layout_l']?></div>
+    <div id="layout_r" class="nav_layout_r"><?=$data['layout_r']?></div>
+    <div id="layout_b" class="nav_layout_b"><?=$data['layout_b']?></div>
+   </div>
   </div>
 
-  <!--####### Контакты #######-->
+<!--####### Превью-изображение #######-->
+  <div class="touch">
+   <h3 class="float_l">Превью-изображение</h3> <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+   <pre class="tt">
+Введите в поле ниже ссылку на изображение
+доступное из Интернета или выберите его
+в менеджере файлов. Изображение будет
+использовано как привью на на страницу
+«Контакты» в соцсетях.</pre>
+   <hr>
+   Путь к файлу<br>
+   <label class="input inline width90">
+    <input type="text" name="img_prev" id="img_prev" value="<?=htmlspecialchars($data['img_prev'])?>">
+   </label>
+   <a href="#" class="fa-folder-open fa-lg blue" onclick="files('img_prev','<?=$data['lang']?>');return false"></a>&nbsp;<i class="fa-eye fa-lg blue" onmouseover="img_prev(this,'img_prev')"></i>
+   <pre class="tt"></pre>
+  </div>
+
+<!--####### Контакты #######-->
   <div class="touch" id="contact">
    <h3 class="float_l">Контакты</h3> <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
 <pre class="tt">
@@ -111,7 +128,7 @@ JAVASCRIPT-код без тегов script
 редактировать их.</pre>
    <hr>
    <button type="button" class="add_contact_btn">Добавить контакт</button>
-   <div class="contact_box" style="display:none">
+   <div class="contact_box">
     <div class="row">
      <div class="col6">
       Порядок <i class="fa-question-circle red" onmouseover="tt(this);"></i>
@@ -185,35 +202,44 @@ GPS-координаты (широта,долгота).
      <button type="button" class="contact_done_btn">Готово</button><button type="button" class="contact_cancel_btn">Отмена</button>
     </div>
    </div>
-   <textarea name="contacts" hidden><?=$contacts?></textarea>
+   <textarea name="contacts" class="no-emmet" hidden><?=$data['contacts']?></textarea>
    <div class="contact_prev"></div>
   </div>
 
-  <!--####### Форма обратной связи #######-->
+<!--####### Форма обратной связи #######-->
   <div class="touch">
    <h3>Форма обратной связи</h3>
    <hr>
    <label class="select">
     <select name="contact_form">
-     <option value="on" <?=$contact_form=='on'?'selected':''?>>Показать форму обратной связи</option>
-     <option value="off" <?=$contact_form=='off'?'selected':''?>>Скрыть форму обратной связи</option>
+     <option value="on" <?php if($data['contact_form']=='on') echo'selected'?>>Показать форму обратной связи</option>
+     <option value="off" <?php if($data['contact_form']=='off') echo'selected'?>>Скрыть форму обратной связи</option>
     </select>
    </label>
   </div>
 
   <div class="button this_form_control">
-   <button type="button" onclick="subm(form,s_opts)">Сохранить изменения</button><a href="#" class="btn_lnk" onclick="window.history.back();return false">Отменить</a>
+   <button type="button" onclick="subm(form,s_opts)">Сохранить изменения</button><a href="/admin/contact/get_list" class="btn_lnk">Отменить</a>
   </div>
  </form>
 </div>
 
+<script src="https://maps.googleapis.com/maps/api/js?language=<?=$data['lang']?>&key=<?=$conf['gapi_key']?>"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" defer></script>
 <script>
+var ms=document.createElement("link");ms.rel="stylesheet";//стили jquery-ui
+ms.href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.min.css";
+document.getElementsByTagName("head")[0].appendChild(ms);
 ///////////////////////рег.выражения для проверки полей
-var s_opts={};
- s_opts['title']=/^[^><]+$/i;
- s_opts['description']=/^[^><]+$/i;
-
-//////////////////////////////////////////////////////////контакты
+var s_opts={
+ title:/[^\s]/,
+ description:/[^\s]/
+};
+$(function(){
+ /////////////////установка значений полей
+ $('select[name="robots"] option[value="<?=$data['robots']?>"]').attr('selected',true);
+});
+///////////////////////контакты
 ;(function($,google){
  var _=$('#contact'),//блок контакта
      _order=_.find('.order'),//поле "порядок"
@@ -234,7 +260,6 @@ var s_opts={};
      _cancel_btn=_.find('.contact_cancel_btn'),//кнопка "отмена"
      _gps_reg=/(^-?)[0-9]+(?:\.[0-9]*)?,-?[0-9]+(?:\.[0-9]*)?$/,//регулярка проверки gps
      _opt=!_contacts.val()?{}:JSON.parse(_contacts.val());//объект контактов
-
  ////////////////////////////////валидация полей
  var __validator=function(id){
   var opt_count=Object.keys(_opt).length;//всего контактов
@@ -327,7 +352,7 @@ var s_opts={};
   var order=_order.val(),//новый порядковый номер
   int_order=parseInt(order,10),//новый порядковый номер в число
   int_id=parseInt(id,10),//текущий порядковый номер в число
-  temp={};//если изменится порядковый номер - будет хранить объект слайдов с новым порядком
+  temp={};//если изменится порядковый номер - будет хранить объект с новым порядком
   Number.prototype.between=function(a,b){var min=Math.min(a,b),max=Math.max(a,b);return this>=min&&this<=max;};//проверка числа в диапазоне
   if(order!==id){//порядковый номер изменился
    for(var k in _opt){//проход по контактам
@@ -436,6 +461,7 @@ var s_opts={};
  _add_btn.on('click.Contact',function(){__get_add_form();});//открыть блок полей
  _cancel_btn.on('click.Contact',function(){__clear();scrll('contact');});//скрыть, очистить блок полей
 ////////////////////////////////после загрузки модуля
- __show();//показать превью
+ __show();
 }(jQuery,google));
 </script>
+<?php $this->load->helper('back/redactor')?>

@@ -3,7 +3,7 @@
 /*------------------------------------------------------------------------------basic---*/
 html{min-height:100%}
 body{background:url(/img/bg.svg) no-repeat center center fixed;background-size:cover;color:#000;border-top:none}
-nav{background:#E7D977;margin-bottom:2em;}
+nav{background:#E7D977;margin-bottom:2em}
 .menu{margin:0 auto;max-width:1100px}
 .active,.menu li a:hover,.menu li span:hover,.menu li:hover>a,.menu li:hover>span{background:rgba(0,0,0,0.05)}
 .user_nav{float:right}
@@ -29,11 +29,31 @@ input[name="fuck_bot"]{display:none;visibility:hidden}
 .SelectSearch_input{width:100%;padding:.5em 3em .5em .5em;font-size:1em;margin:0;border-radius:5px 5px 0 0;border:none;border-bottom:1px solid #4A76BE}
 
 /*----------------------------------------------------------------------------links--*/
-#links_choice_btn{display:inline-block;margin-bottom:.4em;}
-#links_choice{display:none;}
-#prev_links{max-height:200px;overflow-x:auto;margin-top:.3em;}
-.remove_link{display:inline-block;margin:0 .3em .3em 0;padding:.5em;border:1px solid;border-radius:3px;cursor:url(/img/remove.png),pointer!important;color:#0E7AA9}
-.remove_link:hover{opacity:.4;}
+#links .links_box{display:none;margin-top:.2em;}
+#links .links_box .button button:last-child{margin-right:0;}
+#links .links_prev{max-height:200px;overflow-x:auto;margin-top:.3em;}
+#links .links_remove{display:inline-block;margin:0 .3em .3em 0;padding:.5em;border:1px solid;border-radius:3px;cursor:url(/img/remove.png),pointer!important;color:#0E7AA9}
+#links .links_remove:hover{opacity:.4;}
+
+/*-----------------------------------------------------------------------------------------versions----*/
+#versions .v_box{display:none;margin-top:.2em;}
+#versions .v_box .button button:last-child{margin-right:0;}
+#versions .v_prev_item{margin-top:.3em;border:#4a76be solid 1px;border-radius:3px;display:flex;justify-content:space-between;}
+#versions .v_prev_str_box,#versions .v_prev_control{display:flex;}
+#versions .v_prev_str_box span{padding:.3em .5em;}
+#versions .v_prev_lang{color:#777;background:#e3e3e3;border-radius:2px 0 0 2px;min-width:2.2em;}
+#versions .v_prev_edit_btn,#versions .v_prev_del_btn{display:flex!important;align-items:center;padding:.5em;color:#fff;background:#437de0;cursor:pointer;}
+#versions .v_prev_edit_btn:hover,#versions .v_prev_del_btn:hover{background:#237aa9;}
+
+/*----------------------------------------------------------------------------languages--*/
+/*edit_form*/
+#l_r{display:none;}
+#l_r mark, #l_r_msg mark{background:#fff;}
+#l_r_msg a{padding:.5em 0;font-size:110%;display:block;cursor:pointer;}
+#l_r .textarea{display:flex;height:505px;}
+#l_r_lines,#l_r .textarea textarea{margin:0;font-family:monospace!important;font-size:14px!important;line-height:20px!important;white-space:pre!important;resize:none;}
+#l_r_lines{padding:5px;background-color:#e3e3e3;border:1px solid #4a76be;border-right:none;border-radius:3px 0 0 3px;overflow:hidden;text-align:right;color:#777;}
+#l_r .textarea textarea{padding:5px;border-radius:0 3px 3px 0;border-left:none;}
 
 /*----------------------------------------------------------------------------gallery--*/
 .type_section{display:none;}
@@ -67,7 +87,8 @@ h1,h2,h3,h4,h5{font-family:Helvetica,Arial;color:#000;}
 .pagination li:last-child a{border-radius:0 3px 3px 0}
 
 /*-----------------------------------------------------------------------------------------contact----*/
-.geo_search{display:none;}
+.geo_search,.contact_box{display:none;}
+.contact_box .button button:last-child{margin-right:0;}
 .contact_gmap{width:100%;height:300px;border:#4a76be solid 1px;border-top:none;border-bottom:none;margin:0;padding:0;}
 .marker_desc,.gps_search{border:#4a76be solid 1px;background-color:#fff;box-shadow:none;min-width:10em;width:100%;padding:0.3em;margin:0.2em auto 0 auto;border-radius:3px 3px 0 0;font:100%/1.5em Georgia,Helvetica,Arial;}
 .marker_desc{margin:0 auto;border-radius:0 0 3px 3px;}
@@ -90,11 +111,13 @@ h1,h2,h3,h4,h5{font-family:Helvetica,Arial;color:#000;}
 .buc_prev_edit_btn:hover,.buc_prev_del_btn:hover{background:#237aa9;}
 
 /*----------------------------------------------------------------------------------------------menu tree----*/
-ul.menu_tree,ul.menu_tree ul{list-style:none;margin:0;padding:0}
-ul.menu_tree ul{margin-left:14px;position:relative}
-ul.menu_tree ul:before{content:"";display:block;width:0;position:absolute;top:-17px;bottom:0;left:0;border-left:1px solid #bbb}
-ul.menu_tree li{list-style:none;margin:20px 0;padding:0 10px;color:#000;position:relative}
-.menu_item{border:1px solid #bbb;padding:5px}
-.edit_menu_item{display:none;margin:7px 0;padding:5px;border:1px solid #bbb}
-ul.menu_tree ul li:before{content:"";display:block;width:10px;height:0;border-top:1px solid #bbb;position:absolute;top:10px;left:0}
-ul.menu_tree ul li:last-child:before{background:#fff;height:auto;top:10px;bottom:0}
+ul.m_tree,ul.m_tree ul{list-style:none;margin:0;padding:0}
+ul.m_tree ul{margin-left:1em;position:relative}
+ul.m_tree ul:before{content:"";display:block;width:0;position:absolute;top:-1em;bottom:0;left:0;border-left:1px solid #bbb}
+ul.m_tree li{margin:1em 0;padding:0;}
+ul.m_tree ul li{list-style:none;margin:1em 0;padding:0 0 0 1em;color:#000;position:relative}
+ul.m_tree .m_item{display:inline-block;border:1px solid #bbb;padding:.2em .4em}
+ul.m_tree .m_item form{border-top:1px solid #bbb;margin-top:.2em;padding-top:.4em}
+ul.m_tree .m_item.edit{display:block;background:#eee;}
+ul.m_tree ul li:before{content:"";display:block;width:1em;height:0;border-top:1px solid #bbb;position:absolute;top:1em;left:0}
+ul.m_tree ul li:last-child:before{background:#fff;height:auto;top:1em;bottom:0}

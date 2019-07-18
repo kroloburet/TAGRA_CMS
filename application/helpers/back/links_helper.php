@@ -1,144 +1,137 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 /////////////////////////////////////////////////////////////////
 if(!function_exists('links')){
-function links($opt=''){
+function links(){
 $CI=&get_instance();
-$prefix=$CI->config->item('db_tabl_prefix');
-$sections=$CI->db->select('title,alias')->order_by('title','ASC')->get($prefix.'sections')->result_array();
-$gallerys=$CI->db->select('title,alias')->order_by('title','ASC')->get($prefix.'gallerys')->result_array();
-$pages=$CI->db->select('title,alias')->order_by('title','ASC')->get($prefix.'pages')->result_array();
+$data=$CI->app('data');
+$m['pages']=$CI->db->where('lang',$data['lang'])->select('title,alias')->order_by('title','ASC')->get('pages')->result_array();
+$m['sections']=$CI->db->where('lang',$data['lang'])->select('title,alias')->order_by('title','ASC')->get('sections')->result_array();
+$m['gallerys']=$CI->db->where('lang',$data['lang'])->select('title,alias')->order_by('title','ASC')->get('gallerys')->result_array();
+if(!empty($m['pages'])){foreach($m['pages'] as $k=>$v){$m['pages'][]=['title'=>$v['title'],'url'=>'/'.$v['alias']];unset($m['pages'][$k]);};}
+if(!empty($m['sections'])){foreach($m['sections'] as $k=>$v){$m['sections'][]=['title'=>$v['title'],'url'=>'/section/'.$v['alias']];unset($m['sections'][$k]);};}
+if(!empty($m['gallerys'])){foreach($m['gallerys'] as $k=>$v){$m['gallerys'][]=['title'=>$v['title'],'url'=>'/gallery/'.$v['alias']];unset($m['gallerys'][$k]);};}
+$m=json_encode($m,JSON_FORCE_OBJECT);
 ?>
 
-<h3 class="float_l">Связанные ссылки</h3> <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
-<pre class="tt">
+<div id="links">
+ <h3 class="float_l">Связанные ссылки</h3> <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+ <pre class="tt">
 Здесь вы можете выбрать материалы сайта,
 ссылки на которые будут показанны в отдельном
 блоке на странице. Это может быть полезно когда
 нужно предложить посетителю перейти на другие
 материалы, а так же для перелинковки страниц.</pre>
-<hr>
-Заголовок блока <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
-<pre class="tt">
+ <hr>
+ Заголовок блока <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+ <pre class="tt">
 Заголовок блока связанных ссылок.
 Например: «Смотрите так же»
 Если поле не заполнено, блок ссылок
-будет выведен без заголовка.</pre><br>
-<label class="input">
-<input type="text" id="links_header" placeholder="Может оставаться пустым">
-</label>
-<a href="#" id="links_choice_btn"><i class="fa-plus-circle fa-lg blue"></i>&nbsp;Выбрать материалы</a>
-<div id="links_choice">
- <label class="select">
- <select id="materials_select">
-  <option value="pages" selected>Страницы</option>
-  <option value="sections">Разделы</option>
-  <option value="gallerys">Галереи</option>
- </select>
+будет выведен без заголовка.</pre>
+ <label class="input">
+  <input type="text" class="links_header" placeholder="Может оставаться пустым">
  </label>
- <div id="materials_viewer"></div>
+ <button type="button" class="links_add_btn">Добавить ссылки</button>
+ <span class="prev_links_msg"></span>
+ <div class="links_box">
+  <label class="select">
+   <select class="links_type">
+    <option value="pages" selected>Страницы</option>
+    <option value="sections">Разделы</option>
+    <option value="gallerys">Галереи</option>
+   </select>
+  </label>
+  <label class="select links_viewer"></label>
+  <div class="button algn_r">
+   <button type="button" class="links_done_btn">Готово</button>
+  </div>
+ </div>
+ <div class="links_prev"></div>
+ <textarea class="links_opt" class="no-emmet" name="links" hidden><?=isset($data['links'])?$data['links']:''?></textarea>
 </div>
-<div id="prev_links_msg"></div>
-<div id="prev_links"></div>
-<textarea id="links_opt" class="no-emmet" name="links" hidden><?=$opt?></textarea>
 
 <script>
 ;(function($){
- //////////////////////////////////////////////////////////
- //объявление приватных свойств по умолчанию
- //////////////////////////////////////////////////////////
- var _l_opt=$('#links_opt'),//textarea с опциями
-     _opt=!_l_opt.val()?{}:JSON.parse(_l_opt.val()),//объект опций,
-     _materials=$('<select/>',{class:'SelectSearch',size:5}),//список материалов,
-     _pages='<?php if(empty($pages)){echo '<option value="">На сайте нет страниц</option>';}else{foreach($pages as $i){?><option value="/<?=$i['alias']?>"><?=$i['title']?></option><?php }}?>',
-     _sections='<?php if(empty($sections)){echo '<option value="">На сайте нет разделов</option>';}else{foreach ($sections as $i){?><option value="<?='/section/'.$i['alias']?>"><?=$i['title']?></option><?php }}?>',
-     _gallerys='<?php if(empty($gallerys)){echo '<option value="">На сайте нет галерей</option>';}else{foreach($gallerys as $i){?><option value="<?='/gallery/'.$i['alias']?>"><?=$i['title']?></option><?php }}?>';
-     
- //////////////////////////////////////////////////////////
- //приватные методы
- //////////////////////////////////////////////////////////
+ var _=$('#links'),
+     _header=_.find('.links_header'),//поле "Заголовок блока"
+     _box=_.find('.links_box'),//контейнер полей
+     _type=_.find('.links_type'),//список типа материала
+     _viewer=_.find('.links_viewer'),//label списка материалов,
+     _l_opt=_.find('.links_opt'),//поле для отправки
+     _opt=!_l_opt.val()?{}:JSON.parse(_l_opt.val()),//объект ссылок,
+     _m=<?=$m?>;//объект материалов
  ////////////////////////получить уникальный id
- var _get_id=function(){return new Date().getTime().toString();};
+ var __get_id=function(){return new Date().getTime().toString();};
  ////////////////////////отображение списка материалов
- var _materials_viewer=function(material){
-  switch(material){
-   case 'pages':_materials.html(_pages);break;
-   case 'sections':_materials.html(_sections);break;
-   case 'gallerys':_materials.html(_gallerys);break;
+ var __viewer=function(){
+  var m=_m[_type.val()],
+      s=$('<select/>',{class:'SelectSearch',size:5,html:'<option disabled>Нет материалов</option>'}),
+      o;
+  if(m){
+   for(var i in m){o+='<option value="'+m[i].url+'">'+m[i].title+'</option>';}
+   s.html(o);
   }
-  $('#materials_viewer').html(_materials);
-  _materials.wrapAll('<label class="select"></label>').SelectSearch().on('change.Links',function(){_add();});
+  _viewer.html(s);
+  s.SelectSearch().on('change.Links',function(){__add();});
  };
  ////////////////////////показать превью ссылок
- var _show=function(){
+ var __show=function(){
   if($.isEmptyObject(_opt)){return false;}
-  var clear_btn=$('<button/>',{type:'button',text:'Очистить все'}),
-      clear_msg=$('<span/>',{text:'Чтобы удалить ссылку — кликните на ней в списке превью ниже.'}),
-      preview_msg=$('#prev_links_msg'),
-      preview=$('#prev_links').empty();
-  $('#links_header').val(_opt.title);
-  for(var k in _opt){
-   if(_opt[k].url && _opt[k].title){
-    var link=$('<span/>',{class:'fa-chain remove_link',id:k,title:'Удалить ссылку',text:' '+_opt[k].title});
-    link.on('click.Links',function(){if(confirm('Эта ссылка будет удалена!\nВыполнить действие?'))_del($(this)[0].id);});
+  var clear_btn=$('<button/>',{type:'button',text:'Удалить все'}),
+      clear_msg=$('<span/>',{text:'Чтобы удалить ссылку — кликните по ней в превью ниже.'}),
+      preview=$('.links_prev').empty();
+  _header.val(_opt.title);
+  for(var i in _opt){
+   if(_opt[i].url && _opt[i].title){
+    var link=$('<span/>',{class:'fa-chain links_remove',id:i,title:'Удалить ссылку',text:' '+_opt[i].title});
+    link.on('click.Links',function(){__del($(this)[0].id);});
     preview.prepend(link);
    }
-   preview_msg.html([clear_btn,clear_msg]);
-   clear_btn.on('click.Links',function(){if(confirm('Все ссылки и заголовок блока будут удалены!\nВыполнить действие?'))_clear();});
   }
+  _.find('.prev_links_msg').html([clear_btn,clear_msg]);
+  clear_btn.on('click.Links',function(){if(confirm('Все ссылки и заголовок блока будут удалены!\nВыполнить действие?'))__del_all();});
  };
  ////////////////////////добавить ссылку
- var _add=function(){
-  var url=_materials.val(),
+ var __add=function(){
+  var url=_viewer.find('select').val(),
       added=false;
   if(url){
-   for(var k in _opt){if(_opt[k].url===url){added=true;continue;}}//
-   if(!added){_opt[_get_id()]={title:_materials.find('option:selected').text(),url:url};}
+   for(var i in _opt){if(_opt[i].url===url){added=true;continue;}}//
+   if(!added){_opt[__get_id()]={title:_viewer.find('select option:selected').text(),url:url};}
   }
   if(!$.isEmptyObject(_opt)){
-   _opt.title=$.trim($('#links_header').val());
+   _opt.title=$.trim(_header.val());
    _l_opt.val(JSON.stringify(_opt));
-   _show();
+   __show();
   }
  };
- ////////////////////////удалить ссылку
- var _del=function(id){
+ ////////////////////////удалить
+ var __del=function(id){
+  if(!confirm('Эта ссылка будет удалена!\nВыполнить действие?')){return false;}
   delete _opt[id];
-  for(var k in _opt){
-   if(k!=='title'){
+  for(var i in _opt){
+   if(i!=='title'){
     _l_opt.val(JSON.stringify(_opt));
-    _show();
+    __show();
     return true;
    }
   }
-  _clear();
+  __del_all();
  };
- ////////////////////////очистить все ссылки
- var _clear=function(){
+ ////////////////////////очистить все
+ var __del_all=function(){
   _opt={};
-  _l_opt.add('#links_header').val('');
-  $('#prev_links_msg,#prev_links').empty();
+  _l_opt.add(_header).val('');
+  _.find('.prev_links_msg,.links_prev').empty();
+  scrll('links');
  };
- 
- //////////////////////////////////////////////////////////
- //события
- //////////////////////////////////////////////////////////
- ////////////////////////показать\скрыть блок выбора материалов
- $('#links_choice_btn').on('click.Links',function(e){
-  e.preventDefault();
-  var choice=$('#links_choice');
-  choice.slideToggle(200);
-  choice.is(':hidden')?false:_materials_viewer($('#materials_select').val());
- });
- ////////////////////////отображение списка материалов
- $('#materials_select').on('change.Links',function(){_materials_viewer($(this).val());});
- ////////////////////////добавление ссылки на материал
- $('#links_header').on('change.Links',function(){_add();});
- 
- //////////////////////////////////////////////////////////
- //после загрузки модуля
- //////////////////////////////////////////////////////////
- _show();//показать превью
- 
+ ////////////////////////события
+ _.find('.links_add_btn').on('click.Links',function(){_box.slideDown(200);scrll('links');__viewer();});//открыть форму добавления
+ _.find('.links_done_btn').on('click.Links',function(){_box.slideUp(200);scrll('links');});//скрыть форму добавления
+ _type.on('change.Links',function(){__viewer();});//отображение списка материалов
+ _header.on('change.Links',function(){__add();});//добавление ссылки на материал
+ ////////////////////////после загрузки модуля
+ __show();
 }(jQuery));
 </script>
 <?php }}?>

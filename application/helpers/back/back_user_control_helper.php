@@ -3,8 +3,7 @@
 if(!function_exists('administrator_control')){//управление администратором системы
 function administrator_control(){
 $CI=&get_instance();
-$prefix=$CI->config->item('db_tabl_prefix');
-$q=$CI->db->where('status','administrator')->get($prefix.'back_users')->result_array();
+$q=$CI->db->where('status','administrator')->get('back_users')->result_array();
 if(empty($q)){$a='{}';}else{foreach($q as $v){$a[$v['id']]=$v;}$a=json_encode($a,JSON_FORCE_OBJECT);}
 unset($q);
 ?>
@@ -65,7 +64,6 @@ unset($q);
      _cancel_btn=_.find('.buc_cancel_btn'),//кнопка "отмена"
      _prev=_.find('.buc_prev'),//блок превью
      _opt=<?=$a?>;//объект администратора
-
  ////////////////////////////////валидация полей
  var __validator=function(){
   //валидация поля "E-mail"
@@ -99,21 +97,24 @@ unset($q);
   _cancel_btn.hide();
   _done_btn.attr('disabled',true).html('<i class="fa fa-spin fa-spinner"></i>&nbsp;&nbsp;обработка...');
   $.ajax({
-    url:'<?=base_url('admin/setting/edit_administrator')?>',
-    type:'post',
-    data:{login:_login.val(),password:_pass.val(),email:_mail.val()},
-    dataType:'json',
-    success:function(resp){
-     switch(resp.status){
-      case'error':alert('Ой! Ошибка..(\nВозможно это временные неполадки, попробуйте снова.');break;
-      case'nomail':alert('E-mail некорректный!\nИзмените и попробуйте снова.');break;
-      case'nounq':alert('В системе уже есть пользователь с такими данными!');break;
-      case'ok':if(!$.isEmptyObject(resp.opt)){_opt=resp.opt;__clear();__show();scrll('administrator_control');}break;
-      default:console.log(resp);
-     }
-     _cancel_btn.show();
-     _done_btn.attr('disabled',false).html(done_btn_text);
+   url:'/admin/setting/edit_administrator',
+   type:'post',
+   data:{login:_login.val(),password:_pass.val(),email:_mail.val()},
+   dataType:'json',
+   success:function(resp){
+    switch(resp.status){
+     case'error':alert('Ой! Ошибка..(\nВозможно это временные неполадки, попробуйте снова.');break;
+     case'nomail':alert('E-mail некорректный!\nИзмените и попробуйте снова.');break;
+     case'nounq':alert('В системе уже есть пользователь с такими данными!');break;
+     case'ok':if(!$.isEmptyObject(resp.opt)){_opt=resp.opt;__clear();__show();scrll('administrator_control');}break;
+     default:console.log(resp);
     }
+    _cancel_btn.show();
+    _done_btn.attr('disabled',false).html(done_btn_text);
+   },
+   error:function(){
+    alert('Ой! Возникла ошибка соединения..( Повторите попытку.');
+   }
   });
  };
  ////////////////////////////////отобразить превью
@@ -129,11 +130,10 @@ unset($q);
    _prev.prepend(prev_item);
   }
  };
-
 ////////////////////////////////события
  _cancel_btn.on('click.BUC',function(){__clear();scrll('administrator_control');});//скрыть, очистить блок полей
 ////////////////////////////////после загрузки модуля
- __show();//показать превью
+ __show();
 }(jQuery));
 </script>
 <?php }}
@@ -141,8 +141,7 @@ unset($q);
 if(!function_exists('moderators_control')){//управление модераторами системы
 function moderators_control(){
 $CI=&get_instance();
-$prefix=$CI->config->item('db_tabl_prefix');
-$q=$CI->db->where('status','moderator')->get($prefix.'back_users')->result_array();
+$q=$CI->db->where('status','moderator')->get('back_users')->result_array();
 if(empty($q)){$m='{}';}else{foreach($q as $v){$m[$v['id']]=$v;}$m=json_encode($m,JSON_FORCE_OBJECT);}
 unset($q);
 ?>
@@ -222,7 +221,6 @@ unset($q);
      _cancel_btn=_.find('.buc_cancel_btn'),//кнопка "отмена"
      _prev=_.find('.buc_prev'),//блок превью
      _opt=<?=$m?>;//объект модераторов
-
  ////////////////////////////////валидация полей
  var __validator=function(id){
   //валидация логина и пароля если модератор добавляется
@@ -271,21 +269,24 @@ unset($q);
   _cancel_btn.hide();
   _done_btn.attr('disabled',true).html('<i class="fa fa-spin fa-spinner"></i>&nbsp;&nbsp;обработка...');
   $.ajax({
-    url:'<?=base_url('admin/setting/add_moderator')?>',
-    type:'post',
-    data:{login:_login.val(),password:_pass.val(),email:_mail.val(),access:_access.val()},
-    dataType:'json',
-    success:function(resp){
-     switch(resp.status){
-      case'error':alert('Ой! Ошибка..(\nВозможно это временные неполадки, попробуйте снова.');break;
-      case'nomail':alert('E-mail некорректный!\nИзмените и попробуйте снова.');break;
-      case'nounq':alert('В системе уже есть пользователь с такими данными!');break;
-      case'ok':if(!$.isEmptyObject(resp.opt)){_opt=resp.opt;__clear();__show();scrll('moderators_control');}break;
-      default:console.log(resp);
-     }
-     _cancel_btn.show();
-     _done_btn.attr('disabled',false).html(done_btn_text);
+   url:'/admin/setting/add_moderator',
+   type:'post',
+   data:{login:_login.val(),password:_pass.val(),email:_mail.val(),access:_access.val()},
+   dataType:'json',
+   success:function(resp){
+    switch(resp.status){
+     case'error':alert('Ой! Ошибка..(\nВозможно это временные неполадки, попробуйте снова.');break;
+     case'nomail':alert('E-mail некорректный!\nИзмените и попробуйте снова.');break;
+     case'nounq':alert('В системе уже есть пользователь с такими данными!');break;
+     case'ok':if(!$.isEmptyObject(resp.opt)){_opt=resp.opt;__clear();__show();scrll('moderators_control');}break;
+     default:console.log(resp);
     }
+    _cancel_btn.show();
+    _done_btn.attr('disabled',false).html(done_btn_text);
+   },
+   error:function(){
+    alert('Ой! Возникла ошибка соединения..( Повторите попытку.');
+   }
   });
  };
  ////////////////////////////////редактировать
@@ -295,38 +296,44 @@ unset($q);
   _cancel_btn.hide();
   _done_btn.attr('disabled',true).html('<i class="fa fa-spin fa-spinner"></i>&nbsp;&nbsp;обработка...');
   $.ajax({
-    url:'<?=base_url('admin/setting/edit_moderator')?>/'+id,
-    type:'post',
-    data:{login:_login.val(),password:_pass.val(),email:_mail.val(),access:_access.val()},
-    dataType:'json',
-    success:function(resp){
-     switch(resp.status){
-      case'error':alert('Ой! Ошибка..(\nВозможно это временные неполадки, попробуйте снова.');break;
-      case'nomail':alert('E-mail некорректный!\nИзмените и попробуйте снова.');break;
-      case'nounq':alert('В системе уже есть пользователь с такими данными!');break;
-      case'ok':if(!$.isEmptyObject(resp.opt)){_opt=resp.opt;__clear();__show();scrll('moderators_control');}break;
-      default:console.log(resp);
-     }
-     _cancel_btn.show();
-     _done_btn.attr('disabled',false).html(done_btn_text);
+   url:'/admin/setting/edit_moderator/'+id,
+   type:'post',
+   data:{login:_login.val(),password:_pass.val(),email:_mail.val(),access:_access.val()},
+   dataType:'json',
+   success:function(resp){
+    switch(resp.status){
+     case'error':alert('Ой! Ошибка..(\nВозможно это временные неполадки, попробуйте снова.');break;
+     case'nomail':alert('E-mail некорректный!\nИзмените и попробуйте снова.');break;
+     case'nounq':alert('В системе уже есть пользователь с такими данными!');break;
+     case'ok':if(!$.isEmptyObject(resp.opt)){_opt=resp.opt;__clear();__show();scrll('moderators_control');}break;
+     default:console.log(resp);
     }
+    _cancel_btn.show();
+    _done_btn.attr('disabled',false).html(done_btn_text);
+   },
+   error:function(){
+    alert('Ой! Возникла ошибка соединения..( Повторите попытку.');
+   }
   });
  };
  ////////////////////////////////удалить
  var __del=function(id){
   $.ajax({
-    url:'<?=base_url('admin/setting/del_moderator')?>',
-    type:'post',
-    data:{id:id},
-    dataType:'text',
-    success:function(resp){
-     switch(resp){
-      case'error':alert('Ой! Ошибка..(\nВозможно это временные неполадки, попробуйте снова.');break;
-      case'last':alert('Вы пытаетесь удалить единственного модератора!\nВ системе должен быть один или больше модераторов.');break;
-      case'ok':delete _opt[id];__show();break;
-      default:console.log(resp);
-     }
+   url:'/admin/setting/del_moderator',
+   type:'post',
+   data:{id:id},
+   dataType:'text',
+   success:function(resp){
+    switch(resp){
+     case'error':alert('Ой! Ошибка..(\nВозможно это временные неполадки, попробуйте снова.');break;
+     case'last':alert('Вы пытаетесь удалить единственного модератора!\nВ системе должен быть один или больше модераторов.');break;
+     case'ok':delete _opt[id];__show();break;
+     default:console.log(resp);
     }
+   },
+   error:function(){
+    alert('Ой! Возникла ошибка соединения..( Повторите попытку.');
+   }
   });
  };
  ////////////////////////////////отобразить превью
@@ -336,7 +343,7 @@ unset($q);
   for(var k in _opt){//заполнять превью
    var edit_btn=$('<div/>',{class:'buc_prev_edit_btn fa-edit',title:'Редактировать'}).data('id',k),
        del_btn=$('<div/>',{class:'buc_prev_del_btn fa-trash-o',title:'Удалить'}).data('id',k),
-       prev_str_box=$('<div/>',{class:'buc_prev_str_box '+(_opt[k].access=='off'?'red':''),html:_opt[k].email}),
+       prev_str_box=$('<div/>',{class:'buc_prev_str_box '+(_opt[k].access==='off'?'red':''),html:_opt[k].email}),
        control_box=$('<div/>',{class:'buc_prev_control',html:[edit_btn,del_btn]}),
        prev_item=$('<div/>',{class:'buc_prev_item',html:[prev_str_box,control_box]});
    edit_btn.on('click.BUC',function(){__get_edit_form($(this).data('id'));scrll('moderators_control');});
@@ -344,12 +351,11 @@ unset($q);
    _prev.prepend(prev_item);
   }
  };
-
 ////////////////////////////////события
  _add_btn.on('click.BUC',function(){__get_add_form();});//открыть блок полей
  _cancel_btn.on('click.BUC',function(){__clear();scrll('moderators_control');});//скрыть, очистить блок полей
 ////////////////////////////////после загрузки модуля
- __show();//показать превью
+ __show();
 }(jQuery));
 </script>
 <?php }}

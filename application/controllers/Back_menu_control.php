@@ -11,52 +11,60 @@ class Back_menu_control extends Back_basic_control{
   $this->load->model('back_menu_model');
  }
 
+ function _set_data($lang){
+  $data['lang']=$lang;
+  $data['view_title']='Главное меню сайта';
+  $data['menu']=$this->back_menu_model->get_menu($lang);
+  $p=$this->db->where('lang',$lang)->select('title,alias,section')->order_by('title')->get('pages')->result_array();
+  $s=$this->db->where('lang',$lang)->select('title,alias,section')->order_by('title')->get('sections')->result_array();
+  $g=$this->db->where('lang',$lang)->select('title,alias,section')->order_by('title')->get('gallerys')->result_array();
+  $data['materials']=['pages'=>$p,'sections'=>$s,'gallerys'=>$g];
+  return $data;
+ }
+
  function edit_form(){
-  $data=$this->conf;
-  $data['conf_title']='Главное меню сайта';
-  $data['menu']=$this->back_menu_model->get_menu();
-  $data['pages']=$this->db->select('title,alias,section')->order_by('title','ASC')->get($this->_prefix().'pages')->result_array();
-  $data['sections']=$this->db->select('title,alias,section')->order_by('title','ASC')->get($this->_prefix().'sections')->result_array();
-  $data['gallerys']=$this->db->select('title,alias,section')->order_by('title','ASC')->get($this->_prefix().'gallerys')->result_array();
-  $this->_viewer('back/menu_view',$data);
+  if($this->_lang_selection(['view_title'=>'Главное меню сайта'])){return false;}
+  $this->_viewer('back/menu_view',$this->_set_data($this->app('data.lang')));
  }
 
  function add_item(){
-  array_map('trim',$this->input->post());//убираем пробелы в начале и в конце
-  $data['pid']=$this->input->post('pid');
-  $data['order']=$this->input->post('order');
-  $data['title']=$this->input->post('title');
-  $data['url']=$this->input->post('url');
-  $data['target']=$this->input->post('target');
-  $data['public']=$this->input->post('public');
-  $this->back_menu_model->add_menu_item($data);
-  redirect('admin/menu/edit_form');
+  if(!$this->input->post()){exit(json_encode(['status'=>'error'],JSON_FORCE_OBJECT));}
+  $p=array_map('trim',$this->input->post());
+  if(!$this->back_menu_model->add_item($p)){exit(json_encode(['status'=>'error'],JSON_FORCE_OBJECT));}
+  $resp=$this->_set_data($p['lang']);
+  $resp['html']=$this->load->view('back/menu_view',['data'=>$resp],TRUE);
+  $resp['status']='ok';
+  exit(json_encode($resp,JSON_FORCE_OBJECT));
  }
 
- function edit_item($id){
-  array_map('trim',$this->input->post());//убираем пробелы в начале и в конце
-  $data['pid']=$this->input->post('pid');
-  $data['order']=$this->input->post('order');
-  $data['title']=$this->input->post('title');
-  $data['url']=$this->input->post('url');
-  $data['target']=$this->input->post('target');
-  $this->back_basic_model->edit($id,$data,$this->_prefix().'menu');
-  redirect('admin/menu/edit_form');
+ function edit_item(){
+  if(!$this->input->post()){exit(json_encode(['status'=>'error'],JSON_FORCE_OBJECT));}
+  $p=array_map('trim',$this->input->post());
+  if(!$this->back_menu_model->edit_item($p)){exit(json_encode(['status'=>'error'],JSON_FORCE_OBJECT));}
+  $resp=$this->_set_data($p['lang']);
+  $resp['html']=$this->load->view('back/menu_view',['data'=>$resp],TRUE);
+  $resp['status']='ok';
+  exit(json_encode($resp,JSON_FORCE_OBJECT));
  }
 
- function del_item($id,$pid,$order){
-  $this->back_menu_model->del_menu_item($id,$pid,$order);
-  redirect('admin/menu/edit_form');
- }
-
- function public_item(){//побликовать\не публиковать аяксом
+ function del_item(){
+  if(!$this->input->post()){exit(json_encode(['status'=>'error'],JSON_FORCE_OBJECT));}
   $p=$this->input->post();
-  $this->back_menu_model->public_menu_item($p['id'],$p['pub']);
-  if($p['pub']==='on'){
-   echo'<a href="#" onclick="public_item(this,\''.$p['id'].'\',\'off\');return false" class="fa-eye-slash red" title="Опубликовать/не опубликовывать"></a>';
-  }elseif($p['pub']==='off'){
-   echo'<a href="#" onclick="public_item(this,\''.$p['id'].'\',\'on\');return false" class="fa-eye green" title="Опубликовать/не опубликовывать"></a>';
-  }
+  if(!$this->back_menu_model->del_item($p)){exit(json_encode(['status'=>'error'],JSON_FORCE_OBJECT));}
+  $resp=$this->_set_data($p['lang']);
+  $resp['html']=$this->load->view('back/menu_view',['data'=>$resp],TRUE);
+  $resp['status']='ok';
+  exit(json_encode($resp,JSON_FORCE_OBJECT));
  }
+
+ function public_item(){
+  if(!$this->input->post()){exit(json_encode(['status'=>'error'],JSON_FORCE_OBJECT));}
+  $p=$this->input->post();
+  if(!$this->back_menu_model->public_item($p)){exit(json_encode(['status'=>'error'],JSON_FORCE_OBJECT));}
+  $resp=$this->_set_data($p['lang']);
+  $resp['html']=$this->load->view('back/menu_view',['data'=>$resp],TRUE);
+  $resp['status']='ok';
+  exit(json_encode($resp,JSON_FORCE_OBJECT));
+  }
 
 }

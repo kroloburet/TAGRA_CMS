@@ -1,7 +1,7 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
 ///////////////////////////////////
-//работа с главной страницей
+//работа со страницами "Главная"
 ///////////////////////////////////
 
 class Back_home_model extends Back_basic_model{
@@ -9,15 +9,8 @@ class Back_home_model extends Back_basic_model{
   parent::__construct();
  }
 
- function get_home_page(){
-  foreach($this->db->get($this->_prefix().'index_page')->result_array() as $data){
-   foreach($data as $k=>$v){$data[$k]=$v;}
-  }
-  return $data;
- }
-
- function edit_home_page(/*значения полей*/$post_arr){
-  $this->db->update($this->_prefix().'index_page',$post_arr);
+ function edit_home_page(/*id страницы*/$id,/*значения полей*/$data){
+  $this->db->where('id',$id)->update('index_pages',$data);
  }
 
 }

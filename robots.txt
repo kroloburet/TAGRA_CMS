@@ -1,5 +1,6 @@
 User-agent: *
 Disallow:
+Disallow: /do/
 Disallow: /instal/
 Disallow: /admin/
 Disallow: /css/back/

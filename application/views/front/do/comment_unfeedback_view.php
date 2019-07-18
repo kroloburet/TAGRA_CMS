@@ -6,12 +6,12 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="none">
-  <link href="<?=base_url('UI_fraimwork/fonts/FontAwesome/style.css')?>" rel="stylesheet">
-  <link href="<?=base_url('UI_fraimwork/css.css')?>" rel="stylesheet">
+  <link href="/UI_fraimwork/fonts/FontAwesome/style.css" rel="stylesheet">
+  <link href="/UI_fraimwork/css.css" rel="stylesheet">
   <!--[if lt IE 8]><!-->
-  <link href="<?=base_url('UI_fraimwork/fonts/FontAwesome/ie7/ie7.css')?>" rel="stylesheet">
+  <link href="/UI_fraimwork/fonts/FontAwesome/ie7/ie7.css" rel="stylesheet">
   <!--<![endif]-->
-  <title>Отписка от обратной связи</title>
+  <title><?=$title?></title>
   <style>
    body{border:none;}
    .comment_action_box{display:block;width:50%;margin:15% auto 11% auto;}
@@ -24,4 +24,3 @@
   <div class="comment_action_box <?=$msg_class?>"><?=$msg?></div>
  </body>
 </html>
-

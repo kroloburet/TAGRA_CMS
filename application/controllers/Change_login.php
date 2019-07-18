@@ -10,10 +10,6 @@ class Change_login extends CI_Controller{
   $this->load->model('back_basic_model');
  }
 
- function _prefix(){//получение префикса таблиц базы данных из конфигурационного файла
-  return $this->config->item('db_tabl_prefix');
- }
-
  function gen_pass($lenght=10){//генерирует пароль длинной $lenght
   $alphabet=range('a','z');
   $up_alphabet=range('A','Z');
@@ -39,7 +35,7 @@ class Change_login extends CI_Controller{
   if(!$q){$resp['status']='nomail';exit(json_encode($resp,JSON_FORCE_OBJECT));}//если выборка пуста
   //////////////////////подготовка к рассылке
   $domen=str_replace('www.','',$this->input->server('HTTP_HOST'));//домен
-  $site_name=$this->back_basic_model->get_val($this->_prefix().'config','name','conf_site_name','value');//имя сайта
+  $site_name=$this->back_basic_model->get_val('config','name','site_name','value');//имя сайта
   $this->load->library('email');//загрузка библиотеки
   foreach($q as $v){//проход по выборке
    if($v['status']==='moderator'&&$v['access']!=='on'){//это запрещенный модератор
@@ -64,7 +60,7 @@ class Change_login extends CI_Controller{
 Пароль: '.$pass.'<br>
 </p>
 <hr>
-<b> Внимание! </b>— Эта информация конфиденциальна и отправлена только Вам! Не храните ее в месте доступном для посторонних. Сообщение генерировано системой. Не отвечайте на него.
+<b>Внимание!</b> — Эта информация конфиденциальна и отправлена только Вам! Не храните ее в месте доступном для посторонних. Сообщение сгенерировано системой. Не отвечайте на него.
 </body></html>';
    $this->email->from('Robot@'.$domen,$site_name);
    $this->email->to($mail);

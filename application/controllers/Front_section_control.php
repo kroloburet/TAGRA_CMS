@@ -12,14 +12,13 @@ class Front_section_control extends Front_basic_control{
  }
 
  function section($alias){
-  $q=$this->front_section_model->get_section($alias);
-  if($q){//eсли есть такой алиас в разделах
-   $data=array_merge($this->conf,$q);//соединение массивов
+  $data=$this->front_section_model->get_section($alias);
+  if($data){
    $data['sub_sections']=$this->front_section_model->get_sub_sections($alias);
    $data['sub_gallerys']=$this->front_section_model->get_sub_gallerys($alias);
    $data['sub_pages']=$this->front_section_model->get_sub_pages($alias);
    $this->_viewer('front/section_view',$data);
-  }else{//нет такого алиаса
+  }else{
    redirect('404_override');
   }
  }

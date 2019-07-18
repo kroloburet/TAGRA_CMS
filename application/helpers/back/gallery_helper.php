@@ -1,7 +1,12 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 /////////////////////////////////////////////////////////////////
 if(!function_exists('gallery')){
-function gallery($type='',$opt=''){//Тип галереи и добавление мультимедиа
+function gallery(){//Тип галереи и добавление мультимедиа
+$CI=&get_instance();
+$data=$CI->app('data');
+$type=isset($data['gallery_type'])?$data['gallery_type']:'';
+$opt=isset($data['gallery_opt'])?$data['gallery_opt']:'';
+$lang=$data['lang'];
 ?>
 <h3>Тип галереи и добавление мультимедиа</h3>
 <hr>
@@ -29,7 +34,7 @@ function gallery($type='',$opt=''){//Тип галереи и добавлени
  <label class="input inline width90">
   <input type="text" id="g_f_folder_url" class="g_field">
  </label>
- <a href="#" class="fa-folder-open fa-lg blue" onclick="files('g_f_folder_url',{no_host:true});return false"></a>
+ <a href="#" class="fa-folder-open fa-lg blue" onclick="files('g_f_folder_url','<?=$lang?>',{no_host:true});return false"></a>
 </div>
 
 <!--Изображения с описанием-->
@@ -53,7 +58,7 @@ function gallery($type='',$opt=''){//Тип галереи и добавлени
    <label class="input inline width70">
     <input type="text" id="g_f_url" class="g_field">
    </label>
-   <a href="#" class="fa-folder-open fa-lg blue" onclick="files('g_f_url');return false"></a>&nbsp;<i class="fa-eye fa-lg blue" onmouseover="img_prev(this,'g_f_url')"></i>
+   <a href="#" class="fa-folder-open fa-lg blue" onclick="files('g_f_url','<?=$lang?>');return false"></a>&nbsp;<i class="fa-eye fa-lg blue" onmouseover="img_prev(this,'g_f_url')"></i>
    <pre class="tt"></pre>
   </div>
  </div>
@@ -127,7 +132,7 @@ function gallery($type='',$opt=''){//Тип галереи и добавлени
    <label class="input inline width80">
     <input type="text" id="g_a_url" class="g_field">
    </label>
-   <a href="#" class="fa-folder-open fa-lg blue" onclick="files('g_a_url');return false"></a>
+   <a href="#" class="fa-folder-open fa-lg blue" onclick="files('g_a_url','<?=$lang?>');return false"></a>
   </div>
  </div>
  Название трека
@@ -149,7 +154,6 @@ function gallery($type='',$opt=''){//Тип галереи и добавлени
      _section=$('[data-type='+_type+']'),//секция типа галереи
      _g_opt=$('#g_opt'),//textarea с опциями галереи
      _opt=!_g_opt.val()?{}:JSON.parse(_g_opt.val());//объект опций галереи
-
  /////////////////////////////////валидатор формы
  var _validator=function(id){
   var opt_count=Object.keys(_opt).length,//всего в галерее
@@ -379,12 +383,8 @@ function gallery($type='',$opt=''){//Тип галереи и добавлени
    break;
   }
  };
-
- //////////////////////////////////////////////////////////
- //события
- //////////////////////////////////////////////////////////
- //////////////////////////////////////выбор типа галереи
- $('#g_type').on('change.G',function(){
+ ////////////////////////////////события
+ $('#g_type').on('change.G',function(){//выбор типа галереи
   if(!_g_opt.val()){
    _get_add_form($(this).val());
   }else{
@@ -397,12 +397,8 @@ function gallery($type='',$opt=''){//Тип галереи и добавлени
    }
   }
  });
- //////////////////////////////////////добавить "папка с изображениями"
- $('#g_f_folder_url').on('change.G',function(){_add();});
-
- //////////////////////////////////////////////////////////
- //после загрузки модуля
- //////////////////////////////////////////////////////////
+ $('#g_f_folder_url').on('change.G',function(){_add();});//добавить "папка с изображениями"
+ ////////////////////////////////после загрузки модуля
  _get_add_form(_type);//открыть форму типа на добавление
  _show();//показать превью
 }(jQuery));

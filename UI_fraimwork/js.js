@@ -133,7 +133,7 @@ function lim(elm/*this*/,lim/*(число) - лимит символов в по
      l_c=$(l).find('.lim_count');//контейнер подсчета в счетчике
  if(!l){//если счетчик еще не создан
   var l_c=$('<i/>',{class:'lim_count',text:parseInt(lim,10)-val.length}),//контейнер подсчета в счетчике
-      l=$('<span/>',{title:'Доступно символов',class:'lim fa-angle-left',html:l_c}),//счетчик
+      l=$('<span/>',{class:'lim fa-angle-left',html:l_c}),//счетчик
       el_p=el.css('padding-right');//отступ в поле (начальный)
   el.after(l).on('blur.UIF',function(){//вставка в DOM и потеря фокуса
    el.val(el.val().substr(0,parseInt(lim,10)));//обрезка строки если лимит превышен

@@ -1,21 +1,20 @@
-<h1><?=$conf_title?></h1>
-
-<?php if(!empty($new_comments)){?>
+<h1><?=$data['view_title']?></h1>
+<?php if(!empty($data['new_comments'])){?>
 
 <!--####### Новые комментарии #######-->
 <div class="sheath">
  <h3>Новые комментарии</h3>
  <hr>
- <?php foreach($new_comments as $v){?>
+ <?php foreach($data['new_comments'] as $v){?>
   <div class="touch">
    <div class="float_l">
     <b><?=$v['name']?></b>
     <?=$v['pid']>0?' в ответ на <a href="'.base_url($v['url'].'#comment_'.$v['pid']).'" target="_blank">комментарий</a>':FALSE?>
    </div>
    <div class="algn_r">
-    <a href="<?=base_url('admin/comment/public_new/'.$v['premod_code'])?>" class="fa-check-circle green" title="Опубликовать комментарий"></a>&nbsp;&nbsp;
-    <a href="<?=base_url('admin/comment/del_new/'.$v['premod_code'])?>" class="fa-trash-o red" title="Удалить комментарий" onclick="if(!confirm('Комментарий будет удален!\nВыполнить действие?')){return false;}"></a>&nbsp;&nbsp;
-      <a href="<?=base_url($v['url'])?>" target="_blank" class="fa-external-link" title="Перейти на страницу"></a>&nbsp;&nbsp;
+    <a href="/admin/comment/public_new/<?=$v['premod_code']?>" class="fa-check-circle green" title="Опубликовать комментарий"></a>&nbsp;&nbsp;
+    <a href="/admin/comment/del_new/<?=$v['premod_code']?>" class="fa-trash-o red" title="Удалить комментарий" onclick="if(!confirm('Комментарий будет удален!\nВыполнить действие?')){return false;}"></a>&nbsp;&nbsp;
+      <a href="/<?=$v['url']?>" target="_blank" class="fa-external-link" title="Перейти на страницу"></a>&nbsp;&nbsp;
     <span class="blue fa-info-circle" onmouseover="tt(this);"></span>
     <pre class="tt">
 <b>ID: </b><?=$v['id'].PHP_EOL?>
@@ -41,10 +40,11 @@
       Сортировать
       <label class="select">
        <select name="order" onchange="submit()">
-        <option value="id">по идентификатору</option>
-        <option value="name">по имени комментатора</option>
-        <option value="date">по дате</option>
-        <option value="url">по URL</option>
+        <option value="id">По идентификатору</option>
+        <option value="name">По имени комментатора</option>
+        <option value="date">По дате</option>
+        <option value="url">По URL</option>
+        <option value="lang">По языку</option>
        </select>
       </label>
      </div>
@@ -58,7 +58,7 @@
         <option value="300">300</option>
         <option value="500">500</option>
         <option value="1000">1000</option>
-        <option value="all">все</option>
+        <option value="all">Все</option>
        </select>
       </label>
      </div>
@@ -68,15 +68,16 @@
       Контекст поиска
       <label class="select">
        <select name="context_search">
-        <option value="comment">текст комментария</option>
-        <option value="name">имя комментатора</option>
+        <option value="comment">Текст комментария</option>
+        <option value="name">Имя комментатора</option>
+        <option value="lang">Язык</option>
        </select>
       </label>
      </div>
      <div class="col8">
       Искать в контексте
       <label class="search">
-       <input type="text" name="search" placeholder="строка запроса">
+       <input type="text" name="search" placeholder="Строка запроса">
        <a href="#" class="btn_lnk" onclick="form.submit();return false">Поиск</a>
       </label>
      </div>
@@ -89,7 +90,7 @@
   <div class="tab_content">
 
    <!--####### Настройки комментариев #######-->
-   <form method="POST" action="<?=base_url('admin/comment/set_comments_config')?>">
+   <form method="POST" action="/admin/comment/set_comments_config">
     <div class="row">
      <div class="col6">
       <!--####### Вывод #######-->
@@ -120,7 +121,7 @@
 не чувствительна к регистру (Админ = админ) но
 чувствительна к символам разной локали ([eng A]дмин &ne; админ)</pre>
        <label class="input">
-        <input type="text" name="reserved_names" value="<?=$conf['reserved_names']?>">
+        <input type="text" name="reserved_names" value="<?=htmlspecialchars($data['conf']['reserved_names'])?>">
        </label>
        Рейтинг комментариев <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
        <pre class="tt">
@@ -139,7 +140,7 @@
 Если "0" - лимит безграничный.
 <b class="red">Целое, положительное число!</b></pre>
        <label class="input">
-        <input name="name_limit" type="number" min="0" value="<?=$conf['name_limit']?>">
+        <input name="name_limit" type="number" min="0" value="<?=htmlspecialchars($data['conf']['name_limit'])?>">
        </label>
        Лимит в поле «Ваш комментарий» <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
        <pre class="tt">
@@ -148,7 +149,7 @@
 Если "0" - лимит безграничный.
 <b class="red">Целое, положительное число!</b></pre>
        <label class="input">
-        <input name="text_limit" type="number" min="0" value="<?=$conf['text_limit']?>">
+        <input name="text_limit" type="number" min="0" value="<?=htmlspecialchars($data['conf']['text_limit'])?>">
        </label>
        Кнопка «Еще комментарии» <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
        <pre class="tt">
@@ -158,7 +159,7 @@
 Если "0" - не скрывать комментарии.
 <b class="red">Целое, положительное число!</b></pre>
        <label class="input">
-        <input name="show" type="number" min="0" value="<?=$conf['show']?>">
+        <input name="show" type="number" min="0" value="<?=htmlspecialchars($data['conf']['show'])?>">
        </label>
       </div>
      </div>
@@ -214,7 +215,7 @@
  </dd>
 </dl>
 
-<?php if(empty($comments)){?>
+<?php if(empty($data['comments'])){?>
 <div class="sheath">
  <p>Ничего не найдено. Запрос не дал результатов..(</p>
 </div>
@@ -227,20 +228,22 @@
    <td>Дата</td>
    <td>Комментатор</td>
    <td>URL</td>
+   <td>Язык</td>
    <td>Действия</td>
   </tr>
  </thead>
  <tbody>
  <?php
  $tree_arr=[];
- foreach($comments as $v){$tree_arr[$v['pid']][]=$v;}//получить многомерный массив
+ foreach($data['comments'] as $v){$tree_arr[$v['pid']][]=$v;}//получить многомерный массив
  function build_tree($tree_arr,$pid=0){//построение дерева
   if(!is_array($tree_arr) || !isset($tree_arr[$pid])){return false;}//нет данных
   foreach($tree_arr[$pid] as $v){?>
   <tr id="<?=$v['id']?>">
    <td><?=$v['date']?></td>
-   <td><?=$v['pid']>0?'<a href="'.base_url($v['url'].'#comment_'.$v['pid']).'" class="fa-level-up" target="_blank" title="Перейти к родительскому комментарию"></a> '.$v['name']:$v['name']?></td>
-   <td>/<?=$v['url']?></td>
+   <td><?=$v['pid']>0?'<a href="'.base_url($v['url'].'#comment_'.$v['pid']).'" class="fa-level-up" target="_blank" title="Перейти к родительскому комментарию"></a> '.mb_strimwidth($v['name'],0,40,'...'):mb_strimwidth($v['name'],0,40,'...')?></td>
+   <td>/<?=mb_strimwidth($v['url'],0,40,'...')?></td>
+   <td><?=$v['lang']?></td>
    <td>
     <span class="blue fa fa-info-circle" onmouseover="tt(this);"></span><pre class="tt" style="max-width:400px;white-space:normal;"><?=$v['comment']?></pre>&nbsp;&nbsp;
     <a href="<?=base_url($v['url'].'#comment_'.$v['id'])?>" target="_blank" class="fa fa-external-link" title="Перейти к комментарию на странице"></a>&nbsp;&nbsp;
@@ -261,7 +264,7 @@
 $def['order']=!$this->input->get('order')?'id':$this->input->get('order');
 $def['pag_per_page']=!$this->input->get('pag_per_page')?$this->session->userdata('pag_per_page'):$this->input->get('pag_per_page');
 $def['context_search']=!$this->input->get('context_search')?'comment':$this->input->get('context_search');
-$def['search']=($this->input->get('search')==='')?'':$this->input->get('search');
+$def['search']=($this->input->get('search')==='')?'':addslashes($this->input->get('search'));
 ?>
 <script>
 var form=$('#filter'),
@@ -277,26 +280,29 @@ $(function(){
  form.find('select[name="context_search"] option[value="<?=$def['context_search']?>"]').attr('selected',true);
  form.find('input[name="search"]').val('<?=$def['search']?>');
  //////////////////////////установка значений полей настроек
- $('select[name="form"] option[value="<?=$conf['form']?>"]').attr('selected',true);
- $('select[name="rating"] option[value="<?=$conf['rating']?>"]').attr('selected',true);
- $('select[name="notific"] option[value="<?=$conf['notific']?>"]').attr('selected',true);
- $('select[name="feedback"] option[value="<?=$conf['feedback']?>"]').attr('selected',true);
+ $('select[name="form"] option[value="<?=$data['conf']['form']?>"]').attr('selected',true);
+ $('select[name="rating"] option[value="<?=$data['conf']['rating']?>"]').attr('selected',true);
+ $('select[name="notific"] option[value="<?=$data['conf']['notific']?>"]').attr('selected',true);
+ $('select[name="feedback"] option[value="<?=$data['conf']['feedback']?>"]').attr('selected',true);
 });
 //////////////////////////удаление опубликованого комментария с дочерней ветвью
 function del_branch(id,url){
  if(!confirm('Комментарий и его дочерняя ветвь будут удалены!\nВыполнить действие?')){return false;}
  $.ajax({
-   url:'<?=base_url('admin/comment/del_branch')?>',
+   url:'/admin/comment/del_branch',
    type:'post',
    data:{id:id,url:url},
    dataType:'json',
    success:function(resp){
     switch(resp.status){
      case 'ok':for(var i in resp.ids){$('#'+resp.ids[i]).remove();}break;
-     case 'error':alert('Ошибка!\nВозможно это временные неполадки, попробуйте снова');break;
+     case 'error':alert('Ошибка! Не удалось удалить комментарий..(');break;
      default :console.log(resp);
     }
-   }
+   },
+  error:function(){
+   alert('Ой! Возникла ошибка соединения..( Повторите попытку.');
+  }
  });
 }
 </script>

@@ -1,18 +1,19 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 ///////////////////////////////////////////////////////////////////////////
-if(!function_exists('section_alias_to_title')){
- 
- function get_sections($tabl='sections'){//получить таблицу разделов
-  $CI=& get_instance();
-  $prefix=$CI->config->item('db_tabl_prefix');
-  return $CI->db->select('title,alias')->get($prefix.$tabl)->result_array();
- }
- 
- function section_alias_to_title($alias='',$tabl='sections'){//получить заголовок раздела по алиасу
-  if($alias==''){return FALSE;}
-  foreach(get_sections($tabl) as $v){
-   echo $v['alias']==$alias?$v['title']:'';
+class Section_alias_to_title{
+ protected $sections=[];
+ function __construct(){
+  $CI=&get_instance();
+  $q=$CI->db->select('title,alias')->get('sections')->result_array();
+  if(!empty($q)){
+   foreach($q as $v){
+    $this->sections[$v['alias']]=$v['title'];
+   }
   }
  }
-}
 
+ function get_title($alias){
+  return isset($this->sections[$alias])?mb_strimwidth($this->sections[$alias],0,20,'...'):'';
+ }
+
+}
