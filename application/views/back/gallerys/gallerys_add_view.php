@@ -129,14 +129,6 @@ JavaScript-код с тегами script
    ?>
   </div>
 
-<!--####### Связанные ссылки #######-->
-  <div class="touch">
-   <?php
-   $this->load->helper('back/links');
-   links();
-   ?>
-  </div>
-
 <!--####### Версии материала #######-->
   <?php
   $this->load->helper('back/versions');

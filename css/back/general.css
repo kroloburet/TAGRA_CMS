@@ -28,13 +28,6 @@ input[name="fuck_bot"]{display:none;visibility:hidden}
 #work_info hr, #env_info hr{border-bottom:1px solid rgba(255,255,255,0.7)}
 .SelectSearch_input{width:100%;padding:.5em 3em .5em .5em;font-size:1em;margin:0;border-radius:5px 5px 0 0;border:none;border-bottom:1px solid #4A76BE}
 
-/*----------------------------------------------------------------------------links--*/
-#links .links_box{display:none;margin-top:.2em;}
-#links .links_box .button button:last-child{margin-right:0;}
-#links .links_prev{max-height:200px;overflow-x:auto;margin-top:.3em;}
-#links .links_remove{display:inline-block;margin:0 .3em .3em 0;padding:.5em;border:1px solid;border-radius:3px;cursor:url(/img/remove.png),pointer!important;color:#0E7AA9}
-#links .links_remove:hover{opacity:.4;}
-
 /*-----------------------------------------------------------------------------------------versions----*/
 #versions .v_box{display:none;margin-top:.2em;}
 #versions .v_box .button button:last-child{margin-right:0;}

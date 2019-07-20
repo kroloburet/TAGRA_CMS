@@ -30,33 +30,6 @@ class Back_basic_model extends CI_Model{
   return $q[0]['public']=='off'?'on':'off';
  }
 
- function links_url_replace($search,$replace){//перзаписать связанные ссылки
-  //$search-(строка) искомый url
-  //$replace-(строка) замена
-  $tables=['index_pages','pages','sections','gallerys'];
-  foreach($tables as $table){//проход по таблицам
-   $q=$this->db->select('id,links')->like('links','"'.$search.'"')->get($table)->result_array();//вернуть записи с искомой
-   if(empty($q)){continue;}//в таблице нет записей
-   foreach($q as $k=>$v){$q[$k]['links']=str_replace('"'.$search.'"','"'.$replace.'"',$v['links']);}//перезаписать искомые url в массиве
-   $this->db->update_batch($table,$q,'id');//изменить в базе
-  }
- }
-
- function links_url_del($search){//удалить связанные ссылки
-  //$search-(строка) искомый url
-  $tables=['index_pages','pages','sections','gallerys'];
-  foreach($tables as $table){//проход по таблицам с полями id,links
-   $q=$this->db->select('id,links')->like('links','"'.$search.'"')->get($table)->result_array();//вернуть записи с искомой
-   if(empty($q)){continue;}//в таблице нет записей
-   foreach($q as $k=>$v){//проход по записям
-    $links=json_decode($v['links'],true);//json опций в массив
-    foreach($links as $id=>$opt){if(is_array($opt)&&in_array($search,$opt)){unset($links[$id]);}}//проход по массиву опций, удалить искомое
-    $q[$k]['links']=count($links)<=1?'':json_encode($links,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);//массив опций в json, для отправки
-   }
-   $this->db->update_batch($table,$q,'id');//изменить в базе записи с искомым
-  }
- }
-
  function set_versions($table,$new=[],$old=[]){//добавить/редактировать версии материала
   //$table-(строка)таблица БД материала "pages", "sections"...
   //$new-массив новых данных материала (будут записаны в БД)

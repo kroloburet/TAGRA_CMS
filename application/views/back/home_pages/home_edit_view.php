@@ -103,14 +103,6 @@ JavaScript-код с тегами script
    </div>
   </div>
 
-<!--####### Связанные ссылки #######-->
-  <div class="touch">
-   <?php
-   $this->load->helper('back/links');
-   links();
-   ?>
-  </div>
-
 <!--####### Превью-изображение #######-->
   <div class="touch">
    <h3 class="float_l">Превью-изображение</h3> <i class="fa-question-circle blue" onmouseover="tt(this);"></i>

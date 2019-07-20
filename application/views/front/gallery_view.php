@@ -31,17 +31,6 @@
 </div>
 <?php }?>
 
-<?php if($data['links']){//есть связанные ссылки
-$l_opt=json_decode($data['links'],true);
-echo '<!--####### Связанные ссылки #######-->'.PHP_EOL;
-echo '<div id="links_block" class="noprint">'.PHP_EOL;
-echo $l_opt['title']?'<h2>'.$l_opt['title'].'</h2>'.PHP_EOL:FALSE;
-foreach($l_opt as $k=>$v){
- echo $k!=='title'?'<a href="'.$v['url'].'" class="links_item fa-chain">&nbsp;'.$v['title'].'</a>'.PHP_EOL:FALSE;
-}
-echo '</div>'.PHP_EOL;
-}?>
-
 <!--####### Галерея #######-->
 <div id="FVGallery_layout">
 <?php

@@ -24,7 +24,6 @@ class Back_section_model extends Back_basic_model{
    $url='section/'.$q[0]['alias'];
    $this->db->where('url',$url)->update('comments',['url'=>'section/'.$data['alias']]);//перезаписать url комментариев
    $this->db->where('url','/'.$url)->update('menu',['url'=>'/section/'.$data['alias']]);//перезаписать url пунктов меню
-   $this->links_url_replace('/'.$url,'/section/'.$data['alias']);//перезаписать связанные ссылки
   }
   if($q[0]['alias']!==$data['alias']||$q[0]['versions']!==$data['versions']){//алиас или версии изменились
    $this->set_versions('sections',$data,$q[0]);//добавить/обновить связи с материалом в версиях
@@ -39,7 +38,6 @@ class Back_section_model extends Back_basic_model{
   $this->db->where('section',$alias)->update('gallerys',['section'=>'']);
   $url='section/'.$alias;
   $this->db->where('url',$url)->delete('comments');//удалить комментарии к материалу
-  $this->links_url_del('/'.$url);//удалить связанные ссылки на материал
   $this->del_versions('sections','/'.$url);//удалить связи с материалом в версиях
  }
 
