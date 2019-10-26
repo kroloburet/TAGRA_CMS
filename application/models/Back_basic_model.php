@@ -56,6 +56,7 @@ class Back_basic_model extends CI_Model{
   if(!empty($new['versions'])){
    $preurl='/';
    switch($table){
+    case'page':$preurl='/page/';break;
     case'sections':$preurl='/section/';break;
     case'gallerys':$preurl='/gallery/';break;
    }
@@ -66,7 +67,7 @@ class Back_basic_model extends CI_Model{
      unset($q2[$k]);//удалить связь
      $db->where('id',$q[$new['lang']]['id'])->update($table,['versions'=>empty($q2)?'':json_encode($q2,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES)]);
     }
-    $db->where('id',$v['id'])->update($table,['versions'=>json_encode([$new['lang']=>['id'=>$new['id'],'title'=>$new['title'],'url'=>$preurl.$new['alias']]]+$q,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES)]);
+    $db->where('id',$v['id'])->update($table,['versions'=>json_encode([$new['lang']=>['id'=>$new['id'],'title'=>$new['title'],'url'=>$preurl.$new['id']]]+$q,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES)]);
    }
   }
  }

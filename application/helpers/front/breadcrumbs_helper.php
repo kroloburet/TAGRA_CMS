@@ -19,20 +19,20 @@ class Breadcrumbs{//вывод "хлебных крошек"
   echo $this->list.'<li class="bc_end">'.$this->data['title'].PHP_EOL.'</ul>'.PHP_EOL;//вывод всей цепи
  }
 
- private function get_sub_sections_list($alias){//дополнить лист цепочкой подразделов
-  //$alias-алиас родительского раздела в цепи
-  $q=$this->get_data('sections',$alias);
-  if(!empty($q)){//если такой алиас есть
-   if($q['section']){$this->get_sub_sections_list($q['section']);}//если есть родитель - рекурсия;
-   $this->list.='<li><a href="/section/'.$q['alias'].'">'.$q['title'].'</a>'.PHP_EOL;
+ private function get_sub_sections_list($id){//дополнить лист цепочкой подразделов
+  //$id-id родительского раздела в цепи
+  $q=$this->get_data('sections',$id);
+  if(!empty($q)){//такой id есть
+   if($q['section']){$this->get_sub_sections_list($q['section']);}//есть родитель - рекурсия;
+   $this->list.='<li><a href="/section/'.$q['id'].'">'.$q['title'].'</a>'.PHP_EOL;
   }
  }
 
- private function get_data($table,$alias){//получить материал
+ private function get_data($table,$id){//получить материал
   //$table-таблица материала в БД
-  //$alias-алиас материала в БД
-  $this->CI->db->where(['public'=>'on','alias'=>$alias]);
-  $this->CI->db->select('id,alias,title,section');
+  //$id-id материала в БД
+  $this->CI->db->where(['public'=>'on','id'=>$id]);
+  $this->CI->db->select('title,id,section');
   $q=$this->CI->db->get($table)->result_array();
   return isset($q[0])?$q[0]:[];
  }

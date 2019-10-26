@@ -24,13 +24,13 @@ class Back_home_control extends Back_basic_control{
   //инициализация постраничной навигации
   $this->_set_pagination(current_url(),$home_pages['count_result']);
   $data['home_pages']=$home_pages['result'];
-  $data['view_title']='Управление страницами «Главная»';
+  $data['view_title']='Управление страницами "Главная"';
   $this->_viewer('back/home_pages/home_list_view',$data);
  }
 
  function edit_form($id){
   $data=$this->back_basic_model->get_where_id('index_pages',$id);
-  $data['view_title']='Редактировать страницу «Главная»';
+  $data['view_title']='Редактировать страницу "Главная"';
   $this->_viewer('back/home_pages/home_edit_view',$data);
  }
 

@@ -11,7 +11,7 @@ class Front_contact_control extends Front_basic_control{
   $this->load->model('front_contact_model');
  }
 
- function contact(){
+ function index(){
   $data=$this->front_contact_model->get_contact_page();
   $this->_viewer('front/contact_view',$data);
  }

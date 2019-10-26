@@ -58,7 +58,7 @@ window.addEventListener('load',function(){
      tracks=[
          <?php if($data['gallery_opt']){foreach(json_decode($data['gallery_opt'],true)as$v){?>
       {
-       "name":"<?=addslashes($v['a_title'])?>",
+       "name":<?=json_encode($v['a_title'])?>,
        "file":"<?=$v['a_file']?>"
       },
      <?php }}?>

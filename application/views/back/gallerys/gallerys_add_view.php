@@ -2,29 +2,34 @@
 <div class="sheath">
  <form method="POST" action="/admin/gallery/add">
   <input type="hidden" name="id" value="<?=round(microtime(true)*1000)?>">
-  <input type="hidden" name="last_mod_date" value="<?=date('Y-m-d')?>">
   <input type="hidden" name="creation_date" value="<?=date('Y-m-d')?>">
+  <input type="hidden" name="last_mod_date" value="<?=date('Y-m-d')?>">
   <input type="hidden" name="lang" value="<?=$data['lang']?>">
 
-<!--####### Title, description... #######-->
+  <!--####### Основное #######-->
   <div class="touch">
+   <h3>Основное</h3>
+   <hr>
    Заголовок галереи <i class="fa-info-circle red" onmouseover="tt(this);"></i>
    <pre class="tt">
 Должен быть информативным и емким,
 содержать ключевые слова.
 <b class="red">Обязательно для заполнения!</b></pre>
    <label class="input">
-   <input type="text" name="title" placeholder="Заголовок галереи. Пример: Отпуск 2014" onkeyup="lim(this,100)" onchange="translit(this,'#alias');check_title(this,null,'gallerys','Галерея с таким заголовком уже существует!\nИзмените заголовок и продолжайте.')">
+    <input type="text" name="title" onkeyup="lim(this,150)">
    </label>
-   Алиас галереи <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+   Описание <i class="fa-info-circle red" onmouseover="tt(this);"></i>
    <pre class="tt">
-Идентификатор галереи — информативное ключевое слово/а
-Будет использоваться как часть ссылки на галереи.
-Генерируется автоматически.</pre>
-   <label class="input">
-    <input type="text" name="alias" id="alias" readonly>
+Краткое (до 250 символов) описание этой галереи
+которое будет показано под заголовком (ссылкой)
+в результатах поиска в Интернете (description)
+и на странице родительского раздела. Должно быть
+информативным и емким, содержать ключевые слова.
+<b class="red">Обязательно для заполнения!</b></pre>
+   <label class="textarea">
+    <textarea name="description" class="no-emmet" onkeyup="lim(this,250)" rows="3"></textarea>
    </label>
-   Родительский раздел <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+   Родительский раздел <i class="fa-info-circle blue" onmouseover="tt(this);"></i>
    <pre class="tt">
 Раздел сайта, в котором будет
 эта галерея.</pre>
@@ -32,86 +37,84 @@
    $this->load->helper('back/select_sections_tree');
    new select_section();
    ?>
-   Описание <i class="fa-info-circle red" onmouseover="tt(this);"></i>
+   Превью-изображение <i class="fa-info-circle blue" onmouseover="tt(this);"></i>
    <pre class="tt">
-Краткое (до 250 символов) описание этой галереи
-которое будет показано под заголовком (ссылкой)
-в результатах поиска в Интернете
-и на странице родительского раздела.
-Должно быть информативным и емким,
-содержать ключевые слова.
-<b class="red">Обязательно для заполнения!</b></pre>
-   <label class="textarea">
-    <textarea name="description" class="no-emmet" placeholder="Описание галереи (description)" onkeyup="lim(this,250)" rows="3"></textarea>
+Введите в поле ниже ссылку на изображение
+доступное из Интернета или выберите его
+в менеджере файлов. Изображение будет
+использовано как привью на эту страницу
+в соцсетях и в списке материалов раздела.</pre>
+   <label class="input inline width90">
+    <input type="text" name="img_prev" id="img_prev" value="<?=htmlspecialchars($conf['img_prev_def'])?>">
    </label>
-  </div>
+   <a href="#" class="fa-folder-open fa-lg blue" onclick="files('img_prev','<?=$data['lang']?>');return false"></a>&nbsp;<i class="fa-eye fa-lg blue" onmouseover="img_prev(this,'img_prev')"></i>
+   <pre class="tt"></pre>
 
-<!--####### JS, CSS, кнопки соцсетей... #######-->
-  <div class="algn_r"><a href="#" onclick="opn_cls('more_opt');return false">Дополнительно (JS, CSS, кнопки соцсетей...) <i class="fa-angle-down"></i></a></div>
-  <div id="more_opt" class="opn_cls touch">
-   Индексация поисковыми роботами
-   <label class="select">
-    <select name="robots">
-     <option value="all">Страница полностью доступна</option>
-     <option value="index">Только индексировать страницу</option>
-     <option value="follow">Только проходить по ссылкам на странице</option>
-     <option value="noindex">Не индексировать страницу</option>
-     <option value="nofollow">Не проходить по ссылкам на странице</option>
-     <option value="noimageindex">Не индексировать изображения на странице</option>
-     <option value="none">Страница полностью недоступна</option>
-    </select>
-   </label>
-   <div class="row">
-    <div class="col6">
-     CSS-код <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
-     <pre class="tt">
+   <!--####### Дополнительные настройки #######-->
+   <a href="#" onclick="opn_cls('more_basic_opt');return false">Дополнительные настройки <i class="fa-angle-down"></i></a>
+   <div id="more_basic_opt" class="opn_cls">
+    <div class="row">
+     <div class="col6">
+      Кнопки <q>Share</q>
+      <label class="select">
+       <select name="addthis_share">
+        <option value="off" <?php if($conf['addthis_share_def']=='off') echo'selected'?>>Скрыть</option>
+        <option value="on" <?php if($conf['addthis_share_def']=='on') echo'selected'?>>Показать</option>
+       </select>
+      </label>
+     </div>
+     <div class="col6">
+      Кнопки <q>Follow</q>
+      <label class="select">
+       <select name="addthis_follow">
+        <option value="off" <?php if($conf['addthis_follow_def']=='off') echo'selected'?>>Скрыть</option>
+        <option value="on" <?php if($conf['addthis_follow_def']=='on') echo'selected'?>>Показать</option>
+       </select>
+      </label>
+     </div>
+    </div>
+    Индексация поисковыми роботами
+    <label class="select">
+     <select name="robots">
+      <option value="all">Индексировать без ограничений</option>
+      <option value="noindex">Не показывать материал в результатах поиска</option>
+      <option value="nofollow">Не проходить по ссылкам в материале</option>
+      <option value="noimageindex">Не индексировать изображения в материале</option>
+      <option value="none">Не индексировать полностью</option>
+     </select>
+    </label>
+    <div class="row">
+     <div class="col6">
+      CSS-код <i class="fa-info-circle blue" onmouseover="tt(this);"></i>
+      <pre class="tt">
 CSS-код с тегами style
 который будет применен к этой странице.
 Можно подгружать внешние таблицы стилей.</pre>
-     <label class="textarea">
-      <textarea name="css" class="emmet-syntax-css" placeholder="CSS-код с тегами <style> и </style>" rows="6"></textarea>
-     </label>
-    </div>
-    <div class="col6">
-     JavaScript-код <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
-     <pre class="tt">
+      <label class="textarea">
+       <textarea name="css" class="emmet-syntax-css" placeholder="CSS-код с тегами <style> и </style>" rows="6"></textarea>
+      </label>
+     </div>
+     <div class="col6">
+      JavaScript-код <i class="fa-info-circle blue" onmouseover="tt(this);"></i>
+      <pre class="tt">
 JavaScript-код с тегами script
 который будет применен к этой странице.
 Можно подгружать внешние скрипты.</pre>
-     <label class="textarea">
-      <textarea name="js" class="no-emmet" placeholder="JavaScript-код с тегами <script> и </script>" rows="6"></textarea>
-     </label>
-    </div>
-   </div>
-   <div class="row">
-    <div class="col6">
-     Кнопки «Share»
-     <label class="select">
-      <select name="addthis_share">
-       <option value="off" <?php if($conf['addthis_share_def']=='off') echo'selected'?>>Скрыть</option>
-       <option value="on" <?php if($conf['addthis_share_def']=='on') echo'selected'?>>Показать</option>
-      </select>
-     </label>
-    </div>
-    <div class="col6">
-     Кнопки «Follow»
-     <label class="select">
-      <select name="addthis_follow">
-       <option value="off" <?php if($conf['addthis_follow_def']=='off') echo'selected'?>>Скрыть</option>
-       <option value="on" <?php if($conf['addthis_follow_def']=='on') echo'selected'?>>Показать</option>
-      </select>
-     </label>
+      <label class="textarea">
+       <textarea name="js" class="no-emmet" placeholder="JavaScript-код с тегами <script> и </script>" rows="6"></textarea>
+      </label>
+     </div>
     </div>
    </div>
   </div>
 
-<!--####### Контент #######-->
+  <!--####### Контент #######-->
   <div class="touch">
    <h3>Контент</h3>
    <hr>
-   Ширина левого сегмента макета&nbsp;<input type="text" name="layout_l_width" class="layout_l_width_input" value="<?=htmlspecialchars($conf['layout_l_width'])?>" size="3" onkeyup="$('#layout_l').css('width',($(this).val()-2)+'%')">&nbsp;%&nbsp;&nbsp;<a href="#" onclick="$('#layout_t,#layout_l,#layout_r,#layout_b').removeClass('nav_layout_active');return false">Kомпактно <i class="fa-compress"></i></a>&nbsp;&nbsp;<a href="#" onclick="opn_cls('o_makete');return false">О макете <i class="fa-angle-down"></i></a>
+   Ширина левой колонки макета&nbsp;<input type="text" name="layout_l_width" class="layout_l_width_input" value="<?=htmlspecialchars($conf['layout_l_width'])?>" size="3" onkeyup="$('#layout_l').css('width',($(this).val()-2)+'%')">&nbsp;%&nbsp;&nbsp;<a href="#" onclick="$('#layout_t,#layout_l,#layout_r,#layout_b').removeClass('nav_layout_active');return false">Kомпактно <i class="fa-compress"></i></a>&nbsp;&nbsp;<a href="#" onclick="opn_cls('o_makete');return false">О макете <i class="fa-angle-down"></i></a>
    <div id="o_makete" class="opn_cls">
-С целью улучшения визуального восприятия и компактности основной части страницы, контент представлен в виде макета. Вы можете заполнить один и более сегментов.<br>Макет разделен на 4 сегмента, в каждом из которых Вы можете размещать и редактировать свой контент(содержание). Чтобы разместить или редактировать контент в одном из сегментов, выберите его, кликнув по нему мышкой.<br>Сегмент, который не содержит контент, не будет отображен на странице. Вы можете задать ширину левого сегмента в процентном отношении, к ширине макета на странице. Значение по умолчанию, для всех страниц, устанавливается в настройках макета. Еще, вы можете "компактно" собрать макет редактирования, чтобы вернуть его сегменты к прежнему виду.
+    Чтобы основная часть страницы проще воспринималась визуально и была адаптивной, она представлена в виде макета. Сам макет разделен на 4 сегмента (колонки). Вы можете заполнять один и более этих сегментов своим контентом (содержимым). Чтобы разместить или редактировать контент в одном из сегментов, выберите его, кликнув по нему мышкой. Пустой сегмент, без контента, не буде отображаться на странице. Вы можете задать ширину левой колонки в процентном отношении к общей ширине шаблона. Значение ширины шаблона и ширина левой колонки по умолчанию для всех вновь создаваемых материалов устанавливается в настройках <q>Макет и редактор</q> (в главном меню: Конфигурация). Чтобы вернуть макет к <q>компактному</q> виду, нажмите на кнопку <q>Компактно</q> в верхней части этого блока.
    </div>
    <div style="margin-top:.5em">
     <div id="layout_t" class="nav_layout_t"></div>
@@ -121,7 +124,7 @@ JavaScript-код с тегами script
    </div>
   </div>
 
-<!--####### Тип галереи и добавление мультимедиа #######-->
+  <!--####### Тип галереи и добавление мультимедиа #######-->
   <div class="touch">
    <?php
    $this->load->helper('back/gallery');
@@ -129,65 +132,51 @@ JavaScript-код с тегами script
    ?>
   </div>
 
-<!--####### Версии материала #######-->
+  <!--####### Версии материала #######-->
   <?php
   $this->load->helper('back/versions');
   versions('gallerys');
   ?>
 
-<!--####### Превью-изображение #######-->
+  <!--####### Доступность #######-->
   <div class="touch">
-   <h3 class="float_l">Превью-изображение</h3> <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
-   <pre class="tt">
-Введите в поле ниже ссылку на изображение
-доступное из Интернета или выберите его
-в менеджере файлов. Изображение будет
-использовано как привью на эту страницу
-в соцсетях и в списке материалов раздела.</pre>
+   <h3>Доступность</h3>
    <hr>
-   Путь к файлу<br>
-   <label class="input inline width90">
-    <input type="text" name="img_prev" id="img_prev" value="<?=htmlspecialchars($conf['img_prev_def'])?>">
-   </label>
-   <a href="#" class="fa-folder-open fa-lg blue" onclick="files('img_prev','<?=$data['lang']?>');return false"></a>&nbsp;<i class="fa-eye fa-lg blue" onmouseover="img_prev(this,'img_prev')"></i>
-   <pre class="tt"></pre>
-  </div>
-
-<!--####### Комментарии, видимость... #######-->
-  <div class="row touch">
-   <div class="col6">
-    <label class="select">
-     <select name="comments">
-      <option value="on">Разрешить комментировать и отвечать</option>
-      <option value="on_comment">Разрешить только комментировать</option>
-      <option value="off">Запретить комментировать и отвечать</option>
-     </select>
-    </label>
-   </div>
-   <div class="col6">
-    <label class="select">
-     <select name="public">
-      <option value="on">Опубликовать</option>
-      <option value="off">Не опубликовывать</option>
-     </select>
-    </label>
+   <div class="row">
+    <div class="col6">
+     <label class="select">
+      <select name="comments">
+       <option value="on">Разрешить комментировать и отвечать</option>
+       <option value="on_comment">Разрешить только комментировать</option>
+       <option value="off">Запретить комментировать и отвечать</option>
+      </select>
+     </label>
+    </div>
+    <div class="col6">
+     <label class="select">
+      <select name="public">
+       <option value="on">Опубликовать</option>
+       <option value="off">Не опубликовывать</option>
+      </select>
+     </label>
+    </div>
    </div>
   </div>
 
   <div class="button this_form_control">
-   <button type="button" onclick="subm(form,s_opts)">Добавить галерею</button><a href="/admin/gallery/get_list" class="btn_lnk">Отменить</a>
+   <button type="button" onclick="subm(form,req)">Добавить галерею</button><a href="/admin/gallery/get_list" class="btn_lnk">Отменить</a>
   </div>
  </form>
 </div>
 
 <script>
-var s_opts={//рег.выражения для проверки полей
- title:/[^\s]/,
- description:/[^\s]/
-};
-$(function(){
- /////////////////установка значений полей
- $('select[name="comments"] option[value="<?=$conf['comments']['form']?>"]').attr('selected',true);
-});
+ var req={//рег.выражения для проверки полей
+  title:/[^\s]/,
+  description:/[^\s]/
+ };
+ $(function(){
+  //установить значеня полей
+  $('select[name="comments"] option[value="<?=$conf['comments']['form']?>"]').attr('selected',true);
+ });
 </script>
 <?php $this->load->helper('back/redactor')?>

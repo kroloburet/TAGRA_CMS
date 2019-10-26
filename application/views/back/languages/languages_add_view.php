@@ -6,18 +6,18 @@
    <h3>Этап первый</h3>
    <hr>
    <ul>
-    <li>Выберите на этой странице настройки языка, нажмите «Сохранить и продолжить».</li>
+    <li>Выберите на этой странице настройки языка, нажмите <q>Сохранить и продолжить</q>.</li>
     <li>Система проверит корректность ваших настроек.</li>
     <li>Система создаст пустой каталог в /upload с именем тега данного языка. В этом каталоге файловый менеджер будет размещать ваши файлы и каталоги, относящиеся к материалам данного языка.</li>
     <li>Система создаст каталог в /application/language с именем тега данного языка, и скопирует в него файлы локализации инетерфейса текущего языка по умолчанию.</li>
-    <li>Система создаст страницы «Главная» и «Контакты» для выбранной языковой версии сайта</li>
+    <li>Система создаст страницы <q>Главная</q> и <q>Контакты</q> для выбранной языковой версии сайта</li>
    </ul>
    <h3>Этап второй</h3>
    <hr>
    <ul>
     <li>После удачного завершения первого этапа система перенаправит на страницу редактирования данного языка.</li>
     <li>Отредактируйте файлы локализации интерфейса согласно данному языку, сохраните изменения.</li>
-    <li>Отредактируйте страницы «Главная» и «Контакты» для данной языковой версии ресурса (в главном меню: Материал/Управление страницами «Главная», Материал/Управление страницами «Контакты»).</li>
+    <li>Отредактируйте страницы <q>Главная</q> и <q>Контакты</q> для данной языковой версии ресурса (в главном меню: Материал/Управление страницами <q>Главная</q>, Материал/Управление страницами <q>Контакты</q>).</li>
     <li>Теперь вы можете приступить к созданию материалов для данной языковой версии ресурса.</li>
    </ul>
    <h3>Обратите внимание</h3>
@@ -35,7 +35,7 @@
  <form method="POST" action="/admin/language/add">
   <input type="hidden" name="id" value="<?=round(microtime(true)*1000)?>">
 
-<!--####### Title, tag... #######-->
+  <!--####### Title, tag... #######-->
   <div class="touch">
    Название языка <i class="fa-info-circle red" onmouseover="tt(this);"></i>
    <pre class="tt">
@@ -46,16 +46,18 @@
 запутаться самому.
 <b class="red">Обязательно для заполнения!</b></pre>
    <label class="input">
-   <input type="text" name="title" placeholder="Пример: UA" onkeyup="lim(this,10)" onchange="check_title(this,null,'languages','Язык с таким названием уже существует!\nИзмените название и продолжайте.')">
+    <input type="text" name="title" placeholder="Пример: UA" onkeyup="lim(this,20)" onchange="check_title(this,null,'languages','Язык с таким названием уже существует!\nИзмените название и продолжайте.')">
    </label>
 
-   Тег языка <i class="fa-info-circle blue" onmouseover="tt(this,'c');"></i>
+   Тег языка <i class="fa-info-circle red" onmouseover="tt(this,'c');"></i>
    <pre class="tt">
 Двухбуквенный код страны заданый
 стандартом <a href="https://ru.wikipedia.org/wiki/ISO_639-1" target="_blank">ISO 639-1</a>. Выберите из списка
-язык для которого будет установлен тег.</pre>
+язык для которого будет установлен тег.
+<b class="red">Обязательно для заполнения!</b></pre>
    <label class="select">
     <select name="tag">
+     <option value="">Выбрать из предложенных:</option>
      <option value="az">Азербайджанский [az]</option>
      <option value="ay">Аймарский [ay]</option>
      <option value="sq">Албанский [sq]</option>
@@ -162,22 +164,23 @@
   </div>
 
   <div class="button this_form_control">
-   <button type="button" onclick="subm(form,s_opts)">Сохранить и продолжить</button><a href="/admin/language/get_list" class="btn_lnk">Отменить</a>
+   <button type="button" onclick="subm(form,req)">Сохранить и продолжить</button><a href="/admin/language/get_list" class="btn_lnk">Отменить</a>
   </div>
  </form>
 </div>
 
 <script>
-var s_opts={//рег.выражения для проверки полей
- title:/[^\s]/
-};
-$(function(){
- /////////////////блокировка в списке добавленных тегов
- var k,
-     list=$('select[name="tag"]'),
-     added_tags=<?=$data['added_tags']?>;
- for(var k in added_tags){
-  list.find('option[value="'+added_tags[k]+'"]').attr('disabled',true);
- }
-});
+ var req={//рег.выражения для проверки полей
+  title:/[^\s]/,
+  tag:/[^\s]/
+ };
+ $(function(){
+  /////////////////блокировка в списке добавленных тегов
+  var k,
+  list=$('select[name="tag"]'),
+  added_tags=<?=$data['added_tags']?>;
+  for(var k in added_tags){
+   list.find('option[value="'+added_tags[k]+'"]').attr('disabled',true);
+  }
+ });
 </script>

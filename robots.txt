@@ -6,5 +6,6 @@ Disallow: /admin/
 Disallow: /css/back/
 Disallow: /scripts/back/
 Disallow: /.htaccess
+Disallow: /404_override
 Disallow: /403.html
 Disallow: /plug.html

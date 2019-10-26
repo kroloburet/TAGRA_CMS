@@ -14,7 +14,7 @@ class Back_language_model extends Back_basic_model{
  }
 
  function del_lang($tag){
-  $tables=['index_pages','contact_pages','pages','sections','gallerys','comments','menu','tags'];
+  $tables=['index_pages','contact_pages','pages','sections','gallerys','comments','menu'];
   $this->db->delete($tables,['lang'=>$tag]);//удалить все материалы на удаляемом языке
   foreach($tables as $table){//поиск и удаление связей материалов удаляемого языка в версиях
    if(!in_array($table,['pages','sections','gallerys'])){continue;}//искать только в этих материалах или выход

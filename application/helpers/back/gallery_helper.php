@@ -10,7 +10,7 @@ $lang=$data['lang'];
 ?>
 <h3>Тип галереи и добавление мультимедиа</h3>
 <hr>
-Тип галереи <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+Тип галереи <i class="fa-info-circle blue" onmouseover="tt(this);"></i>
 <pre class="tt">
 Выберите, какое мультимедиа вы хотите
 отображать в галерее.</pre>
@@ -25,7 +25,7 @@ $lang=$data['lang'];
 
 <!--Папка с изображениями-->
 <div class="type_section" data-type="foto_folder">
- Путь к папке <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+ Путь к папке <i class="fa-info-circle blue" onmouseover="tt(this);"></i>
  <pre class="tt">
 Нажмите на значок папки и выберите
 папку с изображениями в менеджере файлов.
@@ -41,7 +41,7 @@ $lang=$data['lang'];
 <div class="type_section" data-type="foto_desc">
  <div class="row">
   <div class="col3">
-   Порядок <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+   Порядок <i class="fa-info-circle blue" onmouseover="tt(this);"></i>
    <pre class="tt">
 Порядковый номер изображения в галерее.</pre>
    <label class="input">
@@ -49,7 +49,7 @@ $lang=$data['lang'];
    </label>
   </div>
   <div class="col9">
-   Путь к изображению <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+   Путь к изображению <i class="fa-info-circle blue" onmouseover="tt(this);"></i>
    <pre class="tt">
 Нажмите на значок папки и выберите
 файл изображения в менеджере файлов.
@@ -81,7 +81,7 @@ $lang=$data['lang'];
 <div class="type_section" data-type="video_yt">
  <div class="row">
   <div class="col3">
-   Порядок <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+   Порядок <i class="fa-info-circle blue" onmouseover="tt(this);"></i>
    <pre class="tt">
 Порядковый номер видео в галерее.</pre>
    <label class="input">
@@ -89,7 +89,7 @@ $lang=$data['lang'];
    </label>
   </div>
   <div class="col9">
-   Путь к видео YouTube <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+   Путь к видео YouTube <i class="fa-info-circle blue" onmouseover="tt(this);"></i>
    <pre class="tt">
 Ссылка на видео из YouTube.</pre>
    <label class="input">
@@ -108,7 +108,7 @@ $lang=$data['lang'];
 <div class="type_section" data-type="audio">
  <div class="row">
   <div class="col3">
-   Порядок <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+   Порядок <i class="fa-info-circle blue" onmouseover="tt(this);"></i>
    <pre class="tt">
 Порядковый номер аудио трека в галерее.</pre>
    <label class="input">
@@ -116,19 +116,18 @@ $lang=$data['lang'];
    </label>
   </div>
   <div class="col9">
-   Путь к треку <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+   Путь к треку <i class="fa-info-circle blue" onmouseover="tt(this);"></i>
    <pre class="tt">
-Нажмите на значок папки и выберите
-файл трека в менеджере файлов.
-Можно указать абсолютный путь к треку,
-который доступен из Интернета.
-ВНИМАНИЕ!
-Чтобы ваш трек можно было прослушать
+Нажмите на значок папки и выберите файл
+трека в менеджере файлов. Можно указать
+абсолютный путь к треку, который доступен
+из Интернета.
+ВНИМАНИЕ! Чтобы ваш трек можно было прослушать
 в разных браузерах, сохраните его
 в форматах .mp3, .ogg, .wav с одинаковым
 именем файла. Все три файла должны находиться
 в одной папке. Если браузер не поддерживает
-один из форматов — он загружает другой</pre><br>
+один из форматов &mdash; он загружает другой</pre><br>
    <label class="input inline width80">
     <input type="text" id="g_a_url" class="g_field">
    </label>
@@ -172,8 +171,11 @@ $lang=$data['lang'];
     if(!/\S/.test(folder_url)){alert('Выберите папку!');return false;}
    break;
    case 'foto_desc'://валидация полей типа "Изображения с описанием"
-    var f_url=$('#g_f_url');//поле "путь к изображению"
+    var f_url=$('#g_f_url'),//поле "путь к изображению"
+        f_title=$('#g_f_title'),//поле "заголовок"
+        f_desc=$('#g_f_desc');//поле "описание"
     if(!/^(https?:\/\/)[\(\)\s\w\.\/-]+\.(png|jpg|jpeg|gif|webp|svg)$/i.test(f_url.val())){alert('Выберите изображение!');return false;}
+    if(!/\S/.test(f_title.val())&&!/\S/.test(f_desc.val())){alert('Заполните поля: "Заголовок" и "Описание", либо одно из них');return false;}
    break;
    case 'video_yt'://валидация полей типа "Видео c YouTube"
     var yt_url=$('#g_v_yt_url');//поле "путь к видео YouTube"

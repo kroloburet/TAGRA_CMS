@@ -38,11 +38,11 @@ function print_menu_tree($input){
    <div class="row">
     <div class="col6">
      Родительский пункт
-      <label class="select">
-       <select class="m_pid" onchange="Menu.load_order(this)">
-        <option value="0">Нет родителя</option>
-        <?php print_pids_tree($data['menu'])?>
-       </select>
+     <label class="select">
+      <select class="m_pid" onchange="Menu.load_order(this)">
+       <option value="0">Нет родителя</option>
+       <?php print_pids_tree($data['menu'])?>
+      </select>
      </label>
     </div>
     <div class="col6">
@@ -51,10 +51,10 @@ function print_menu_tree($input){
       <select class="m_order"></select>
      </label>
     </div>
-   Название пункта
-   <label class="input">
-    <input type="text" class="m_title">
-   </label>
+    Название пункта
+    <label class="input">
+     <input type="text" class="m_title">
+    </label>
    </div>
    <div class="row">
     <div class="col6">
@@ -71,8 +71,8 @@ function print_menu_tree($input){
        <option value="pages">Страница сайта</option>
        <option value="sections">Раздел сайта</option>
        <option value="gallerys">Галерея сайта</option>
-       <option value="home">Страница «Главная»</option>
-       <option value="contact">Страница «Контакты»</option>
+       <option value="home">Страница "Главная"</option>
+       <option value="contact">Страница "Контакты"</option>
        <option value="file">Файл или папка</option>
       </select>
      </label>
@@ -124,7 +124,7 @@ var Menu={
       filling=function(m){//рекурсивное наполнение пунктами родителя
        for(var i in m){
         if(pid.val()===m[i].pid){
-         id&&id===m[i].id?false:order.append('<option value="'+(n++)+'">После «'+m[i].title+'»</option>');
+         id&&id===m[i].id?false:order.append('<option value="'+(n++)+'">После "'+m[i].title+'"</option>');
         }else if(m[i].nodes){filling(m[i].nodes);}
        }
       };
@@ -162,10 +162,11 @@ var Menu={
   label.html(section);
   if(!mm||$.isEmptyObject(mm)){section.html($('<option/>',{text:'Нет материалов..('}));return label;}
   switch(material){
+   case 'pages':preurl='/page/';break;
    case 'sections':preurl='/section/';break;
    case 'gallerys':preurl='/gallery/';break;
   }
-  for(var k in mm){section.append($('<option/>',{value:preurl+mm[k].alias,text:mm[k].title}));}
+  for(var k in mm){section.append($('<option/>',{value:preurl+mm[k].id,text:mm[k].title}));}
   section.on('change.M',function(){url.val(this.value);}).SelectSearch();
   return label;
  },

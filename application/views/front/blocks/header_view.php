@@ -1,13 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html lang="<?=$data['lang']?>">
 <head>
-<meta name="generator" content="Powered by «Tagra CMS» Development and design by kroloburet@gmail.com">
+<meta name="generator" content="Powered by Tagra CMS. Development and design by Sergey Nizhnik kroloburet@gmail.com">
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="<?=$data['robots']?>">
 <meta name="description" content="<?=htmlspecialchars($data['description'])?>">
 <title><?=$data['title']?> | <?=$conf['site_name']?></title>
+
 <?php if($conf['markup_data']=='on'){
 $this->load->helper('front/markup_data');
 markup_data();
@@ -20,7 +21,7 @@ markup_data();
 <!--[if lt IE 8]><link href="/UI_fraimwork/fonts/FontAwesome/ie7/ie7.css" rel="stylesheet"><![endif]-->
 
 </head>
-<body lang="<?=$data['lang']?>" id="body">
+<body id="body">
 
 <!--
 ########### Оно тебе надо?

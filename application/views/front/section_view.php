@@ -37,14 +37,14 @@
 <?php foreach($data['sub_sections'] as $v){?>
 <div class="section_sub_item clear">
 <?php if($v['img_prev']){?>
- <a href="<?=base_url('section/'.$v['alias'])?>" style="background-image:url(<?=$v['img_prev']?>);" class="section_sub_item_prev" title="<?=htmlspecialchars($lexic['section']['sub_section'].' "'.$v['title'].'"')?>"></a>
+ <a href="/section/<?=$v['id']?>" style="background-image:url(<?=$v['img_prev']?>);" class="section_sub_item_prev" title="<?=htmlspecialchars($lexic['section']['sub_section'].' "'.$v['title'].'"')?>"></a>
 <?php }else{?>
- <a href="<?=base_url('section/'.$v['alias'])?>" class="fa-copy section_sub_item_prev" title="<?=htmlspecialchars($lexic['section']['sub_section'].' "'.$v['title'].'"')?>"></a>
+ <a href="/section/<?=$v['id']?>" class="fa-copy section_sub_item_prev" title="<?=htmlspecialchars($lexic['section']['sub_section'].' "'.$v['title'].'"')?>"></a>
 <?php }?>
  <div class="section_sub_item_desc">
   <h3><?=$v['title']?></h3>
   <div><?=$v['description']?>...</div>
-  <a href="<?=base_url('section/'.$v['alias'])?>"><?=$lexic['section']['more']?></a>
+  <a href="/section/<?=$v['id']?>"><?=$lexic['section']['more']?></a>
  </div>
 </div>
 <?php }?>
@@ -60,14 +60,14 @@ if($v['gallery_type']=='video_yt'){$icon='fa-file-movie-o';}
 ?>
 <div class="section_sub_item clear">
 <?php if($v['img_prev']){?>
- <a href="<?=base_url('gallery/'.$v['alias'])?>" style="background-image:url(<?=$v['img_prev']?>);" class="section_sub_item_prev" title="<?=htmlspecialchars($lexic['section']['sub_gallery'].' "'.$v['title'].'"')?>"></a>
+ <a href="/gallery/<?=$v['id']?>" style="background-image:url(<?=$v['img_prev']?>);" class="section_sub_item_prev" title="<?=htmlspecialchars($lexic['section']['sub_gallery'].' "'.$v['title'].'"')?>"></a>
 <?php }else{?>
- <a href="<?=base_url('gallery/'.$v['alias'])?>" class="<?=$icon?> section_sub_item_prev" title="<?=htmlspecialchars($lexic['section']['sub_gallery'].' "'.$v['title'].'"')?>"></a>
+ <a href="/gallery/<?=$v['id']?>" class="<?=$icon?> section_sub_item_prev" title="<?=htmlspecialchars($lexic['section']['sub_gallery'].' "'.$v['title'].'"')?>"></a>
 <?php }?>
  <div class="section_sub_item_desc">
   <h3><?=$v['title']?></h3>
   <div><?=$v['description']?>...</div>
-  <a href="<?=base_url('gallery/'.$v['alias'])?>"><?=$lexic['section']['more']?></a>
+  <a href="/gallery/<?=$v['id']?>"><?=$lexic['section']['more']?></a>
  </div>
 </div>
 <?php }?>
@@ -79,14 +79,14 @@ if($v['gallery_type']=='video_yt'){$icon='fa-file-movie-o';}
 <?php foreach($data['sub_pages'] as $v){?>
 <div class="section_sub_item clear">
 <?php if($v['img_prev']){?>
- <a href="<?=base_url($v['alias'])?>" style="background-image:url(<?=$v['img_prev']?>);" class="section_sub_item_prev" title="<?=htmlspecialchars($lexic['section']['sub_page'].' "'.$v['title'].'"')?>"></a>
+ <a href="/page/<?=$v['id']?>" style="background-image:url(<?=$v['img_prev']?>);" class="section_sub_item_prev" title="<?=htmlspecialchars($lexic['section']['sub_page'].' "'.$v['title'].'"')?>"></a>
 <?php }else{?>
- <a href="<?=base_url($v['alias'])?>" class="fa-file-text-o section_sub_item_prev" title="<?=htmlspecialchars($lexic['section']['sub_page'].' "'.$v['title'].'"')?>"></a>
+ <a href="/page/<?=$v['id']?>" class="fa-file-text-o section_sub_item_prev" title="<?=htmlspecialchars($lexic['section']['sub_page'].' "'.$v['title'].'"')?>"></a>
 <?php }?>
  <div class="section_sub_item_desc">
   <h3><?=$v['title']?></h3>
   <div><?=$v['description']?>...</div>
-  <a href="<?=base_url($v['alias'])?>"><?=$lexic['section']['more']?></a>
+  <a href="/page/<?=$v['id']?>"><?=$lexic['section']['more']?></a>
  </div>
 </div>
 <?php }?>
@@ -94,7 +94,7 @@ if($v['gallery_type']=='video_yt'){$icon='fa-file-movie-o';}
 
 <?php
 $this->load->helper('front/comments');
-$comm=new Comments(array_replace($conf['comments'],['form'=>$data['comments']]));
+$comm=new comments(array_replace($conf['comments'],['form'=>$data['comments']]));
 $comm->print_comments();
 ?>
 

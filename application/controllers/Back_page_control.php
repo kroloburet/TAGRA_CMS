@@ -48,14 +48,13 @@ class Back_page_control extends Back_basic_control{
 
  function edit($id){
   $this->back_page_model->edit_page($id,array_map('trim',$this->input->post()));
-  $this->app('conf.sitemap.generate')==='auto'?$this->sitemap_generator():FALSE;
   redirect('admin/page/get_list');
  }
 
  function del(){
   $p=$this->input->post();
-  if(!$p['alias']){exit('error');}
-  $this->back_page_model->del_page($p['alias']);
+  if(!$p['id']){exit('error');}
+  $this->back_page_model->del_page($p['id']);
   $this->app('conf.sitemap.generate')==='auto'?$this->sitemap_generator():FALSE;
   exit('ok');
  }

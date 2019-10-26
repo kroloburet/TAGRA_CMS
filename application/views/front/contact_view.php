@@ -6,14 +6,23 @@
 <div id="headline">
  <h1><?=$data['title']?></h1>
  <div class="noprint">
-  <button type="button" class="fa fa-print" id="print_btn" onclick="window.print();">&nbsp;<?=$lexic['contact']['print']?></button>
+  <button type="button" class="fa-print" id="print_btn" onclick="window.print();">&nbsp;<?=$lexic['contact']['print']?></button>
  </div>
 </div>
 
-<?php if($data['layout_t']){?>
-<!--####### Контент страницы #######-->
+<?php if($data['layout_l']||$data['layout_r']||$data['layout_t']||$data['layout_b']){//если заполнен один из сегментов макета?>
+<!--####### Material content #######-->
 <div id="layouts">
+<?php if($data['layout_t']){//если заполнен верхний?>
 <div id="layout_t"><?=$data['layout_t']?></div>
+<?php }?>
+<?php if($data['layout_l']||$data['layout_r']){//если заполнен правый или левый?>
+<div id="layout_l" style="width:<?=htmlspecialchars($data['layout_l_width'])?>%;"><?=$data['layout_l']?></div>
+<div id="layout_r"><?=$data['layout_r']?></div>
+<?php }?>
+<?php if($data['layout_b']){//если заполнен нижний?>
+<div id="layout_b"><?=$data['layout_b']?></div>
+<?php }?>
 </div>
 <?php }?>
 

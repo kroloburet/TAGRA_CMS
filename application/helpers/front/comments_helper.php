@@ -21,7 +21,7 @@ class Comments{
 </div>
 <?php }if($this->conf['form']!=='off'){?>
 <!--####### Форма отправки #######-->
-<div class="add_comment_box" class="noprint">
+<div class="noprint add_comment_box">
  <form class="add_comment_form">
   <label class="input">
    <input type="text" name="name" placeholder="<?=htmlspecialchars($this->lexic['comments']['your_name'])?>" <?=$this->conf['name_limit']>0?'onkeyup="lim(this,'.$this->conf['name_limit'].')"':FALSE?> value="<?=$this->CI->input->cookie('comment_name')?htmlspecialchars($this->CI->input->cookie('comment_name')):''?>">
@@ -77,7 +77,9 @@ $this->print_js();
 </div>';
  }
 
- function print_js(){//вывод javascript?>
+ function print_js(){//вывод javascript
+  if($this->conf['form']=='off'){return FALSE;}
+ ?>
 <script>
 var Comments={
  <?php if($this->conf['show']>0){//Установлен лимит видимых комментов?>
@@ -108,7 +110,7 @@ var Comments={
 
  <?php }if($this->conf['feedback']=='on'){//Обратная связь?>
  feedback:function(){//показать уведомление о возможности обратной связи
-  var name=$('input[name="name"]').attr('placeholder','<?=addslashes($this->lexic['comments']['your_name_or_mail'])?>'),
+  var name=$('.add_comment_form input[name="name"]').attr('placeholder','<?=addslashes($this->lexic['comments']['your_name_or_mail'])?>'),
       msg=$('<div/>',{class:'feedback_msg',text:'<?=addslashes($this->lexic['comments']['feedback_msg'])?>'});
   name.on('focus.Feedback',function(){$(this).before(msg);});
   name.on('blur.Feedback',function(){msg.remove();});
@@ -173,13 +175,13 @@ var Comments={
       msg=function(m){actions_box.html(m);setTimeout(function(){actions_box.html(actions);},delay);};
   //проверка полей
   if(!/\S/.test(name_val)){
-   msg('<p class="notific_r mini full"><?=addslashes($this->lexic['comments']['novalid_field'])?>"'+name.attr('placeholder')+'"</p>');return false;}
+   msg('<p class="notific_r mini full"><?=addslashes($this->lexic['comments']['novalid_field'])?><q>'+name.attr('placeholder')+'</q></p>');return false;}
   if(!/\S/.test(comment.val())){
-   msg('<p class="notific_r mini full"><?=addslashes($this->lexic['comments']['novalid_field'])?>"'+comment.attr('placeholder')+'"</p>');return false;}
+   msg('<p class="notific_r mini full"><?=addslashes($this->lexic['comments']['novalid_field'])?><q>'+comment.attr('placeholder')+'</q></p>');return false;}
   <?php if($this->conf['feedback']=='on'){//если обратная связь?>
   if(~name_val.indexOf('@'))//в поле есть признак email
    if(!/^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/.test(name_val)){
-    msg('<p class="notific_r mini full"><?=addslashes($this->lexic['comments']['novalid_mail'])?>'+name.attr('placeholder')+'"</p>');return false;}
+    msg('<p class="notific_r mini full"><?=addslashes($this->lexic['comments']['novalid_mail'])?><q>'+name.attr('placeholder')+'</q></p>');return false;}
   <?php }?>
   //блокирую кнопку
   actions_box.find('button').attr('disabled',true).html('<i class="fa fa-spin fa-spinner"></i><?=addslashes($this->lexic['basic']['loading'])?>');
@@ -218,7 +220,7 @@ var Comments={
       if(pid.val()!=='0'){setTimeout(function(){f.remove();$('.add_comment_form').slideDown(200);},delay);}//удалить форму ответа, отобразить основную
       break;
      case 'reserved_name'://имя зарезервировано
-      msg('<p class="notific_r mini full">"'+name_val+'" <?=addslashes($this->lexic['comments']['reserved_name_msg'])?></p>');
+      msg('<p class="notific_r mini full"><q>'+name_val+'</q> <?=addslashes($this->lexic['comments']['reserved_name_msg'])?></p>');
       break;
      case 'error'://ошибки
       msg('<p class="notific_r mini full"><?=addslashes($this->lexic['basic']['error'])?></p>');

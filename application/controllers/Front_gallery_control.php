@@ -11,8 +11,8 @@ class Front_gallery_control extends Front_basic_control{
   $this->load->model('front_gallery_model');
  }
 
- function gallery($alias){
-  $data=$this->front_gallery_model->get_gallery($alias);
+ function get_gallery($id){
+  $data=$this->front_gallery_model->get_gallery($id);
   $data?$this->_viewer('front/gallery_view',$data):redirect('404_override');
  }
 

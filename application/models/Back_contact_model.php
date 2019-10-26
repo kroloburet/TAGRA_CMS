@@ -9,7 +9,7 @@ class Back_contact_model extends Back_basic_model{
   parent::__construct();
  }
 
- function edit_contact_page(/*id страницы*/$id,/*значения полей*/$data){
+ function edit_contact_page($id,$data){
   $this->db->where('id',$id)->update('contact_pages',$data);
  }
 

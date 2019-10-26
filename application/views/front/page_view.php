@@ -33,7 +33,7 @@
 
 <?php
 $this->load->helper('front/comments');
-$comm=new Comments(array_replace($conf['comments'],['form'=>$data['comments']]));
+$comm=new comments(array_replace($conf['comments'],['form'=>$data['comments']]));
 $comm->print_comments();
 ?>
 

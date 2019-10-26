@@ -48,14 +48,13 @@ class Back_gallery_control extends Back_basic_control{
 
  function edit($id){
   $this->back_gallery_model->edit_gallery($id,array_map('trim',$this->input->post()));
-  $this->app('conf.sitemap.generate')==='auto'?$this->sitemap_generator():FALSE;
   redirect('admin/gallery/get_list');
  }
 
  function del(){
   $p=$this->input->post();
-  if(!$p['alias']){exit('error');}
-  $this->back_gallery_model->del_gallery($p['alias']);
+  if(!$p['id']){exit('error');}
+  $this->back_gallery_model->del_gallery($p['id']);
   $this->app('conf.sitemap.generate')==='auto'?$this->sitemap_generator():FALSE;
   exit('ok');
  }

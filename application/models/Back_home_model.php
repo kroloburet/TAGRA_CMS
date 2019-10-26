@@ -9,7 +9,7 @@ class Back_home_model extends Back_basic_model{
   parent::__construct();
  }
 
- function edit_home_page(/*id страницы*/$id,/*значения полей*/$data){
+ function edit_home_page($id,$data){
   $this->db->where('id',$id)->update('index_pages',$data);
  }
 

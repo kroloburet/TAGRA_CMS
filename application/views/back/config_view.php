@@ -1,7 +1,7 @@
 <h1><?=$data['view_title']?></h1>
 <dl class="tabs">
 
-<!--####### Основные настройки #######-->
+ <!--####### Основные настройки #######-->
  <dt class="tab_active">Основные настройки</dt>
  <dd>
   <form method="POST" action="/admin/setting/set_config">
@@ -13,13 +13,13 @@
       <div class="row  touch">
        <h3>Общее</h3>
        <hr>
-       Доступ к сайту <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+       Доступ к сайту <i class="fa-info-circle blue" onmouseover="tt(this);"></i>
        <pre class="tt">
 Управление доступом к пользовательской
 части вашего сайта. Это полезно, например,
 когда вы ведете технические работы на сайте,
 административную часть изменения не затрагивают.
-Если установлено «Доступ к сайту закрыт» —
+Если установлено <q>Доступ к сайту закрыт</q> &mdash;
 только администратору и модераторам будет
 открыт доступ к пользовательской части сайта.</pre>
        <label class="select">
@@ -32,18 +32,18 @@
        <label class="input">
         <input type="text" name="site_name" value="<?=htmlspecialchars($conf['site_name'])?>">
        </label>
-      E-mail с сайта <i class="fa-info-circle red" onmouseover="tt(this);"></i>
+       E-mail с сайта <i class="fa-info-circle red" onmouseover="tt(this);"></i>
        <pre class="tt">
 E-mail на который будут приходить
 письма от пользователей вашего сайта.
-Например: со страницы «Контакты».
+Например: со страницы <q>Контакты</q>.
 <b class="red">Обязательно для заполнения!</b></pre>
        <label class="input">
         <input type="text" name="site_mail" value="<?=htmlspecialchars($conf['site_mail'])?>">
        </label>
-      Путь к библиотеке JQuery <i class="fa-info-circle red" onmouseover="tt(this,'c');"></i>
+       Путь к библиотеке JQuery <i class="fa-info-circle red" onmouseover="tt(this,'c');"></i>
        <pre class="tt">
-JQuery — подключаемый скрипт для правильной
+JQuery &mdash; подключаемый скрипт для правильной
 работы всего сайта. Подробную информацию и
 ссылку для подключения актуальной версии
 можно получить на странице <a href="http://code.jquery.com/" target="_blank">jQuery CDN</a>
@@ -51,11 +51,11 @@ JQuery — подключаемый скрипт для правильной
        <label class="input">
         <input type="text" name="jq" value="<?=htmlspecialchars($conf['jq'])?>">
        </label>
-      Ключ Google map API <i class="fa-info-circle red" onmouseover="tt(this);"></i>
+       Ключ Google map API <i class="fa-info-circle red" onmouseover="tt(this);"></i>
        <pre class="tt">
 Система использует сервис Google map чтобы вы могли
 указать расположение и отобразить карту на странице
-«Контакты» или других страницах. Чтобы это работало,
+<q>Контакты</q> или других страницах. Чтобы это работало,
 необходимо иметь аккаунт в Google, вкрючить API
 и получить ключ. Если у вас возникли трудности
 связанные с получением ключа или отображением карт,
@@ -77,13 +77,13 @@ JQuery — подключаемый скрипт для правильной
        <label class="input">
         <input type="text" name="body_width" value="<?=($conf['body_width'])?>">
        </label>
-       Ширина левой колонки макета «Контент» (в процентах)
+       Ширина левой колонки макета <q>Контент</q> (в процентах)
        <label class="input">
         <input type="text" name="layout_l_width" value="<?=htmlspecialchars($conf['layout_l_width'])?>">
        </label>
-       Emmet <i class="fa-question-circle blue" onmouseover="tt(this,'c');"></i>
+       Emmet <i class="fa-info-circle blue" onmouseover="tt(this,'c');"></i>
        <pre class="tt">
-Emmet — плагин который в некоторой
+Emmet &mdash; плагин который в некоторой
 степени ускоряет написание кода HTML, CSS.
 В системе используется <a href="https://github.com/emmetio/textarea" target="_blank">emmet for &lt;textarea&gt;</a>
 <a href="http://docs.emmet.io" target="_blank">Документация и синтаксис emmet</a></pre>
@@ -99,7 +99,7 @@ Emmet — плагин который в некоторой
       <div class="row touch">
        <h3>Вывод</h3>
        <hr>
-       Микроразметка <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+       Микроразметка <i class="fa-info-circle blue" onmouseover="tt(this);"></i>
        <pre class="tt">
 Микроразметка предназначена для улучшения
 отображения результатов поиска, делая процесс
@@ -118,18 +118,18 @@ Emmet — плагин который в некоторой
        <a href="#" onclick="opn_cls('addthis_opt');return false">Настройки <i class="fa-angle-down"></i></a>
        <hr>
        <div id="addthis_opt" class="opn_cls">
-        JavaScript-код подключения к сервису <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+        JavaScript-код подключения к сервису <i class="fa-info-circle blue" onmouseover="tt(this);"></i>
         <pre class="tt">
 После регистрации в сервисе AddThis вы получаете
 небольшой код который нужно разместить на вашем сайте.
-После этого вы можете управлять кнопками «поделиться»
+После этого вы можете управлять кнопками <q>поделиться</q>
 с вашего аккаунта в сервисе.</pre>
         <label class="textarea">
          <textarea class="no-emmet" name="addthis_js" placeholder="<script src='//s7.addthis.com/js/300/addthis_widget.js#pubid=XXXXXXXXXXXXXXX'></script>" rows="2"><?=$conf['addthis_js']?></textarea>
         </label>
-        HTML-код кнопок «Share» <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+        HTML-код кнопок <q>Share</q> <i class="fa-info-circle blue" onmouseover="tt(this);"></i>
         <pre class="tt">
-Создайте в разделе «Share» сервиса «AddThis» набор
+Создайте в разделе <q>Share</q> сервиса <q>AddThis</q> набор
 кнопок для вашего сайта и скопируйте полученный HTML-код
 в это поле. Созданные вами кнопки будут показанны на страницах.
 С их помощью посетители вашего сайта смогут поделиться ссылкой
@@ -137,9 +137,9 @@ Emmet — плагин который в некоторой
         <label class="textarea">
          <textarea class="no-emmet" name="addthis_share" placeholder="<div class='addthis_sharing_toolbox'></div>" rows="2"><?=$conf['addthis_share']?></textarea>
         </label>
-        HTML-код кнопок «Follow» <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+        HTML-код кнопок <q>Follow</q> <i class="fa-info-circle blue" onmouseover="tt(this);"></i>
         <pre class="tt">
-Создайте в разделе «Follow» сервиса «AddThis» набор
+Создайте в разделе <q>Follow</q> сервиса <q>AddThis</q> набор
 кнопок для вашего сайта и скопируйте полученный HTML-код
 в это поле. Созданные вами кнопки будут показанны на страницах.
 С их помощью посетители вашего сайта смогут посетить
@@ -147,21 +147,21 @@ Emmet — плагин который в некоторой
         <label class="textarea">
          <textarea class="no-emmet" name="addthis_follow" placeholder="<div class='addthis_horizontal_follow_toolbox'></div>" rows="2"><?=$conf['addthis_follow']?></textarea>
         </label>
-        Кнопки «Share» в системе по умолчанию
+        Кнопки <q>Share</q> в системе по умолчанию
         <label class="select">
          <select name="addthis_share_def">
           <option value="off" <?=$conf['addthis_share_def']=='off'?'selected':''?>>Скрыть</option>
           <option value="on" <?=$conf['addthis_share_def']=='on'?'selected':''?>>Показать</option>
          </select>
         </label>
-        Кнопки «Follow» в системе по умолчанию
+        Кнопки <q>Follow</q> в системе по умолчанию
         <label class="select">
          <select name="addthis_follow_def">
           <option value="off" <?=$conf['addthis_follow_def']=='off'?'selected':''?>>Скрыть</option>
           <option value="on" <?=$conf['addthis_follow_def']=='on'?'selected':''?>>Показать</option>
          </select>
         </label>
-        Превью-изображение <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+        Превью-изображение <i class="fa-info-circle blue" onmouseover="tt(this);"></i>
         <pre class="tt">
 Ссылка на изображение доступное из Интернета
 или выбранное в менеджере файлов. Изображение
@@ -179,60 +179,60 @@ Emmet — плагин который в некоторой
 
       <!--####### Навигация «хлебные крошки» #######-->
       <div class="row touch">
-       <h3 class="float_l">Навигация «хлебные крошки»</h3><span>
+       <h3 class="float_l">Навигация <q>хлебные крошки</q></h3><span>
         <a href="#" onclick="opn_cls('bc_opt');return false">Настройки <i class="fa-angle-down"></i></a>
        </span>
        <hr>
        <div id="bc_opt" class="opn_cls">
         <label class="select">
          <select name="breadcrumbs[public]">
-          <option value="on" <?=$conf['breadcrumbs']['public']=='on'?'selected':''?>>Показать «хлебные крошки»</option>
-          <option value="off" <?=$conf['breadcrumbs']['public']=='off'?'selected':''?>>Скрыть «хлебные крошки»</option>
+          <option value="on" <?=$conf['breadcrumbs']['public']=='on'?'selected':''?>>Показать "хлебные крошки"</option>
+         <option value="off" <?=$conf['breadcrumbs']['public']=='off'?'selected':''?>>Скрыть "хлебные крошки"</option>
          </select>
         </label>
         <label class="checkbox inline" style="margin:0">
          <input type="checkbox" name="breadcrumbs[home]" <?=isset($conf['breadcrumbs']['home'])?'value="on" checked':''?>>
          <span class="custom-checkbox"><i class="icon-check"></i></span>
          Ссылка на главную
-        </label>  <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+        </label>  <i class="fa-info-circle blue" onmouseover="tt(this);"></i>
         <pre class="tt">
-Будет ли показана ссылка на страницу «Главная»
-в начале цепочки «хлебных крошек».</pre>
+Будет ли показана ссылка на страницу <q>Главная</q>
+в начале цепочки <q>хлебных крошек</q>.</pre>
        </div>
       </div>
      </div>
     </div>
 
     <div class="button this_form_control">
-     <button type="button" onclick="subm(form,s_opts)">Сохранить все настройки</button>
+     <button type="button" onclick="subm(form,req)">Сохранить все настройки</button>
     </div>
    </div>
   </form>
  </dd>
 
- <?php if($conf['status']=='administrator'){$this->load->helper('back/back_user_control')?>
- <dt>Администратор</dt>
- <dd>
-  <div class="tab_content">
-   <p>Администратор — это статус с полными правами доступа к административной части системы и правом действий от имени администратора в пользовательской части. Администратор в системе может быть только один.</p>
-   <?php administrator_control()?>
-  </div>
- </dd>
- <dt>Модераторы</dt>
- <dd>
-  <div class="tab_content">
-   <p>Модератор — это статус с ограниченными правами доступа к административной части системы и правом действий от имени модератора в пользовательской части. Модератор может управлять всем кроме настроек администратора и модераторов. Администратор может запретить «доступ» модератору использовать вышеперчисленные права.</p>
-   <?php moderators_control()?>
-  </div>
- </dd>
- <?php }?>
+ <?php if($conf['status']=='administrator'){
+  $this->load->helper('back/back_user_control')?>
+  <dt>Администратор</dt>
+  <dd>
+   <div class="tab_content">
+    <p>Администратор &mdash; это статус с полными правами доступа к административной части системы и правом действий от имени администратора в пользовательской части. Администратор в системе может быть только один.</p>
+ <?php administrator_control()?>
+   </div>
+  </dd>
+  <dt>Модераторы</dt>
+  <dd>
+   <div class="tab_content">
+    <p>Модератор &mdash; это статус с ограниченными правами доступа к административной части системы и правом действий от имени модератора в пользовательской части. Модератор может управлять всем кроме настроек администратора и модераторов. Администратор может запретить <q>доступ</q> модератору использовать вышеперчисленные права.</p>
+ <?php moderators_control()?>
+   </div>
+  </dd>
+<?php }?>
 
 </dl>
 <script>
-////////////////////////////////////////////////рег.выражения для проверки полей
-var s_opts={
- site_mail:/^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/,
- jq:/[^\s]/,
- gapi_key:/[^\s]/
-};
+ var req={//рег.выражения для проверки полей
+  site_mail:/^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/,
+  jq:/[^\s]/,
+  gapi_key:/[^\s]/
+ };
 </script>

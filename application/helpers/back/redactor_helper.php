@@ -2,19 +2,35 @@
 /////////////////////////////////////////////////////////////////
 $CI=&get_instance();
 $data=$CI->app('data');
-$pages=$CI->db->where('lang',$data['lang'])->select('title,alias,section')->order_by('title')->get('pages')->result_array();
-$sections=$CI->db->where('lang',$data['lang'])->select('title,alias,section')->order_by('title')->get('sections')->result_array();
-$gallerys=$CI->db->where('lang',$data['lang'])->select('title,alias,section')->order_by('title')->get('gallerys')->result_array();
+$pages=$CI->db->where('lang',$data['lang'])->select('title,id')->order_by('title')->get('pages')->result_array();
+$sections=$CI->db->where('lang',$data['lang'])->select('title,id')->order_by('title')->get('sections')->result_array();
+$gallerys=$CI->db->where('lang',$data['lang'])->select('title,id')->order_by('title')->get('gallerys')->result_array();
 ?>
 
 <script src="/scripts/tinymce_4.7.11/tinymce.min.js"></script>
 <script>
-//////////////////////////////////////////////////настройки текстового редактора
-tinymce.init({
+var mce_link_list=[//выпадающий список ссылок на страницы сайта
+ <?php if($pages){?>
+  {title:"Страницы",menu:[
+   <?php foreach($pages as $i){?>{title:<?=json_encode($i['title'])?>,value:"<?='/page/'.$i['id']?>"},<?php }?>
+  ]},
+ <?php }?>
+ <?php if($sections){?>
+  {title:"Разделы",menu:[
+   <?php foreach($sections as $i){?>{title:<?=json_encode($i['title'])?>,value:"<?='/section/'.$i['id']?>"},<?php }?>
+  ]},
+ <?php }?>
+ <?php if($gallerys){?>
+  {title:"Галереи",menu:[
+   <?php foreach($gallerys as $i){?>{title:<?=json_encode($i['title'])?>,value:"<?='/gallery/'.$i['id']?>"},<?php }?>
+  ]},
+ <?php }?>
+  {title:"Главная",value:"/"},
+  {title:"Контакты",value:"/contact"},
+ ];
+var mce_overall_conf={//глобальная конфигурация редактора
  language:"ru",//язык редактора
  content_css:"/css/back/redactor.css",//стили для редактируемого контента
- selector:"#layout_t,#layout_l,#layout_r,#layout_b",
- inline:true,//редактор появляется после клика в елементе
  menubar:false,
  element_format:"html",//теги в формате
  code_dialog_width:800,
@@ -37,40 +53,28 @@ tinymce.init({
  ],
  plugins:"advlist autolink lists link image charmap print preview anchor searchreplace visualblocks code textcolor media table contextmenu paste nonbreaking moxiemanager fullscreen",
  toolbar:"undo redo | styleselect | bold italic | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table charmap link image media insertfile | fullscreen code",
- link_list:[//выпадающий список ссылок на страницы сайта
- <?php if($pages){?>
-  {title:"Страницы",menu:[
-   <?php foreach($pages as $i){?>{title:"<?=addslashes($i['title'])?>",value:"<?='/'.$i['alias']?>"},<?php }?>
-  ]},
- <?php }?>
- <?php if($sections){?>
-  {title:"Разделы",menu:[
-   <?php foreach($sections as $i){?>{title:"<?=addslashes($i['title'])?>",value:"<?='/section/'.$i['alias']?>"},<?php }?>
-  ]},
- <?php }?>
- <?php if($gallerys){?>
-  {title:"Галереи",menu:[
-   <?php foreach($gallerys as $i){?>{title:"<?=addslashes($i['title'])?>",value:"<?='/gallery/'.$i['alias']?>"},<?php }?>
-  ]},
- <?php }?>
-  {title:"Главная",value:"/"},
-  {title:"Контакты",value:"/contact"}
- ],
+ link_list:mce_link_list,
  ////////////////////////настройки файлового менеджера
  moxiemanager_rootpath:'/upload/<?=$data['lang']?>',
  moxiemanager_title:'Mенеджер файлов',
+ moxiemanager_view:'thumbs',
  moxiemanager_leftpanel:false
-});
+};
+//////////////////////////////////////////////////настройки текстового редактора по умолчанию
+tinymce.init(Object.assign({},mce_overall_conf,{
+ selector: "#layout_t,#layout_l,#layout_r,#layout_b",
+ inline: true//редактор появляется после клика в елементе
+}));
 //////////////////////////////////////////////////////////////////////////////////////инициализация текстового редактора
 $(function(){//готовность DOM
-var layouts=$("#layout_t,#layout_l,#layout_r,#layout_b");
-layouts.on('click',function(){
- if($(this).hasClass('nav_layout_active')){
-  return false;
- }else{
-  layouts.removeClass('nav_layout_active');
-  $(this).addClass('nav_layout_active');
- }
-});
+ var layouts=$("#layout_t,#layout_l,#layout_r,#layout_b");
+ layouts.on('click',function(){
+  if($(this).hasClass('nav_layout_active')){
+   return false;
+  }else{
+   layouts.removeClass('nav_layout_active');
+   $(this).addClass('nav_layout_active');
+  }
+ });
 });
 </script>

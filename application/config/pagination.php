@@ -1,8 +1,8 @@
 <?php
-$config['first_link'] = '<i class="fa fa-angle-double-left"></i>';
-$config['next_link'] = '<i class="fa fa-angle-right"></i>';
-$config['prev_link'] = '<i class="fa fa-angle-left"></i>';
-$config['last_link'] = '<i class="fa fa-angle-double-right"></i>';
+$config['first_link'] = '<i class="fa-angle-double-left"></i>';
+$config['next_link'] = '<i class="fa-angle-right"></i>';
+$config['prev_link'] = '<i class="fa-angle-left"></i>';
+$config['last_link'] = '<i class="fa-angle-double-right"></i>';
 $config['cur_tag_open'] = '<li class="pag_active"><a href="#">';//текущую страницу
 $config['cur_tag_close'] = '</a></li>';//текущую страницу
 $config['num_tag_open'] = '<li>';//номера страниц

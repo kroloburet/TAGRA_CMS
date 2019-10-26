@@ -5,12 +5,12 @@ function versions($material){
 $CI=&get_instance();
 if(count($CI->app('conf.langs'))<2){return false;}//в системе один язык
 $data=$CI->app('data');
-$m=$CI->db->where('lang !=',$data['lang'])->select('id,alias,title,lang')->order_by('title','ASC')->get($material)->result_array();
+$m=$CI->db->where('lang !=',$data['lang'])->select('title,id,lang')->order_by('title','ASC')->get($material)->result_array();
 foreach($m as $k=>$v){
  switch($material){
-  case 'pages':$url='/'.$v['alias'];break;
-  case 'sections':$url='/section/'.$v['alias'];break;
-  case 'gallerys':$url='/gallery/'.$v['alias'];break;
+  case 'pages':$url='/page/'.$v['id'];break;
+  case 'sections':$url='/section/'.$v['id'];break;
+  case 'gallerys':$url='/gallery/'.$v['id'];break;
  }
  $m[$v['lang']][$v['id']]=['id'=>$v['id'],'title'=>$v['title'],'url'=>$url];
  unset($m[$k]);
@@ -19,7 +19,7 @@ $m=json_encode($m,JSON_FORCE_OBJECT);
 ?>
 
 <div class="touch" id="versions">
- <h3 class="float_l">Версии материала</h3> <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+ <h3 class="float_l">Версии материала</h3> <i class="fa-info-circle blue" onmouseover="tt(this);"></i>
  <pre class="tt">
 Здесь вы можете выбрать версии этого
 материала на других языках ресурса.

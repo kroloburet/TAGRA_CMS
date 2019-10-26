@@ -15,11 +15,11 @@ if(empty($data)||empty($conf)||empty($lexic)){return FALSE;}
 $seg1=$CI->uri->segment(1);//первый сегмент урл после домена
 $data['lang']=isset($data['lang'])?$data['lang']:$conf['user_lang'];
 $img_prev=empty($data['img_prev'])?empty($conf['img_prev_def'])?base_url('img/noimg.jpg'):$conf['img_prev_def']:$data['img_prev'];
-$img_prev_size=@getimagesize($data['img_prev']);
+$img_prev_size=@getimagesize($img_prev);
 $creation_date=!empty($data['creation_date'])?$data['creation_date']:date('Y-m-d');
 $last_mod_date=!empty($data['last_mod_date'])?$data['last_mod_date']:date('Y-m-d');
 $layout=@$data['layout_t'].@$data['layout_l'].@$data['layout_r'].@$data['layout_b'];
-$imgs=$audios=$cmnts=$cmnts_count=$breadcrumb_list=$tel=$mail=$address='';
+$imgs=$audios=$cmnts=$cmnts_count=$breadcrumb=$tel=$mail=$address='';
 
 if(!empty($layout)){
 ////////////////////////////////////////////////
@@ -29,9 +29,9 @@ if(!empty($layout)){
  preg_match_all('/<img[^>]+src="([^"]+)"[^>]*>/i',$layout,$layout_imgs);
  if(!empty($layout_imgs[1])){
   foreach($layout_imgs[1] as $v){
-   if(!preg_match('/.+(\.jpg|\.jpeg|\.gif|\.png)$/i',$v)){continue;}//если тип не разрешен
+   if(!preg_match('/.+(\.jpg|\.jpeg|\.gif|\.png)$/i',$v)){continue;}//тип не разрешен
    $v=preg_match('/^https?:\/\//i',$v)?$v:base_url($v);//url должен быть абсолютный
-   $imgs.='{"@type":"ImageObject","url":"'.addslashes($v).'"}';
+   $imgs.='{"@type":"ImageObject","url":"'.$v.'"}';
   }
  }
 //аудио в контенте
@@ -39,7 +39,7 @@ if(!empty($layout)){
  if(!empty($layout_audios[1])){
   foreach($layout_audios[1] as $v){
    $v=preg_match('/^https?:\/\//i',$v)?$v:base_url($v);//url должен быть абсолютный
-   $audios.='{"@type":"AudioObject","url":"'.addslashes($v).'"}';
+   $audios.='{"@type":"AudioObject","url":"'.$v.'"}';
   }
  }
 }
@@ -53,10 +53,10 @@ if(isset($data['gallery_opt'])&&$data['gallery_opt']){
   case'foto_folder'://галерея из папки с изображениями
    function get_foto_folder_srcs($dir){
     $result='';
-    if($dir_handle=@opendir('.'.$dir)){//пробуем открыть папку
-     while($file=readdir($dir_handle)){//поиск по файлам
+    if($dir_handle=@opendir('.'.$dir)){//открыть папку
+     while($file=readdir($dir_handle)){//проход по файлам
       if($file=='.'||$file=='..')continue;//пропустить ссылки на другие папки
-      if(!preg_match('/.+(\.jpg|\.jpeg|\.gif|\.png)$/i',$file)){continue;}//если тип не разрешен
+      if(!preg_match('/.+(\.jpg|\.jpeg|\.gif|\.png)$/i',$file)){continue;}//тип не разрешен
       $result.='{"@type":"ImageObject","url":"'.base_url($dir.'/'.$file).'"}';
      }
      closedir($dir_handle);//закрыть папку
@@ -66,17 +66,17 @@ if(isset($data['gallery_opt'])&&$data['gallery_opt']){
    $imgs.=get_foto_folder_srcs(json_decode($data['gallery_opt'],TRUE)['f_folder']);
    break;
   case'foto_desc'://галерея изображений с описаниями
-   foreach(json_decode($data['gallery_opt'],TRUE) as $v){//читаю json изображений
-    if(!preg_match('/.+(\.jpg|\.jpeg|\.gif|\.png)$/i',$v['f_url'])){continue;}//если тип не разрешен
+   foreach(json_decode($data['gallery_opt'],TRUE) as $v){//проход по изображениям
+    if(!preg_match('/.+(\.jpg|\.jpeg|\.gif|\.png)$/i',$v['f_url'])){continue;}//тип не разрешен
     $v['f_url']=preg_match('/^https?:\/\//i',$v['f_url'])?$v['f_url']:base_url($v['f_url']);//url должен быть абсолютный
-    $imgs.='{"@type":"ImageObject","name":"'.addslashes($v['f_title']).'","description":"'.addslashes($v['f_desc']).'","url":"'.addslashes($v['f_url']).'"}';
+    $imgs.='{"@type":"ImageObject","name":'.json_encode($v['f_title']).',"description":'.json_encode($v['f_desc']).',"url":"'.$v['f_url'].'"}';
    }
    break;
   //аудио в галерее
   case'audio':
-   foreach(json_decode($data['gallery_opt'],TRUE) as $v){//читаю json аудио
+   foreach(json_decode($data['gallery_opt'],TRUE) as $v){//проход по аудио
     $v['a_url']=preg_match('/^https?:\/\//i',$v['a_url'])?$v['a_url']:base_url($v['a_url']);//url должен быть абсолютный
-    $audios.='{"@type":"AudioObject","name":"'.addslashes($v['a_title']).'","url":"'.addslashes($v['a_url']).'"}';
+    $audios.='{"@type":"AudioObject","name":'.json_encode($v['a_title']).',"url":"'.$v['a_url'].'"}';
    }
    break;
  }
@@ -95,7 +95,7 @@ if(!empty($q)){//комментарии есть
   $tree='';
   foreach($tree_arr[$pid] as $v){
    $name=filter_var($v['name'],FILTER_VALIDATE_EMAIL)?explode('@',$v['name'])[0]:$v['name'];
-    $tree.='{"@type":"Comment","datePublished":"'.addslashes($v['date']).'","text":"'.addslashes($v['comment']).'","creator":{"@type":"Person","name":"'.addslashes($name).'"}}';
+    $tree.='{"@type":"Comment","datePublished":"'.$v['date'].'","text":'.json_encode($v['comment']).',"creator":{"@type":"Person","name":'.json_encode($name).'}}';
    $tree.=build_tree($tree_arr,$v['id']);
   }
   return $tree;
@@ -109,17 +109,17 @@ if(isset($conf['breadcrumbs']['public'])&&$conf['breadcrumbs']['public']=='on'){
 ////////////////////////////////////////////////
 //обработка "хлебных крошек"
 ////////////////////////////////////////////////
- global $breadcrumb_list;//объявляю лист
- $home=isset($conf['breadcrumbs']['home'])&&$conf['breadcrumbs']['home']=='on'?'{"@type":"ListItem","position":1,"name":"'.addslashes($lexic['breadcrumbs']['home']).'","item":"'.base_url().'"}':'';//главная в цепи
- $breadcrumb_list=$home;//лист+главная
- function get_sub_sections($a,$p){//дополнить лист цепочкой подразделов
-  //$a-алиас родительского раздела в цепи
-  //$p-позиция в цепочке для разметки
-  global $CI,$data,$breadcrumb_list;
-  $q=$CI->db->where(['public'=>'on','alias'=>$a,'lang'=>$data['lang']])->select('id,alias,title,section')->get('sections')->result_array();
-  if(isset($q[0])&&!empty($q[0])){//если такой алиас есть
-   if($q[0]['section']){get_sub_sections($q[0]['section'],$p);$p=$p+1;}//если есть родитель - рекурсия;
-   $breadcrumb_list.='{"@type":"ListItem","position":'.$p.',"name":"'.addslashes($q[0]['title']).'","item":"'.base_url('section/'.$q[0]['alias']).'"}';
+ global $breadcrumb;//цепь
+ $home=isset($conf['breadcrumbs']['home'])&&$conf['breadcrumbs']['home']=='on'?'{"@type":"ListItem","position":1,"name":'.json_encode($lexic['breadcrumbs']['home']).',"item":"'.base_url().'"}':'';//главная в цепи
+ $breadcrumb=$home;//добавить главную в цепь
+ function get_sub_sections($id,$pos){//добавить в цепь подразделы
+  //$id-id родительского раздела в цепи
+  //$pos-позиция звена в цепи
+  global $CI,$data,$breadcrumb;
+  $q=$CI->db->where(['public'=>'on','id'=>$id,'lang'=>$data['lang']])->select('title,id,section')->get('sections')->result_array();
+  if(isset($q[0])&&!empty($q[0])){//такой id есть
+   if($q[0]['section']){get_sub_sections($q[0]['section'],$pos);$pos=$pos+1;}//есть родитель - рекурсия;
+   $breadcrumb.='{"@type":"ListItem","position":'.$pos.',"name":'.json_encode($q[0]['title']).',"item":"'.base_url('section/'.$q[0]['id']).'"}';
   }
  }
  if(@$data['section']){get_sub_sections($data['section'],$home?2:1);}//етсть раздел
@@ -133,7 +133,7 @@ if($q=$CI->db->where('lang',$data['lang'])->get('contact_pages')->result_array()
  foreach(json_decode($q,TRUE) as $v){//json в массив и обход
   $t=$v['tel']?array_merge($t,explode(',',$v['tel'])):$t;//записать в массив
   $m=$v['mail']?array_merge($m,explode(',',$v['mail'])):$m;//записать в массив
-  $address.='{"@type":"PostalAddress","streetAddress":"'.addslashes($v['address']).'"}';
+  $address.='{"@type":"PostalAddress","streetAddress":'.json_encode($v['address']).'}';
  }
  $tel=implode(',',array_map(function($i){return '"'.preg_replace('/\s+/','',$i).'"';},array_unique($t)));//в строку, в кавычки, оставить уникальные
  $mail=implode(',',array_map(function($i){return '"'.preg_replace('/\s+/','',$i).'"';},array_unique($m)));//в строку, в кавычки, оставить уникальные
@@ -170,22 +170,22 @@ if($q=$CI->db->where('lang',$data['lang'])->get('contact_pages')->result_array()
 {
 "@context":"http://schema.org",
 "@type":"Organization",
-"name":"<?=addslashes($conf['site_name'])?>",
+"name":<?=json_encode($conf['site_name'])?>,
 "url":"<?=base_url()?>",
-"logo":"<?=addslashes($img_prev)?>"
+"logo":"<?=$img_prev?>"
 <?php if(!empty($mail)){?>,"email":[<?=$mail?>]<?php }?>
 <?php if(!empty($tel)){?>,"telephone":[<?=$tel?>]<?php }?>
 <?php if($address){?>,"address":[<?=preg_replace('/\}\{/m','},{',$address)?>]<?php }?>
 }
 </script>
 <?php if($seg1!=='contact'){//все кроме страницы "контакты""?>
-<?php if($breadcrumb_list){?>
+<?php if($breadcrumb){?>
 <!--разметка "хлебных крошек"-->
 <script type="application/ld+json">
 {
 "@context":"http://schema.org",
 "@type":"BreadcrumbList",
-"itemListElement":[<?=preg_replace('/\}\{/m','},{',$breadcrumb_list)?>]
+"itemListElement":[<?=preg_replace('/\}\{/m','},{',$breadcrumb)?>]
 }
 </script>
 <?php }?>
@@ -194,14 +194,14 @@ if($q=$CI->db->where('lang',$data['lang'])->get('contact_pages')->result_array()
 {
 "@context":"http://schema.org",
 "@type":"Article",
-"mainEntityOfPage":{"@type":"WebPage","@id":"<?=addslashes(current_url())?>"},
-"headline":"<?=addslashes($data['title'])?>",
-"description":"<?=addslashes($data['description'])?>",
+"mainEntityOfPage":{"@type":"WebPage","@id":"<?=current_url()?>"},
+"headline":<?=json_encode($data['title'])?>,
+"description":<?=json_encode($data['description'])?>,
 "datePublished":"<?=$creation_date?>",
 "dateModified":"<?=$last_mod_date?>",
-"author":{"@type":"Person","name":"<?=addslashes($conf['site_name'])?>"},
-"publisher":{"@type":"Organization","name":"<?=addslashes($conf['site_name'])?>","logo":"<?=addslashes($img_prev)?>"},
-"image":[{"@type":"ImageObject","representativeOfPage":true,"url":"<?=addslashes($img_prev)?>"}<?=$imgs?','.preg_replace('/\}\{/m','},{',$imgs):FALSE?>]
+"author":{"@type":"Person","name":<?=json_encode($conf['site_name'])?>},
+"publisher":{"@type":"Organization","name":<?=json_encode($conf['site_name'])?>,"logo":"<?=$img_prev?>"},
+"image":[{"@type":"ImageObject","representativeOfPage":true,"url":"<?=$img_prev?>"}<?=$imgs?','.preg_replace('/\}\{/m','},{',$imgs):FALSE?>]
 <?php if($audios){?>,"audio":[<?=preg_replace('/\}\{/m','},{',$audios)?>]<?php }?>
 <?php if($cmnts){?>,"commentCount":"<?=$cmnts_count?>","comment":[<?=preg_replace('/\}\{/m','},{',$cmnts)?>]<?php }?>
 }

@@ -11,8 +11,8 @@ class Front_page_control extends Front_basic_control{
   $this->load->model('front_page_model');
  }
 
- function is_page($alias){
-  $data=$this->front_page_model->is_page($alias);
+ function get_page($id){
+  $data=$this->front_page_model->get_page($id);
   $data?$this->_viewer('front/page_view',$data):redirect('404_override');
  }
 

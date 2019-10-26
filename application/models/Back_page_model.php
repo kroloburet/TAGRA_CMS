@@ -17,20 +17,15 @@ class Back_page_model extends Back_basic_model{
 
  function edit_page($id,$data){
   $q=$this->db->where('id',$id)->get('pages')->result_array();//изменяемый материал
-  if($q[0]['alias']!==$data['alias']){//алиас изменился
-   $url=$q[0]['alias'];
-   $this->db->where('url',$url)->update('comments',['url'=>$data['alias']]);//перезаписать url комментариев
-   $this->db->where('url','/'.$url)->update('menu',['url'=>'/'.$data['alias']]);//перезаписать url пунктов меню
-  }
-  if($q[0]['alias']!==$data['alias']||$q[0]['versions']!==$data['versions']){//алиас или версии изменились
+  if($q[0]['versions']!==$data['versions']){//версии изменились
    $this->set_versions('pages',$data,$q[0]);//добавить/обновить связи с материалом в версиях
   }
   $this->db->where('id',$id)->update('pages',$data);
  }
 
- function del_page($alias){
-  $this->db->where('alias',$alias)->delete('pages');
-  $url=$alias;
+ function del_page($id){
+  $this->db->where('id',$id)->delete('pages');
+  $url='page/'.$id;
   $this->db->where('url',$url)->delete('comments');//удалить комментарии к материалу
   $this->del_versions('pages','/'.$url);//удалить связи с материалом в версиях
  }

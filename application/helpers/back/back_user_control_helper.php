@@ -13,7 +13,7 @@ unset($q);
  <hr>
  <div class="buc_box">
   <div class="buc_info"></div>
-  Логин <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+  Логин <i class="fa-info-circle red" onmouseover="tt(this);"></i>
   <pre class="tt">
 Строка длиной 5-20 символов
 которыми могут быть строчные,
@@ -23,7 +23,7 @@ unset($q);
   <label class="input">
    <input type="text" class="buc_login" placeholder="Оставьте поле пустым если не хотите менять логин">
   </label>
-  Пароль <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+  Пароль <i class="fa-info-circle red" onmouseover="tt(this);"></i>
   <pre class="tt">
 Строка длиной 8-20 символов
 которыми могут быть строчные,
@@ -36,10 +36,10 @@ unset($q);
   <label class="input">
    <input type="text" class="buc_pass" id="ac_pass"placeholder="Оставьте поле пустым если не хотите менять пароль">
   </label>
-  E-mail <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+  E-mail <i class="fa-info-circle red" onmouseover="tt(this);"></i>
   <pre class="tt">
-На этот е-mail будут высланы логины
-и пароли, если Вы их забудите.
+На этот е-mail будут высланы логин
+и парол, если вы их забудите.
 Указывайте надежный почтовый ящик.
 <b class="red">Обязательно для заполнения!</b></pre>
   <label class="input">
@@ -154,7 +154,7 @@ unset($q);
   <div class="buc_info"></div>
   <div class="row">
    <div class="col6">
-    Логин <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+    Логин <i class="fa-info-circle red" onmouseover="tt(this);"></i>
     <pre class="tt">
 Строка длиной 5-20 символов
 которыми могут быть строчные,
@@ -164,7 +164,7 @@ unset($q);
     <label class="input">
      <input type="text" class="buc_login">
     </label>
-    Пароль <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+    Пароль <i class="fa-info-circle red" onmouseover="tt(this);"></i>
     <pre class="tt">
 Строка длиной 8-20 символов
 которыми могут быть строчные,
@@ -179,14 +179,14 @@ unset($q);
     </label>
    </div>
    <div class="col6">
-    E-mail <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+    E-mail <i class="fa-info-circle red" onmouseover="tt(this);"></i>
     <pre class="tt">
 Указывайте надежный почтовый ящик.
 <b class="red">Обязательно для заполнения!</b></pre>
     <label class="input">
      <input type="text" class="buc_mail">
     </label>
-    Доступ <i class="fa-question-circle blue" onmouseover="tt(this);"></i>
+    Доступ <i class="fa-info-circle blue" onmouseover="tt(this);"></i>
     <pre class="tt">
 Разрешить или запретить вход в
 административную часть системы и

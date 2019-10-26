@@ -1,14 +1,14 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 ///////////////////////////////////////////////////////////////////////////
 class Select_section{//вывод дерева разделов в выпадающем списке
- private $CI,$data,$q,$a,$s;
+ private $CI,$data,$q,$i,$s;
  function __construct(){
   $this->CI=&get_instance();
   $this->data=$this->CI->app('data');
-  $this->a=isset($this->data['alias'])?$this->data['alias']:FALSE;
+  $this->i=isset($this->data['id'])?$this->data['id']:FALSE;
   $this->s=isset($this->data['section'])?$this->data['section']:FALSE;
   $lang=$this->data['lang'];
-  $this->q=$this->CI->db->where('lang',$lang)->select('title,alias,section')->get('sections')->result_array();
+  $this->q=$this->CI->db->where('lang',$lang)->select('title,id,section')->get('sections')->result_array();
   $this->get_select();//вывод
  }
 
@@ -24,13 +24,13 @@ class Select_section{//вывод дерева разделов в выпада�
   $options='';//будет содержать дерево опций списка
   foreach($input as $k=>$v){//обход входного массива
    if($v['section']==$section){//начать заполнять с корня
-    $bufer='<option value="'.$v['alias'].'" '
-           .($this->s&&$this->s==$v['alias']?'selected':FALSE).' '
-           .($this->a&&$this->a==$v['alias']?'disabled':FALSE).'>'
+    $bufer='<option value="'.$v['id'].'" '
+           .($this->s&&$this->s==$v['id']?'selected':FALSE).' '
+           .($this->i&&$this->i==$v['id']?'disabled':FALSE).'>'
            .str_repeat('&#183; ',$level).$v['title']
            .'</potion>'.PHP_EOL;//записать в буфер
     unset($input[$k]);//удалить записанный элемент из входного массива
-    $sublevel=$this->get_options($input,$v['alias'],$level+1);//рекурсивно выбрать дочерние элементы
+    $sublevel=$this->get_options($input,$v['id'],$level+1);//рекурсивно выбрать дочерние элементы
     if($sublevel){$bufer.=$sublevel;}//есть дочерние - записать в буфер
     $options.=$bufer;//записать буфер в дерево опций списка
    }

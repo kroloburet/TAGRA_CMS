@@ -2,9 +2,7 @@
 /* The script tag referring to this file must be placed before the ending body tag. */
 
 /* Use conditional comments in order to target IE 7 and older:
-	<!--[if lt IE 8]><!-->
-	<script src="ie7/ie7.js"></script>
-	<!--<![endif]-->
+	<!--[if lt IE 8]><script src="ie7/ie7.js"></script><![endif]-->
 */
 
 (function() {

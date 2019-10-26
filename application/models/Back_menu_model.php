@@ -43,24 +43,25 @@ class Back_menu_model extends Back_basic_model{
  }
 
  function edit_item($data){//изменить пункт
-  $ids=[];//будет содержать id и order для изменения порядка
   $q=$this->db->where('lang',$data['lang'])->get('menu')->result_array();//выборка всех пунктов языка
   foreach($q as $k=>$v){$q[$v['id']]=$v;unset($q[$k]);}//формат выборки
-  if($q[$data['id']]['pid']!==$data['pid']||$q[$data['id']]['order']!==$data['order']){//пункт перемещается
-   foreach($q as $k=>$v){
-    if($v['id']===$data['id']){continue;}
-    if($v['pid']===$q[$data['id']]['pid']&&$v['order']>$q[$data['id']]['order']){//удалить из старого места
-     $ids[]=['id'=>$v['id'],'order'=>$v['order']-1];
-    }
-    if($v['pid']===$data['pid']&&$v['order']>=$data['order']){//поместить в новое место
-     $ids[]=['id'=>$v['id'],'order'=>$v['order']+1];
-    }
+  $id=$data['id'];//пункт который изменяется
+  $old_ord=$q[$id]['order'];//старое место
+  $old_pid=$q[$id]['pid'];//старый родитель
+  $new_ord=$data['order'];//новое место
+  $new_pid=$data['pid'];//новый родитель
+  if($new_ord!==$old_ord || $new_pid!==$old_pid){//пункт перемещается - удалить из старого места, вставить в новое
+   foreach($q as $k=>$v){//пересчитать порядок (удаление)
+    if($v['id']===$id){continue;}//не обрабатывать изменяемый пункт
+    if($v['pid']===$old_pid && $v['order']>$old_ord){$q[$k]['order']=$v['order']-1;}//в группе старого родителя, изменить порядок
+   }
+   foreach($q as $k=>$v){//пересчитать порядок (вставка)
+    if($v['id']===$id){continue;}//не обрабатывать изменяемый пункт
+    if($v['pid']===$new_pid && $v['order']>=$new_ord){$q[$k]['order']=$v['order']+1;}//в группе нового родителя, изменить порядок
    }
   }
-  return (
-   $this->db->where('id',$data['id'])->update('menu',$data)&&
-   empty($ids)?TRUE:$this->db->update_batch('menu',$ids,'id')
-  );
+  $q[$id]=$data;//перезаписать данные изменяемого пункта
+  return $this->db->update_batch('menu',$q,'id');
  }
 
  function del_item($data){//удалить ветку пунктов, изменить порядок пунктов

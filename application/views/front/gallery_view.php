@@ -56,8 +56,8 @@ switch($data['gallery_type']){
   if($data['gallery_opt']){//есть опции
    foreach(json_decode($data['gallery_opt'],true) as $v){
     echo '<div class="FVG_item FVG_item_f_desc">'.PHP_EOL;
-    echo $v['f_title']||$v['f_desc']?'<div class="FVG_item_f_desc_preview"><h3>'.$v['f_title'].'</h3>'.$v['f_desc'].'</div>'.PHP_EOL:FALSE;
     echo '<img src="/img/noimg.jpg" alt="'.$v['f_title'].'" data-src="'.$v['f_url'].'">'.PHP_EOL;
+    echo '<div class="FVG_item_f_desc_preview"><h3>'.$v['f_title'].'</h3>'.$v['f_desc'].'</div>'.PHP_EOL;
     echo '<textarea class="opt" hidden>'.json_encode($v).'</textarea>'.PHP_EOL;
     echo '</div>'.PHP_EOL;
    }
@@ -112,7 +112,7 @@ switch($data['gallery_type']){
 
 <?php
 $this->load->helper('front/comments');
-$comm=new Comments(array_replace($conf['comments'],['form'=>$data['comments']]));
+$comm=new comments(array_replace($conf['comments'],['form'=>$data['comments']]));
 $comm->print_comments();
 ?>
 

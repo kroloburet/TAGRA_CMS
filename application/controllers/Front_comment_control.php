@@ -151,7 +151,7 @@ IP пользователя: '.$data['ip'].'<br>
    $q=$this->db->where('id',$data['id'])->get('comments')->result_array();//публикуемый коммент
    !isset($q[0])||empty($q[0])?exit(json_encode(['status'=>'error'],JSON_FORCE_OBJECT)):TRUE;//если удален
    $this->load->helper('front/comments');
-   $comm=new Comments(array_replace($this->c_conf,['form'=>$p['conf']]));//заменить в глобальном конфиге конфигом со страницы, передать
+   $comm=new сomments(array_replace($this->c_conf,['form'=>$p['conf']]));//заменить в глобальном конфиге конфигом со страницы, передать
    exit(json_encode(['status'=>'onpublic','html'=>$comm->print_comment($q[0])],JSON_FORCE_OBJECT));
   }
  }

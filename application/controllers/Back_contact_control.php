@@ -11,7 +11,6 @@ class Back_contact_control extends Back_basic_control{
   $this->load->model('back_contact_model');
  }
 
-
  function get_list(){
   //разобрать get-данные если они есть, если нет - установить по умолчанию
   $get=$this->input->get();
@@ -25,13 +24,13 @@ class Back_contact_control extends Back_basic_control{
   //инициализация постраничной навигации
   $this->_set_pagination(current_url(),$contact_pages['count_result']);
   $data['contact_pages']=$contact_pages['result'];
-  $data['view_title']='Управление страницами «Контакты»';
+  $data['view_title']='Управление страницами "Контакты"';
   $this->_viewer('back/contact_pages/contact_list_view',$data);
  }
 
  function edit_form($id){
   $data=$this->back_basic_model->get_where_id('contact_pages',$id);
-  $data['view_title']='Редактировать страницу «Контакты»';
+  $data['view_title']='Редактировать страницу "Контакты"';
   $this->_viewer('back/contact_pages/contact_edit_view',$data);
  }
 

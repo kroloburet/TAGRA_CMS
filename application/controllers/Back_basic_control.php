@@ -7,7 +7,6 @@
 class Back_basic_control extends CI_Controller{
  function __construct(){
   parent::__construct();
-  //////////////////загрузить скрипты для работы класса
   $this->load->library('session');
   $this->load->model('back_basic_model');
   //////////////////проверка авторизации при обращении к контроллеру
@@ -80,6 +79,7 @@ class Back_basic_control extends CI_Controller{
      $data=$this->back_basic_model->get_config();
      $data['status']=$v['status']==='administrator'?'administrator':'moderator';
      $data['admin_mail']=$this->_get_admin_param('email');
+     $data['moderator_mail']=implode(',',array_column(array_filter($q,function($i){return $i['status']=='moderator'&&$i['access']=='on';}),'email'));
      $data['langs']=$this->back_basic_model->get_langs();
      foreach($data['langs'] as $i){if($i['def']=='on'){$data['lang_def']=$i;break;}}
      $this->set_app(['conf'=>$data]);//записать конфигурацию
@@ -169,12 +169,6 @@ class Back_basic_control extends CI_Controller{
   return TRUE;
  }
 
- function del(){//удаление из таблицы $tabl по $id аяксом
-  $post=$this->input->post();
-  $this->back_basic_model->del($post['tab'],$post['id']);
-  echo '';
- }
-
  function check_title(){//проверка на уникальность title в таблице БД
    $p=$this->input->post();
    $this->back_basic_model->check_title($p['title'],$p['id'],$p['tab'])?exit('found'):exit('ok');
@@ -208,19 +202,19 @@ class Back_basic_control extends CI_Controller{
   $pages=$sections=$gallerys='';
   $where=['robots !='=>'none','robots !='=>'noindex'];//только индексируемые
   $this->app('conf.sitemap.allowed')==='public'?$where['public']='on':FALSE;//если включать только опубликованные материалы
-  $select='alias';//только нужные поля
+  $select='id';//только нужные поля
   $pgs=$this->db->where($where)->select($select)->get('pages')->result_array();
   $sctns=$this->db->where($where)->select($select)->get('sections')->result_array();
   $glrs=$this->db->where($where)->select($select)->get('gallerys')->result_array();
   //разметка <url>
   if(!empty($pgs)){//есть страницы
-   foreach($pgs as $i){$pages.='<url><loc>'.base_url($i['alias']).'</loc></url>'.PHP_EOL;}
+   foreach($pgs as $i){$pages.='<url><loc>'.base_url('page/'.$i['id']).'</loc></url>'.PHP_EOL;}
   }
   if(!empty($sctns)){//есть разделы
-   foreach($sctns as $i){$sections.='<url><loc>'.base_url('section/'.$i['alias']).'</loc></url>'.PHP_EOL;}
+   foreach($sctns as $i){$sections.='<url><loc>'.base_url('section/'.$i['id']).'</loc></url>'.PHP_EOL;}
   }
   if(!empty($glrs)){//есть галереи
-   foreach($glrs as $i){$gallerys.='<url><loc>'.base_url('gallery/'.$i['alias']).'</loc></url>'.PHP_EOL;}
+   foreach($glrs as $i){$gallerys.='<url><loc>'.base_url('gallery/'.$i['id']).'</loc></url>'.PHP_EOL;}
   }
   //формировать sitemap.xml
   $f=fopen(getcwd().'/sitemap.xml','a');//открыть файл в режиме чтения

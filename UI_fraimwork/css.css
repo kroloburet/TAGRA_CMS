@@ -56,17 +56,13 @@ s,del{text-decoration:line-through}
 hr{padding:0;margin:0.5em 0;border:none;border-bottom:#E7D977 solid 1px;height:0;clear:both}
 abbr{text-decoration:none;border-bottom:#999 dashed 1px;cursor:help}
 p{padding:0 0 1em 0;margin:0}
-h1,h2,h3,h4,h5,h6{font-family:'Lobster',Georgia,Helvetica,Arial;font-weight:normal;line-height:1.1em;text-align:left;color:#634D35;word-break:break-word;}
+h1,h2,h3,h4,h5,h6{font-family:'Lobster',Georgia,Helvetica,Arial;font-weight:normal;line-height:1.1em;color:#634D35;word-break:break-word;}
 h1{font-size:2.2em;margin:0;padding:0 0 1em 0}
 h2{font-size:1.5em;margin:0;padding:0 0 0.6em 0}
 h3{font-size:1.3em;margin:0;padding:0 0 0.2em 0}
 h4{font-size:1.2em;margin:0;padding:0 0 0.1em 0}
 h5{font-size:1em;margin:0;padding:0}
 pre{margin:0;padding:0 0 1.5em 0;font-size:90%;line-height:normal;overflow:auto}
-ul{}
-ul li{}
-ol{}
-ol li{}
 mark{background:#ffef78;padding:0.1em}
 
 /*--------------------------------------------------------------------HELPERS----*/
@@ -170,7 +166,7 @@ form .row,form .row .col12,form .row .col11,form .row .col10,form .row .col9,for
 .input input,.textarea textarea,.select,.search input{border:#4a76be solid 1px;border-radius:3px;}
 
 /*--------------------------------------------------input*/
-.input input[type="url"],.input input[type="phone"],.input input[type="number"],.input input[type="datetime"],.input input[type="date"],.input input[type="month"],.input input[type="color"],.input input[type="time"],.input input[type="search"],.input input[type="text"],.input input[type="password"],.input input[type="tel"],.input input[type="email"],.textarea textarea,.search input[type="text"]{border:#4a76be solid 1px;background-color:#fff;box-shadow:none;padding:0.3em;margin:0;border-radius:3px;font:100%/1.5em Georgia,Helvetica,Arial}
+.input input[type="url"],.input input[type="phone"],.input input[type="number"],.input input[type="datetime"],.input input[type="date"],.input input[type="month"],.input input[type="color"],.input input[type="time"],.input input[type="search"],.input input[type="text"],.input input[type="password"],.input input[type="tel"],.input input[type="email"],.textarea textarea,.search input[type="search"]{border:#4a76be solid 1px;background-color:#fff;box-shadow:none;padding:0.3em;margin:0;border-radius:3px;font:100%/1.5em Georgia,Helvetica,Arial}
 
 /*--------------------------------------------------select*/
 .select{background-color:#fff;}
@@ -209,13 +205,13 @@ input[type="button"]:not([disabled]):active,input[type="submit"]:not([disabled])
 input[type="button"],input[type="submit"],input[type="reset"],button{width:auto;overflow:visible}
 
 /*--------------------------------------------------search*/
-.search input[type="text"],.search .btn_lnk{display:block;margin:0;padding:0.3em;font:100%/1.5em Georgia,Helvetica,Arial;}
-.search input[type="text"]{border-radius:3px 0 0 3px;border-right:none;float:left;min-width:0;width:85%}
+.search input[type="search"],.search .btn_lnk{display:block;margin:0;padding:0.3em;font:100%/1.5em Georgia,Helvetica,Arial;}
+.search input[type="search"]{border-radius:3px 0 0 3px;border-right:none;float:left;min-width:0;width:85%}
 .search .btn_lnk{border-radius:0 3px 3px 0;float:right;width:15%;box-shadow:none;color:#fff;font-weight:bold;}
-.search.inline input[type="text"]{width:70%}
+.search.inline input[type="search"]{width:70%}
 .search.inline .btn_lnk{width:30%}
-@media(max-width:600px){.search input[type="text"]{width:70%}.search .btn_lnk{width:30%}}
-@media(max-width:350px){.search input[type="text"],.search .btn_lnk{width:100%;float:none;border:#4a76be solid 1px;border-radius:3px;margin-bottom:0.7em;}}
+@media(max-width:600px){.search input[type="search"]{width:70%}.search .btn_lnk{width:30%}}
+@media(max-width:350px){.search input[type="search"],.search .btn_lnk{width:100%;float:none;border:#4a76be solid 1px;border-radius:3px;margin-bottom:0.7em;}}
 
 /*--------------------------------------------------Hand cursor on clickable controls */
 input[type="reset"],input[type="submit"],input[type="file"],input[type="radio"],input[type="checkbox"],select,button{cursor:pointer}

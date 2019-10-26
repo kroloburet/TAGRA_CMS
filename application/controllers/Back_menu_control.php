@@ -15,9 +15,9 @@ class Back_menu_control extends Back_basic_control{
   $data['lang']=$lang;
   $data['view_title']='Главное меню сайта';
   $data['menu']=$this->back_menu_model->get_menu($lang);
-  $p=$this->db->where('lang',$lang)->select('title,alias,section')->order_by('title')->get('pages')->result_array();
-  $s=$this->db->where('lang',$lang)->select('title,alias,section')->order_by('title')->get('sections')->result_array();
-  $g=$this->db->where('lang',$lang)->select('title,alias,section')->order_by('title')->get('gallerys')->result_array();
+  $p=$this->db->where('lang',$lang)->select('title,id,section')->order_by('title')->get('pages')->result_array();
+  $s=$this->db->where('lang',$lang)->select('title,id,section')->order_by('title')->get('sections')->result_array();
+  $g=$this->db->where('lang',$lang)->select('title,id,section')->order_by('title')->get('gallerys')->result_array();
   $data['materials']=['pages'=>$p,'sections'=>$s,'gallerys'=>$g];
   return $data;
  }

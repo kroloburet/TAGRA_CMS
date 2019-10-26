@@ -48,14 +48,13 @@ class Back_section_control extends Back_basic_control{
 
  function edit($id){
   $this->back_section_model->edit_section($id,array_map('trim',$this->input->post()));
-  $this->app('conf.sitemap.generate')==='auto'?$this->sitemap_generator():FALSE;
   redirect('admin/section/get_list');
  }
 
  function del(){
   $p=$this->input->post();
-  if(!$p['alias']){exit('error');}
-  $this->back_section_model->del_section($p['alias']);
+  if(!$p['id']){exit('error');}
+  $this->back_section_model->del_section($p['id']);
   $this->app('conf.sitemap.generate')==='auto'?$this->sitemap_generator():FALSE;
   exit('ok');
  }
