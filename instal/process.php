@@ -348,7 +348,7 @@
 //config.php
    $conf='<?php defined("BASEPATH") OR exit("No direct script access allowed");'.PHP_EOL
    .'$config["app"]=[];'.PHP_EOL
-   .'$config["tagra_version"]="3.1";'.PHP_EOL
+   .'$config["tagra_version"]="4.0";'.PHP_EOL
    .'$config["tagra_instal_date"]="'.$moment.'";'.PHP_EOL
    .'$config["base_url"]="'.$domen.'";'.PHP_EOL
    .'$config["index_page"]="";'.PHP_EOL
