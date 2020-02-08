@@ -1,0 +1,55 @@
+version: '3.5'
+
+services:
+
+  web:
+    build: ./local/web
+    container_name: tagra_web
+    volumes:
+      - .:/var/www/html
+    ports:
+      - 80:80
+    environment:
+      - APACHE_RUN_USER=#1000
+      - APACHE_RUN_GROUP=#1000
+    depends_on:
+      - db
+    networks:
+      tagra:
+        aliases:
+          - web
+
+  db:
+    image: mysql
+    container_name: tagra_db
+    volumes:
+      - ./local/db/data:/var/lib/mysql
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=tagra
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=admin
+    command: --default-authentication-plugin=mysql_native_password
+    networks:
+      tagra:
+        aliases:
+          - db
+
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: tagra_phpmyadmin
+    ports:
+      - 8080:80
+    depends_on:
+      - web
+      - db
+    networks:
+      tagra:
+        aliases:
+          - phpmyadmin
+
+networks:
+  tagra:
+    name: tagra-network
