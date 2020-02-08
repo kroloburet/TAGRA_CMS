@@ -1,164 +1,339 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
 
-///////////////////////////////////
-//базовые методы
-///////////////////////////////////
+/**
+ * Базовая модель
+ *
+ * Общие методы для работы в административной части
+ *
+ * @author Sergey Nizhnik <kroloburet@gmail.com>
+ */
+class Back_basic_model extends CI_Model
+{
 
-class Back_basic_model extends CI_Model{
- function __construct(){
-  parent::__construct();
- }
-
- function add($data,$table){
-  return $this->db->insert($table,$data)?TRUE:FALSE;
- }
-
- function edit($id,$data,$table){
-  return $this->db->where('id',$id)->update($table,$data)?TRUE:FALSE;
- }
-
- function del($table,$id){
-  return $this->db->where('id',$id)->delete($table)?TRUE:FALSE;
- }
-
- function toggle_public($id,$table){
-  //$id-(строка или число) id материала
-  //$table-(строка) таблица материала в БД
-  $q=$this->db->where('id',$id)->get($table)->result_array();//получить материал
-  if(!isset($q[0]['public'])){return FALSE;}
-  $this->db->where('id',$id)->update($table,['public'=>$q[0]['public']=='off'?'on':'off']);
-  return $q[0]['public']=='off'?'on':'off';
- }
-
- function set_versions($table,$new=[],$old=[]){//добавить/редактировать версии материала
-  //$table-(строка)таблица БД материала "pages", "sections"...
-  //$new-массив новых данных материала (будут записаны в БД)
-  //$old-массив старых данных материала (уже записаны в БД)
-  if(!$table||empty($new)){return false;}
-  global $db;
-  $db=$this->db;
-  function get_versions($table,$id){//получить в массив версии материала
-   global $db;
-   $q=$db->where('id',$id)->select('versions')->get($table)->result_array();
-   return empty($q[0]['versions'])?[]:json_decode($q[0]['versions'],TRUE);
-  }
-  //удалить все связи с собой
-  if(!empty($old['versions'])){//версии материала уже есть в БД
-   foreach(json_decode($old['versions'],TRUE) as $k=>$v){//проход по версиям
-    $q=get_versions($table,$v['id']);//получить в массив версии каждой из версий
-    if(isset($q[$new['lang']])){//есть связи с материалами связываемого языка
-     unset($q[$new['lang']]);//удалить связь
-     $db->where('id',$v['id'])->update($table,['versions'=>empty($q)?'':json_encode($q,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES)]);
+    function __construct()
+    {
+        parent::__construct();
     }
-   }
-  }
-  //добавить связь с собой
-  if(!empty($new['versions'])){
-   $preurl='/';
-   switch($table){
-    case'page':$preurl='/page/';break;
-    case'sections':$preurl='/section/';break;
-    case'gallerys':$preurl='/gallery/';break;
-   }
-   foreach(json_decode($new['versions'],TRUE) as $k=>$v){//пройти по новым связанным материалам
-    $q=get_versions($table,$v['id']);//получить в массив версии каждой из версий
-    if(isset($q[$new['lang']])){//есть связи с материалами связываемого языка
-     $q2=get_versions($table,$q[$new['lang']]['id']);
-     unset($q2[$k]);//удалить связь
-     $db->where('id',$q[$new['lang']]['id'])->update($table,['versions'=>empty($q2)?'':json_encode($q2,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES)]);
+
+    /**
+     * Добавить данные
+     *
+     * @param array $data Данные
+     * @param string $table Имя таблицы
+     * @return boolean
+     */
+    function add(array $data, string $table)
+    {
+        return $this->db->insert($table, $data);
     }
-    $db->where('id',$v['id'])->update($table,['versions'=>json_encode([$new['lang']=>['id'=>$new['id'],'title'=>$new['title'],'url'=>$preurl.$new['id']]]+$q,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES)]);
-   }
-  }
- }
 
- function del_versions($table,$url){//удалить связи с метериалом в версиях
-  $q=$this->db->select('id,versions')->like('versions','"'.$url.'"')->get($table)->result_array();//вернуть записи с искомой
-  if(empty($q)){return FALSE;}//в таблице нет записей
-  foreach($q as $k=>$v){//проход по записям
-   $vers=json_decode($v['versions'],true);
-   foreach($vers as $lang=>$opt){if($opt['url']===$url){unset($vers[$lang]);}}//проход по массиву опций, удалить искомое
-   $q[$k]['versions']=empty($vers)?'':json_encode($vers,JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES);//массив опций в json, для отправки
-  }
-  $this->db->update_batch($table,$q,'id');//изменить в базе записи с искомым
- }
+    /**
+     * Редактировать данные
+     *
+     * @param string $id Идентификатор записи
+     * @param array $data Данные
+     * @param string $table Имя таблицы
+     * @return bulean
+     */
+    function edit(string $id, array $data, string $table)
+    {
+        return $this->db->update($table, $data, ['id' => $id]);
+    }
 
-///////////////////////////////////
-//языки
-///////////////////////////////////
+    /**
+     * Удалить данные
+     *
+     * @param string $table Имя таблицы
+     * @param string $id Идентификатор записи
+     * @return boolean
+     */
+    function del(string $table, string $id)
+    {
+        return $this->db->delete($table, ['id' => $id]) !== false ? true : false;
+    }
 
- function get_langs(){
-  return $this->db->get('languages')->result_array();
- }
+    /**
+     * Переключить публикацию
+     *
+     * Инвертирует значение поля "public"
+     *
+     * @param string $id Идентификатор записи
+     * @param string $table Имя таблицы
+     * @return string Новое значение поля "public"
+     */
+    function toggle_public(string $id, string $table)
+    {
+        // получить материал
+        $q = $this->db->where('id', $id)->get($table)->result_array();
+        if (!isset($q[0]['public'])) {
+            return false;
+        }
+        return (string) (
+            $this->db->update($table, ['public' => $q[0]['public'] ? 0 : 1], ['id' => $id]) ?
+            $q[0]['public'] ? 0 : 1 :
+            false
+            );
+    }
 
-///////////////////////////////////
-//получение, проверка, фильтр данных
-///////////////////////////////////
+    /**
+     * Добавить/редактировать версии материала
+     *
+     * @param string $table Имя таблицы
+     * @param array $new Mассив новых данных материала (будут записаны в БД)
+     * @param array $old Массив старых данных материала (уже записаны в БД)
+     * @return void|boolean
+     */
+    function set_versions(string $table, array $new = [], array $old = [])
+    {
+        if (!$table || empty($new)) {
+            return false;
+        }
+        $db = $this->db;
+        // получить в массив версии материала
+        $get_versions = function (string $table, string $id) use ($db) {
+            $q = $db->where('id', $id)->select('versions')->get($table)->result_array();
+            return empty($q[0]['versions']) ? [] : json_decode($q[0]['versions'], true);
+        };
+        // удалить все связи с собой
+        if (!empty($old['versions'])) {// версии материала уже есть в БД
+            $ov = json_decode($old['versions'], true);
+            // проход по версиям
+            foreach ($ov as $k => $v) {
+                $q = $get_versions($table, $v['id']); // получить в массив версии каждой из версий
+                if (isset($q[$new['lang']])) {// есть связи с материалами связываемого языка
+                    unset($q[$new['lang']]); // удалить связь
+                    $db->where('id', $v['id'])->update($table, ['versions' => empty($q) ? '' :
+                            json_encode($q, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)]);
+                }
+            }
+        }
+        // добавить связь с собой
+        if (!empty($new['versions'])) {
+            $nv = json_decode($new['versions'], true);
+            $preurl = '/';
+            switch ($table) {
+                case'pages':$preurl = '/page/';
+                    break;
+                case'sections':$preurl = '/section/';
+                    break;
+                case'gallerys':$preurl = '/gallery/';
+                    break;
+            }
+            // пройти по новым связанным материалам
+            foreach ($nv as $k => $v) {
+                $q = $get_versions($table, $v['id']); // получить в массив версии каждой из версий
+                if (isset($q[$new['lang']])) {// есть связи с материалами связываемого языка
+                    $q2 = $get_versions($table, $q[$new['lang']]['id']);
+                    unset($q2[$k]); // удалить связь
+                    $db->where('id', $q[$new['lang']]['id'])->update($table, ['versions' => empty($q2) ? '' :
+                            json_encode($q2, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)]);
+                }
+                $db->where('id', $v['id'])->update(
+                    $table, ['versions' => json_encode(
+                        [$new['lang'] => ['id' => $new['id'], 'title' => $new['title'], 'url' => $preurl . $new['id']]] + $q,
+                        JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)]);
+            }
+        }
+    }
 
+    /**
+     * Удалить связи с метериалом в версиях
+     *
+     * @param string $table Имя таблицы
+     * @param string $url URL материала
+     * @return void|boolean
+     */
+    function del_versions(string $table, string $url)
+    {
+        // вернуть записи с искомой
+        $q = $this->db->select('id,versions')->like('versions', '"' . $url . '"')->get($table)->result_array();
+        if (empty($q)) {
+            return false;
+        }
+        // проход по записям
+        foreach ($q as $k => $v) {
+            $vers = json_decode($v['versions'], true);
+            foreach ($vers as $lang => $opt) {
+                if ($opt['url'] === $url) {
+                    unset($vers[$lang]);
+                }
+            }
+            // проход по массиву опций, удалить искомое
+            $q[$k]['versions'] = empty($vers) ? '' :
+                json_encode($vers, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); // массив опций в json, для отправки
+        }
+        // изменить в базе записи с искомым
+        return $this->db->update_batch($table, $q, 'id') !== false ? true : false;
+    }
 
- function get_where_id($table,$id){
-  $q=$this->db->where('id',$id)->get($table)->result_array();
-  if(empty($q)){return FALSE;}
-  foreach($q as $data){foreach($data as $k=>$v){$data[$k]=$v;}}
-  return $data;
- }
+    /**
+     * Получить все языки из БД
+     *
+     * @return array
+     */
+    function get_langs()
+    {
+        return $this->db->get('languages')->result_array();
+    }
 
- function get_val($table,$field,$field_val,$res_field){
-  //$table-(строка) таблица
-  //$field-(строка) поле
-  //$field_val-(строка) значение в поле
-  //$res_field-(строка) получить значение (из найденной записи)
-  $q=$this->db->get_where($table,[$field=>$field_val])->result_array();
-  if(empty($q)){return FALSE;}
-  foreach ($q as $v){return $v[$res_field];}
- }
+    /**
+     * Получить запись по идентификатору
+     *
+     * @param string $table Имя таблицы
+     * @param string $id Идентификатор записи
+     * @return array|boolean
+     */
+    function get_where_id(string $table, string $id)
+    {
+        $q = $this->db->where('id', $id)->get($table)->result_array();
+        return isset($q[0]) ? $q[0] : false;
+    }
 
- function check_title($title,$id,$table){//проверка на уникальность title в таблице БД
-  $where=$id?['title'=>$title,'id !='=>$id]:['title'=>$title];
-  $q=$this->db->where($where)->get($table)->result_array();
-  return empty($q)?FALSE:TRUE;
- }
+    /**
+     * Получить значение из поля в таблице
+     *
+     * @param string $table Имя таблицы
+     * @param string $field Поле
+     * @param string $field_val Значение в поле
+     * @param string $res_field Получить значение (из найденной записи)
+     * @return mixed|boolean Значение поля "$res_field" или false
+     */
+    function get_val(string $table, string $field, string $field_val, string $res_field)
+    {
+        $q = $this->db->get_where($table, [$field => $field_val])->result_array();
+        return isset($q[0][$res_field]) ? $q[0][$res_field] : false;
+    }
 
- function get_result_list($table,$get=[]){//получает выборку, сортирует, фильтрует, поиск
- //$table-таблица для запроса "pages", "sections"...
- //$get_arr-get-массив формы фильтра (отсутствующие значения должны быть установлены по умолчанию)
- //$context_search-массив имен полей в которых будет поиск значения из $get_arr['search']
-  if(empty($get)){return [];}
-  //комментарии только опубликованные
-  $table==='comments'?$this->db->where('public','on'):TRUE;
-  //если сортировка по id, сортировать результат - последняя запись сверху
-  ($get['order']=='id')?$this->db->order_by('id','DESC'):$this->db->order_by($get['order'],'ASC');
-  //поиск $get_arr['search'] в поле $get_arr['context_search']
-  if($get['search']!==''){
-   $like=$get['context_search']==='content'?['layout_t'=>$get['search'],'layout_b'=>$get['search'],'layout_l'=>$get['search'],'layout_r'=>$get['search']]:[$get['context_search']=>$get['search']];
-   $table==='comments'?$this->db->like($like):$this->db->or_like($like);
-  }
-  $q['count_result']=$this->db->count_all_results($table,FALSE);
-  $this->db->limit($get['pag_per_page'],$get['per_page']);
-  $q['result']=$this->db->get()->result_array();
-  return $q;
- }
+    /**
+     * Проверка уникальности заголовка
+     *
+     * Проверка не затрагивает запись с id (если передан), поскольку метод
+     * применяется в основном при редактировании "title" этой же записи
+     *
+     * @param string $title Заголовок
+     * @param string|null $id Идентификатор текущей записи
+     * @param string $table Имя таблицы
+     * @return boolean false если запись уникальна или true если нашлось совпадение
+     */
+    function check_title(string $title, string $id, string $table)
+    {
+        $where = $id ? ['title' => $title, 'id !=' => $id] : ['title' => $title];
+        $q = $this->db->where($where)->get($table)->result_array();
+        return empty($q) ? false : true;
+    }
 
-///////////////////////////////////
-//конфигурация и пользователи админки
-///////////////////////////////////
+    /**
+     * Получить отфильтрованную выборку
+     *
+     * Метод применяет данные фильтра для выборки
+     * из таблицы материала.
+     *
+     * @param string $t Имя таблицы
+     * @param array $f Данные фильтра
+     * @return array Отфильтрованная выборка с данными примененного фильтра
+     */
+    function get_list(string $t, array $f = [])
+    {
+        $data = ['filter' => $f, 'result' => [], 'count_result' => 0];// массив для возврата
+        if (!$t) {
+            return $data;
+        }
+        // подготовить запрос
+        $t = $this->db->dbprefix($t);
+        $where = '';
+        $like = '';
+        $order_by = 'ORDER BY creation_date DESC';
+        $limit = '';
+        if (isset($f['lang']) && $f['lang'] !== 'all') {
+            $where = "WHERE lang='{$f['lang']}'";
+        }
+        if (isset($f['context_search']) && isset($f['search']) && $f['search'] !== '') {
+            $like = $where ? 'AND ' : 'WHERE ';
+            $search = "LIKE LOWER('%{$this->db->escape_like_str($f['search'])}%') ESCAPE '!'";
+            if ($f['context_search'] === 'content') {
+                $like .= "(
+                    LOWER(layout_t) {$search}
+                    OR LOWER(layout_l) {$search}
+                    OR LOWER(layout_r) {$search}
+                    OR LOWER(layout_b) {$search}
+                )";
+            } else {
+                $like .= "LOWER({$f['context_search']}) {$search}";
+            }
+        }
+        if (isset($f['order'])) {
+            $order_by = "ORDER BY {$f['order']}";
+            if (
+                $f['order'] === 'id'
+                || $f['order'] === 'creation_date'
+                || $f['order'] === 'last_mod_date'
+                || $f['order'] === 'def'
+            ) {
+                $order_by .= ' DESC';
+            }
+        }
+        if (isset($f['limit']) && $f['limit'] !== 'all') {
+            if ($this->input->get('per_page')) {
+                $limit = "LIMIT {$this->input->get('per_page')}, {$f['limit']}";
+            } else {
+                $limit = "LIMIT {$f['limit']}";
+            }
+        }
+        // выполнить запрос
+        $q = $this->db->query("SELECT * FROM `{$t}` {$where} {$like} {$order_by} {$limit};")->result_array();
+        $data['count_result'] = count($this->db->query("SELECT * FROM `{$t}` {$where} {$like} {$order_by};")->result_array());
+        $data['result'] = $q;
+        // отладка
+//        print_r($f);
+//        echo "<br> SELECT * FROM `{$t}` {$where} {$like} {$order_by} {$limit};";
+        // вернуть данные
+        return $data;
+    }
 
- function get_back_users($email=FALSE){
-  if($email){$this->db->where('email',$email);}
-  $q=$this->db->get('back_users')->result_array();
-  return empty($q)?FALSE:$q;
- }
+    /**
+     * Получить пользователей админки
+     *
+     * Выбрать всех по email если передан
+     *
+     * @param string|null $email
+     * @return array|boolean
+     */
+    function get_back_users(string $email = null)
+    {
+        if ($email) {
+            $this->db->where('email', $email);
+        }
+        $q = $this->db->get('back_users')->result_array();
+        return empty($q) ? false : $q;
+    }
 
- function edit_back_user($id,$data=[]){
-   return $this->db->where('id',$id)->update('back_users',$data)?TRUE:FALSE;
- }
+    /**
+     * Редактировать данные пользователя админки
+     *
+     * @param string $id Идентификатор пользователя
+     * @param array $data Данные
+     * @return boolean
+     */
+    function edit_back_user(string $id, array $data = [])
+    {
+        return $this->db->update('back_users', $data, ['id' => $id]);
+    }
 
- function get_config(){//таблицу config в масив $data['name']='value'
-  foreach($this->db->get('config')->result_array() as $v){
-   $json=@json_decode($v['value'],TRUE);
-   $data[$v['name']]=$json===NULL?$v['value']:$json;//если значение - json - преобразовать в массив
-  }
-  return $data;
- }
-
+    /**
+     * Получить конфигурацию
+     *
+     * Возвращает массив ['name']='value'. Если 'value' - json - преобразовывает в подмассив
+     *
+     * @return array
+     */
+    function get_config()
+    {
+        $q = $this->db->get('config')->result_array();
+        foreach ($q as $v) {
+            $json = @json_decode($v['value'], true);
+            $data[$v['name']] = $json === null ? $v['value'] : $json;
+        }
+        return $data;
+    }
 }
