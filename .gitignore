@@ -1,0 +1,6 @@
+.idea
+/application/config/config.php
+/application/config/database.php
+/upload
+/local/db/data/*
+!/local/db/data/.gitkeep
