@@ -191,7 +191,9 @@ abstract class MOXMAN_Vfs_BaseFile implements MOXMAN_Vfs_IFile {
 	 * @return string File name of file.
 	 */
 	public function getName() {
-		return basename($this->path);
+	    $p = explode('/', $this->path);
+	    return end($p);
+//		return basename($this->path);
 	}
 
 	/**

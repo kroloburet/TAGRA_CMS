@@ -322,8 +322,8 @@ class MOXMAN_Vfs_BasicFileFilter implements MOXMAN_Vfs_IFileFilter {
 			}
 
 			// Handle include pattern
-			if ($this->includeDirectoryPattern && !preg_match($this->includeDirectoryPattern, $name)) {
-				if ($this->logFunction) {
+            if ($this->includeDirectoryPattern && !preg_match($this->includeDirectoryPattern, $name)) {
+                if ($this->logFunction) {
 					$this->log("File \"" . $absPath . "\" denied by \"includeDirectoryPattern\".");
 				}
 
