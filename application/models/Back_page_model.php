@@ -1,33 +1,71 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
 
-///////////////////////////////////
-//работа с страницами
-///////////////////////////////////
+/**
+ * Модель страниц
+ *
+ * Методы для работы со страницами в административной части
+ *
+ * @author Sergey Nizhnik <kroloburet@gmail.com>
+ */
+class Back_page_model extends Back_basic_model
+{
 
-class Back_page_model extends Back_basic_model{
- function __construct(){
-  parent::__construct();
- }
+    function __construct()
+    {
+        parent::__construct();
+    }
 
- function add_page($data){
-  if($this->db->insert('pages',$data)&&$data['versions']){
-   $this->set_versions('pages',$data);//добавить связи с материалом в версиях
-  }
- }
+    /**
+     * Добавить страницу
+     *
+     * @param array $data Данные
+     * @return boolean
+     */
+    function add_page(array $data)
+    {
+        $res = $this->db->insert('pages', $data);
+        // добавить связи с материалом в версиях
+        $res && $data['versions'] ? $this->set_versions('pages', $data) : null;
+        return $res;
+    }
 
- function edit_page($id,$data){
-  $q=$this->db->where('id',$id)->get('pages')->result_array();//изменяемый материал
-  if($q[0]['versions']!==$data['versions']){//версии изменились
-   $this->set_versions('pages',$data,$q[0]);//добавить/обновить связи с материалом в версиях
-  }
-  $this->db->where('id',$id)->update('pages',$data);
- }
+    /**
+     * Редактировать страницу
+     *
+     * @param string $id Идентификатор страницы
+     * @param array $data Данные
+     * @return boolean
+     */
+    function edit_page(string $id, array $data)
+    {
+        $q = $this->db->where('id', $id)->get('pages')->result_array(); // изменяемый материал
+        if ($q[0]['versions'] !== $data['versions']) {// версии изменились
+            $this->set_versions('pages', $data, $q[0]); // добавить/обновить связи с материалом в версиях
+        }
+        return $this->db->update('pages', $data, ['id' => $id]);
+    }
 
- function del_page($id){
-  $this->db->where('id',$id)->delete('pages');
-  $url='page/'.$id;
-  $this->db->where('url',$url)->delete('comments');//удалить комментарии к материалу
-  $this->del_versions('pages','/'.$url);//удалить связи с материалом в версиях
- }
-
+    /**
+     * Удалить страницу
+     *
+     * Вместе со страницей удалит все комментарии к ней
+     *
+     * @param string $id Идентификатор страницы
+     * @return boolean
+     */
+    function del_page(string $id)
+    {
+        $url = 'page/' . $id;
+        // удалить материал и комментарии
+        if (
+            $this->db->delete('pages', ['id' => $id]) === false ||
+            $this->db->delete('comments', ['url' => $url]) === false
+        ) {
+            return false;
+        }
+        // удалить связи с материалом в версиях
+        $this->del_versions('pages', '/' . $url);
+        return true;
+    }
 }

@@ -1,16 +1,30 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
 
-///////////////////////////////////
-//работа со страницами "Контакты"
-///////////////////////////////////
+/**
+ * Модель страниц "Контакты"
+ *
+ * Методы для работы с страницами "Контакты" в административной части
+ *
+ * @author Sergey Nizhnik <kroloburet@gmail.com>
+ */
+class Back_contact_model extends Back_basic_model
+{
 
-class Back_contact_model extends Back_basic_model{
- function __construct(){
-  parent::__construct();
- }
+    function __construct()
+    {
+        parent::__construct();
+    }
 
- function edit_contact_page($id,$data){
-  $this->db->where('id',$id)->update('contact_pages',$data);
- }
-
+    /**
+     * Редактировать страницу "Контакты"
+     *
+     * @param string $id Идентификатор страницы "Контакты"
+     * @param array $data Данные
+     * @return boolean
+     */
+    function edit_contact_page(string $id, array $data)
+    {
+        return $this->db->update('contact_pages', $data, ['id' => $id]);
+    }
 }

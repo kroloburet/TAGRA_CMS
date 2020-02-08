@@ -1,17 +1,30 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
 
-///////////////////////////////////
-//работа с галереями
-///////////////////////////////////
+/**
+ * Модель галерей
+ *
+ * Методы для работы с галереями в пользовательской части
+ *
+ * @author Sergey Nizhnik <kroloburet@gmail.com>
+ */
+class Front_gallery_model extends Front_basic_model
+{
 
-class Front_gallery_model extends Front_basic_model{
- function __construct(){
-  parent::__construct();
- }
+    function __construct()
+    {
+        parent::__construct();
+    }
 
- function get_gallery($id){
-  $q=$this->db->where(['public'=>'on','id'=>$id])->get('gallerys')->result_array();
-  return isset($q[0])?$q[0]:FALSE;
- }
-
+    /**
+     * Получить галерею
+     *
+     * @param string $id Идентификатор галереи
+     * @return array
+     */
+    function get_gallery(string $id)
+    {
+        $q = $this->db->where(['public' => 1, 'id' => $id])->get('gallerys')->result_array();
+        return isset($q[0]) ? $q[0] : [];
+    }
 }

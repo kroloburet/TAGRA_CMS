@@ -1,308 +1,535 @@
 <?php
-function print_pids_tree($input,$level=0){
- if(empty($input)){return FALSE;}
- foreach($input as $v){
-  echo'<option value="'.$v['id'].'">'.str_repeat('&#183; ',$level).$v['title'].'</option>'.PHP_EOL;
-  if(isset($v['nodes'])){print_pids_tree($v['nodes'],$level+1);}
- }
+/**
+ * Дерево выпадающего списка
+ *
+ * Выводит дерево меню для выпадающего списка
+ * "Родительский пункт".
+ *
+ * @param array $input Меню
+ * @param int $level Уровень вложенности
+ * @return void
+ */
+function print_pids_tree(array $input, int $level = 0)
+{
+    if (empty($input)) {
+        return;
+    }
+
+    foreach ($input as $v) {
+        echo '<option value="' . $v['id'] . '">' . str_repeat('&#183; ', $level) . $v['title'] . '</option>' . PHP_EOL;
+        if (isset($v['nodes'])) {
+            print_pids_tree($v['nodes'], $level + 1);
+        }
+    }
 }
 
-function print_menu_tree($input){
- if(empty($input)){return FALSE;}
- foreach($input as $v){
-  $ext_link=$v['url']?'<a href="'.$v['url'].'" target="_blank" class="fa-external-link" title="Посмотреть на сайте"></a>&nbsp;&nbsp;':'<i class="fa-external-link gray"></i>&nbsp;&nbsp;';
-  echo '<li>'.PHP_EOL;
-  echo '<div class="m_item">'.$v['title'].'&nbsp;&nbsp;'.PHP_EOL
-       .$ext_link.PHP_EOL
-       .'<a href="#" onclick="Menu.public_del(this,\'public\');return false" class="'.($v['public']=='on'?'fa-eye green':'fa-eye-slash red').'" title="Опубликовать/не опубликовывать"></a>&nbsp;&nbsp;'.PHP_EOL
-       .'<a href="#" class="fa-edit green" title="Редактировать" onclick="Menu.show_edit_form(this);return false"></a>&nbsp;&nbsp;'.PHP_EOL
-       .'<a href="#" class="fa-trash-o red" title="Удалить" onclick="Menu.public_del(this,\'del\');return false"></a>'.PHP_EOL
-       .'<textarea class="m_item_opt" hidden>'.json_encode($v,JSON_FORCE_OBJECT).'</textarea>'.PHP_EOL
-       .'</div>'.PHP_EOL;
-  if(isset($v['nodes'])){
-   echo '<ul>'.PHP_EOL;
-   print_menu_tree($v['nodes']);//рекурсия
-   echo '</ul>'.PHP_EOL;
-  }
-  echo '</li>'.PHP_EOL;
- }
+/**
+ * Дерево меню
+ *
+ * Вывести дерево меню для управления пунктами
+ *
+ * @param array $input Меню
+ * @return void
+ */
+function print_menu_tree(array $input)
+{
+    if (empty($input)) {
+        return;
+    }
+
+    foreach ($input as $v) {
+        $ext_link = $v['url']
+            ? '<a href="' . $v['url']
+            . '" target="_blank" class="fas fa-external-link-alt" '
+            . 'title="Посмотреть на сайте"></a>&nbsp;&nbsp;'
+            : '<i class="fas fa-external-link-alt gray"></i>&nbsp;&nbsp;';
+
+        echo '<li>' . PHP_EOL;
+        echo '
+<div class="m_item">
+   ' . $v['title'] . '&nbsp;&nbsp;
+   ' . $ext_link . '
+   <a href="#" onclick="Menu.public_del(this, \'public\');return false"
+      class="' . ($v['public'] ? 'fas fa-eye blue' : 'fas fa-eye-slash red') . '"
+      title="Опубликовать/не опубликовывать"></a>&nbsp;&nbsp;
+   <a href="#" class="fas fa-edit blue" title="Редактировать"
+      onclick="Menu.show_edit_form(this);return false"></a>&nbsp;&nbsp;
+   <a href="#" class="fas fa-trash-alt red" title="Удалить"
+      onclick="Menu.public_del(this, \'del\');return false"></a>
+   <textarea class="m_item_opt" hidden>' . json_encode($v, JSON_FORCE_OBJECT) . '</textarea>
+</div>
+';
+
+        if (isset($v['nodes'])) {
+            echo '<ul>' . PHP_EOL;
+            print_menu_tree($v['nodes']);
+            echo '</ul>' . PHP_EOL;
+        }
+        echo '</li>' . PHP_EOL;
+    }
 }
 ?>
 
-<h1><?="{$data['view_title']} [{$data['lang']}]"?></h1>
-<div class="sheath" id="m_area">
- <div class="touch">
-  <h3>Добавить пункт меню</h3>
-  <hr>
-  <form class="m_form">
-   <div class="row">
-    <div class="col6">
-     Родительский пункт
-     <label class="select">
-      <select class="m_pid" onchange="Menu.load_order(this)">
-       <option value="0">Нет родителя</option>
-       <?php print_pids_tree($data['menu'])?>
-      </select>
-     </label>
-    </div>
-    <div class="col6">
-     Порядок
-     <label class="select">
-      <select class="m_order"></select>
-     </label>
-    </div>
-    Название пункта
-    <label class="input">
-     <input type="text" class="m_title">
-    </label>
-   </div>
-   <div class="row">
-    <div class="col6">
-     Ссылка
-     <label class="input">
-      <input type="text" class="m_url" id="m_url" placeholder="Оставьте пустым, если пункт — не ссылка">
-     </label>
-    </div>
-    <div class="col6">
-     Материалы ресурса
-     <label class="select">
-      <select class="m_link" onchange="Menu.select_link(this)">
-       <option value="">Выбрать из предложенных:</option>
-       <option value="pages">Страница сайта</option>
-       <option value="sections">Раздел сайта</option>
-       <option value="gallerys">Галерея сайта</option>
-       <option value="home">Страница "Главная"</option>
-       <option value="contact">Страница "Контакты"</option>
-       <option value="file">Файл или папка</option>
-      </select>
-     </label>
-    </div>
-   </div>
-   <div class="m_link_viewer"></div>
-   <div class="row">
-    <div class="col6">
-     <label class="select">
-      <select class="m_target">
-       <option value="_self">Открывать в текущем окне</option>
-       <option value="_blank">Открывать в новом окне</option>
-      </select>
-     </label>
-    </div>
-    <div class="col6">
-     <label class="select">
-      <select class="m_public">
-       <option value="on">Опубликовать пункт</option>
-       <option value="off">Не опубликовывать пункт</option>
-      </select>
-     </label>
-    </div>
-   </div>
-   <div class="button m_control">
-    <button type="button" onclick="Menu.add_edit(this,'add')">Добавить пункт меню</button>
-   </div>
-  </form>
- </div>
+<h1><?= "{$data['view_title']} [{$data['lang']}]" ?></h1>
 
- <ul class="m_tree">
-  <?php print_menu_tree($data['menu'])?>
- </ul>
+<!--
+########### Добавить пункт меню
+-->
+
+<div class="sheath" id="m_area">
+  <div class="touch">
+    <h2>Добавить пункт меню</h2>
+    <hr>
+    <form class="m_form">
+      <div class="row">
+        <div class="col6">
+          Родительский пункт
+          <label class="select">
+            <select class="m_pid" onchange="Menu.load_order(this)">
+              <option value="0">Нет родителя</option>
+              <?php print_pids_tree($data['menu']) ?>
+            </select>
+          </label>
+        </div>
+        <div class="col6">
+          Порядок
+          <label class="select">
+            <select class="m_order"></select>
+          </label>
+        </div>
+        Название пункта
+        <label class="input">
+          <input type="text" class="m_title">
+        </label>
+      </div>
+      <div class="row">
+        <div class="col6">
+          Ссылка
+          <label class="input">
+            <input type="text" class="m_url" id="m_url" placeholder="Оставьте пустым, если пункт — не ссылка">
+          </label>
+        </div>
+        <div class="col6">
+          Материалы ресурса
+          <label class="select">
+            <select class="m_link" onchange="Menu.select_link(this)">
+              <option value="">Выбрать из предложенных:</option>
+              <option value="pages">Страница сайта</option>
+              <option value="sections">Раздел сайта</option>
+              <option value="gallerys">Галерея сайта</option>
+              <option value="home">Страница "Главная"</option>
+              <option value="contact">Страница "Контакты"</option>
+              <option value="file">Файл или папка</option>
+            </select>
+          </label>
+        </div>
+      </div>
+      <div class="m_link_viewer"></div>
+      <div class="row">
+        <div class="col6">
+          <label class="select">
+            <select class="m_target">
+              <option value="_self">Открывать в текущем окне</option>
+              <option value="_blank">Открывать в новом окне</option>
+            </select>
+          </label>
+        </div>
+        <div class="col6">
+          <label class="select">
+            <select class="m_public">
+              <option value="1">Опубликовать пункт</option>
+              <option value="0">Не опубликовывать пункт</option>
+            </select>
+          </label>
+        </div>
+      </div>
+      <div class="button m_control">
+        <button type="button" onclick="Menu.add_edit(this, 'add')">Добавить пункт меню</button>
+      </div>
+    </form>
+  </div>
+
+  <!--
+  ########### Дерево меню
+  -->
+
+  <ul class="m_tree">
+    <?php print_menu_tree($data['menu']) ?>
+  </ul>
 </div>
 
 <script>
-var Menu={
- _mm:<?=json_encode($data['materials'],JSON_FORCE_OBJECT)?>,//материалы ресурса
- _m:<?=json_encode($data['menu'],JSON_FORCE_OBJECT)?>,//меню
+    /**
+     * Управление меню
+     */
+    const Menu = {
+      _mm:<?= json_encode($data['materials'], JSON_FORCE_OBJECT) ?>, // материалы ресурса
+      _m:<?= json_encode($data['menu'], JSON_FORCE_OBJECT) ?>, // меню
 
- ///////////////////////заполнение списка "Порядок"
- load_order:function(el,id){
-  //el-список "Порядок" (this)
-  //id-id пункта исключаемого из списка в форме редактирования
-  var f=$(el.form),
-      pid=$(el),
-      order=f.find('.m_order'),
-      n=1,
-      filling=function(m){//рекурсивное наполнение пунктами родителя
-       for(var i in m){
-        if(pid.val()===m[i].pid){
-         id&&id===m[i].id?false:order.append('<option value="'+(n++)+'">После "'+m[i].title+'"</option>');
-        }else if(m[i].nodes){filling(m[i].nodes);}
-       }
-      };
-  order.html('<option value="'+(n++)+'">Первый пункт</option>');
-  if($.isEmptyObject(this._m)){return false;}
-  filling(this._m);
-  order.find('option').last().attr('selected',true);
- },
+      /**
+       * Заполнение выпадающего списка "Порядок"
+       *
+       * @param {object} el Ссылка "this" на списке "Родительский пункт"
+       * @param {string} id Идентификатор пункта исключаемого из списка "Порядок"
+       * @returns {void}
+       */
+      load_order: function(el, id = null) {
+        let f = $(el.form),// форма добавления/редактирования
+            pid = $(el),// список "Родительский пункт"
+            order = f.find('.m_order'),// список "Порядок"
+            n = 1,// счетчик значения порядка пунктов
+            filling = function(m) {// рекурсивное заполнение пунктами родителя
+              for (let i in m) {// проход по меню
+                if (pid.val() === m[i].pid) {// это значение списка "Родительский пункт"
+                  if (! id || id !== m[i].id) {// это неисключаемый пункт
+                    order.append('<option value="' + (n ++) + '">После "' + m[i].title + '"</option>');
+                  }
+                } else if (m[i].nodes) {// это подуровень
+                  filling(m[i].nodes);// рекурсиивно заполнить подуровень
+                }
+              }
+            };
 
- ///////////////////////работа списка "Материалы ресурса"
- select_link:function(el){
-  //el-список "Материалы ресурса" (this)
-  var f=$(el.form),
-      link=$(el),
-      viewer=f.find('.m_link_viewer'),
-      url=f.find('.m_url');
-  switch(link.val()){
-   case 'home':url.val('/');viewer.empty();break;
-   case 'contact':url.val('/contact');viewer.empty();break;
-   case 'file':files(url.attr('id'),'<?=$data['lang']?>',{no_host:true});viewer.empty();break;
-   case 'pages':viewer.html(this.load_link_viewer('pages',url));break;
-   case 'sections':viewer.html(this.load_link_viewer('sections',url));break;
-   case 'gallerys':viewer.html(this.load_link_viewer('gallerys',url));break;
-  }
- },
+        // добавить в список "Первый пункт"
+        order.html('<option value="' + (n ++) + '">Первый пункт</option>');
 
- ///////////////////////отображение списка и выбор материала ресурса
- load_link_viewer:function(material,url){
-  //material-строка, значение списка "Материалы ресурса"
-  //url-объект, поле "Ссылка"
-  var mm=this._mm[material],
-      label=$('<label/>',{class:'select'}),
-      section=$('<select/>',{class:'full',size:'5'}),
-      preurl='/';
-  label.html(section);
-  if(!mm||$.isEmptyObject(mm)){section.html($('<option/>',{text:'Нет материалов..('}));return label;}
-  switch(material){
-   case 'pages':preurl='/page/';break;
-   case 'sections':preurl='/section/';break;
-   case 'gallerys':preurl='/gallery/';break;
-  }
-  for(var k in mm){section.append($('<option/>',{value:preurl+mm[k].id,text:mm[k].title}));}
-  section.on('change.M',function(){url.val(this.value);}).SelectSearch();
-  return label;
- },
+        // выйти если меню пустое
+        if ($.isEmptyObject(this._m)) return;
 
- ///////////////////////отображение формы редактирования пункта
- show_edit_form:function(el){
-  //el-ссылка "Редактировать" (this)
-  this.hide_edit_form($('.m_item'));
-  var m_item=$(el).parent('.m_item'),
-      clone=$('.m_form').clone(true),
-      m_pid=clone.find('.m_pid'),
-      opt=$.parseJSON(m_item.find('.m_item_opt').val()),//данные редактируемого пункта с вложенными
-      set_pids=function(m){//удаление из списка "Родительский пункт" редактируемого пункта с вложенными
-       m_pid.find('option[value="'+m.id+'"]').remove();
-       if(m.nodes){for(var i in m.nodes){set_pids(m.nodes[i]);}}
+        // заполнить список "Порядок" и выделить последний элемент
+        filling(this._m);
+        order.find('option').last().attr('selected', true);
       },
-      btns=[
-       $('<button/>',{type:'button',text:'Сохранить изменения'}).on('click.M',function(){Menu.add_edit(this,'edit');}),
-       $('<button/>',{type:'button',text:'Отмена'}).on('click.M',function(){Menu.hide_edit_form(m_item);})
-      ];
-  set_pids(opt);
-  m_pid.val(opt.pid);
-  this.load_order(m_pid[0],opt.id);
-  clone.find('.m_order').val(opt.order);
-  clone.find('.m_link_viewer').empty();
-  clone.find('.m_title').val(opt.title);
-  clone.find('.m_url').attr('id',opt.id).val(opt.url);
-  clone.find('.m_target').val(opt.target);
-  clone.find('.m_public').val(opt.public);
-  clone.find('.m_control').html(btns);
-  clone.prepend($('<input/>',{class:'m_id',type:'hidden',value:opt.id}));
-  m_item.addClass('edit').append(clone);
- },
 
- ///////////////////////сокрытие формы редактирования пункта
- hide_edit_form:function(item){
-  //item-объект, контейнер редактируемого пункта
-  item.removeClass('edit');
-  item.find('.m_form').remove();
- },
+      /**
+       * Работа списка "Материалы ресурса"
+       *
+       * @param {type} el Ссылка "this" на списке "Материалы ресурса"
+       * @returns {void}
+       */
+      select_link: function(el) {
+        let f = $(el.form),// форма добавления/редактирования
+            link = $(el),// список "Материалы ресурса"
+            viewer = f.find('.m_link_viewer'),// контейнер для выбора материала
+            url = f.find('.m_url');// поле "Ссылка"
 
- ///////////////////////отображение сообщений
- msg:function(style,msg,targ,call){
-  //style-строка, css-класс сообщения
-  //msg-строка, сообщение
-  //targ-объект, элемент для отображения сообщения
-  //call-функция, что делать после отображения сообщения
-  style=style||'notific_r';
-  msg=msg||'Поле "Название пункта" должно быть заплнено!';
-  var box=$('<p/>',{class:'full '+style,html:msg});
-  targ.html(box);
-  setTimeout(function(){box.remove();call();},3000);
-  return true;
- },
+        // выбранно в списке "Материалы ресурса"
+        switch (link.val()) {
+          // страница "Главная"
+          case 'home':
+            url.val('/');
+            viewer.empty();
+            break;
+          // страница "Контакты"
+          case 'contact':
+            url.val('/contact');
+            viewer.empty();
+            break;
+          // файл
+          case 'file':
+            files(url.attr('id'), '<?= $data['lang'] ?>', {no_host: true});
+            viewer.empty();
+            break;
+          // страница
+          case 'pages':
+            viewer.html(this.load_link_viewer('pages', url));
+            break;
+          // раздел
+          case 'sections':
+            viewer.html(this.load_link_viewer('sections', url));
+            break;
+          // галерея
+          case 'gallerys':
+            viewer.html(this.load_link_viewer('gallerys', url));
+            break;
+        }
+      },
 
- ///////////////////////обновление страницы и данных
- update:function(data){
-  //data-json (объект), ответ сервера
-  $('#m_area').replaceWith($(data.html).filter('#m_area'));
-  this._mm=data.materials;
-  this._m=data.menu;
-  this.load_order($('.m_form').find('.m_pid')[0]);
- },
+      /**
+       * Список выбора материала
+       *
+       * @param {string} material значение списка "Материалы ресурса"
+       * @param {object} url поле "Ссылка"
+       * @returns {object} Список материалов
+       */
+      load_link_viewer: function(material, url) {
+        let mm = this._mm[material],// объект материалов
+            label = $('<label/>', {class: 'select'}),// label списка
+            section = $('<select/>', {size: '5'}),// список
+            preurl = '/';// сегменты url перед id
 
- ///////////////////////добавление\редактирование пункта
- add_edit:function(el,action){
-  //el-кнопка "Добавить пункт меню\Сохранить изменения" (this)
-  //action-строка (add||edit), действие
-  if(!el||(action!=='add'&&action!=='edit')){return false;}
-  var f=$(el.form),
-      title=f.find('.m_title').val(),
-      process='<i class="fa fa-spin fa-spinner"></i>&nbsp;&nbsp;обработка...',
-      control=f.find('.m_control'),
-      btn=control.html(),
-      err=action==='add'?'Ошибка! Не удалось добавить пункт меню..(':'Ошибка! Не удалось изменить пункт меню..(';
-  if(!/[^\s]/.test(title)){return this.msg(null,null,control,function(){control.html(btn);});}
-  control.html(process);
-  $.ajax({
-   url:'/admin/menu/'+(action==='add'?'add_item':'edit_item'),
-   type:'post',
-   data:{
-    lang:'<?=$data['lang']?>',
-    id:f.find('.m_id').val()||null,
-    pid:f.find('.m_pid').val(),
-    order:f.find('.m_order').val(),
-    title:title,
-    url:f.find('.m_url').val(),
-    target:f.find('.m_target').val(),
-    public:f.find('.m_public').val()
-   },
-   dataType:'json',
-   success:function(resp){
-    switch(resp.status){
-     case 'ok':Menu.update(resp);break;
-     case 'error':Menu.msg(null,err,control,function(){control.html(btn);});break;
-     default :console.log(resp);
-    }
-   },
-   error:function(){
-    Menu.msg(null,'Ой! Возникла ошибка соединения..( Повторите попытку.',control,function(){control.html(btn);});
-   }
-  });
- },
+        // задать структуру списка по умолчанию
+        label.html(section);
+        if (! mm || $.isEmptyObject(mm)) {
+          section.html($('<option/>', {text: 'Нет материалов..('}));
+          return label;
+        }
 
- ///////////////////////переключение публикации\удаление пункта
- public_del:function(el,action){
-  //el-ссылка "Удалить" или "Опубликовать/не опубликовывать"(this)
-  //action-строка (public||del), действие
-  if(!el||(action!=='public'&&action!=='del')){return false;}
-  if(action==='del'&&!confirm('Пункт меню будет удален вместе с вложенными пунктами!\nВыполнить действие?')){return false;}
-  var self=$(el),
-      process=$('<i/>',{class:'fa fa-spin fa-spinner'});
-  self.replaceWith(process);
-  $.ajax({
-   url:'/admin/menu/'+(action==='public'?'public_item':'del_item'),
-   type:'post',
-   data:$.parseJSON(process.siblings('.m_item_opt').val()),
-   dataType:'json',
-   success:function(resp){
-    switch(resp.status){
-     case 'ok':Menu.update(resp);break;
-     case 'error':
-      process.replaceWith(self);
-      alert(action==='public'?'Ошибка! Не удалось применить изменения..(':'Ошибка! Не удалось удалить пункт меню..(');
-     break;
-     default :process.replaceWith(self);console.log(resp);
-    }
-   },
-   error:function(){
-    process.replaceWith(self);
-    alert('Ой! Возникла ошибка соединения..( Повторите попытку.');
-   }
-  });
- }
+        // установить сегмент
+        switch (material) {
+          case 'pages':
+            preurl = '/page/';
+            break;
+          case 'sections':
+            preurl = '/section/';
+            break;
+          case 'gallerys':
+            preurl = '/gallery/';
+            break;
+        }
 
-};
-///////////////////////после загрузки страницы
-Menu.load_order($('.m_form').find('.m_pid')[0]);
+        // заполнить список материалами
+        for (let k in mm) {
+          section.append($('<option/>', {value: preurl + mm[k].id, text: mm[k].title}));
+        }
+
+        // активировать плагин поиска по списку
+        TUI.SelectSearch({el: section});
+
+        // выбор материала в списке вставляет url в поле "Ссылка"
+        section.on('change.M', function() {
+          url.val(this.value);
+        });
+
+        return label;
+      },
+
+      /**
+       * Открыть форму редактирования пункта
+       *
+       * @param {type} el Ссылка "this" на поле "Редактировать"
+       * @returns {void}
+       */
+      show_edit_form: function(el) {
+
+        // скрыть все открытые формы редактирования
+        this.hide_edit_form($('.m_item'));
+
+        let m_item = $(el).parent('.m_item'),// контейнер пункта меню
+            clone = $('.m_form').clone(true),// клон формы добавления станет формой редактирования текущего пункта
+            m_pid = clone.find('.m_pid'),// список "Родительский пункт"
+            opt = $.parseJSON(m_item.find('.m_item_opt').val()),// данные редактируемого пункта с вложенными
+            set_pids = function(m) {// удаление из списка "Родительский пункт" редактируемого пункта с вложенными
+              m_pid.find('option[value="' + m.id + '"]').remove();
+              if (m.nodes) {
+                for (let i in m.nodes) {
+                  set_pids(m.nodes[i]);
+                }
+              }
+            },
+            btns = [// кнопки формы редактирования пункта
+              $('<button/>', {type: 'button', text: 'Сохранить изменения'})
+                .on('click.M', function() {
+                  Menu.add_edit(this, 'edit');
+                }),
+              $('<button/>', {type: 'button', text: 'Отмена'})
+                .on('click.M', function() {
+                  Menu.hide_edit_form(m_item);
+                })
+            ];
+
+        // заполнить поля формы, открыть форму
+        set_pids(opt);
+        m_pid.val(opt.pid);
+        this.load_order(m_pid[0], opt.id);
+        clone.find('.m_order').val(opt.order);
+        clone.find('.m_link_viewer').empty();
+        clone.find('.m_title').val(opt.title);
+        clone.find('.m_url').attr('id', opt.id).val(opt.url);
+        clone.find('.m_target').val(opt.target);
+        clone.find('.m_public').val(opt.public);
+        clone.find('.m_control').html(btns);
+        clone.prepend($('<input/>', {class: 'm_id', type: 'hidden', value: opt.id}));
+        m_item.addClass('edit').append(clone);
+      },
+
+      /**
+       * Скрыть форму редактирования пункта
+       *
+       * @param {object} item Контейнер редактируемого пункта
+       * @returns {void}
+       */
+      hide_edit_form: function(item) {
+        item.removeClass('edit');
+        item.find('.m_form').remove();
+      },
+
+      /**
+       * Отображение сообщений
+       *
+       * @param {string} style CSS класс сообщения
+       * @param {string} msg HTML сообщение
+       * @param {object} targ Элемент для отображения сообщения
+       * @param {callback} call Что делать после отображения сообщения
+       * @returns {void}
+       */
+      msg: function(style, msg, targ, call) {
+        style = style || 'notific_r';// css сласс контейнера сообщения
+        msg = msg || 'Поле "Название пункта" должно быть заплнено!';// сообщение
+        let box = $('<p/>', {class: 'full ' + style, html: msg});// контейнер
+        targ.html(box);// поместить контейнер в елемент отображения сообщения в форме
+        setTimeout(function() {// вывести и удалить сообщение, запустить коллбэк
+          box.remove();
+          call();
+        }, 3000);
+        return;
+      },
+
+      /**
+       * Обновление данных на странице
+       *
+       * @param {object} data json ответ сервера
+       * @returns {void}
+       */
+      update: function(data) {
+        // подменить DOM страницы ответом сервера
+        $('#m_area').replaceWith($(data.html).filter('#m_area'));
+
+        this._mm = data.materials;// обновить объект материалов ресурса
+        this._m = data.menu;// обновить объект меню
+
+        // заполнить список "Порядок" в форме добавления
+        this.load_order($('.m_form').find('.m_pid')[0]);
+      },
+
+      /**
+       * Добавить/редактировать пункт
+       *
+       * Универсальный метод отправляет запрос на редактирование
+       * или добавление пункта меню.
+       *
+       * @param {object} el Ссылка "this" на кнопку "Добавить пункт меню" или "Сохранить изменения"
+       * @param {string} action Действие над пунктом "add" или "edit"
+       * @returns {void}
+       */
+      add_edit: function(el, action) {
+
+        // проверка аргументов
+        if (! el || (action !== 'add' && action !== 'edit')) return;
+
+        let f = $(el.form),// текущая форма
+            title = f.find('.m_title').val(),// поле "Название пункта"
+            process = '<i class="fas fa-spin fa-spinner"></i>&nbsp;обработка...',// лодер
+            control = f.find('.m_control'),// контейнер кнопок отправки/отмены
+            btn = control.html(),// кнопки
+            err = action === 'add'// сообщение ошибки по умолчанию
+              ? 'Ошибка! Не удалось добавить пункт меню..('
+              : 'Ошибка! Не удалось изменить пункт меню..(';
+
+        // валидация поля "Название пункта"
+        if (! /[^\s]/.test(title)) {
+          return this.msg(null, null, control, function() {
+            control.html(btn);
+          });
+        }
+
+        // лодер
+        control.html(process);
+
+        // отправить запрос
+        $.ajax({
+          url: '/admin/menu/' + (action === 'add' ? 'add_item' : 'edit_item'),
+          type: 'post',
+          data: {
+            lang: '<?= $data['lang'] ?>',
+            id: f.find('.m_id').val() || null,
+            pid: f.find('.m_pid').val(),
+            order: f.find('.m_order').val(),
+            title: title,
+            url: f.find('.m_url').val(),
+            target: f.find('.m_target').val(),
+            public: f.find('.m_public').val()
+          },
+          dataType: 'json',
+          success: function(resp) {
+            switch (resp.status) {
+              case 'ok':
+                Menu.update(resp);
+                break;
+              case 'error':
+                Menu.msg(null, err, control, function() {
+                  control.html(btn);
+                });
+                break;
+              default :
+                console.error(`#### TAGRA ERROR INFO ####\n\n${resp}`);
+                Menu.msg(null, `Ой! Что-то пошло не так..(<br>
+                  Сведения о неполадке выведены в консоль.`, control, function() {
+                    control.html(btn);
+                });
+            }
+          },
+          error: function(xhr, status, thrown) {
+            console.error(`#### TAGRA ERROR INFO ####\n\nПричина: ${thrown}\nОтвет сервера:\n${xhr.responseText}`);
+            Menu.msg(null, `Ой! Ошибка соединения..(<br>
+              Сведения о неполадке выведены в консоль.<br>
+              Возможно это проблемы на сервере или с сетью Интернет. Повторите попытку.`, control, function() {
+                control.html(btn);
+            });
+          }
+        });
+      },
+
+      /**
+       * Переключить публикацию или удалить пункт
+       *
+       * Универсальный метод отправляет запрос на переключение
+       * публикации или удаление пункта меню.
+       *
+       * @param {object} el Ссылка "this" на триггер "Опубликовать/не опубликовывать" или "Удалить"
+       * @param {string} action Действие над пунктом "public" или "del"
+       * @returns {void}
+       */
+      public_del: function(el, action) {
+
+        // проверка аргументов
+        if (! el || (action !== 'public' && action !== 'del')) return;
+
+        // подтверждение удаления
+        if (
+          action === 'del'
+          && ! confirm('Пункт меню будет удален вместе с вложенными пунктами!\nВыполнить действие?')
+        ) return;
+
+        let self = $(el),// триггер
+            process = $('<i/>', {class: 'fas fa-spin fa-spinner'});// лодер
+
+        // замена триггера лодером
+        self.replaceWith(process);
+
+        // отправить запрос
+        $.ajax({
+          url: '/admin/menu/' + (action === 'public' ? 'public_item' : 'del_item'),
+          type: 'post',
+          data: $.parseJSON(process.siblings('.m_item_opt').val()),
+          dataType: 'json',
+          success: function(resp) {
+            switch (resp.status) {
+              case 'ok':
+                Menu.update(resp);
+                break;
+              case 'error':
+                process.replaceWith(self);
+                alert(action === 'public'
+                  ? 'Ошибка! Не удалось переключить публикацию..('
+                  : 'Ошибка! Не удалось удалить пункт меню..(');
+                break;
+              default :
+                process.replaceWith(self);
+                console.error(`#### TAGRA ERROR INFO ####\n\n${resp}`);
+                alert('Ой! Что-то пошло не так..(\nСведения о неполадке выведены в консоль.');
+            }
+          },
+          error: function(xhr, status, thrown) {
+            console.error(`#### TAGRA ERROR INFO ####\n\nПричина: ${thrown}\nОтвет сервера:\n${xhr.responseText}`);
+            alert('Ой! Ошибка соединения..(\nСведения о неполадке выведены в консоль.\nВозможно это проблемы на сервере или с сетью Интернет. Повторите попытку.');
+            process.replaceWith(self);
+          }
+        });
+      }
+
+    };
+
+    // заполнить список "Порядок" в форме добавления
+    Menu.load_order($('.m_form').find('.m_pid')[0]);
 </script>

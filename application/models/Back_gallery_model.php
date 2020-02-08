@@ -1,33 +1,71 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
 
-///////////////////////////////////
-//работа с галереями
-///////////////////////////////////
+/**
+ * Модель галерей
+ *
+ * Методы для работы с галереями в административной части
+ *
+ * @author Sergey Nizhnik <kroloburet@gmail.com>
+ */
+class Back_gallery_model extends Back_basic_model
+{
 
-class Back_gallery_model extends Back_basic_model{
- function __construct(){
-  parent::__construct();
- }
+    function __construct()
+    {
+        parent::__construct();
+    }
 
- function add_gallery($data){
-  if($this->db->insert('gallerys',$data)&&$data['versions']){
-   $this->set_versions('gallerys',$data);//добавить связи с материалом в версиях
-  }
- }
+    /**
+     * Добавить галерею
+     *
+     * @param array $data Данные
+     * @return boolean
+     */
+    function add_gallery(array $data)
+    {
+        $res = $this->db->insert('gallerys', $data);
+        // добавить связи с материалом в версиях
+        $res && $data['versions'] ? $this->set_versions('gallerys', $data) : null;
+        return $res;
+    }
 
- function edit_gallery($id,$data){
-  $q=$this->db->where('id',$id)->get('gallerys')->result_array();//изменяемый материал
-  if($q[0]['versions']!==$data['versions']){//версии изменились
-   $this->set_versions('gallerys',$data,$q[0]);//добавить/обновить связи с материалом в версиях
-  }
-  $this->db->where('id',$id)->update('gallerys',$data);
- }
+    /**
+     * Редактировать галерею
+     *
+     * @param string $id Идентификатор галереи
+     * @param array $data Данные
+     * @return boolean
+     */
+    function edit_gallery(string $id, array $data)
+    {
+        $q = $this->db->where('id', $id)->get('gallerys')->result_array(); // изменяемый материал
+        if ($q[0]['versions'] !== $data['versions']) {// версии изменились
+            $this->set_versions('gallerys', $data, $q[0]); // добавить/обновить связи с материалом в версиях
+        }
+        return $this->db->update('gallerys', $data, ['id' => $id]);
+    }
 
- function del_gallery($id){
-  $this->db->where('id',$id)->delete('gallerys');
-  $url='gallery/'.$id;
-  $this->db->where('url',$url)->delete('comments');//удалить комментарии к материалу
-  $this->del_versions('gallerys','/'.$url);//удалить связи с материалом в версиях
- }
-
+    /**
+     * Удалить галерею
+     *
+     * Вместе с галереей удалит все комментарии к ней
+     *
+     * @param string $id Идентификатор галереи
+     * @return boolean
+     */
+    function del_gallery(string $id)
+    {
+        $url = 'gallery/' . $id;
+        // удалить материал и комментарии
+        if (
+            $this->db->delete('gallerys', ['id' => $id]) === false ||
+            $this->db->delete('comments', ['url' => $url]) === false
+        ) {
+            return false;
+        }
+        // удалить связи с материалом в версиях
+        $this->del_versions('gallerys', '/' . $url);
+        return true;
+    }
 }

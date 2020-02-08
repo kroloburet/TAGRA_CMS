@@ -1,76 +1,125 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
 
-///////////////////////////////////
-//обработка запроса отправки нового логина и пароля
-///////////////////////////////////
+/**
+ * Контроллер "Восстановить доступ"
+ *
+ * @author Sergey Nizhnik <kroloburet@gmail.com>
+ */
+class Change_login extends CI_Controller
+{
 
-class Change_login extends CI_Controller{
- function __construct(){
-  parent::__construct();
-  $this->load->model('back_basic_model');
- }
+    function __construct()
+    {
+        parent::__construct();
+        $this->load->model('back_basic_model');
+    }
 
- function gen_pass($lenght=10){//генерирует пароль длинной $lenght
-  $alphabet=range('a','z');
-  $up_alphabet=range('A','Z');
-  $digits=range('1','9');
-  $spech=['~','@','#','$','[',']','_','-'];
-  $full_array=array_merge($alphabet,$up_alphabet,$digits,$spech);
-  $password='';
-  for($i=0;$i<$lenght;$i++){
-   $entrie=array_rand($full_array);
-   $password.=$full_array[$entrie];
-  }
-  return $password;
- }
+    /**
+     * Генерировать пароль
+     *
+     * @param int $lenght Символов в строке результата
+     * @return string
+     */
+    protected function _gen_pass(int $lenght = 10)
+    {
+        $alphabet = range('a', 'z');
+        $up_alphabet = range('A', 'Z');
+        $digits = range('1', '9');
+        $spech = ['~', '@', '#', '$', '[', ']', '_', '-'];
+        $full_array = array_merge($alphabet, $up_alphabet, $digits, $spech);
+        $password = '';
+        for ($i = 0; $i < $lenght; $i++) {
+            $entrie = array_rand($full_array);
+            $password .= $full_array[$entrie];
+        }
+        return $password;
+    }
 
- function index(){//проверить в БД email и отправить на него новые логин и пароль, старые перезаписать
-  $resp=[];//массив для возврата в json
-  $count=0;//счетчик сообщений
-  $p=array_map('trim',$this->input->post());//данные
-  $mail=filter_var($p['send_pass_mail'],FILTER_VALIDATE_EMAIL);//поле email
-  if($p['fuck_bot']!==''){$resp['status']='bot';exit(json_encode($resp,JSON_FORCE_OBJECT));}//если бот
-  if(!$mail){$resp['status']='nomail';exit(json_encode($resp,JSON_FORCE_OBJECT));}//если не передан email
-  $q=$this->back_basic_model->get_back_users($mail);//выборка
-  if(!$q){$resp['status']='nomail';exit(json_encode($resp,JSON_FORCE_OBJECT));}//если выборка пуста
-  //////////////////////подготовка к рассылке
-  $domen=str_replace('www.','',$this->input->server('HTTP_HOST'));//домен
-  $site_name=$this->back_basic_model->get_val('config','name','site_name','value');//имя сайта
-  $this->load->library('email');//загрузка библиотеки
-  foreach($q as $v){//проход по выборке
-   if($v['status']==='moderator'&&$v['access']!=='on'){//это запрещенный модератор
-    if(count($q)<2){$resp['status']='noaccess';exit(json_encode($resp,JSON_FORCE_OBJECT));}//кроме него в выборке никого нет
-    continue;//пропустить итерацию
-   }
-   $login=(strstr($mail,'@',TRUE))?strstr($mail,'@',TRUE):$this->gen_pass(8);//имя пользователя email или генерить
-   $pass=$this->gen_pass();//генерить новый пароль
-   $data['login']=password_hash($login,PASSWORD_BCRYPT);//шифровать логин для БД
-   $data['password']=password_hash($pass,PASSWORD_BCRYPT);//шифровать пароль для БД
-   $data['last_mod_date']=date('Y-m-d H:i:s');
-   $this->back_basic_model->edit_back_user($v['id'],$data);//перезаписать данные пользователя
-   //отправить новые данные пользователю
-   $msg='
-<html><head><title>Пароли к '.$domen.'</title>
-</head><body>
-<h2>Здравствуйте!</h2>
-<p>'.date('Y-m-d H:i:s').' вам отосланы новые логин и пароль для авторизации на сайте '.$domen.'.<br>
-Вы можете использовать их для <a href="'.base_url('admin').'" target="_blank">входа в админку сайта</a>. Старые логин и пароль были перезаписаны с целью безопасности. Ваш статус в системе &mdash; '.$v['status'].'.</p>
-<p>
-Логин: '.$login.'<br>
-Пароль: '.$pass.'<br>
-</p>
-<hr>
-<b>Внимание!</b> &mdash; Эта информация конфиденциальна и отправлена только вам! Не храните ее в месте доступном для посторонних. Сообщение сгенерировано системой. Не отвечайте на него.
-</body></html>';
-   $this->email->from('Robot@'.$domen,$site_name);
-   $this->email->to($mail);
-   $this->email->subject('Пароли к '.$domen);
-   $this->email->message($msg);
-   $this->email->send()?$count++:FALSE;
-  }
-  $resp['status']='ok';
-  $resp['html']='На указанный e-mail <q>'.$mail.'</q> отослано сообщений: '.$count.'<br>Сообщения могут быть помещены в <q>спам</q>';
-  exit(json_encode($resp,JSON_FORCE_OBJECT));
- }
-
+    /**
+     * Сбросить и отправить новые логин и пароль пользователю
+     *
+     * Метод принимает данные из POST переданные
+     * ajax запросом, валидирует, перезаписывает логин и пароль,
+     * отправляет новые логин и пароль пользователю, выведет строку ответа.
+     *
+     * @return void
+     */
+    function index()
+    {
+        $count = 0; // счетчик сообщений
+        $p = array_map('trim', $this->input->post()); // данные
+        $mail = filter_var($p['send_pass_mail'], FILTER_VALIDATE_EMAIL); // поле email
+        /**
+         * проверка, валидация данных
+         */
+        // если бот
+        $p['fuck_bot'] !== '' ? exit(json_encode(['status' => 'bot'], JSON_FORCE_OBJECT)) : null;
+        // валидация email
+        !$mail ? exit(json_encode(['status' => 'nomail'], JSON_FORCE_OBJECT)) : null;
+        // получить выборку по email
+        !$q = $this->back_basic_model->get_back_users($mail) ?
+            exit(json_encode(['status' => 'nomail'], JSON_FORCE_OBJECT)) : null;
+        /**
+         * обработка выборки
+         */
+        $domen = str_replace('www.', '', $this->input->server('HTTP_HOST')); // домен
+        $site_name = $this->back_basic_model->get_val('config', 'name', 'site_name', 'value'); // имя сайта
+        $this->load->library('email');
+        // проход по выборке
+        foreach ($q as $v) {
+            // если запрещенный модератор
+            if ($v['status'] === 'moderator' && !$v['access']) {
+                // если кроме него в выборке никого нет
+                count($q) < 2 ? exit(json_encode(['status' => 'noaccess'], JSON_FORCE_OBJECT)) : null;
+                continue; // пропустить итерацию
+            }
+            // имя пользователя email или генерировать
+            $login = strstr($mail, '@', true) ? strstr($mail, '@', true) : $this->_gen_pass(8);
+            // генерировать новый пароль
+            $pass = $this->_gen_pass();
+            // шифровать логин для БД
+            $data['login'] = password_hash($login, PASSWORD_BCRYPT);
+            // шифровать пароль для БД
+            $data['password'] = password_hash($pass, PASSWORD_BCRYPT);
+            $data['last_mod_date'] = date('Y-m-d H:i:s');
+            // перезаписать данные пользователя
+            $this->back_basic_model->edit_back_user($v['id'], $data)
+                ? exit(json_encode(['status' => 'noedit'], JSON_FORCE_OBJECT))
+                : null;
+            // отправить новые данные пользователю
+            $msg = '
+<html>
+    <head>
+        <title>Пароли к ' . $domen . '</title>
+    </head>
+    <body>
+        <h2>Здравствуйте!</h2>
+        <p>
+            ' . date('Y-m-d H:i:s') . ' вам отосланы новые логин и пароль для авторизации на сайте ' . $domen . '.<br>
+            Вы можете использовать их для <a href="' . base_url('admin') . '" target="_blank">входа в админку сайта</a>.
+            Старые логин и пароль были перезаписаны с целью безопасности. Ваш статус в системе &mdash; ' . $v['status'] . '.
+        </p>
+        <p>
+            Логин: ' . $login . '<br>
+            Пароль: ' . $pass . '<br>
+        </p>
+        <hr>
+        <b>Внимание!</b> &mdash; Эта информация конфиденциальна и отправлена только вам!
+        Не храните ее в месте доступном для посторонних. Сообщение сгенерировано системой. Не отвечайте на него.
+    </body>
+</html>
+';
+            $this->email->from('Robot@' . $domen, $site_name);
+            $this->email->to($mail);
+            $this->email->subject('Пароли к ' . $domen);
+            $this->email->message($msg);
+            $this->email->send() ? $count++ : exit(json_encode(['status' => 'nosend'], JSON_FORCE_OBJECT));
+        }
+        exit(json_encode([
+            'status' => 'ok',
+            'html' => 'На указанный e-mail <q>' . $mail . '</q> отправлено сообщений: ' . $count . '<br>'
+            . 'Сообщения могут быть помещены в <q>спам</q>']
+                , JSON_FORCE_OBJECT));
+    }
 }

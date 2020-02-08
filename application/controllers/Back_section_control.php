@@ -1,62 +1,113 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
-include_once(APPPATH.'controllers/Back_basic_control.php');
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+include_once(APPPATH . 'controllers/Back_basic_control.php');
 
-///////////////////////////////////
-//работа с разделами
-///////////////////////////////////
+/**
+ * Контроллер разделов
+ *
+ * Методы для работы с разделами в административной части
+ *
+ * @author Sergey Nizhnik <kroloburet@gmail.com>
+ */
+class Back_section_control extends Back_basic_control
+{
 
-class Back_section_control extends Back_basic_control{
- function __construct(){
-  parent::__construct();
-  $this->load->model('back_section_model');
- }
+    function __construct()
+    {
+        parent::__construct();
+        $this->load->model('back_section_model');
+    }
 
- function get_list(){
-  //разобрать get-данные если они есть, если нет - установить по умолчанию
-  $get=$this->input->get();
-  isset($get['order'])?TRUE:$get['order']='id';
-  isset($get['search'])?TRUE:$get['search']='';
-  isset($get['context_search'])?TRUE:$get['context_search']='title';
-  isset($get['pag_per_page'])?TRUE:$get['pag_per_page']=$this->session->pag_per_page;
-  isset($get['per_page'])?TRUE:$get['per_page']=0;
-  //получить выборку для страницы результата и количество всех записей
-  $sections=$this->back_basic_model->get_result_list('sections',$get);
-  //инициализация постраничной навигации
-  $this->_set_pagination(current_url(),$sections['count_result']);
-  $data['sections']=$sections['result'];
-  $data['view_title']='Управление разделами';
-  $this->_viewer('back/sections/sections_list_view',$data);
- }
+    /**
+     * Загрузить шаблон управления разделами
+     *
+     * @return void
+     */
+    function get_list()
+    {
+        $sections = $this->_filter_list('sections');
+        $data['sections'] = $sections['result'];
+        $data['filter'] = $sections['filter'];
+        $data['view_title'] = 'Управление разделами';
+        $this->_viewer('back/sections/sections_list_view', $data);
+    }
 
- function add_form(){
-  $data['view_title']='Добавить раздел';
-  if($this->_lang_selection($data)){return false;}
-  $this->_viewer('back/sections/sections_add_view',$data);
- }
+    /**
+     * Загрузить шаблон добавления
+     *
+     * @return void
+     */
+    function add_form()
+    {
+        $data['view_title'] = 'Добавить раздел';
+        if ($this->_lang_selection($data)) {
+            return false;
+        }
+        $this->_viewer('back/sections/sections_add_view', $data);
+    }
 
- function edit_form($id){
-  $data=$this->back_basic_model->get_where_id('sections',$id);
-  $data['view_title']='Редактировать раздел';
-  $this->_viewer('back/sections/sections_edit_view',$data);
- }
+    /**
+     * Загрузить шаблон редактирования
+     *
+     * @param string $id Идентификатор раздела
+     * @return void
+     */
+    function edit_form(string $id)
+    {
+        $data = $this->back_basic_model->get_where_id('sections', $id);
+        $data['view_title'] = 'Редактировать раздел';
+        $this->_viewer('back/sections/sections_edit_view', $data);
+    }
 
- function add(){
-  $this->back_section_model->add_section(array_map('trim',$this->input->post()));
-  $this->app('conf.sitemap.generate')==='auto'?$this->sitemap_generator():FALSE;
-  redirect('admin/section/get_list');
- }
+    /**
+     * Добавить раздел
+     *
+     * Метод принимает данные из POST переданные
+     * ajax запросом, добавит данные и выведет json ответ.
+     *
+     * @return void
+     */
+    function add()
+    {
+        $res = $this->back_section_model->add_section(array_map('trim', $this->input->post()));
+        $this->app('conf.sitemap.generate') === 'auto' ? $this->sitemap_generator() : null;
+        exit(json_encode([
+            'status' => $res ? 'ok' : 'error',
+            'redirect' => '/admin/section/get_list']
+                , JSON_FORCE_OBJECT));
+    }
 
- function edit($id){
-  $this->back_section_model->edit_section($id,array_map('trim',$this->input->post()));
-  redirect('admin/section/get_list');
- }
+    /**
+     * Редактировать раздел
+     *
+     * Метод принимает данные из POST переданные
+     * ajax запросом, редактирует данные и выведет json ответ.
+     *
+     * @param string $id Идентификатор раздела
+     * @return void
+     */
+    function edit(string $id)
+    {
+        $res = $this->back_section_model->edit_section($id, array_map('trim', $this->input->post()));
+        exit(json_encode([
+            'status' => $res ? 'ok' : 'error',
+            'redirect' => '/admin/section/get_list']
+                , JSON_FORCE_OBJECT));
+    }
 
- function del(){
-  $p=$this->input->post();
-  if(!$p['id']){exit('error');}
-  $this->back_section_model->del_section($p['id']);
-  $this->app('conf.sitemap.generate')==='auto'?$this->sitemap_generator():FALSE;
-  exit('ok');
- }
-
+    /**
+     * Удалить раздел
+     *
+     * Метод принимает данные из POST переданные
+     * ajax запросом, удалит материал и выведет строку ответа.
+     *
+     * @return void
+     */
+    function del()
+    {
+        $p = $this->input->post();
+        $res = $this->back_section_model->del_section($p['id']);
+        $this->app('conf.sitemap.generate') === 'auto' ? $this->sitemap_generator() : null;
+        exit($res ? 'ok' : 'error');
+    }
 }
