@@ -505,6 +505,6 @@ AddCharset utf-8 .atom .css .js .json .rss .vtt .xml
 # ----------------------------------------------------------------------
 # убераем "index.php" из строки запроса
  <IfModule mod_rewrite.c>
-  RewriteCond $1 !^(index\.php|robots\.txt|sitemap\.xml|403\.html|plug\.html|favicon\.ico|img|css|scripts|upload|instal|UI_fraimwork)
+  RewriteCond $1 !^(index\.php|robots\.txt|sitemap\.xml|403\.html|plug\.html|favicon\.ico|img|css|scripts|upload|instal|Tagra_UI)
   RewriteRule ^(.*)$ /index.php?/$1 [L]
  </IfModule>
