@@ -148,7 +148,7 @@ ul,ol{margin-top:0;}
 .row .col2{width:14.166666%;}
 .row .col1{width:5.583333%;}
 form .row,form .row .col12,form .row .col11,form .row .col10,form .row .col9,form .row .col8,form .row .col7,form .row .col6,form .row .col5,form .row .col4,form .row .col3,form .row .col2,form .row .col1{margin-bottom:0;}
-@media(max-width:600px){.row{margin:0;}.row .col12,.row .col11,.row .col10,.row .col9,.row .col8,.row .col7,.row .col6,.row .col5,.row .col4,.row .col3,.row .col2,.row .col1{width:100%;float:none;margin-left:0;margin-bottom:1.5em;}}
+@media(max-width:600px){.row{margin:0;}.row .col12,.row .col11,.row .col10,.row .col9,.row .col8,.row .col7,.row .col6,.row .col5,.row .col4,.row .col3,.row .col2,.row .col1{width:100%!important;float:none;margin-left:0;margin-bottom:1.5em;}}
 
 /*------------------------------------------------------------------------------TABL---*/
 .tabl{padding:0;margin:0 0 1.5em 0;background-color:var(--color-base-bg);}
