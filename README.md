@@ -1,6 +1,6 @@
 <!-- Developer: Sergey Nizhnik kroloburet@gmail.com -->
 
-<img src="https://rawgit.com/kroloburet/TAGRA_CMS/master/img/tagra_share.jpg" style="max-width:900px;margin-bottom:1.5em;">
+<img src="https://raw.githubusercontent.com/kroloburet/TAGRA_CMS/master/img/tagra_share.jpg" style="max-width:900px;margin-bottom:1.5em;">
 
 ## Кратко о системе
 Cистема управления контентом Tagra разработана для реализации веб-ресурсов (корпоративных, визиток, промо) с адаптивным дизайном и высокой производительностью. Также система может служить базой для разработки более масштабных и сложных веб-проектов. В отличии от более <q>тяжеловесных</q> CMS (Joomla, WordPress и т.д), использует меньше программного кода, библиотек, не перегружена лишним и проста в администрировании. Tagra написана на базе PHP-фреймворка [CodeIgniter](https://www.codeigniter.com).
@@ -66,4 +66,4 @@ Cистема управления контентом Tagra разработан
 Свободная лицензия [MIT license](https://opensource.org/licenses/MIT).
 
 ***
-Если возникли трудности или выше перечисленные инструкции для вас сложны, обратитесь к разработчику системы: <img src="https://rawgit.com/kroloburet/TAGRA_CMS/master/img/i.jpg"> kroloburet@gmail.com
+Если возникли трудности или выше перечисленные инструкции для вас сложны, обратитесь к разработчику системы: <img src="https://raw.githubusercontent.com/kroloburet/TAGRA_CMS/master/img/i.jpg"> kroloburet@gmail.com
