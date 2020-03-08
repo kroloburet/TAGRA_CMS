@@ -27,7 +27,7 @@
       <i class="fas fa-angle-up"></i>
     </div>
 
-    <!-- отложенная загрузка CSS -->
+    <!-- отложенная загрузка-->
     <script>
       ;(function() {
         const head = document.getElementsByTagName('head')[0];
@@ -46,6 +46,20 @@
         tu.rel = 'stylesheet';
         tu.href = "/Tagra_UI/style.css";
         head.insertBefore(tu, head.firstChild);
+        <?php
+        if (
+            (isset($data['addthis_share']) || isset($data['addthis_follow']))
+            && ($data['addthis_share'] || $data['addthis_follow'])
+        ) {
+            if ($conf['addthis']['js']) { ?>
+                // кнопки "addthis"
+                setTimeout(() => {
+                  const at = document.createElement('script');
+                  at.src = "<?= $conf['addthis']['js'] ?>";
+                  head.insertBefore(at, head.firstChild);
+                }, 3000);
+            <?php }
+        } ?>
       })();
     </script>
 
@@ -151,16 +165,6 @@
       }(jQuery));
     </script>
         <?php }
-    } ?>
-
-    <?php
-    if (// кнопки "addthis"
-        (isset($data['addthis_share']) || isset($data['addthis_follow']))
-        && ($data['addthis_share'] || $data['addthis_follow'])
-    ) {
-        if ($conf['addthis']['js']) {
-            echo '<!-- JS для кнопок соцсетей -->' . PHP_EOL . $conf['addthis']['js'] . PHP_EOL;
-        }
     } ?>
 
     <!--
