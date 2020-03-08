@@ -137,17 +137,17 @@
             <a href="#" onclick="TUI.Toggle('#addthis_opt');return false"><i class="fas fa-bars"></i></a>
             <hr>
             <div id="addthis_opt" hidden>
-              JavaScript-код подключения к сервису <i class="fas fa-info-circle blue" onmouseover="TUI.Hint(this)"></i>
+              Путь к JavaScript-коду подключения <i class="fas fa-info-circle blue" onmouseover="TUI.Hint(this)"></i>
               <pre class="hint">
-                После регистрации в сервисе AddThis вы получаете
-                небольшой код который нужно разместить на вашем сайте.
-                После этого вы можете управлять кнопками <q>поделиться</q>
-                с вашего аккаунта в сервисе.
+                После регистрации в сервисе AddThis и создания кнопок
+                вы получаете небольшой код который нужно разместить
+                на вашем сайте. Скопируйте в это поле путь из тега
+                &lt;script&gt;, атребут <q>src</q>.
               </pre>
-              <label class="textarea">
-                <textarea class="no-emmet" name="addthis[js]"
-                          placeholder="<script src='//s7.addthis.com/js/300/addthis_widget.js#pubid=XXXXXXXXXXXXXXX'></script>"
-                          rows="2"><?= $conf['addthis']['js'] ?></textarea>
+              <label class="input">
+                <input type="text" name="addthis[js]"
+                          placeholder="//s7.addthis.com/js/300/addthis_widget.js#pubid=XXXXXXXXXXXXXXX"
+                          value="<?= $conf['addthis']['js'] ?>">
               </label>
               HTML-код кнопок <q>Share</q> <i class="fas fa-info-circle blue" onmouseover="TUI.Hint(this)"></i>
               <pre class="hint">
@@ -155,12 +155,12 @@
                 кнопок для вашего сайта и скопируйте полученный HTML-код
                 в это поле. Созданные вами кнопки будут показанны на страницах.
                 С их помощью посетители вашего сайта смогут поделиться ссылкой
-                и информацией о вашей странице в своих соц-сетях.
+                и информацией о вашей странице в своих социальных сетях.
               </pre>
-              <label class="textarea">
-                <textarea class="no-emmet" name="addthis[share]"
+              <label class="input">
+                <input type="text" name="addthis[share]"
                           placeholder="<div class='addthis_sharing_toolbox'></div>"
-                          rows="2"><?= $conf['addthis']['share'] ?></textarea>
+                          value="<?= $conf['addthis']['share'] ?>">
               </label>
               HTML-код кнопок <q>Follow</q> <i class="fas fa-info-circle blue" onmouseover="TUI.Hint(this)"></i>
               <pre class="hint">
@@ -168,12 +168,12 @@
                 кнопок для вашего сайта и скопируйте полученный HTML-код
                 в это поле. Созданные вами кнопки будут показанны на страницах.
                 С их помощью посетители вашего сайта смогут посетить
-                ваши страницы соц-сетей.
+                ваши страницы в социальных сетях.
               </pre>
-              <label class="textarea">
-                <textarea class="no-emmet" name="addthis[follow]"
+              <label class="input">
+                <input type="text" name="addthis[follow]"
                           placeholder="<div class='addthis_horizontal_follow_toolbox'></div>"
-                          rows="2"><?= $conf['addthis']['follow'] ?></textarea>
+                          value="<?= $conf['addthis']['follow'] ?>">
               </label>
               Кнопки <q>Share</q> в системе по умолчанию
               <label class="select">
