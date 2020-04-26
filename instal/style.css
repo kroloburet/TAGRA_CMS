@@ -7,23 +7,89 @@
  */
 
 /*------------------------------------------------------------------------------BASIS---*/
-#content{padding:0 1%;margin:2em auto;max-width:900px;}
-.touch{padding:1em;}
-.touch:hover{background:rgba(0,0,0,.1);}
-.container{background-color:var(--color-base-bg);padding:1em;border:1px solid var(--color-gray);margin-bottom:2em;}
-.notific_r,.notific_g,.notific_y,.notific_b{display:block;padding:0 0 0 2em;margin:0 0 .3em 0;background-color:var(--color-base-bg)!important;}
-.notific_g:before,.notific_r:before,.notific_y:before,.notific_b:before{display:none;}
-.notific_g:after,.notific_r:after,.notific_y:after,.notific_b:after{left:0;}
-.notific_r:after{color:var(--color-red);}
-.notific_g:after{color:var(--color-green);}
-.notific_y:after{color:var(--color-yellow);}
-.notific_b:after{color:var(--color-blue);}
-#copy{text-align:center;}
+#content {
+    padding: 0 1%;
+    margin: 2em auto;
+    max-width: 900px;
+}
+
+.touch {
+    padding: 1em;
+}
+
+.touch:hover {
+    background: rgba(0, 0, 0, .1);
+}
+
+.container {
+    background-color: var(--color-base-bg);
+    padding: 1em;
+    border: 1px solid var(--color-gray);
+    margin-bottom: 2em;
+}
+
+.TUI_notice-r, .TUI_notice-g, .TUI_notice-y, .TUI_notice-b {
+    display: block;
+    padding: 0 0 0 2em;
+    margin: 0 0 .3em 0;
+    background-color: var(--color-base-bg) !important;
+}
+
+.TUI_notice-g::before, .TUI_notice-r::before, .TUI_notice-y::before, .TUI_notice-b::before {
+    display: none;
+}
+
+.TUI_notice-g::after, .TUI_notice-r::after, .TUI_notice-y::after, .TUI_notice-b::after {
+    left: 0;
+}
+
+.TUI_notice-r::after {
+    color: var(--color-red);
+}
+
+.TUI_notice-g::after {
+    color: var(--color-green);
+}
+
+.TUI_notice-y::after {
+    color: var(--color-yellow);
+}
+
+.TUI_notice-b::after {
+    color: var(--color-blue);
+}
+
+#copy {
+    text-align: center;
+}
 
 /*------------------------------------------------------------------------------FORM---*/
-.instal_form label{position:initial;display:flex;align-items:center;}
-.instal_form label div{min-width:17em;}
-.instal_form label input{max-width:32em;}
+.instal_form label {
+    position: initial;
+    display: flex;
+    align-items: center;
+}
+
+.instal_form label :first-child {
+    min-width: 17em;
+}
+
+.instal_form label input {
+    max-width: 32em;
+}
 
 /*------------------------------------------------------------------------------MEDIA---*/
-@media(max-width:600px){.instal_form label{flex-wrap:wrap;}.instal_form label input{max-width:90%;}.container{padding:0;border:none;}}
+@media (max-width: 600px) {
+    .instal_form label {
+        flex-wrap: wrap;
+    }
+
+    .instal_form label input {
+        max-width: 90%;
+    }
+
+    .container {
+        padding: 0;
+        border: none;
+    }
+}
