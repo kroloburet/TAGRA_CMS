@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
  * Базовый контроллер
@@ -42,7 +42,7 @@ class Front_basic_control extends CI_Controller
             return $this->config->item('app');
         }
         // обработать путь и вернуть значение массива
-        return array_reduce(explode('.', $path), function($i, $k) {
+        return array_reduce(explode('.', $path), function ($i, $k) {
             return isset($i[$k]) ? $i[$k] : null;
         }, $this->config->item('app'));
     }

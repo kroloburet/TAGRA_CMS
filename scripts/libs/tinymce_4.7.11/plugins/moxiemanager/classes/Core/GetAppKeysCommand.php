@@ -10,22 +10,24 @@
  *
  * @package MOXMAN_Core
  */
-class MOXMAN_Core_GetAppKeysCommand extends MOXMAN_Core_BaseCommand {
-	/**
-	 * Executes the command logic with the specified RPC parameters.
-	 *
-	 * @param Object $params Command parameters sent from client.
-	 * @return Object Result object to be passed back to client.
-	 */
-	public function execute($params) {
-		$config = MOXMAN::getConfig();
+class MOXMAN_Core_GetAppKeysCommand extends MOXMAN_Core_BaseCommand
+{
+    /**
+     * Executes the command logic with the specified RPC parameters.
+     *
+     * @param Object $params Command parameters sent from client.
+     * @return Object Result object to be passed back to client.
+     */
+    public function execute($params)
+    {
+        $config = MOXMAN::getConfig();
 
-		return (object) array(
-			"skydrive.client_id" => $config->get("skydrive.client_id"),
-			"googledrive.client_id" => $config->get("googledrive.client_id"),
-			"dropbox.app_id" => $config->get("dropbox.app_id")
-		);
-	}
+        return (object)array(
+            "skydrive.client_id" => $config->get("skydrive.client_id"),
+            "googledrive.client_id" => $config->get("googledrive.client_id"),
+            "dropbox.app_id" => $config->get("dropbox.app_id")
+        );
+    }
 }
 
 ?>

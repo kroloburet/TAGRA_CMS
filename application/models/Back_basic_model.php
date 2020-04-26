@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
  * Базовая модель
@@ -69,11 +69,11 @@ class Back_basic_model extends CI_Model
         if (!isset($q[0]['public'])) {
             return false;
         }
-        return (string) (
-            $this->db->update($table, ['public' => $q[0]['public'] ? 0 : 1], ['id' => $id]) ?
+        return (string)(
+        $this->db->update($table, ['public' => $q[0]['public'] ? 0 : 1], ['id' => $id]) ?
             $q[0]['public'] ? 0 : 1 :
             false
-            );
+        );
     }
 
     /**
@@ -104,7 +104,7 @@ class Back_basic_model extends CI_Model
                 if (isset($q[$new['lang']])) {// есть связи с материалами связываемого языка
                     unset($q[$new['lang']]); // удалить связь
                     $db->where('id', $v['id'])->update($table, ['versions' => empty($q) ? '' :
-                            json_encode($q, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)]);
+                        json_encode($q, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)]);
                 }
             }
         }
@@ -113,11 +113,14 @@ class Back_basic_model extends CI_Model
             $nv = json_decode($new['versions'], true);
             $preurl = '/';
             switch ($table) {
-                case'pages':$preurl = '/page/';
+                case'pages':
+                    $preurl = '/page/';
                     break;
-                case'sections':$preurl = '/section/';
+                case'sections':
+                    $preurl = '/section/';
                     break;
-                case'gallerys':$preurl = '/gallery/';
+                case'gallerys':
+                    $preurl = '/gallery/';
                     break;
             }
             // пройти по новым связанным материалам
@@ -127,12 +130,12 @@ class Back_basic_model extends CI_Model
                     $q2 = $get_versions($table, $q[$new['lang']]['id']);
                     unset($q2[$k]); // удалить связь
                     $db->where('id', $q[$new['lang']]['id'])->update($table, ['versions' => empty($q2) ? '' :
-                            json_encode($q2, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)]);
+                        json_encode($q2, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)]);
                 }
                 $db->where('id', $v['id'])->update(
                     $table, ['versions' => json_encode(
-                        [$new['lang'] => ['id' => $new['id'], 'title' => $new['title'], 'url' => $preurl . $new['id']]] + $q,
-                        JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)]);
+                    [$new['lang'] => ['id' => $new['id'], 'title' => $new['title'], 'url' => $preurl . $new['id']]] + $q,
+                    JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)]);
             }
         }
     }

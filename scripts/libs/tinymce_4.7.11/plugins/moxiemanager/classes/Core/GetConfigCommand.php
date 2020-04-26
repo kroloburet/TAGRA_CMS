@@ -10,20 +10,22 @@
  *
  * @package MOXMAN_Core
  */
-class MOXMAN_Core_GetConfigCommand extends MOXMAN_Core_BaseCommand {
-	/**
-	 * Executes the command logic with the specified RPC parameters.
-	 *
-	 * @param Object $params Command parameters sent from client.
-	 * @return Object Result object to be passed back to client.
-	 */
-	public function execute($params) {
-		if (isset($params->path) && $params->path) {
-			return $this->getPublicConfig(MOXMAN::getFile($params->path));
-		}
+class MOXMAN_Core_GetConfigCommand extends MOXMAN_Core_BaseCommand
+{
+    /**
+     * Executes the command logic with the specified RPC parameters.
+     *
+     * @param Object $params Command parameters sent from client.
+     * @return Object Result object to be passed back to client.
+     */
+    public function execute($params)
+    {
+        if (isset($params->path) && $params->path) {
+            return $this->getPublicConfig(MOXMAN::getFile($params->path));
+        }
 
-		return $this->getPublicConfig();
-	}
+        return $this->getPublicConfig();
+    }
 }
 
 ?>

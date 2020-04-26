@@ -1,9 +1,10 @@
-<?php defined('BASEPATH') OR exit('No direct script access allowed');
+<?php defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
  * Разметка структурированных данных META и JSON-LD
  */
- class Markup_data{
+class Markup_data
+{
 
     private $CI;
     private $data;
@@ -96,7 +97,7 @@
         }
 
         $tel = $mail = $address = '';
-        $tmp = ['t'=>[], 'm'=>[]];// временный массив данных
+        $tmp = ['t' => [], 'm' => []];// временный массив данных
         $c = json_decode($q, true); // json в массив
 
         // заполнить временный массив и адрес
@@ -109,12 +110,12 @@
         }
 
         // телефоны и email из временного массива в строку, в кавычки, оставить уникальные
-        $tel = implode(',', array_map(function($i) {
-                return '"' . preg_replace('/\s+/', '', $i) . '"';
-            }, array_unique($tmp['t'])));
-        $mail = implode(',', array_map(function($i) {
-                return '"' . preg_replace('/\s+/', '', $i) . '"';
-            }, array_unique($tmp['m'])));
+        $tel = implode(',', array_map(function ($i) {
+            return '"' . preg_replace('/\s+/', '', $i) . '"';
+        }, array_unique($tmp['t'])));
+        $mail = implode(',', array_map(function ($i) {
+            return '"' . preg_replace('/\s+/', '', $i) . '"';
+        }, array_unique($tmp['m'])));
 
         return '
     <!--разметка контактов-->
@@ -152,8 +153,8 @@
         $data = $this->data;
         $home = isset($this->conf['breadcrumbs']['home']) && $this->conf['breadcrumbs']['home']// главная в цепи
             ? '{"@type":"ListItem","position":1,"name":'
-                . json_encode($this->lexic['breadcrumbs']['home']) . ',"item":"'
-                . base_url() . '"}'
+            . json_encode($this->lexic['breadcrumbs']['home']) . ',"item":"'
+            . base_url() . '"}'
             : '';
         $breadcrumb = $home;// добавить главную в цепь
 
@@ -166,7 +167,7 @@
          */
         $get_sub_sections = function (string $id, int $pos) use ($CI, $data, &$breadcrumb, &$get_sub_sections) {
             $q = $CI->db
-                ->where(['public'=>1, 'id'=>$id, 'lang'=>$data['lang']])
+                ->where(['public' => 1, 'id' => $id, 'lang' => $data['lang']])
                 ->select('title, id, section')
                 ->get('sections')
                 ->result_array();
@@ -348,6 +349,7 @@
                     }
                     return $tree;
                 }
+
                 $comments_count = count($q); //всего комментариев
                 $comments = build_tree($tree_arr);
             }
@@ -367,7 +369,7 @@
          "author":{"@type":"Person","name":' . json_encode($this->conf['site_name']) . '},
          "publisher":{"@type":"Organization","name":' . json_encode($this->conf['site_name']) . ',"logo":"' . $this->img_prev . '"},
          "image":[{"@type":"ImageObject","representativeOfPage":true,"url":"' . $this->img_prev . '"}' . ($imgs ? ',' . preg_replace('/\}\{/m', '},{', $imgs) : '') . ']
-         ' . ($audios ? ',"audio":[' . preg_replace('/\}\{/m', '},{', $audios) .']' : '') . '
+         ' . ($audios ? ',"audio":[' . preg_replace('/\}\{/m', '},{', $audios) . ']' : '') . '
          ' . ($comments ? ',"commentCount":"' . $comments_count . '","comment":[' . preg_replace('/\}\{/m', '},{', $comments) . ']' : '') . '
       }
     </script>

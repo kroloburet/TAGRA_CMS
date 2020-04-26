@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 include_once(APPPATH . 'controllers/Back_basic_control.php');
 
 /**
@@ -59,8 +59,8 @@ class Back_contact_control extends Back_basic_control
         $p = array_map('trim', $this->input->post());
         $res = $this->back_contact_model->edit_contact_page($id, $p);
         exit(json_encode([
-            'status' => $res ? 'ok' : 'error',
-            'redirect' => '/admin/contact/get_list']
-                , JSON_FORCE_OBJECT));
+                'status' => $res ? 'ok' : 'error',
+                'redirect' => '/admin/contact/get_list']
+            , JSON_FORCE_OBJECT));
     }
 }

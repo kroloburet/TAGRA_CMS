@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
  * Модель меню
@@ -51,6 +51,7 @@ class Back_menu_model extends Back_basic_model
             }
             return $output;
         }
+
         return maketree($q);
     }
 
@@ -66,8 +67,8 @@ class Back_menu_model extends Back_basic_model
     {
         // выбрать пункты того же родителя, порядок которых больше или равен добавляемого пункта
         $q = $this->db->
-                where(['lang' => $data['lang'], 'pid' => $data['pid'], 'order >=' => $data['order']])->
-                get('menu')->result_array();
+        where(['lang' => $data['lang'], 'pid' => $data['pid'], 'order >=' => $data['order']])->
+        get('menu')->result_array();
         $ids = []; // массив id с новым порядком для изменения
         if (!empty($q)) {
             foreach ($q as $v) {
@@ -75,9 +76,9 @@ class Back_menu_model extends Back_basic_model
             }
         }
         return (
-            $this->db->insert('menu', $data) &&
-            empty($ids) ? true : $this->db->update_batch('menu', $ids, 'id')
-            );
+        $this->db->insert('menu', $data) &&
+        empty($ids) ? true : $this->db->update_batch('menu', $ids, 'id')
+        );
     }
 
     /**
@@ -161,9 +162,9 @@ class Back_menu_model extends Back_basic_model
             }
         }
         return (
-            $this->db->where_in('id', $ids['del'])->delete('menu') !== false &&
-            empty($ids['decrement']) ? true : $this->db->update_batch('menu', $ids['decrement'], 'id')
-            );
+        $this->db->where_in('id', $ids['del'])->delete('menu') !== false &&
+        empty($ids['decrement']) ? true : $this->db->update_batch('menu', $ids['decrement'], 'id')
+        );
     }
 
     /**

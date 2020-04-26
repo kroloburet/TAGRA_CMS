@@ -11,7 +11,7 @@ $moxieManagerConfig['general.temp_dir'] = '';
 $moxieManagerConfig['general.allow_override'] = 'hidden_tools,disabled_tools';
 
 // Filesystem
-$moxieManagerConfig['filesystem.rootpath'] = preg_replace('#/$#','',$_SERVER['DOCUMENT_ROOT']).'/upload';  ///webroot/uploads';
+$moxieManagerConfig['filesystem.rootpath'] = preg_replace('#/$#', '', $_SERVER['DOCUMENT_ROOT']) . '/upload';  ///webroot/uploads';
 $moxieManagerConfig['filesystem.include_directory_pattern'] = '';
 $moxieManagerConfig['filesystem.exclude_directory_pattern'] = '/^mcith$/i';
 $moxieManagerConfig['filesystem.include_file_pattern'] = '';
@@ -90,13 +90,12 @@ $moxieManagerConfig['thumbnail.allow_override'] = '*';
 // Authentication
 $moxieManagerConfig['authenticator'] = '';//использовать форму входа "BasicAuthenticator" ; не использовать ""
 $moxieManagerConfig['basicauthenticator.users'] = array(
-   array(
-      "username" => "validuser",
-      "password" => "bestpassword",
-      "email" => "a1@starlink.ru",
-      "groups" => array("administrator"))
+    array(
+        "username" => "validuser",
+        "password" => "bestpassword",
+        "email" => "a1@starlink.ru",
+        "groups" => array("administrator"))
 );
-
 
 
 // SessionAuthenticator
@@ -150,22 +149,22 @@ $moxieManagerConfig['dropbox.app_id'] = '';
 
 // Amazon S3 plugin
 $moxieManagerConfig['amazons3.buckets'] = array(
-'bucketname' => array(
-'publickey' => '',
-'secretkey' => ''
-)
+    'bucketname' => array(
+        'publickey' => '',
+        'secretkey' => ''
+    )
 );
 
 // Ftp plugin
 $moxieManagerConfig['ftp.accounts'] = array(
-'ftpname' => array(
-'host' => '',
-'user' => '',
-'password' => '',
-'rootpath' => '/',
-'wwwroot' => '/',
-'passive' => true
-)
+    'ftpname' => array(
+        'host' => '',
+        'user' => '',
+        'password' => '',
+        'rootpath' => '/',
+        'wwwroot' => '/',
+        'passive' => true
+    )
 );
 
 // Favorites plugin

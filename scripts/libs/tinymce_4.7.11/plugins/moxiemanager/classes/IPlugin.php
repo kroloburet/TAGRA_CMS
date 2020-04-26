@@ -11,12 +11,13 @@
  *
  * @package MOXMAN
  */
-interface MOXMAN_IPlugin {
-	/**
-	 * Gets executed when the plugin is to be initialized. You can bind custom events in this
-	 * method if you override it in subclasses.
-	 */
-	public function init();
+interface MOXMAN_IPlugin
+{
+    /**
+     * Gets executed when the plugin is to be initialized. You can bind custom events in this
+     * method if you override it in subclasses.
+     */
+    public function init();
 }
 
 ?>

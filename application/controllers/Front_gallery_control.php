@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 include_once(APPPATH . 'controllers/Front_basic_control.php');
 
 /**

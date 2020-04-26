@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
  * Базовый контроллер
@@ -43,7 +43,7 @@ class Back_basic_control extends CI_Controller
             return $this->config->item('app');
         }
         // обработать путь и вернуть значение массива
-        return array_reduce(explode('.', $path), function($i, $k) {
+        return array_reduce(explode('.', $path), function ($i, $k) {
             return isset($i[$k]) ? $i[$k] : null;
         }, $this->config->item('app'));
     }
@@ -103,7 +103,7 @@ class Back_basic_control extends CI_Controller
                 if (password_verify($p['lgn'], $v['login']) && password_verify($p['pswd'], $v['password'])) {
                     // это запрещенный модератор
                     if ($v['status'] === 'moderator' && !$v['access']) {
-                        $data_msg['msg'] = '<p class="notific_r mini full">'
+                        $data_msg['msg'] = '<p class="TUI_notice-r mini TUI_full">'
                             . 'Упс! Администратор запретил вам вход и все действия от имени модератора.</p>';
                         break;
                     }
@@ -116,7 +116,7 @@ class Back_basic_control extends CI_Controller
                     break;
                 }
                 // данные неверны
-                $data_msg['msg'] = '<p class="notific_r mini full">Нет пользователя с такими данными!</p>';
+                $data_msg['msg'] = '<p class="TUI_notice-r mini TUI_full">Нет пользователя с такими данными!</p>';
             }
         }
         /**
@@ -131,7 +131,7 @@ class Back_basic_control extends CI_Controller
                     $this->session->moderator === $v['password'] . $v['login']) {
                     // это запрещенный модератор
                     if ($v['status'] === 'moderator' && !$v['access']) {
-                        $data_msg['msg'] = '<p class="notific_r mini full">'
+                        $data_msg['msg'] = '<p class="TUI_notice-r mini TUI_full">'
                             . 'Упс! Администратор запретил вам вход и все действия от имени модератора.</p>';
                         break;
                     }
@@ -139,9 +139,9 @@ class Back_basic_control extends CI_Controller
                     $data = $this->back_basic_model->get_config(); // получить конфигурацию
                     $data['status'] = $v['status'] === 'administrator' ? 'administrator' : 'moderator'; // записать статус
                     $data['admin_mail'] = $this->_get_admin_param('email'); // записать email админа
-                    $data['moderator_mail'] = implode(',', array_column(array_filter($q, function($i) {
-                                return $i['status'] == 'moderator' && $i['access'];
-                            }), 'email')); // записать email модераторов в строку через запятые
+                    $data['moderator_mail'] = implode(',', array_column(array_filter($q, function ($i) {
+                        return $i['status'] == 'moderator' && $i['access'];
+                    }), 'email')); // записать email модераторов в строку через запятые
                     $data['langs'] = $this->back_basic_model->get_langs(); // записать все языки системы
                     // записать язык системы по умолчанию
                     foreach ($data['langs'] as $i) {
@@ -387,9 +387,9 @@ class Back_basic_control extends CI_Controller
         $res = $this->db->update('config', ['value' => $conf], ['name' => 'sitemap']);
         $this->sitemap_generator(); // обновить карту сайта
         exit(json_encode([
-            'status' => $res ? 'ok' : 'error',
-            'redirect' => '/admin/sitemap']
-                , JSON_FORCE_OBJECT));
+                'status' => $res ? 'ok' : 'error',
+                'redirect' => '/admin/sitemap']
+            , JSON_FORCE_OBJECT));
     }
 
     /**

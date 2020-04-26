@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 include_once(APPPATH . 'controllers/Back_basic_control.php');
 
 /**
@@ -177,7 +177,7 @@ class Back_comment_control extends Back_basic_control
             &pid=' . $q[0]['id'] . '
             &mail=' . $q[0]['name'] . '
             &url=' . $data['url'] . '
-            &lang=' . $data['lang']) .'"
+            &lang=' . $data['lang']) . '"
             target="_blank" title="' . htmlspecialchars($lexic['comments']['unpage_more']) . '">
             ' . $lexic['comments']['unpage_less'] . '
         </a>&nbsp;|&nbsp;
@@ -186,9 +186,9 @@ class Back_comment_control extends Back_basic_control
             &pid=' . $q[0]['id'] . '
             &mail=' . $q[0]['name'] . '
             &url=' . $data['url'] . '
-            &lang=' . $data['lang']) .'"
-            target="_blank" title="' . htmlspecialchars($lexic['comments']['unsite_more']) .'">
-            ' .$lexic['comments']['unsite_less'] . '
+            &lang=' . $data['lang']) . '"
+            target="_blank" title="' . htmlspecialchars($lexic['comments']['unsite_more']) . '">
+            ' . $lexic['comments']['unsite_less'] . '
         </a>
     </body>
 </html>

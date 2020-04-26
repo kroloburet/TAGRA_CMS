@@ -1,1 +1,1 @@
-tinymce.addI18n('en',{"Insert file":"Insert file","moxiemanager_insert":"Insert file"});
+tinymce.addI18n('en', {"Insert file": "Insert file", "moxiemanager_insert": "Insert file"});

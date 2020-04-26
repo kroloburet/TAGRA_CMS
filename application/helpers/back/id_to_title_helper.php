@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
  * Получить заголовок материала
@@ -18,7 +18,7 @@ class Id_to_title
     function __construct(string $table = 'sections', int $limit = 20)
     {
         $CI = &get_instance();
-        $q = $CI->db->select('title,id')->get($table)->result_array();
+        $q = $CI->db->select('title, id')->get($table)->result_array();
         $this->limit = $limit;
         if (!empty($q)) {
             foreach ($q as $v) {

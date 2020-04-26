@@ -8,49 +8,49 @@
 /*global moxman:true */
 
 moxman.require([
-	"moxman/PluginManager",
-	"moxman/vfs/FileSystemManager",
-	"moxman/util/JsonRpc"
-], function(PluginManager, FileSystemManager, JsonRpc) {
-	PluginManager.add("favorites", function(manager) {
-		function addFavorite() {
-			JsonRpc.exec('favorites.add', {paths: manager.getSelectedFiles().toPathArray()});
-		}
+    "moxman/PluginManager",
+    "moxman/vfs/FileSystemManager",
+    "moxman/util/JsonRpc"
+], function (PluginManager, FileSystemManager, JsonRpc) {
+    PluginManager.add("favorites", function (manager) {
+        function addFavorite() {
+            JsonRpc.exec('favorites.add', {paths: manager.getSelectedFiles().toPathArray()});
+        }
 
-		function removeFavorite() {
-			var paths = [];
+        function removeFavorite() {
+            var paths = [];
 
-			manager.getSelectedFiles().each(function(file) {
-				paths.push(file.info.link);
-			});
+            manager.getSelectedFiles().each(function (file) {
+                paths.push(file.info.link);
+            });
 
-			JsonRpc.exec('favorites.remove', {paths: paths}, function() {
-				manager.refresh();
-			});
-		}
+            JsonRpc.exec('favorites.remove', {paths: paths}, function () {
+                manager.refresh();
+            });
+        }
 
-		function gotoFile() {
-			FileSystemManager.getFile(manager.getSelectedFiles()[0].info.link, function(file) {
-				manager.open(file);
-			});
-		}
+        function gotoFile() {
+            FileSystemManager.getFile(manager.getSelectedFiles()[0].info.link, function (file) {
+                manager.open(file);
+            });
+        }
 
-		manager.on('BeforeRenderManageMenu', function(e) {
-			var menu = e.menu;
+        manager.on('BeforeRenderManageMenu', function (e) {
+            var menu = e.menu;
 
-			if (manager.currentDir.path == '/Favorites') {
-				e.preventDefault();
+            if (manager.currentDir.path == '/Favorites') {
+                e.preventDefault();
 
-				menu.append({text: 'Remove favorite', onclick: removeFavorite});
-				menu.append({text: 'Goto file', onclick: gotoFile});
-			}
-		});
+                menu.append({text: 'Remove favorite', onclick: removeFavorite});
+                menu.append({text: 'Goto file', onclick: gotoFile});
+            }
+        });
 
-		manager.addMenuItem({
-			text: 'Add favorite',
-			icon: 'favorites',
-			onclick: addFavorite,
-			contexts: ['manage.tools']
-		});
-	});
+        manager.addMenuItem({
+            text: 'Add favorite',
+            icon: 'favorites',
+            onclick: addFavorite,
+            contexts: ['manage.tools']
+        });
+    });
 });

@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
  * Модель комментариев
@@ -48,9 +48,9 @@ class Front_comment_model extends Front_basic_model
     function public_new(string $code)
     {
         return $this->db->update(
-                'comments',
-                ['public' => 1, 'creation_date' => date('Y-m-d'), 'premod_code' => ''],
-                ['premod_code' => $code, 'public' => 0]
+            'comments',
+            ['public' => 1, 'creation_date' => date('Y-m-d'), 'premod_code' => ''],
+            ['premod_code' => $code, 'public' => 0]
         );
     }
 
@@ -70,10 +70,10 @@ class Front_comment_model extends Front_basic_model
      *
      * Удалит комментарий вместе с дочерними
      *
-     * @global array $ids
      * @param string $id Идентификатор комментария
      * @param string $url URL комментируемого материала
      * @return array|boolean
+     * @global array $ids
      */
     function del_branch(string $id, string $url)
     {

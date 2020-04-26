@@ -10,13 +10,14 @@
  *
  * @package MOXMAN_Http
  */
-interface MOXMAN_Http_IHandler {
-	/**
-	 * Process a request using the specified context.
-	 *
-	 * @param MOXMAN_Http_Context $httpContext Context instance to pass to use for the handler.
-	 */
-	public function processRequest(MOXMAN_Http_Context $httpContext);
+interface MOXMAN_Http_IHandler
+{
+    /**
+     * Process a request using the specified context.
+     *
+     * @param MOXMAN_Http_Context $httpContext Context instance to pass to use for the handler.
+     */
+    public function processRequest(MOXMAN_Http_Context $httpContext);
 }
 
 ?>

@@ -11,14 +11,15 @@
  *
  * @package MOXMAN_Vfs
  */
-interface MOXMAN_Vfs_IFileConfigProvider {
-	/**
-	 * Returns a config based on the specified file.
-	 *
-	 * @param MOXMAN_Vfs_IFile $file File to get the config for.
-	 * @return MOXMAN_Util_Config Config for the specified file.
-	 */
-	public function getConfig(MOXMAN_Vfs_IFile $file);
+interface MOXMAN_Vfs_IFileConfigProvider
+{
+    /**
+     * Returns a config based on the specified file.
+     *
+     * @param MOXMAN_Vfs_IFile $file File to get the config for.
+     * @return MOXMAN_Util_Config Config for the specified file.
+     */
+    public function getConfig(MOXMAN_Vfs_IFile $file);
 }
 
 ?>

@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
  * Контроллер "Восстановить доступ"
@@ -117,9 +117,9 @@ class Change_login extends CI_Controller
             $this->email->send() ? $count++ : exit(json_encode(['status' => 'nosend'], JSON_FORCE_OBJECT));
         }
         exit(json_encode([
-            'status' => 'ok',
-            'html' => 'На указанный e-mail <q>' . $mail . '</q> отправлено сообщений: ' . $count . '<br>'
-            . 'Сообщения могут быть помещены в <q>спам</q>']
-                , JSON_FORCE_OBJECT));
+                'status' => 'ok',
+                'html' => 'На указанный e-mail <q>' . $mail . '</q> отправлено сообщений: ' . $count . '<br>'
+                    . 'Сообщения могут быть помещены в <q>спам</q>']
+            , JSON_FORCE_OBJECT));
     }
 }

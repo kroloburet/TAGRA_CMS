@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 include_once(APPPATH . 'controllers/Back_basic_control.php');
 
 /**
@@ -155,6 +155,7 @@ class Back_language_control extends Back_basic_control
             }
             return rmdir($dir);
         }
+
         // удалить каталоги с содержимым
         if (!_rrd(APPPATH . "language/$tag") || !_rrd(getcwd() . "/upload/$tag")) {
             return false;
@@ -174,7 +175,7 @@ class Back_language_control extends Back_basic_control
     function get_localization_file()
     {
         $p = array_map('trim', $this->input->post());
-        echo!file_exists($p['path']) ? 'error' : file_get_contents($p['path']);
+        echo !file_exists($p['path']) ? 'error' : file_get_contents($p['path']);
     }
 
     /**

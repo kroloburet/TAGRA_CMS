@@ -10,60 +10,62 @@
  *
  * @package MOXMAN_Core
  */
-class MOXMAN_Core_DeleteCommand extends MOXMAN_Core_BaseCommand {
-	/**
-	 * Executes the command logic with the specified RPC parameters.
-	 *
-	 * @param Object $params Command parameters sent from client.
-	 * @return Object Result object to be passed back to client.
-	 */
-	public function execute($params) {
-		$paths = $params->paths;
-		$result = array();
+class MOXMAN_Core_DeleteCommand extends MOXMAN_Core_BaseCommand
+{
+    /**
+     * Executes the command logic with the specified RPC parameters.
+     *
+     * @param Object $params Command parameters sent from client.
+     * @return Object Result object to be passed back to client.
+     */
+    public function execute($params)
+    {
+        $paths = $params->paths;
+        $result = array();
 
-		foreach ($paths as $path) {
-			$file = MOXMAN::getFile($path);
-			$config = $file->getConfig();
+        foreach ($paths as $path) {
+            $file = MOXMAN::getFile($path);
+            $config = $file->getConfig();
 
-			if ($config->get('general.demo')) {
-				throw new MOXMAN_Exception(
-					"This action is restricted in demo mode.",
-					MOXMAN_Exception::DEMO_MODE
-				);
-			}
+            if ($config->get('general.demo')) {
+                throw new MOXMAN_Exception(
+                    "This action is restricted in demo mode.",
+                    MOXMAN_Exception::DEMO_MODE
+                );
+            }
 
-			if (!$file->exists()) {
-				throw new MOXMAN_Exception(
-					"Path doesn't exist: " . $file->getPublicPath(),
-					MOXMAN_Exception::FILE_DOESNT_EXIST
-				);
-			}
+            if (!$file->exists()) {
+                throw new MOXMAN_Exception(
+                    "Path doesn't exist: " . $file->getPublicPath(),
+                    MOXMAN_Exception::FILE_DOESNT_EXIST
+                );
+            }
 
-			if (!$file->canWrite()) {
-				throw new MOXMAN_Exception(
-					"No write access to file: " . $file->getPublicPath(),
-					MOXMAN_Exception::NO_WRITE_ACCESS
-				);
-			}
+            if (!$file->canWrite()) {
+                throw new MOXMAN_Exception(
+                    "No write access to file: " . $file->getPublicPath(),
+                    MOXMAN_Exception::NO_WRITE_ACCESS
+                );
+            }
 
-			$filter = MOXMAN_Vfs_BasicFileFilter::createFromConfig($config);
-			if ($filter->accept($file, $file->isFile()) !== MOXMAN_Vfs_BasicFileFilter::ACCEPTED) {
-				throw new MOXMAN_Exception(
-					"Invalid file name for: " . $file->getPublicPath(),
-					MOXMAN_Exception::INVALID_FILE_NAME
-				);
-			}
+            $filter = MOXMAN_Vfs_BasicFileFilter::createFromConfig($config);
+            if ($filter->accept($file, $file->isFile()) !== MOXMAN_Vfs_BasicFileFilter::ACCEPTED) {
+                throw new MOXMAN_Exception(
+                    "Invalid file name for: " . $file->getPublicPath(),
+                    MOXMAN_Exception::INVALID_FILE_NAME
+                );
+            }
 
-			$result[] = $this->fileToJson($file);
+            $result[] = $this->fileToJson($file);
 
-			if ($file->exists()) {
-				$file->delete(true);
-				$this->fireFileAction(MOXMAN_Core_FileActionEventArgs::DELETE, $file);
-			}
-		}
+            if ($file->exists()) {
+                $file->delete(true);
+                $this->fireFileAction(MOXMAN_Core_FileActionEventArgs::DELETE, $file);
+            }
+        }
 
-		return $result;
-	}
+        return $result;
+    }
 }
 
 ?>

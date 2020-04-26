@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
  * Класс навигации
@@ -74,7 +74,7 @@ class Nav
         // сформировать и вывести HTML список
         $this->list['menu'] .= '
         <!-- главное меню -->
-        <ul class="menu noprint">';
+        <ul class="TUI_Menu TUI_noprint">';
         $this->_menu_get_list($this->data['front_menu_list']);
         $this->list['menu'] .= '
         </ul>' . PHP_EOL;
@@ -93,8 +93,8 @@ class Nav
             $this->list['menu'] .= '
           <li>
             ' . ($i['url']
-                ? '<a href="' . $i['url'] . '" target="' . $i['target'] . '">' . $i['title'] . '</a>'
-                : '<span>' . $i['title'] . '</span>');
+                    ? '<a href="' . $i['url'] . '" target="' . $i['target'] . '">' . $i['title'] . '</a>'
+                    : '<span>' . $i['title'] . '</span>');
             // если есть вложенные елементы
             if (isset($i['nodes'])) {
                 $this->list['menu'] .= '
@@ -122,13 +122,13 @@ class Nav
 
         $home = isset($this->conf['breadcrumbs']['home']) && $this->conf['breadcrumbs']['home'] // "главная" в цепи
             ? '<li><a href="/" class="bc_home">'
-                . $this->lexic['breadcrumbs']['home'] . '</a></li>'
+            . $this->lexic['breadcrumbs']['home'] . '</a></li>'
             : '';
 
         // сформировать и вывести HTML список
         $this->list['breadcrumbs'] .= '
         <!-- навигация "хлебные крошки" -->
-        <ul class="breadcrumbs noprint">
+        <ul class="breadcrumbs TUI_noprint">
           ' . $home; // начало цепи + "главная"
 
         // если етсть раздел - получить цепь подразделов
@@ -173,7 +173,7 @@ class Nav
     {
         $q = $this->CI->db
             ->where(['public' => 1, 'id' => $id])
-            ->select('title,id,section')
+            ->select('title, id, section')
             ->get('sections')
             ->result_array();
         return isset($q[0]) ? $q[0] : [];

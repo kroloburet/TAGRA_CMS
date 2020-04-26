@@ -8,38 +8,38 @@
 /*global moxman:true */
 
 moxman.require([
-	"moxman/PluginManager",
-	"moxman/vfs/FileSystemManager",
-	"moxman/util/JsonRpc"
-], function(PluginManager, FileSystemManager, JsonRpc) {
-	PluginManager.add("uploaded", function(manager) {
-		function removeUploaded() {
-			var paths = [];
+    "moxman/PluginManager",
+    "moxman/vfs/FileSystemManager",
+    "moxman/util/JsonRpc"
+], function (PluginManager, FileSystemManager, JsonRpc) {
+    PluginManager.add("uploaded", function (manager) {
+        function removeUploaded() {
+            var paths = [];
 
-			manager.getSelectedFiles().each(function(file) {
-				paths.push(file.info.link);
-			});
+            manager.getSelectedFiles().each(function (file) {
+                paths.push(file.info.link);
+            });
 
-			JsonRpc.exec('uploaded.remove', {paths: paths}, function() {
-				manager.refresh();
-			});
-		}
+            JsonRpc.exec('uploaded.remove', {paths: paths}, function () {
+                manager.refresh();
+            });
+        }
 
-		function gotoFile() {
-			FileSystemManager.getFile(manager.getSelectedFiles()[0].info.link, function(file) {
-				manager.open(file);
-			});
-		}
+        function gotoFile() {
+            FileSystemManager.getFile(manager.getSelectedFiles()[0].info.link, function (file) {
+                manager.open(file);
+            });
+        }
 
-		manager.on('BeforeRenderManageMenu', function(e) {
-			var menu = e.menu;
+        manager.on('BeforeRenderManageMenu', function (e) {
+            var menu = e.menu;
 
-			if (manager.currentDir.path == '/Uploaded') {
-				e.preventDefault();
+            if (manager.currentDir.path == '/Uploaded') {
+                e.preventDefault();
 
-				menu.append({text: 'Remove link', onclick: removeUploaded});
-				menu.append({text: 'Goto file', onclick: gotoFile});
-			}
-		});
-	});
+                menu.append({text: 'Remove link', onclick: removeUploaded});
+                menu.append({text: 'Goto file', onclick: gotoFile});
+            }
+        });
+    });
 });

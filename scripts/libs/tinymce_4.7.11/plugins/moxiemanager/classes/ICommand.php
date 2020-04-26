@@ -10,14 +10,15 @@
  *
  * @package MOXMAN
  */
-interface MOXMAN_ICommand {
-	/**
-	 * Gets executed when a RPC call is made.
-	 *
-	 * @param Object $params Object passed in from RPC handler.
-	 * @return Object Return object that gets passed back to client.
-	 */
-	public function execute($params);
+interface MOXMAN_ICommand
+{
+    /**
+     * Gets executed when a RPC call is made.
+     *
+     * @param Object $params Object passed in from RPC handler.
+     * @return Object Return object that gets passed back to client.
+     */
+    public function execute($params);
 }
 
 ?>

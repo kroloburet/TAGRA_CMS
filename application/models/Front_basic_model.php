@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
  * Базовая модель
@@ -39,7 +39,7 @@ class Front_basic_model extends CI_Model
             return $this->config->item('app');
         }
         // обработать путь и вернуть значение массива
-        return array_reduce(explode('.', $path), function($i, $k) {
+        return array_reduce(explode('.', $path), function ($i, $k) {
             return isset($i[$k]) ? $i[$k] : null;
         }, $this->config->item('app'));
     }
@@ -97,9 +97,11 @@ class Front_basic_model extends CI_Model
             // это админ/разрешенный модератор или обычный смертный
             $v['ip'] === $ip && $v['access'] ? $data['conf']['back_user'] = true : null;
             switch ($v['status']) {
-                case'administrator': $data['conf']['admin_mail'] = $v['email'];
+                case'administrator':
+                    $data['conf']['admin_mail'] = $v['email'];
                     break;
-                case'moderator': $v['access'] ? $m[] = $v['email'] : null;
+                case'moderator':
+                    $v['access'] ? $m[] = $v['email'] : null;
                     break;
             }
         }
@@ -136,7 +138,7 @@ class Front_basic_model extends CI_Model
     function get_menu()
     {
         $q = $this->db->where(['public' => 1, 'lang' => $this->app('conf.user_lang')])->
-                order_by('order')->get('menu')->result_array();
+        order_by('order')->get('menu')->result_array();
         if (empty($q)) {
             return [];
         }
@@ -161,6 +163,7 @@ class Front_basic_model extends CI_Model
             }
             return $output;
         }
+
         return maketree($q);
     }
 }

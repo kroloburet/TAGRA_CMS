@@ -10,43 +10,47 @@
  *
  * @package MOXMAN_Vfs
  */
-class MOXMAN_Vfs_FileMetaData extends MOXMAN_Util_NameValueCollection {
-	/** @ignore */
-	private $provider, $file;
+class MOXMAN_Vfs_FileMetaData extends MOXMAN_Util_NameValueCollection
+{
+    /** @ignore */
+    private $provider, $file;
 
-	/**
-	 * [__construct description]
-	 * @param MOXMAN_Vfs_IFileMetaDataProvider $provider Meta data provider instance.
-	 * @param MOXMAN_Vfs_IFile $file File that has the meta data.
-	 */
-	public function __construct(MOXMAN_Vfs_IFileMetaDataProvider $provider, MOXMAN_Vfs_IFile $file) {
-		parent::__construct();
+    /**
+     * [__construct description]
+     * @param MOXMAN_Vfs_IFileMetaDataProvider $provider Meta data provider instance.
+     * @param MOXMAN_Vfs_IFile $file File that has the meta data.
+     */
+    public function __construct(MOXMAN_Vfs_IFileMetaDataProvider $provider, MOXMAN_Vfs_IFile $file)
+    {
+        parent::__construct();
 
-		$this->provider = $provider;
-		$this->file = $file;
-	}
+        $this->provider = $provider;
+        $this->file = $file;
+    }
 
-	/**
-	 * Loads the meta data.
-	 *
-	 * @return MOXMAN_Vfs_FileMetaData Meta data instance.
-	 */
-	public function load() {
-		$this->items = $this->provider->loadMetaData($this->file);
+    /**
+     * Loads the meta data.
+     *
+     * @return MOXMAN_Vfs_FileMetaData Meta data instance.
+     */
+    public function load()
+    {
+        $this->items = $this->provider->loadMetaData($this->file);
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * Saves the meta data.
-	 *
-	 * @return MOXMAN_Vfs_FileMetaData Meta data instance.
-	 */
-	public function save() {
-		$this->provider->saveMetaData($this->file, $this->items);
+    /**
+     * Saves the meta data.
+     *
+     * @return MOXMAN_Vfs_FileMetaData Meta data instance.
+     */
+    public function save()
+    {
+        $this->provider->saveMetaData($this->file, $this->items);
 
-		return $this;
-	}
+        return $this;
+    }
 }
 
 ?>

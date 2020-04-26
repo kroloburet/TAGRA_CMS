@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
  * Модель комментариев
@@ -35,9 +35,9 @@ class Back_comment_model extends Back_basic_model
     function public_new(string $code)
     {
         return $this->db->update(
-                'comments',
-                ['public' => 1, 'creation_date' => date('Y-m-d'), 'premod_code' => ''],
-                ['premod_code' => $code, 'public' => 0]
+            'comments',
+            ['public' => 1, 'creation_date' => date('Y-m-d'), 'premod_code' => ''],
+            ['premod_code' => $code, 'public' => 0]
         );
     }
 

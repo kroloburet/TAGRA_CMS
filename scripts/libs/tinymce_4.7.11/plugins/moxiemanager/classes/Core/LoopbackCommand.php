@@ -10,16 +10,18 @@
  *
  * @package MOXMAN_Core
  */
-class MOXMAN_Core_LoopbackCommand extends MOXMAN_Core_BaseCommand {
-	/**
-	 * Executes the command logic with the specified RPC parameters.
-	 *
-	 * @param Object $params Command parameters sent from client.
-	 * @return Object Result object to be passed back to client.
-	 */
-	public function execute($params) {
-		return $params;
-	}
+class MOXMAN_Core_LoopbackCommand extends MOXMAN_Core_BaseCommand
+{
+    /**
+     * Executes the command logic with the specified RPC parameters.
+     *
+     * @param Object $params Command parameters sent from client.
+     * @return Object Result object to be passed back to client.
+     */
+    public function execute($params)
+    {
+        return $params;
+    }
 }
 
 ?>
