@@ -1,426 +1,771 @@
+'use strict';
 /**
  * Tagra_UI scripts
  *
  * @author Sergey Nizhnik <kroloburet@gmail.com>
  */
+const TUI = (function () {
 
-const TUI = {
+    /**
+     * Private
+     */
 
-  /**
-   * Точка входа для плагинов
-   *
-   * @param {object} methods Методы плагина
-   * @return {object} Метод плагина
-   */
-  _is: function(methods) {
-    if (this[methods]) {
-      // метод существует
-      return this[methods].apply(this, Array.prototype.slice.call(arguments, 1));
-
-    } else if (typeof methods === 'object' || ! methods) {
-      // метод не передан - запустить "init"
-      return this.init.apply(this, arguments);
-
-    } else {
-      // метод не существует
-      return console.error(`Вы о чем?! У TUI нет метода "${methods}"`);
+    /**
+     * Точка входа для плагинов
+     *
+     * @param methods Методы плагина
+     * @return {object} Метод плагина
+     * @private
+     */
+    function _is(methods) {
+        if (this[methods]) {
+            // метод существует
+            return this[methods].apply(this, [].slice.call(arguments, 1));
+        } else if (typeof methods === 'object' || !methods) {
+            // метод не передан - запустить "init"
+            return this.init.apply(this, arguments);
+        } else {
+            // метод не существует
+            return console.error(`Вы о чем?! Здесь нет метода "${methods}"`);
+        }
     }
-  },
 
-  /**
-   * Меню
-   *
-   * @param {object} user_conf Пользовательская конфигурация
-   * @return {object} Набор объектов
-   */
-  Menu: function(user_conf) {
-    const def_conf = {icon: '&#8801;'}, // конфиг по умолчанию
-          conf = $.extend({}, def_conf, user_conf);// слияние в глобальный конфиг
+    /**
+     * Проверка метки активации плагина на элементе.
+     *
+     * @param {object} el Проверяемый элемент
+     * @param {string} selfName Имя плагина
+     * @return {boolean}
+     * @private
+     */
+    function _isActivate(el, selfName) {
+        return el.classList.contains(`TUI_${selfName}-activated`);
+    }
 
-    // обработка и возврат набора
-    return $('ul.menu').each(function() {
+    /**
+     * Установить метку активации плагина на элементе
+     *
+     * @param {object} el Элемент для установки метки
+     * @param {string} selfName Имя плагина
+     * @private
+     */
+    function _markActivate(el, selfName) {
+        return el.classList.add(`TUI_${selfName}-activated`);
+    }
 
-      if ($(this).data('activate')) return;// если уже активировано
+    /**
+     * Удалить метку активации плагина на элементе
+     * вместе с динамически созданными классами
+     *
+     * @param {object} el Элемент для удаления метки
+     * @param {string} selfName Имя плагина
+     * @private
+     */
+    function _unmarkActivate(el, selfName) {
+        el.querySelectorAll(`[class^=TUI_${selfName}]`).forEach(child => {
+            let list = [...child.classList].filter(cssClass => new RegExp(`TUI_${selfName}`).test(cssClass));
+            child.classList.remove(...list);
+        });
+        return el.classList.remove(`TUI_${selfName}-activated`);
+    }
 
-      const ul = $(this), // текущий список
-            btn = $('<i/>', {class: 'menu_btn', html: conf.icon})// кнопка для мобильной версии
-              .on('click.TUI', function() {// показать\скрыть меню
-                ul.toggleClass('active');
-              }),
-            sub_btn = $('<i/>', {class: 'menu_sub_btn', html: conf.icon})// кнопка для вложенных списков
-              .on('click.TUI', function() {// показать\скрыть субменю;
-                $(this).prev('ul').toggleClass('active');
-              });
+    /**
+     * Public
+     */
 
-      ul.before(btn);// добавить кнопку
-      ul.find('ul').prev('a,span').addClass('menu_sub_link').end().after(sub_btn);// добавить кнопки субменю
-      ul.find('a').each(function() {// выделение ссылок с url совпавшими с url текущей страницы
-        const l = window.location,
-              h = $(this).attr('href');
-        if (l.pathname === h || l.pathname + l.search === h || l.href === h)
-          $(this).parents('li').addClass('mark');// пометить пункты
-      });
+    return {
 
-      ul.data('activate', true);// метка активации
-    });
-  },
+        /**
+         * Helpers
+         */
 
-  /**
-   * Input type="file"
-   *
-   * @param {object} user_conf Пользовательская конфигурация
-   * @return {object} Набор объектов
-   */
-  InputFile: function(user_conf) {
-    const def_conf = {placeholder: '<i class="fas fa-folder-open"/>'}, // конфиг по умолчанию
-          conf = $.extend({}, def_conf, user_conf);// слияние в глобальный конфиг
+        /**
+         * Переключение отображения элемента
+         *
+         * @param {string} id Идентификатор элемента
+         * @param {string} display Значение CSS-свойства display видимого элемента
+         * @return {object} Элемент
+         * @constructor
+         */
+        Toggle(id, display = 'block') {
+            const selfName = 'Toggle';
+            const content = document.getElementById(id);
+            if (!content) return;
+            // обработка появления/скрытия
+            const visible = content.style.display;
+            if (visible === 'none' || content.hidden) {
+                content.style.display = display;
+                content.hidden = false;
+            } else {
+                content.style.display = 'none';
+            }
+            return content;
+        },
 
-    // обработка и возврат набора
-    return $('.file input[type="file"]').each(function() {
+        /**
+         * Всплывающая подсказка
+         *
+         * @param {object} trigger "this" Ссылка на триггер
+         * @param {string} hideEvent Cобытие для скрытия подсказки без префикса "on"
+         * @return {object} Элемент подсказки
+         */
+        Hint(trigger, hideEvent = 'mouseout') {
+            const selfName = 'Hint';
+            const hint = trigger.nextElementSibling;
+            if (!hint) return;
+            const w = hint.offsetWidth;
+            const h = hint.offsetHeight;
+            const win = window;
+            const hide = () => {
+                hint.classList.remove(`TUI_${selfName}-show`);
+                hint.style.left = 0;
+            }
+            // обработка положения подсказки
+            trigger.addEventListener('mousemove', e => {
+                const cursor = {x: e.pageX, y: e.pageY};
+                const distance = { //дистанция указателя до правого и нижнего края
+                    right: win.innerWidth - (cursor.x - win.pageXOffset),
+                    bottom: win.innerHeight - (cursor.y - win.pageYOffset)
+                };
+                // разместить слева указателя если близко к правому краю
+                hint.style.left = distance.right < w
+                    ? cursor.x - w < 0
+                        ? 0 // закрепить у левого края если значение отрицательное
+                        : cursor.x - w + 'px'
+                    : (cursor.x + 15) + 'px';
+                // разместить над указателем если близко к нижнему краю
+                hint.style.top = distance.bottom < (h + 15)
+                    ? (cursor.y - 15) - h + 'px'
+                    : (cursor.y + 15) + 'px';
+            });
+            // показать подсказку
+            hint.classList.add(`TUI_${selfName}-show`);
+            // обработка скрытия подсказки
+            document.addEventListener(hideEvent, hide);
+            return hint;
+        },
 
-      if ($(this).data('activate')) return;// если уже активировано
+        /**
+         * Лимит ввода символов в поле
+         *
+         * @param {object} trigger "this" Ссылка на поле
+         * @param {number|string} limit Лимит символов
+         * @return {object} Поле
+         */
+        Lim(trigger, limit = 50) {
+            const selfName = 'Lim';
+            if (typeof limit !== 'number') limit = parseInt(limit);
+            let val = trigger.value;
+            let counter = trigger.parentElement.querySelector(`span.TUI_${selfName}`);
+            const cut = () => trigger.value = trigger.value.substr(0, limit);
+            // создать и прикрепить счетчик если не определен
+            if (!counter) {
+                counter = document.createElement('span');
+                let paddingR = trigger.style.paddingRight;// отступ в поле (начальный)
+                counter.classList.add(`TUI_${selfName}`);
+                counter.textContent = limit.toString();
+                trigger.after(counter);
+                trigger.addEventListener('blur', () => {
+                    cut();// обрезать значение до лимита
+                    counter.remove();// удалить счетчик
+                    trigger.style.paddingRight = paddingR;// вернуть начальный отступ полю
+                });
+                trigger.style.paddingRight = counter.offsetWidth + 'px';// отступ полю на ширину счетчика
+            }
+            // обработка длины значения поля
+            if (val.length <= limit) {
+                counter.textContent = (limit - val.length).toString();
+            } else {
+                cut();
+                counter.textContent = '0';
+            }
+            return trigger;
+        },
 
-      const field = $(this), // текущее поле
-            info = $('<span/>', {class: 'file_vals', html: conf.placeholder}), // информационный элемент
-            inner = function(files) {// отображение информации
-              let name = '',
-                  size = 0,
-                  i = 0;
-              if (typeof (files) !== 'undefined' && files.length) {
-                // файлы выбраны
-                for (i in files) {
-                  if (isNaN(i)) continue;
-                  name += files.length > 1 ? `<span class="file_val">${files[i].name}</span>` : files[i].name;
-                  size += files[i].size;
-                }
-                size = (size / 1048576).toFixed(3);// общий размер файлов в mb
-                info.html(name + ' (' + size + 'mb)');// отобразить список файлов и размер в информационном элементе
-              } else {
-                // файлы не выбраны
-                info.html(conf.placeholder);// сбросить информационный элемент
-              }
+        /**
+         * Переход к элементу
+         *
+         * @param {string|null} selectorId Селектор id элемента или ничего
+         * @return {object} Элемент
+         * @constructor
+         */
+        GoTo(selectorId = null) {
+            const selfName = 'GoTo';
+            const target = selectorId || location.hash;// id элемента или хеш в url
+            if (!target) return;
+            const el = document.getElementById(target.replace(/^#/, ''));
+            setTimeout(() => {
+                el.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start',
+                });
+            }, 200);
+            return el;
+        },
+
+        // /**
+        //  * Шаблон Хелпера TUI
+        //  */
+        // Helper(prop) {
+        //     const selfName = 'Helper'; // arguments.callee.name
+        //     console.log('Hello from TUI.Helper()', this, arguments);
+        // },
+
+        /**
+         * Plugins
+         */
+
+        /**
+         * Всплывающее окно
+         *
+         * @param {string|null} id Идентификатор элемента или ничего
+         * @return {object} Элемент
+         * @constructor
+         */
+        Popup(id = null) {
+            const selfName = 'Popup';
+            if (!id || !document.getElementById(id)) {
+
+                // Активация плагина на элементах коллекции
+
+                const collection = document.querySelectorAll(`.TUI_${selfName}`);
+                collection.forEach(pop => {
+                    // обрабатывать только неактивированный элемент
+                    if (_isActivate(pop, selfName)) return;
+                    // добавить обертку, кнопки и события
+                    const box = document.createElement('div');
+                    const close = document.createElement('span');
+                    const hide = () => {
+                        box.classList.remove(`TUI_${selfName}-show`);
+                        document.body.classList.remove(`TUI_${selfName}-body`);
+                    }
+                    box.classList.add(`TUI_${selfName}-box`);
+                    box.onclick = e => e.target === box ? hide() : null;
+                    close.classList.add(`TUI_${selfName}-close`, 'fas', 'fa-times-circle');
+                    close.onclick = hide;
+                    pop.prepend(close);
+                    box.prepend(pop);
+                    document.body.append(box);
+                    // пометить элемент как активированный
+                    _markActivate(pop, selfName);
+                });
+                return collection;
+            } else {
+
+                // Показать popup по id
+
+                const pop = document.getElementById(id);
+                document.body.classList.add(`TUI_${selfName}-body`);
+                pop.closest(`.TUI_${selfName}-box`).classList.add(`TUI_${selfName}-show`);
+                return pop;
+            }
+        },
+
+        /**
+         * Меню
+         */
+        Menu() {
+            const selfName = 'Menu';
+            const defConf = {
+                selector: `.TUI_${selfName}`,
+                icon: '&#8801;',
             };
+            const methods = {
 
-      field.after(info);// прикрепить к полю информационный элемент
-      inner(this.files);// отобразить информацию если файлы уже выбраны
-      field.on('change.TUI', function() {// отображать информацию с каждым изменением
-        inner(this.files);
-      });
+                /**
+                 * Активация плагина на элементе/тах
+                 *
+                 * @param {object} userConf Пользовательская конфигурация
+                 * @return {object} Коллекция из conf.selector
+                 */
+                init(userConf = {}) {
+                    const conf = Object.assign(defConf, userConf);
+                    const collection = [...document.querySelectorAll(conf.selector)]
+                        .filter(el => el.tagName === 'UL');
+                    collection.forEach(menu => {
+                        // деактивировать текущий чтобы переписать конфиг
+                        if (_isActivate(menu, selfName)) methods.kill(conf.selector);
+                        // прикрепить элементы управления и классы, прослушку событий
+                        const toggle = el => el.classList.toggle(`TUI_${selfName}-show`);
+                        const btn = document.createElement('i');
+                        btn.classList.add(`TUI_${selfName}-btn`);
+                        btn.innerHTML = conf.icon;
+                        btn.onclick = () => toggle(menu);
+                        menu.before(btn);
+                        menu.querySelectorAll('ul').forEach(ul => {
+                            const subBtn = document.createElement('i');
+                            subBtn.classList.add(`TUI_${selfName}-sub-btn`);
+                            subBtn.innerHTML = conf.icon;
+                            subBtn.onclick = () => toggle(ul);
+                            ul.previousElementSibling.classList.add(`TUI_${selfName}-sub-link`);
+                            ul.before(subBtn);
+                        });
+                        // пометить корневой "li" с дочерней ссылкой на текущую страницу
+                        menu.querySelectorAll('a').forEach(a => {
+                            const l = location;
+                            if (l.pathname === a.href || l.pathname + l.search === a.href || l.href === a.href)
+                                a.closest(`${conf.selector} > li`).classList.add(`TUI_${selfName}-mark`);
+                        });
+                        // пометить как активированный
+                        _markActivate(menu, selfName);
+                    });
+                    return collection;
+                },
 
-      field.data('activate', true);// метка активации
-    });
-  },
+                /**
+                 * Деактивация плагина на элементе/тах
+                 *
+                 * @param {string} selector Селектор элемента/тов
+                 * @return {object} Коллекция элементов
+                 */
+                kill(selector = defConf.selector) {
+                    const collection = [...document.querySelectorAll(selector)]
+                        .filter(el => el.tagName === 'UL' && _isActivate(el, selfName));
+                    collection.forEach(menu => {
+                        // удалить динамически созданные кнопки и классы
+                        menu.previousElementSibling.remove();
+                        menu.querySelectorAll(`.TUI_${selfName}-sub-btn`).forEach(el => el.remove());
+                        // удалить метку активации
+                        _unmarkActivate(menu, selfName);
+                    });
+                    return collection;
+                },
+            };
+            return _is.apply(methods, arguments);
+        },
 
-  /**
-   * Input type="range"
-   *
-   * @return {object} Набор объектов
-   */
-  InputRange: function() {
-    // обработка и возврат набора
-    return $('.range input[type="range"]').each(function() {
+        /**
+         * Tабы
+         */
+        Tab() {
+            const selfName = 'Tab';
+            const defConf = {
+                selector: `.TUI_${selfName}`,
+            };
+            const methods = {
 
-      if ($(this).data('activate')) return;// если уже активировано
+                /**
+                 * Активация плагина на элементе/тах
+                 *
+                 * @param {object} userConf Пользовательская конфигурация
+                 * @return {object} Коллекция из conf.selector
+                 */
+                init(userConf = {}) {
+                    const conf = Object.assign(defConf, userConf);
+                    const collection = [...document.querySelectorAll(conf.selector)]
+                        .filter(el => el.tagName === 'DL');
+                    collection.forEach(tab => {
+                        // деактивировать текущий чтобы переписать конфиг
+                        if (_isActivate(tab, selfName)) methods.kill(conf.selector);
+                        // добавить классы и прослушку событий
+                        const dtAll = tab.querySelectorAll('dt');
+                        let visibleFlag = false;
+                        dtAll.forEach(dt => {
+                            dt.onclick = ({target}) => {
+                                target.parentElement.querySelectorAll('dt')
+                                    .forEach(dt => dt.classList.remove(`TUI_${selfName}-show`));
+                                target.classList.add(`TUI_${selfName}-show`);
+                            };
+                            if (dt.classList.contains(`TUI_${selfName}-show`)) visibleFlag = true;
+                        });
+                        if (!visibleFlag) dtAll[0].classList.add(`TUI_${selfName}-show`);
+                        // пометить элемент как активированный
+                        _markActivate(tab, selfName);
+                    });
+                    return collection;
+                },
 
-      const field = $(this), // текущее поле
-            info = $('<span/>', {class: 'range_val', text: field.val() || '0'});// информационный элемент
-      field.after(info);// прикрепить к полю информационный элемент
-      field.on('change.TUI', function() {// отображать информацию с каждым изменением
-        info.text(field.val());
-      });
+                /**
+                 * Деактивация плагина на элементе/тах
+                 *
+                 * @param {string} selector Селектор элемента/тов
+                 * @return {object} Коллекция элементов
+                 */
+                kill(selector = defConf.selector) {
+                    const collection = [...document.querySelectorAll(selector)]
+                        .filter(el => el.tagName === 'DL' && _isActivate(el, selfName));
+                    collection.forEach(tab => {
+                        // удалить привязку событий
+                        tab.querySelectorAll('dt')
+                            .forEach(dt => dt.onclick = null);
+                        // удалить метку активации
+                        _unmarkActivate(tab, selfName);
+                    });
+                    return collection;
+                },
+            };
+            return _is.apply(methods, arguments);
+        },
 
-      field.data('activate', true);// метка активации
-    });
-  },
+        /**
+         * Input type="file"
+         */
+        InputFile() {
+            const selfName = 'InputFile';
+            const defConf = {
+                selector: `.TUI_${selfName}`,
+                icon: '<i class="fas fa-folder-open">',
+            };
+            const methods = {
 
-  /**
-   * Переход к элементу
-   *
-   * @param {string} el Селектор id элемента
-   * @return {object} Элемент
-   */
-  GoTo: function(el) {
-    const target = el || window.location.hash;// id элемента или хеш в url
-    if (! target) return;// аргумент не передан
-    $('body,html').animate({scrollTop: $(target).offset().top}, 800);// анимированый переход
-    return $(target);
-  },
+                /**
+                 * Активация плагина на элементе/тах
+                 *
+                 * @param {object} userConf Пользовательская конфигурация
+                 * @return {object} Коллекция из conf.selector
+                 */
+                init(userConf = {}) {
+                    const conf = Object.assign(defConf, userConf);
+                    const collection = [...document.querySelectorAll(conf.selector)]
+                        .filter(el => el.tagName === 'INPUT' && el.type === 'file');
+                    collection.forEach(inputFile => {
+                        // деактивировать текущий чтобы переписать конфиг
+                        if (_isActivate(inputFile, selfName)) methods.kill(conf.selector);
+                        // добавить элементы, классы и прослушку событий
+                        const info = document.createElement('span');
+                        const innerInfo = () => {
+                            let files = inputFile.files;
+                            let name = '';
+                            let size = 0;
+                            if (files && files.length) {
+                                // файлы выбраны
+                                [...files].forEach(file => {
+                                    name += files.length > 1 ? `<span class="TUI_${selfName}-val">${file.name}</span>` : file.name;
+                                    size += file.size;
+                                });
+                                // общий размер файлов в mb
+                                size = (size / 1048576).toFixed(3);
+                                // отобразить список файлов и размер в информационном элементе
+                                info.innerHTML = `${name} (${size} Mb)`;
+                            } else {
+                                // файлы не выбраны
+                                info.innerHTML = conf.icon;
+                            }
+                        };
+                        // прикрепить инфо-элемент
+                        info.classList.add(`TUI_${selfName}-info`);
+                        info.innerHTML = conf.icon;
+                        inputFile.after(info);
+                        innerInfo();// отобразить информацию если файлы уже выбраны
+                        inputFile.onchange = innerInfo;
+                        // пометить элемент как активированный
+                        _markActivate(inputFile, selfName);
+                    });
+                    return collection;
+                },
 
-  /**
-   * Адаптивные табы
-   *
-   * @return {void}
-   */
-  Tabs: function() {
-    $('.tabs dt').on('click.TUI', function() {// клик по вкладке
-      return $(this).siblings().removeClass('tab_active').end().next('dd').addBack().addClass('tab_active');
-    });
-  },
+                /**
+                 * Деактивация плагина на элементе/тах
+                 *
+                 * @param {string} selector Селектор элемента/тов
+                 * @return {object} Коллекция элементов
+                 */
+                kill(selector = defConf.selector) {
+                    const collection = [...document.querySelectorAll(selector)]
+                        .filter(el => el.tagName === 'INPUT' && el.type === 'file' && _isActivate(el, selfName));
+                    collection.forEach(inputFile => {
+                        // вернуть элемент к состоянию до активации
+                        inputFile.nextElementSibling.remove();
+                        inputFile.onchange = null;
+                        _unmarkActivate(inputFile, selfName);
+                    });
+                    return collection;
+                },
+            };
+            return _is.apply(methods, arguments);
+        },
 
-  /**
-   * Адаптивные таблицы
-   *
-   * @return {object}
-   */
-  Tabl: function() {
-    // обработка и возврат набора
-    return $('table.tabl').each(function() {
+        /**
+         * Input type="range"
+         */
+        InputRange() {
+            const selfName = 'InputRange';
+            const defConf = {
+                selector: `.TUI_${selfName}`,
+            };
+            const methods = {
 
-      if ($(this).data('activate')) return;// если уже активировано
+                /**
+                 * Активация плагина на элементе/тах
+                 *
+                 * @param {object} userConf Пользовательская конфигурация
+                 * @return {object} Коллекция из conf.selector
+                 */
+                init(userConf = {}) {
+                    const conf = Object.assign(defConf, userConf);
+                    const collection = [...document.querySelectorAll(conf.selector)]
+                        .filter(el => el.tagName === 'INPUT' && el.type === 'range');
+                    collection.forEach(inputRange => {
+                        // деактивировать текущий чтобы переписать конфиг
+                        if (_isActivate(inputRange, selfName)) methods.kill(conf.selector);
+                        // добавить элементы, классы и прослушку событий
+                        const info = document.createElement('span');
+                        info.classList.add(`TUI_${selfName}-info`);
+                        info.innerText = inputRange.value || '0';
+                        inputRange.after(info);
+                        inputRange.onchange = () => info.innerText = inputRange.value;
+                        // пометить элемент как активированный
+                        _markActivate(inputRange, selfName);
+                    });
+                    return collection;
+                },
 
-      const table = $(this), // текущая таблица
-            h_sells = table.find('thead th,thead td');// хедер таблицы
+                /**
+                 * Деактивация плагина на элементе/тах
+                 *
+                 * @param {string} selector Селектор элемента/тов
+                 * @return {object} Коллекция элементов
+                 */
+                kill(selector = defConf.selector) {
+                    const collection = [...document.querySelectorAll(selector)]
+                        .filter(el => el.tagName === 'INPUT' && el.type === 'range' && _isActivate(el, selfName));
+                    collection.forEach(inputRange => {
+                        // вернуть элемент к состоянию до активации
+                        inputRange.nextElementSibling.remove();
+                        inputRange.onchange = null;
+                        _unmarkActivate(inputRange, selfName);
+                    });
+                    return collection;
+                },
+            };
+            return _is.apply(methods, arguments);
+        },
 
-      table.find('tbody tr').each(function() {// добавить title к ячейкам
-        $(this).find('th,td').each(function(i) {
-          $(this).attr('title', h_sells.eq(i).text());
-        });
-      });
+        /**
+         * Input type="number"
+         */
+        InputNumber() {
+            const selfName = 'InputNumber';
+            const defConf = {
+                selector: `.TUI_${selfName}`,
+                incIcon: '&plus;',
+                decIcon: '&minus;',
+            };
+            const methods = {
 
-      table.data('activate', true);// метка активации
-    });
-  },
+                /**
+                 * Активация плагина на элементе/тах
+                 *
+                 * @param {object} userConf Пользовательская конфигурация
+                 * @return {object} Коллекция из conf.selector
+                 */
+                init(userConf = {}) {
+                    const conf = Object.assign(defConf, userConf);
+                    const collection = [...document.querySelectorAll(conf.selector)]
+                        .filter(el => el.tagName === 'INPUT' && el.type === 'number');
+                    collection.forEach(inputNumber => {
+                        // деактивировать текущий чтобы переписать конфиг
+                        if (_isActivate(inputNumber, selfName)) methods.kill(conf.selector);
+                        // добавить элементы, валидацию и прослушку событий
+                        const label = inputNumber.parentElement;
+                        const inc = document.createElement('span');
+                        const dec = document.createElement('span');
+                        const opt = {
+                            step: () => parseFloat(inputNumber.step) || 1,
+                            max: () => parseFloat(inputNumber.max),
+                            min: () => parseFloat(inputNumber.min),
+                            val: () => parseFloat(inputNumber.value),
+                            up: () => opt.val() + opt.step(),
+                            down: () => opt.val() - opt.step(),
+                            setValid: () => label.classList.remove('TUI_novalid'),
+                            setNoValid: () => label.classList.add('TUI_novalid'),
+                            initVal: () => isNaN(opt.val())
+                                ? inputNumber.value = (inputNumber.getAttribute('value') || opt.min() || opt.max() || 0)
+                                : null,
+                            setVal(action) {
+                                if (inputNumber.hasAttribute('disabled') || inputNumber.hasAttribute('readonly')) return;
+                                opt.initVal();
+                                opt.setValid();
+                                if (action === 'inc') {
+                                    let max = opt.max();
+                                    let up = opt.up();
+                                    inputNumber.value = isNaN(max) ? up : max > up ? up : max;
+                                } else if (action === 'dec') {
+                                    let min = opt.min();
+                                    let down = opt.down();
+                                    inputNumber.value = isNaN(min) ? down : min < down ? down : min;
+                                }
+                            }
+                        };
+                        opt.initVal();
+                        inc.classList.add(`TUI_${selfName}-inc`);
+                        dec.classList.add(`TUI_${selfName}-dec`);
+                        inc.innerHTML = conf.incIcon;
+                        dec.innerHTML = conf.decIcon;
+                        inputNumber.after(inc);
+                        inputNumber.after(dec);
+                        inc.addEventListener('click', e => {
+                            e.preventDefault();
+                            opt.setVal('inc');
+                        });
+                        dec.addEventListener('click', e => {
+                            e.preventDefault();
+                            opt.setVal('dec');
+                        });
+                        inputNumber.oninput = () => {
+                            let max = opt.max();
+                            let min = opt.min();
+                            let val = opt.val();
+                            opt.setValid();
+                            if (isNaN(val)) opt.setNoValid();
+                            else if (!isNaN(max) && val > max) inputNumber.value = max;
+                            else if (!isNaN(min) && val < min) inputNumber.value = min;
+                        };
+                        // пометить элемент как активированный
+                        _markActivate(inputNumber, selfName);
+                    });
+                    return collection;
+                },
 
-  /**
-   * Всплывающие окна
-   *
-   * @param {string} el Cелектор id элемента
-   * @return {object} Элемент
-   */
-  Popup: function(el) {
-    // если id не передан
-    if (! el || ! $(el)[0]) {
+                /**
+                 * Деактивация плагина на элементе/тах
+                 *
+                 * @param {string} selector Селектор элемента/тов
+                 * @return {object} Коллекция элементов
+                 */
+                kill(selector = defConf.selector) {
+                    const collection = [...document.querySelectorAll(selector)]
+                        .filter(el => el.tagName === 'INPUT' && el.type === 'number' && _isActivate(el, selfName));
+                    collection.forEach(inputNumber => {
+                        // вернуть элемент к состоянию до активации
+                        inputNumber.parentElement.querySelectorAll('span').forEach(el => el.remove());
+                        inputNumber.oninput = null;
+                        _unmarkActivate(inputNumber, selfName);
+                    });
+                    return collection;
+                },
+            };
+            return _is.apply(methods, arguments);
+        },
 
-      // обработка и возврат набора
-      return $('.popup').each(function() {
+        /**
+         * Поиск по списку "select"
+         */
+        SelectSearch() {
+            const selfName = 'SelectSearch';
+            const defConf = {
+                selector: `.TUI_${selfName}`,
+                placeholder: 'Поиск по списку',
+            };
+            const methods = {
 
-        if ($(this).data('activate')) return;// если уже активировано
+                /**
+                 * Активация плагина на элементе/тах
+                 *
+                 * @param {object} userConf Пользовательская конфигурация
+                 * @return {object} Коллекция из conf.selector
+                 */
+                init(userConf = {}) {
+                    const conf = Object.assign(defConf, userConf);
+                    const collection = [...document.querySelectorAll(conf.selector)]
+                        .filter(el => el.tagName === 'SELECT');
+                    collection.forEach(select => {
+                        // деактивировать текущий чтобы переписать конфиг
+                        if (_isActivate(select, selfName)) methods.kill(conf.selector);
+                        // добавить элементы, классы и прослушку событий
+                        let input = document.createElement('input');
+                        let options = select.querySelectorAll('option');
+                        let search = () => {
+                            if (select.disabled) return;
+                            let val = input.value.toLowerCase();
+                            options.forEach(option => {
+                                option.hidden = !(option.textContent.toLowerCase().indexOf(val) > -1);
+                            });
+                        };
+                        input.classList.add(`TUI_${selfName}-input`);
+                        input.type = 'text';
+                        input.placeholder = conf.placeholder;
+                        input.oninput = search;
+                        select.before(input);
+                        select.parentElement.addEventListener('focusout', e => {
+                            if (!e.relatedTarget) {
+                                input.value = '';
+                                options.forEach(option => option.hidden = false);
+                            }
+                        });
+                        // пометить элемент как активированный
+                        _markActivate(select, selfName);
+                    });
+                    return collection;
+                },
 
-        const pop = $(this), // текущий элемент окна
-              lay = $('<div/>', {class: 'popup_lay'}) // задний фон окна
-                .on('click.TUI', function(e) {
-                  e.target === this ? $(this).fadeOut() : false;
-                }),
-              close_btn = $('<span/>', {class: 'popup_close_btn fas fa-times-circle'})
-                .on('click.TUI', function() {
-                  $(this).closest('.popup_lay').fadeOut();
-                });
+                /**
+                 * Деактивация плагина на элементе/тах
+                 *
+                 * @param {string} selector Селектор элемента/тов
+                 * @return {object} Коллекция элементов
+                 */
+                kill(selector = defConf.selector) {
+                    const collection = [...document.querySelectorAll(selector)]
+                        .filter(el => el.tagName === 'SELECT' && _isActivate(el, selfName));
+                    collection.forEach(select => {
+                        // вернуть элемент к состоянию до активации
+                        const box = select.parentElement;
+                        const e = new Event('focusout');
+                        box.dispatchEvent(e);
+                        box.querySelector(`.TUI_${selfName}-input`).remove();
+                        _unmarkActivate(select, selfName);
+                    });
+                    return collection;
+                },
+            };
+            return _is.apply(methods, arguments);
+        },
 
-        pop.prepend(close_btn).wrapAll(lay).css('display', 'inline-block');// построение структуры
-
-        pop.data('activate', true);// метка активации
-      });
+        // /**
+        //  * Шаблон плагина TUI
+        //  */
+        // Plugin() {
+        //     const selfName = 'Plugin'; // arguments.callee.name
+        //     const defConf = {selector: '.myElement'};
+        //     const methods = {
+        //         init(useConf = {}) {
+        //             const conf = Object.assign(defConf, userConf);
+        //             const collection = document.querySelectorAll(conf.selector);
+        //             collection.forEach(element => {
+        //                 if (_isActivate(element, selfName)) methods.kill(conf.selector);
+        //
+        //                 element.classList.add(`TUI_${selfName}`);
+        //                 console.log('Init TUI.Plugin() on element:', element);
+        //
+        //                 _markActivate(element, selfName);
+        //             });
+        //             return collection
+        //         },
+        //         kill(selector = defConf.selector) {
+        //             const collection = document.querySelectorAll(selector);
+        //             collection.forEach(element => {
+        //                 if (!_isActivate(element, selfName)) return;
+        //
+        //                 element.classList.remove(`TUI_${selfName}`);
+        //                 console.log('Kill TUI.Plugin() on element:', element);
+        //
+        //                 _unmarkActivate(element, selfName);
+        //             });
+        //             return collection;
+        //         }
+        //     };
+        //     return _is.apply(methods, arguments);
+        // },
     }
+})();
 
-    // id передан - показать окно
-    $(el).parent('.popup_lay').fadeIn();
-    return $(el);
-  },
-
-  /**
-   * Свернуть/развернуть контент
-   *
-   * @param {string} el Cелектор id элемента с контентом
-   * @return {void}
-   */
-  Toggle: function(el) {
-    return $(el).slideToggle(200);
-  },
-
-  /**
-   * Всплывающая подсказка
-   *
-   * @param {object} el "this" Ссылка на триггер
-   * @param {string} hide_event Cобытие для сокрытия подсказки без префикса "on"
-   * @return {object} Элемент подсказки
-   */
-  Hint: function(el, hide_event) {
-    let hint = $(el).next('.hint'), // подсказка
-        w = hint.width(),
-        h = hint.height(),
-        win = $(window),
-        hide = function() {// скрытие подсказки
-          hint.css({'visibility': 'hidden', 'z-index': '-1000'});
-        };
-
-    el.onmousemove = function(e) {// позиционирование подсказки
-      let mouse = {x: e.pageX, y: e.pageY}, // положение курсора
-          distance = {//дистанция до правого и нижнего края
-            right: win.width() - (mouse.x - win.scrollLeft()),
-            bottom: win.height() - (mouse.y - win.scrollTop())
-          };
-      // разместить слева указателя если близко к правому краю
-      distance.right < w ? hint.css('left', mouse.x - w - 20 + 'px') : hint.css('left', 20 + mouse.x + 'px');
-      // разместить над указателем если близко к нижнему краю
-      distance.bottom < h + 30 ? hint.css('top', mouse.y - h - 15 + 'px') : hint.css('top', 15 + mouse.y + 'px');
-    };
-
-    hint.css({'visibility': 'visible', 'z-index': '1000'});// показать подсказку
-
-    if (hide_event) {// переданное событие прячет подсказку
-      $(document).on(hide_event, hide);
-    } else {// прячет по умолчанию
-      $(el).on('mouseout.TUI', hide);
-    }
-
-    return hint;
-  },
-
-  /**
-   * Лимит ввода символов в поле
-   *
-   * @param {object} el "this" Ссылка на поле
-   * @param {int} limit Лимит символов
-   * @return {object} Элемент счетчика
-   */
-  Lim: function(el, limit) {
-    var field = $(el), // поле
-        val = field.val(), // значение поля
-        l = field.next('.lim'), // счетчик (уже созданный)
-        cut = function() {// обрезать строку, вернуть счетчик
-          field.val(field.val().substr(0, parseInt(limit, 10)));
-          return l;
-        };
-
-    if (! l.length) {// счетчик еще не создан
-      var l = $('<span/>', {class: 'lim', text: + limit}), // счетчик
-          padd = field.css('padding-right');// отступ в поле (начальный)
-      field.after(l)
-        .on('blur.TUI', function() {// вставка в DOM и потеря фокуса
-          cut().remove();// обрезать строку, удалить счетчик
-          field.css('padding-right', padd);// вернуть начальный отступ в поле
-        })
-        .css('padding-right', l.outerWidth(true));// отступ в поле на длину счетчика
-    }
-
-    if (val.length <= parseInt(limit, 10)) {// лимит не превышен
-      l.text(parseInt(limit, 10) - val.length);// обновить счетчик
-    } else {// лимит превышен
-      cut().text('0');// обрезать строку, обнулить счетчик
-    }
-
-    return l;
-  },
-
-  /**
-   * Поиск по выпадающему списку
-   *
-   * @return {object}
-   */
-  SelectSearch: function() {
-    const def_conf = {// конфиг по умолчанию
-          el: 'select.SelectSearch', // набор списков
-          placeholder: 'Поиск по списку', // сообщение в поле поиска
-          noresult: 'Ничего не найдено'// сообщение об отсутствии результатов поиска
-    };
-
-    const methods = {
-      /**
-       * Активация плагина на элементе/тах списка
-       *
-       * @param {object} user_conf Пользовательская конфигурация
-       * @return {object} Набор списков
-       */
-      init: function(user_conf) {
-        const conf = $.extend({}, def_conf, user_conf);// слияние в глобальный конфиг
-
-        // обработка и возврат набора
-        return $(conf.el).each(function() {
-
-          if (! $(this).is('select')) return;// если не список
-
-          if ($(this).data('activate')) {// деактивировать текущий чтобы переписать конфиг
-            methods.kill($(this));
-          }
-
-          let select = $(this), // текущий список для поиска
-              input = $('<input/>', {// поле поска
-                type: 'text',
-                class: 'SelectSearch_input',
-                placeholder: conf.placeholder
-              }),
-              options = select.find('option'), // все элементы списка
-              val, // значение в поле поиска
-              result = {}, // результат поиска (отфильтрованные элементы списка)
-              search = function() {// поиск в списке
-                if (select.is(':disabled')) return;// не искать если список заблокирован
-                val = input.val();
-                result = options.map(function() {// записать все найденые элементы
-                  if (new RegExp(val, 'i').test($(this).text())) return this;
-                });
-                if (result.length > 0) {// нашло - наполнить список нашедшим
-                  select.html($.extend({}, options, result));
-                } else {// не нашло - выдать "Не найдено"
-                  select.html($('<option/>', {text: conf.noresult, disabled: true}));
-                }
-              };
-
-          if (select.attr('multiple')) {
-            select.closest('label.select')
-              .on('focusout.TUI', function() {// вернуть исходный список
-                select.html(options);
-              });
-          }
-
-          input.on('input.TUI', search);// работа поиска
-          select.before(input);// прикрепить поле поиска к списку
-          select.addClass('SelectSearch').data('activate', true);// метка активации
-        });
-      },
-      /**
-       * Деактивация плагина на элементе/тах списка
-       *
-       * @param {string} el Селектор списка/ков
-       * @return {object} Набор списков
-       */
-      kill: function(el) {
-        // обработка и возврат набора
-        return $(el || def_conf.el).each(function() {
-
-          if (! $(this).is('select.SelectSearch')) return;// если не список
-
-          $(this).siblings('.SelectSearch_input').val('').keyup().remove();// сбросить поиск, удалить поле
-          $(this).data('activate', false);// пометить список как деактивированый
-        });
-      }
-    };
-
-    return this._is.apply(methods, arguments);
-  }
-
-  /**
-   * Шаблон метода TUI
-   */
-//    Method: function(prop) {
-//      return console.log('Hello from TUI.Method()', this, arguments);
-//    },
-
-  /**
-   * Шаблон плагина TUI
-   */
-//    Plugin: function(prop) {
-//      const def_conf = {};
-//      const methods = {
-//        init: function(user_conf){
-//          const conf = $.extend({}, def_conf, user_conf);
-//          init: function(user_conf){return console.log('Hello from TUI.Plugin()', this, arguments);
-//        }
-//      };
-//      return this._is.apply(methods, arguments);
-//    }
-
-};
-
-window.addEventListener('load', function() {
-  /**
-   * Автозапуск методов TUI
-   */
-  TUI.Menu();
-  TUI.InputFile();
-  TUI.InputRange();
-  TUI.GoTo();
-  TUI.Tabs();
-  TUI.Tabl();
-  TUI.Popup();
-  TUI.SelectSearch();
+/**
+ * Автозапуск плагинов TUI
+ *
+ * Закомментируй или удали вызов
+ * неиспользуемых плагинов.
+ * Конечно, плагины могут быть вызваны
+ * динамически в любом файле с подключенным TUI
+ *
+ */
+document.addEventListener('DOMContentLoaded', () => {
+    TUI.GoTo();
+    TUI.Popup();
+    TUI.Tab();
+    TUI.Menu();
+    TUI.InputFile();
+    TUI.InputRange();
+    TUI.InputNumber();
+    TUI.SelectSearch();
 });
