@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 include_once(APPPATH . 'controllers/Front_basic_control.php');
 
 /**
@@ -129,7 +129,7 @@ class Front_comment_control extends Front_basic_control
 &nbsp;|&nbsp;
 <a href="' . base_url('do/comment_action/del/' . $data['premod_code']) . '" target="_blank">Удалить</a>
 &nbsp;|&nbsp;
-<a href="' . base_url('admin/comment/get_list') .'" target="_blank">Управление комментариями</a>
+<a href="' . base_url('admin/comment/get_list') . '" target="_blank">Управление комментариями</a>
 ';
         // на чей email отправлять уведомление
         switch ($this->c_conf['notific']) {
@@ -160,7 +160,8 @@ class Front_comment_control extends Front_basic_control
                 $actions = $premod_actions;
                 break;
             // никому не отправлять
-            default : return;
+            default :
+                return;
         }
 
         // если есть родительский комментарий
@@ -246,9 +247,9 @@ class Front_comment_control extends Front_basic_control
             // если в имени валидный email - подписка на ответы
             'feedback' => filter_var($p['name'], FILTER_VALIDATE_EMAIL) ? 1 : 0,
             // код премодерации если комментирует не администратор/модератор
-            'premod_code' => $this->c_conf['notific'] !== 'off' ? microtime(true) : '',
+            'premod_code' => !$back_user && $this->c_conf['notific'] !== 'off' ? microtime(true) : '',
             // не публиковать если премодерация и комментирует не администратор/модератор
-            'public' => in_array($this->c_conf['notific'],
+            'public' => $back_user || in_array($this->c_conf['notific'],
                 ['off', 'site_mail', 'admin_mail', 'moderator_mail']) ? 1 : 0
         ];
         // запомнить имя комментатора для подстановки в поле формы
@@ -297,7 +298,7 @@ class Front_comment_control extends Front_basic_control
      */
     function comment_action(string $action, string $code)
     {
-        $data['msg_class'] = 'notific_r';
+        $data['msg_class'] = 'TUI_notice-r';
         $data['msg'] = '
 Ой! Ошибка..(<br>
 Возможно это временные неполадки, попробуйте снова.<br>
@@ -306,7 +307,7 @@ class Front_comment_control extends Front_basic_control
         $q = $this->db->where('premod_code', $code)->get('comments')->result_array();
         if (!isset($q[0]) || empty($q[0]) || ($action !== 'public' && $action !== 'del' && $action !== 'del_branch')) {
             // некорректное действие или нет комментария с этим кодом
-            $data['msg_class'] = 'notific_r';
+            $data['msg_class'] = 'TUI_notice-r';
             $data['msg'] = '
 Действие невозможно! Комментарий уже удален или опубликован.<br>
 <i class="fas fa-spin fa-spinner"></i>&nbsp;завершение сценария...
@@ -324,7 +325,7 @@ class Front_comment_control extends Front_basic_control
                     // отправить уведомление об ответе
                     $this->_send_feedback($q[0]);
                 }
-                $data['msg_class'] = 'notific_g';
+                $data['msg_class'] = 'TUI_notice-g';
                 $data['msg'] = '
 Комментарий успешно опубликован!<br>
 <i class="fas fa-spin fa-spinner"></i>&nbsp;завершение сценария...
@@ -334,7 +335,7 @@ class Front_comment_control extends Front_basic_control
                  * удалить комментарий
                  */
                 if ($this->front_comment_model->del_new($code)) {
-                    $data['msg_class'] = 'notific_g';
+                    $data['msg_class'] = 'TUI_notice-g';
                     $data['msg'] = '
 Комментарий успешно удален!<br>
 <i class="fas fa-spin fa-spinner"></i>&nbsp;завершение сценария...
@@ -345,7 +346,7 @@ class Front_comment_control extends Front_basic_control
                  * удалить с ветвью дочерних комментариев
                  */
                 if ($this->front_comment_model->del_branch($q[0]['id'], $q[0]['url'])) {
-                    $data['msg_class'] = 'notific_g';
+                    $data['msg_class'] = 'TUI_notice-g';
                     $data['msg'] = '
 Комментарий и ветвь дочерних комментариев успешно удалены!<br>
 <i class="fas fa-spin fa-spinner"></i>&nbsp;завершение сценария...
@@ -380,11 +381,11 @@ class Front_comment_control extends Front_basic_control
         $url = filter_var(isset($g['url']) ? $g['url'] : false, FILTER_SANITIZE_URL);
         $lexic = $this->lang->load('front_template',
             isset($g['lang']) && in_array($g['lang'], array_column($this->app('conf.langs'), 'tag')) ?
-            $g['lang'] : $this->app('conf.lang_def.tag'), true);
+                $g['lang'] : $this->app('conf.lang_def.tag'), true);
         $reload = '<a href="#" onclick="window.location.reload(true);return false;">' . $lexic['comments']['try_again'] . '</a>';
         $close = '<a href="#" onclick="window.close();return false;">' . $lexic['comments']['close_window'] . '</a>';
         $data['title'] = $lexic['comments']['unfeedback_page_title'];
-        $data['msg_class'] = 'notific_r';
+        $data['msg_class'] = 'TUI_notice-r';
         $data['msg'] = "{$lexic['comments']['data_error']} $close";
         // если данные переданы и корректны
         if ($action && $pid && $mail && $url) {
@@ -394,7 +395,7 @@ class Front_comment_control extends Front_basic_control
                  */
                 case 'uncomment':
                     $where = ['feedback' => 1, 'id' => $pid, 'name' => $mail, 'url' => $url];
-                    $data['msg_class'] = 'notific_g';
+                    $data['msg_class'] = 'TUI_notice-g';
                     $data['msg'] = "{$lexic['comments']['uncomment_ok']} {$lexic['comments']['feedback_again']}<br>$close";
                     break;
                 /**
@@ -402,7 +403,7 @@ class Front_comment_control extends Front_basic_control
                  */
                 case 'unpage':
                     $where = ['feedback' => 1, 'name' => $mail, 'url' => $url];
-                    $data['msg_class'] = 'notific_g';
+                    $data['msg_class'] = 'TUI_notice-g';
                     $data['msg'] = "{$lexic['comments']['unpage_ok']} {$lexic['comments']['feedback_again']}<br>$close";
                     break;
                 /**
@@ -410,18 +411,19 @@ class Front_comment_control extends Front_basic_control
                  */
                 case 'unsite':
                     $where = ['feedback' => 1, 'name' => $mail];
-                    $data['msg_class'] = 'notific_g';
+                    $data['msg_class'] = 'TUI_notice-g';
                     $data['msg'] = "{$lexic['comments']['unsite_ok']} {$lexic['comments']['feedback_again']}<br>$close";
                     break;
                 /**
                  * действие не корректное. загрузить шаблон с ошибкой и выйти
                  */
-                default :$this->load->view('front/do/comment_unfeedback_view', $data);
+                default :
+                    $this->load->view('front/do/comment_unfeedback_view', $data);
                     return;
             }
             // если не удалось редактировать данные
             if (!$this->db->where($where)->update('comments', ['feedback' => 0])) {
-                $data['msg_class'] = 'notific_r';
+                $data['msg_class'] = 'TUI_notice-r';
                 $data['msg'] = "{$lexic['basic']['error']}<br>{$reload}&nbsp;|&nbsp;{$close}";
             }
         }
@@ -458,7 +460,7 @@ class Front_comment_control extends Front_basic_control
                 $arr[$p['action']]++;
                 // записать в БД
                 $resp['status'] = $this->front_comment_model->
-                        add_comment_rating($p['id'], json_encode($arr, JSON_FORCE_OBJECT)) ? 'ok' : 'error';
+                add_comment_rating($p['id'], json_encode($arr, JSON_FORCE_OBJECT)) ? 'ok' : 'error';
                 // запомнить выбор пользователя для этого комментария
                 $resp['status'] === 'ok' ? $this->input->set_cookie($p['hash'], $this->input->server('REMOTE_ADDR'), 0) : null;
                 $resp['rating'] = $arr;
