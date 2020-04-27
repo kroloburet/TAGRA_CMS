@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="<?= $data['lang'] ?>">
-  <head>
-    <meta name="generator" content="Powered by Tagra CMS. Development and design by Sergey Nizhnik kroloburet@gmail.com">
+<head>
+    <meta name="generator"
+          content="Powered by Tagra CMS. Development and design by Sergey Nizhnik kroloburet@gmail.com">
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,54 +10,124 @@
     <meta name="description" content="<?= htmlspecialchars($data['description']) ?>">
     <title><?= $data['title'] ?> | <?= $conf['site_name'] ?></title>
 
+    <!--
+    ########### Нreflangs
+    -->
+
+    <link rel="alternate" hreflang="<?= $data['lang'] ?>" href="<?= current_url() ?>">
+    <?php
+    if (isset($data['versions']) && $data['versions']) {
+        $versions = json_decode($data['versions'], true);
+        foreach ($versions as $lang => $v) {
+            echo '<link rel="alternate" hreflang="' . $lang . '" href="' . base_url($v['url']) . '">' . PHP_EOL;
+        }
+    }
+    ?>
+
     <?php
     if ($conf['markup_data']) {
         $this->load->helper('front/markup_data');
         (new Markup_data())->print();
     } ?>
 
-    <!-- презагрузка страницы -->
-    <style>#preload_lay{display:block;position:fixed;z-index:99999;top:0;left:0;width:100%;height:100%;background-color:#fff}#preload{box-sizing:border-box;margin:-50px;position:absolute;top:50%;left:50%;border:7px solid rgba(180,180,180,0.2);border-left-color:var(--color-base);-webkit-transform:translateZ(0);-ms-transform:translateZ(0);transform:translateZ(0);-webkit-animation:load 1.1s infinite linear;animation:load 1.1s infinite linear}#preload,#preload:after{border-radius:50%;width:100px;height:100px}@-webkit-keyframes load{0%{-webkit-transform:rotate(0deg);transform:rotate(0deg)}100%{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}@keyframes load{0%{-webkit-transform:rotate(0deg);transform:rotate(0deg)}100%{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}</style>
-    <script>window.onload = function() {document.getElementById("preload_lay").style.display = "none";};</script>
+    <!--
+    ########### Презагрузка страницы
+    -->
 
-    <!-- шаблон -->
     <style>
-      .container{max-width:<?= htmlspecialchars($conf['body_width']) ?>px;}
-      #layout_l{width:<?= isset($data['layout_l_width'])
-                            ? htmlspecialchars($data['layout_l_width'])
-                            : htmlspecialchars($conf['layout_l_width']) ?>%;}
+        #pagePreloaderBox {
+            display: block;
+            position: fixed;
+            z-index: 99999;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+        }
+
+        #pagePreloader {
+            box-sizing: border-box;
+            margin: -50px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            border: 7px solid rgba(180, 180, 180, .2);
+            border-left-color: var(--color-base);
+            transform: translateZ(0);
+            animation: preloader 1s infinite linear;
+        }
+
+        #pagePreloader, #pagePreloader::after {
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+        }
+
+        @keyframes preloader {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+    <script>
+        window.onload = () => document.getElementById('pagePreloaderBox').style.display = 'none';
+    </script>
+
+    <!--
+    ########### Макет
+    -->
+
+    <style>
+        .container {
+            max-width: <?= htmlspecialchars($conf['body_width']) ?>px;
+        }
+
+        #layouts {
+            grid-template: auto/<?= isset($data['layout_l_width'])
+            ? htmlspecialchars($data['layout_l_width']) . '% 1fr'
+            : htmlspecialchars($conf['layout_l_width']) . '% 1fr' ?>;
+        }
     </style>
 
     <?php if (isset($data['css']) && $data['css']) {
-        echo '<!-- пользовательские стили материала -->'. PHP_EOL . $data['css'] . PHP_EOL;
+        echo "
+    <!--
+    ########### Пользовательский CSS для материала
+    -->
+    \n{$data['css']}\n";
     } ?>
 
-  </head>
-  <body id="body">
+</head>
+<body id="body">
 
-    <!--
-    ########### Оно тебе надо?
-    ########### Лучше бы Пушкина почитал..)
-    -->
+<!--
+########### Оно тебе надо?
+########### Лучше бы Пушкина почитал..)
+-->
 
-    <div id="preload_lay">
-      <div id="preload"></div>
-    </div>
-    <noscript>
-      <div class="notific_y"><?= $lexic['basic']['nojs'] ?></div>
-    </noscript>
+<div id="pagePreloaderBox">
+    <div id="pagePreloader"></div>
+</div>
+<noscript>
+    <div class="TUI_notice-y"><?= $lexic['basic']['nojs'] ?></div>
+</noscript>
 
-    <!--
-    ########### Header
-    -->
+<!--
+########### Header
+-->
 
-    <div class="header_wrapper">
-      <div class="header_container container">
+<header>
+    <div class="container header_container TUI_noprint">
         <?php
         $this->load->helper('front/nav');
         $nav = new nav();
         $nav->langs();
         $nav->menu();
         ?>
-      </div>
     </div>
+</header>
+
