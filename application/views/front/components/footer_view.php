@@ -26,7 +26,10 @@
 </footer>
 <div class="go_top_btn TUI_noprint" onclick="TUI.GoTo('#body')"></div>
 
-<!-- отложенная загрузка-->
+<!--
+########### Отложенная загрузка
+-->
+
 <script>
     ;(function () {
         const head = document.getElementsByTagName('head')[0];
@@ -57,14 +60,13 @@
     })();
 </script>
 
-<!-- отложенная загрузка JS -->
+<!--
+########### Подключение JS
+-->
+
 <script src="/Tagra_UI/script.js" defer></script>
 <script src="https://kit.fontawesome.com/bacee63d78.js" defer></script>
 <script src="<?= htmlspecialchars($conf['jq']) ?>"></script>
-
-<?php if (isset($data['js']) && $data['js']) {
-    echo '<!-- пользовательский JS к этому документу -->' . PHP_EOL . $data['js'] . PHP_EOL;
-} ?>
 
 <?php
 if (// если галерея
@@ -160,6 +162,14 @@ if (// если галерея
             }(jQuery));
         </script>
     <?php }
+} ?>
+
+<?php if (isset($data['js']) && $data['js']) {
+    echo "
+<!--
+########### Пользовательский JS для материала
+-->
+\n{$data['js']}\n";
 } ?>
 
 <!--
