@@ -1,212 +1,194 @@
 <h1><?= "{$data['view_title']} [{$data['lang']}]" ?></h1>
 
 <div class="sheath">
-  <form method="POST" action="/admin/page/add">
-    <input type="hidden" name="id" value="<?= round(microtime(true) * 1000) ?>">
-    <input type="hidden" name="creation_date" value="<?= date('Y-m-d') ?>">
-    <input type="hidden" name="lang" value="<?= $data['lang'] ?>">
+    <form method="POST" action="/admin/page/add">
+        <input type="hidden" name="id" value="<?= round(microtime(true) * 1000) ?>">
+        <input type="hidden" name="creation_date" value="<?= date('Y-m-d') ?>">
+        <input type="hidden" name="lang" value="<?= $data['lang'] ?>">
 
-    <!--
-    ########### Основное
-    -->
+        <!--
+        ########### Основное
+        -->
 
-    <div class="touch">
-      <h2>Основное</h2>
-      <hr>
-      Заголовок страницы <i class="fas fa-info-circle red" onmouseover="TUI.Hint(this)"></i>
-      <pre class="hint">
-        Должен быть информативным и емким,
-        содержать ключевые слова.
-        <b class="red">Обязательно для заполнения!</b>
-      </pre>
-      <label class="input">
-        <input type="text" name="title" onkeyup="TUI.Lim(this, 150)">
-      </label>
-      Описание <i class="fas fa-info-circle red" onmouseover="TUI.Hint(this)"></i>
-      <pre class="hint">
-        Краткое (до 250 символов) описание этой страницы
-        которое будет показано под заголовком (ссылкой)
-        в результатах поиска в Интернете (description)
-        и на странице родительского раздела. Должно быть
-        информативным и емким, содержать ключевые слова.
-        <b class="red">Обязательно для заполнения!</b>
-      </pre>
-      <label class="textarea">
-        <textarea name="description" class="no-emmet" onkeyup="TUI.Lim(this, 250)" rows="3"></textarea>
-      </label>
-      Родительский раздел <i class="fas fa-info-circle blue" onmouseover="TUI.Hint(this)"></i>
-      <pre class="hint">
-        Раздел сайта, в котором будет
-        эта страница.
-      </pre>
-      <?php
-      $this->load->helper('back/select_sections_tree');
-      new select_section();
-      ?>
-      Превью-изображение <i class="fas fa-info-circle blue" onmouseover="TUI.Hint(this)"></i>
-      <pre class="hint">
-        Введите в поле ниже ссылку на изображение
-        доступное из Интернета или выберите его
-        в менеджере файлов. Изображение будет
-        использовано как привью на эту страницу
-        в соцсетях и в списке материалов раздела.
-      </pre>
-      <label class="input inline width90">
-        <input type="text" name="img_prev" id="img_prev" value="<?= htmlspecialchars($conf['img_prev_def']) ?>">
-      </label>
-      <a href="#" class="fas fa-folder-open fa-lg blue"
-         onclick="files('img_prev', '<?= $data['lang'] ?>');return false"></a>&nbsp;
-         <i class="fas fa-eye fa-lg blue" onmouseover="img_prev(this, '#img_prev')"></i>
-      <pre class="hint"></pre>
-
-      <!--
-      ########### Дополнительные настройки
-      -->
-
-      <a href="#" onclick="TUI.Toggle('#more_basic_opt');return false">Дополнительные настройки&nbsp;
-        <i class="fas fa-angle-down"></i>
-      </a>
-      <div id="more_basic_opt" hidden>
-        <div class="row">
-          <div class="col6">
-            Кнопки <q>Share</q>
-            <label class="select">
-              <select name="addthis_share">
-                <option value="0" <?= !$conf['addthis']['share_def'] ? 'selected' : '' ?>>Скрыть</option>
-                <option value="1" <?= $conf['addthis']['share_def'] ? 'selected' : '' ?>>Показать</option>
-              </select>
-            </label>
-          </div>
-          <div class="col6">
-            Кнопки <q>Follow</q>
-            <label class="select">
-              <select name="addthis_follow">
-                <option value="0" <?= !$conf['addthis']['follow_def'] ? 'selected' : '' ?>>Скрыть</option>
-                <option value="1" <?= $conf['addthis']['follow_def'] ? 'selected' : '' ?>>Показать</option>
-              </select>
-            </label>
-          </div>
-        </div>
-        Индексация поисковыми роботами
-        <label class="select">
-          <select name="robots">
-            <option value="all">Индексировать без ограничений</option>
-            <option value="noindex">Не показывать материал в результатах поиска</option>
-            <option value="nofollow">Не проходить по ссылкам в материале</option>
-            <option value="noimageindex">Не индексировать изображения в материале</option>
-            <option value="none">Не индексировать полностью</option>
-          </select>
-        </label>
-        <div class="row">
-          <div class="col6">
-            CSS-код <i class="fas fa-info-circle blue" onmouseover="TUI.Hint(this)"></i>
-            <pre class="hint">
-              CSS-код с тегами style
-              который будет применен к этой странице.
-              Можно подгружать внешние таблицы стилей.
+        <div class="touch">
+            <h2>Основное</h2>
+            <hr>
+            Заголовок страницы <i class="fas fa-info-circle TUI_red" onmouseover="TUI.Hint(this)"></i>
+            <pre class="TUI_Hint">
+                Должен быть информативным и емким,
+                содержать ключевые слова.
+                <b class="TUI_red">Обязательно для заполнения!</b>
             </pre>
-            <label class="textarea">
-              <textarea name="css" class="emmet-syntax-css"
-                        placeholder="CSS-код с тегами <style> и </style>"
-                        rows="6"></textarea>
+            <label class="TUI_input">
+                <input type="text" name="title" oninput="TUI.Lim(this, 150)">
             </label>
-          </div>
-          <div class="col6">
-            JavaScript-код <i class="fas fa-info-circle blue" onmouseover="TUI.Hint(this)"></i>
-            <pre class="hint">
-              JavaScript-код с тегами script
-              который будет применен к этой странице.
-              Можно подгружать внешние скрипты.
+            Описание <i class="fas fa-info-circle TUI_red" onmouseover="TUI.Hint(this)"></i>
+            <pre class="TUI_Hint">
+                Краткое (до 250 символов) описание этой страницы
+                которое будет показано под заголовком (ссылкой)
+                в результатах поиска в Интернете (description)
+                и на странице родительского раздела. Должно быть
+                информативным и емким, содержать ключевые слова.
+                <b class="TUI_red">Обязательно для заполнения!</b>
             </pre>
-            <label class="textarea">
-              <textarea name="js" class="no-emmet"
-                        placeholder="JavaScript-код с тегами <script> и </script>"
-                        rows="6"></textarea>
+            <label class="TUI_textarea">
+                <textarea name="description" class="no-emmet" oninput="TUI.Lim(this, 250)" rows="3"></textarea>
             </label>
-          </div>
+            Родительский раздел <i class="fas fa-info-circle TUI_blue" onmouseover="TUI.Hint(this)"></i>
+            <pre class="TUI_Hint">
+                Раздел сайта, в котором будет
+                эта страница.
+            </pre>
+            <?php
+            $this->load->helper('back/select_sections_tree');
+            new select_section();
+            ?>
+            Превью-изображение <i class="fas fa-info-circle TUI_blue" onmouseover="TUI.Hint(this)"></i>
+            <pre class="TUI_Hint">
+                Введите в поле ниже ссылку на изображение
+                доступное из Интернета или выберите его
+                в менеджере файлов. Изображение будет
+                использовано как привью на эту страницу
+                в соцсетях и в списке материалов раздела.
+            </pre>
+            <div class="TUI_fieldset">
+                <label class="TUI_input">
+                    <input type="text" name="img_prev" id="img_prev" value="<?= htmlspecialchars($conf['img_prev_def']) ?>">
+                </label>
+                <a href="#" class="fas fa-folder-open fa-2x TUI_blue"
+                   onclick="files('img_prev', '<?= $data['lang'] ?>');return false"></a>
+                <i class="fas fa-eye fa-2x TUI_blue" onmouseover="img_prev(this, '#img_prev')"></i>
+                <pre class="TUI_Hint"></pre>
+            </div>
+
+            <!--
+            ########### Дополнительные настройки
+            -->
+
+            <a href="#" onclick="TUI.Toggle('more_basic_opt');return false">Дополнительные настройки&nbsp;
+                <i class="fas fa-angle-down"></i>
+            </a>
+            <div id="more_basic_opt" hidden>
+                <div class="TUI_row">
+                    <div class="TUI_col-6">
+                        Кнопки <q>Share</q>
+                        <label class="TUI_select">
+                            <select name="addthis_share">
+                                <option value="0" <?= !$conf['addthis']['share_def'] ? 'selected' : '' ?>>Скрыть
+                                </option>
+                                <option value="1" <?= $conf['addthis']['share_def'] ? 'selected' : '' ?>>Показать
+                                </option>
+                            </select>
+                        </label>
+                    </div>
+                    <div class="TUI_col-6">
+                        Кнопки <q>Follow</q>
+                        <label class="TUI_select">
+                            <select name="addthis_follow">
+                                <option value="0" <?= !$conf['addthis']['follow_def'] ? 'selected' : '' ?>>Скрыть
+                                </option>
+                                <option value="1" <?= $conf['addthis']['follow_def'] ? 'selected' : '' ?>>Показать
+                                </option>
+                            </select>
+                        </label>
+                    </div>
+                </div>
+                Индексация поисковыми роботами
+                <label class="TUI_select">
+                    <select name="robots">
+                        <option value="all">Индексировать без ограничений</option>
+                        <option value="noindex">Не показывать материал в результатах поиска</option>
+                        <option value="nofollow">Не проходить по ссылкам в материале</option>
+                        <option value="noimageindex">Не индексировать изображения в материале</option>
+                        <option value="none">Не индексировать полностью</option>
+                    </select>
+                </label>
+                <div class="TUI_row">
+                    <div class="TUI_col-6">
+                        CSS-код <i class="fas fa-info-circle TUI_blue" onmouseover="TUI.Hint(this)"></i>
+                        <pre class="TUI_Hint">
+                            CSS-код с тегами style
+                            который будет применен к этой странице.
+                            Можно подгружать внешние таблицы стилей.
+                        </pre>
+                        <label class="TUI_textarea">
+                            <textarea name="css" class="emmet-syntax-css"
+                                      placeholder="CSS-код с тегами <style> и </style>"
+                                      rows="6"></textarea>
+                        </label>
+                    </div>
+                    <div class="TUI_col-6">
+                        JavaScript-код <i class="fas fa-info-circle TUI_blue" onmouseover="TUI.Hint(this)"></i>
+                        <pre class="TUI_Hint">
+                            JavaScript-код с тегами script
+                            который будет применен к этой странице.
+                            Можно подгружать внешние скрипты.
+                        </pre>
+                        <label class="TUI_textarea">
+                            <textarea name="js" class="no-emmet"
+                                      placeholder="JavaScript-код с тегами <script> и </script>"
+                                      rows="6"></textarea>
+                        </label>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
 
-    <!--
-    ########### Контент
-    -->
+        <?php
+        $this->load->helper('back/content');
+        content();
+        ?>
 
-    <div class="touch">
-      <h2>Контент</h2>
-      <hr>
-      Ширина левой колонки макета&nbsp;
-      <input type="text" name="layout_l_width" class="layout_l_width_input"
-             value="<?= htmlspecialchars($conf['layout_l_width']) ?>" size="3"
-             onkeyup="$('#layout_l').css('width', ($(this).val() - 2) + '%')">&nbsp;%&nbsp;&nbsp;
-      <a href="#"
-         onclick="$('#layout_t,#layout_l,#layout_r,#layout_b').removeClass('nav_layout_active');return false">
-        Kомпактно <i class="fas fa-compress"></i>
-      </a>&nbsp;&nbsp;
-      <a href="#" onclick="TUI.Toggle('#o_makete');return false">
-        О макете <i class="fas fa-angle-down"></i>
-      </a>
-      <div id="o_makete" hidden>
-        Чтобы основная часть страницы проще воспринималась визуально и была адаптивной, она представлена в виде макета. Сам макет разделен на 4 сегмента (колонки). Вы можете заполнять один и более этих сегментов своим контентом (содержимым). Чтобы разместить или редактировать контент в одном из сегментов, выберите его, кликнув по нему мышкой. Пустой сегмент, без контента, не будет отображаться на странице. Вы можете задать ширину левой колонки в процентном отношении к общей ширине шаблона. Значение ширины шаблона и ширина левой колонки по умолчанию для всех вновь создаваемых материалов устанавливается в настройках <q>Макет и редактор</q> (в главном меню: Конфигурация). Чтобы вернуть макет к <q>компактному</q> виду, нажмите на <q>Компактно</q> в верхней части этого блока.
-      </div>
-      <div style="margin-top:.5em">
-        <div id="layout_t" class="nav_layout_t"></div>
-        <div id="layout_l" class="nav_layout_l" style="width:<?= $conf['layout_l_width'] ?>%"></div>
-        <div id="layout_r" class="nav_layout_r"></div>
-        <div id="layout_b" class="nav_layout_b"></div>
-      </div>
-    </div>
+        <?php
+        $this->load->helper('back/versions');
+        versions('pages');
+        ?>
 
-    <?php
-    $this->load->helper('back/versions');
-    versions('pages');
-    ?>
+        <!--
+        ########### Доступность
+        -->
 
-    <!--
-    ########### Доступность
-    -->
-
-    <div class="touch">
-      <h2>Доступность</h2>
-      <hr>
-      <div class="row">
-        <div class="col6">
-          <label class="select">
-            <select name="comments">
-              <option value="on">Разрешить комментировать и отвечать</option>
-              <option value="on_comment">Разрешить только комментировать</option>
-              <option value="off">Запретить комментировать и отвечать</option>
-            </select>
-          </label>
+        <div class="touch">
+            <h2>Доступность</h2>
+            <hr>
+            <div class="TUI_row">
+                <div class="TUI_col-6">
+                    <label class="TUI_select">
+                        <select name="comments">
+                            <option value="on">Разрешить комментировать и отвечать</option>
+                            <option value="on_comment">Разрешить только комментировать</option>
+                            <option value="off">Запретить комментировать и отвечать</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="TUI_col-6">
+                    <label class="TUI_select">
+                        <select name="public">
+                            <option value="1">Опубликовать</option>
+                            <option value="0">Не опубликовывать</option>
+                        </select>
+                    </label>
+                </div>
+            </div>
         </div>
-        <div class="col6">
-          <label class="select">
-            <select name="public">
-              <option value="1">Опубликовать</option>
-              <option value="0">Не опубликовывать</option>
-            </select>
-          </label>
-        </div>
-      </div>
-    </div>
 
-    <div class="button this_form_control">
-      <button type="button" onclick="subm(form, req)">Добавить страницу</button>
-      <a href="/admin/page/get_list" class="btn_lnk">Отменить</a>
-    </div>
-  </form>
+        <div class="TUI_fieldset this_form_control">
+            <button type="button" onclick="subm(form, req)">Добавить страницу</button>
+            <a href="/admin/page/get_list" class="TUI_btn-link">Отменить</a>
+        </div>
+    </form>
 </div>
 
 <script>
     // рег.выражения для проверки полей
     const req = {
-      title: /[^\s]/,
-      description: /[^\s]/
+        title: /[^\s]/,
+        description: /[^\s]/
     };
 
-    $(function() {
-      // значения полей
-      $('select[name="comments"] option[value="<?= $conf['comments']['form'] ?>"]').attr('selected', true);
+    $(function () {
+        // значения полей
+        $('select[name="comments"] option[value="<?= $conf['comments']['form'] ?>"]').attr('selected', true);
     });
 </script>
 
