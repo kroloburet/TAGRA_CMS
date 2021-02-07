@@ -540,6 +540,7 @@ const TUI = (function () {
                 selector: `.TUI_${selfName}`,
                 incIcon: '&plus;',
                 decIcon: '&minus;',
+                info: 'Поставьте курсор в поле и крутите колесико мыши ;)',
             };
             const methods = {
 
@@ -611,6 +612,7 @@ const TUI = (function () {
                             else if (!isNaN(max) && val > max) inputNumber.value = max;
                             else if (!isNaN(min) && val < min) inputNumber.value = min;
                         };
+                        label.title = conf.info;
                         // пометить элемент как активированный
                         _markActivate(inputNumber, selfName);
                     });
