@@ -12,7 +12,10 @@
 
 /*---------------------------------------------- TUI variables ---*/
 :root {
-    --color-base-bg: #fff;
+    --font-base: Georgia, Helvetica, Arial;
+    --radius-border: 3px;
+    --color-active-bg: rgba(0, 0, 0, .05);
+    --color-base-bg: #ffffff;
     --color-base: #e7d977;
     --color-font: #291000;
     --color-mark: #ffef78;
@@ -22,16 +25,29 @@
     --color-red: #ff3300;
     --color-blue: #0e7aa9;
     --color-yellow: #e5ca00;
-    --color-gray: #999;
+    --color-gray: #999999;
     --color-bg-green: #8cf097;
     --color-bg-red: #f0ac8c;
     --color-bg-blue: #cfe1ff;
     --color-bg-yellow: #f4f097;
     --color-form: #437ee0;
     --color-form-border: #4a76be;
-    --color-form-disabled: #bbb;
-    --radius-border: 3px;
-    --font-base: Georgia, Helvetica, Arial;
+    --color-form-disabled: #bbbbbb;
+    --color-form-field-bg: var(--color-base-bg);
+    --color-font-btn: #ffffff;
+    --color-font-field: var(--color-font);
+    --notice-color-font: #000000;
+    --hint-color-font: #000000;
+    --hint-color-border: #999999;
+    --hint-color-border-shadow: #333333;
+    --hint-color-bg: #f9f9f9;
+    --popup-color-box-bg: rgba(0, 0, 0, .95);
+    --popup-color-bg: var(--color-base-bg);
+    --popup-color-font: var(--color-font);
+    --popup-color-btn: var(--color-link);
+    --popup-color-btn-hover: var(--color-link-hover);
+    --menu-color-bg: var(--color-base);
+    --menu-color-font: var(--color-font);
 }
 
 /*---------------------------------------------- Layouts & typographic ---*/
@@ -42,7 +58,6 @@
 *, :focus, :active, :visited, :hover {
     outline: none;
     outline-offset: 0;
-
 }
 
 ::-moz-focus-outer, ::-moz-focus-inner, :-moz-focusring {
@@ -61,7 +76,6 @@ body {
     padding: 0 3%;
     font: 100%/1.5em var(--font-base);
     color: var(--color-font);
-    background-color: var(--color-base-bg);
 }
 
 @media (max-width: 600px) {
@@ -140,7 +154,7 @@ hr {
 
 abbr {
     text-decoration: none;
-    border-bottom: #999 dashed 1px;
+    border-bottom: var(--color-gray) dashed 1px;
     cursor: help;
 }
 
@@ -161,7 +175,7 @@ p {
 h1, h2, h3, h4, h5, h6 {
     margin: .5em 0;
     padding: 0;
-    line-height: 1em;
+    line-height: 1.3em;
     word-break: break-word;
 }
 
@@ -207,9 +221,11 @@ input[name="fuck_bot"] {
     min-width: 0;
     border: var(--color-form-border) solid 1px;
     border-radius: var(--radius-border);
-    background-color: var(--color-base-bg);
+    background-color: var(--color-form-field-bg);
     font: 100%/1.5em var(--font-base);
+    color: var(--color-font-field);
     box-shadow: none;
+    overflow: hidden;
 }
 
 /*--- TUI_fieldset ---*/
@@ -252,7 +268,7 @@ input[name="fuck_bot"] {
 .TUI_file input[type="file"] {
     padding: .3em;
     background-color: var(--color-form);
-    color: #fff;
+    color: var(--color-font-btn);
     cursor: pointer;
 }
 
@@ -351,7 +367,7 @@ input[name="fuck_bot"] {
     text-align: center;
     border-left: var(--color-form-border) solid 1px;
     background-color: var(--color-form);
-    color: #fff;
+    color: var(--color-font-btn);
     font-size: 1.7em;
 }
 
@@ -383,7 +399,7 @@ input[name="fuck_bot"] {
     margin: 0 .3em 0 0;
     width: 20px;
     height: 20px;
-    background-color: var(--color-base-bg);
+    background-color: var(--color-form-field-bg);
     border: 1px solid var(--color-form-border);
     position: relative;
 }
@@ -391,7 +407,7 @@ input[name="fuck_bot"] {
 .TUI_checkbox .custom-checkbox {
     border-radius: var(--radius-border);
     transition: box-shadow 180ms ease;
-    box-shadow: inset 0 0 0 12px var(--color-base-bg);
+    box-shadow: inset 0 0 0 12px var(--color-form-field-bg);
     top: -2px;
 }
 
@@ -420,7 +436,7 @@ input[name="fuck_bot"] {
 
 .TUI_radio .custom-radio {
     border-radius: 50%;
-    box-shadow: inset 0 0 0 12px var(--color-base-bg);
+    box-shadow: inset 0 0 0 12px var(--color-form-field-bg);
     transition: all 180ms ease;
     top: -2px;
 }
@@ -428,7 +444,7 @@ input[name="fuck_bot"] {
 .TUI_radio input[type="radio"]:checked + .custom-radio {
     border-color: var(--color-form-border);
     background-color: var(--color-form);
-    box-shadow: inset 0 0 0 4px var(--color-base-bg);
+    box-shadow: inset 0 0 0 4px var(--color-form-field-bg);
 }
 
 .icon-check {
@@ -446,12 +462,13 @@ input[name="fuck_bot"] {
     text-decoration: none;
     font-size: 1em;
     font-weight: bold;
-    color: #fff;
+    color: var(--color-font-btn);
     border: 1px solid var(--color-form-border);
     border-radius: var(--radius-border);
     background-color: var(--color-form);
     cursor: pointer;
     box-shadow: none;
+    vertical-align: middle;
 }
 
 input[type="button"]:not([disabled]):hover, input[type="submit"]:not([disabled]):hover, input[type="reset"]:not([disabled]):hover, button:not([disabled]):hover, .TUI_btn-link:hover {
@@ -469,7 +486,7 @@ input[type="button"]:not([disabled]):active, input[type="submit"]:not([disabled]
 }
 
 .TUI_btn-link:hover {
-    color: #fff;
+    color: var(--color-font-btn);
 }
 
 /*--- TUI_search ---*/
@@ -486,7 +503,7 @@ input[type="button"]:not([disabled]):active, input[type="submit"]:not([disabled]
     margin: 0;
     padding: .3em .5em;
     border-radius: 0 var(--radius-border) var(--radius-border) 0;
-    color: #fff;
+    color: var(--color-font-btn);
 }
 
 @media (max-width: 350px) {
@@ -511,6 +528,7 @@ input[type="button"]:not([disabled]):active, input[type="submit"]:not([disabled]
     width: auto;
     display: inline-block;
     margin-right: 10px;
+    vertical-align: middle;
 }
 
 .TUI_range.inline, .TUI_number.inline {
@@ -549,7 +567,11 @@ input[type="button"][disabled], input[type="submit"][disabled], input[type="rese
     padding: 1em 1em 1em 4.5em;
     margin: 0 0 1em 0;
     border-radius: var(--radius-border);
-    color: #000;
+    color: var(--notice-color-font);
+}
+
+.TUI_notice-g hr, .TUI_notice-r hr, .TUI_notice-y hr, .TUI_notice-b hr {
+    border-bottom: 1px solid rgba(255, 255, 255, .7);
 }
 
 .TUI_notice-g::before, .TUI_notice-r::before, .TUI_notice-y::before, .TUI_notice-b::before {
@@ -722,7 +744,7 @@ table.TUI_table {
 }
 
 .TUI_table tr:hover {
-    background-color: rgba(0, 0, 0, .05);
+    background-color: var(--color-active-bg);
 }
 
 .TUI_table caption {
@@ -849,7 +871,7 @@ table.TUI_table {
 
     * {
         background: transparent !important;
-        color: #000 !important;
+        color: #000000 !important;
         box-shadow: none !important;
         text-shadow: none !important;
     }
@@ -877,7 +899,7 @@ table.TUI_table {
     }
 
     pre, blockquote {
-        border: 1px solid #999;
+        border: 1px solid #999999;
         page-break-inside: avoid;
     }
 
@@ -913,17 +935,17 @@ table.TUI_table {
 
 /*---------------------------------------------- TUI_Hint ---*/
 .TUI_Hint {
-    border: solid #999 1px;
-    border-right-color: #333;
-    border-bottom-color: #333;
-    color: #000;
-    background-color: #f9f9f9;
-    max-width: 300px;
     margin: 0;
     padding: .5em;
+    max-width: 300px;
+    position: absolute;
     top: 0;
     left: 0;
-    position: absolute;
+    border: solid 1px var(--hint-color-border);
+    border-right-color: var(--hint-color-border-shadow);
+    border-bottom-color: var(--hint-color-border-shadow);
+    background-color: var(--hint-color-bg);
+    color: var(--hint-color-font);
     text-align: left;
     font-size: 11px;
     line-height: normal;
@@ -952,7 +974,7 @@ pre.TUI_Hint {
     top: 0;
     right: 0;
     z-index: 1;
-    color: #999;
+    color: var(--color-form-border);
     font: 100%/1.5em var(--font-base);
     white-space: nowrap;
 }
@@ -979,7 +1001,7 @@ pre.TUI_Hint {
     height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
-    background-color: rgba(0, 0, 0, .95);
+    background-color: var(--popup-color-box-bg);
     text-align: center;
     z-index: 9999;
 }
@@ -1002,9 +1024,10 @@ pre.TUI_Hint {
     max-width: 100%;
     padding: 1.5em;
     margin: 4em 3%;
-    border: 1px solid #000;
+    border: 1px solid var(--popup-color-font);
     border-radius: var(--radius-border);
-    background-color: var(--color-base-bg);
+    background-color: var(--popup-color-bg);
+    color: var(--popup-color-font);
     text-align: left;
 }
 
@@ -1012,13 +1035,13 @@ pre.TUI_Hint {
     position: absolute;
     top: -1.5em;
     right: 0;
-    color: var(--color-base-bg);
+    color: var(--popup-color-btn);
     font-size: 2em;
     cursor: pointer;
 }
 
 .TUI_Popup .TUI_Popup-close:hover {
-    color: var(--color-link-hover);
+    color: var(--popup-color-btn-hover);
 }
 
 @media (max-width: 400px) {
@@ -1041,7 +1064,7 @@ pre.TUI_Hint {
     margin: 0;
     padding: 0;
     list-style: none;
-    background-color: var(--color-base);
+    background-color: var(--menu-color-bg);
 }
 
 .TUI_Menu-activated li {
@@ -1058,7 +1081,7 @@ pre.TUI_Hint {
     white-space: nowrap;
     text-decoration: none;
     font-size: 1.2em;
-    color: var(--color-font);
+    color: var(--menu-color-font);
 }
 
 .TUI_Menu-activated ul {
@@ -1066,14 +1089,14 @@ pre.TUI_Hint {
     margin: 0;
     padding: 0;
     position: absolute;
-    background-color: var(--color-base);
+    background-color: var(--menu-color-bg);
 }
 
 .TUI_Menu-activated ul li {
     display: block;
     margin: 0;
     padding: 0;
-    background-color: var(--color-base);
+    background-color: var(--menu-color-bg);
 }
 
 .TUI_Menu-activated ul ul {
@@ -1082,7 +1105,7 @@ pre.TUI_Hint {
 }
 
 .TUI_Menu-activated .TUI_Menu-mark, .TUI_Menu-activated li a:hover, .TUI_Menu-activated li span:hover, .TUI_Menu-activated li:hover > a, .TUI_Menu-activated li:hover > span, .TUI_Menu-activated ul li a:hover, .TUI_Menu-activated ul li:hover > a, .TUI_Menu-activated ul li:hover > span {
-    background-color: rgba(0, 0, 0, .05);
+    background-color: var(--color-active-bg);
 }
 
 .TUI_Menu-activated li:hover > ul {
@@ -1096,7 +1119,7 @@ pre.TUI_Hint {
     font-style: normal;
     text-align: center;
     line-height: 1em;
-    background-color: var(--color-base);
+    background-color: var(--menu-color-bg);
     cursor: pointer;
 }
 
@@ -1104,7 +1127,7 @@ pre.TUI_Hint {
     display: none;
     text-align: center;
     font-style: normal;
-    background-color: rgba(0, 0, 0, .05);
+    background-color: var(--color-active-bg);
     margin: 0;
     padding: .4em .6em;
     z-index: 100;
@@ -1132,7 +1155,7 @@ pre.TUI_Hint {
         position: relative;
         top: 0;
         left: 0;
-        background-color: rgba(0, 0, 0, .05);
+        background-color: var(--color-active-bg);
     }
 
     .TUI_Menu-activated li a, .TUI_Menu-activated li span {
@@ -1163,6 +1186,7 @@ pre.TUI_Hint {
     margin: 0 0 1.5em 0;
     padding: 0;
     text-align: left;
+    border-radius: var(--radius-border);
 }
 
 .TUI_Tab-activated dt {
@@ -1173,6 +1197,7 @@ pre.TUI_Hint {
     left: 0;
     cursor: pointer;
     font-size: 1.2em;
+    border-radius: var(--radius-border) var(--radius-border) 0 0;
 }
 
 .TUI_Tab-activated dt:hover {
@@ -1188,6 +1213,7 @@ pre.TUI_Hint {
     overflow: auto;
     background-color: var(--color-base-bg);
     border-top: 2px solid var(--color-base);
+    border-radius: 0 0 var(--radius-border) var(--radius-border);
     z-index: 2;
 }
 
@@ -1209,12 +1235,18 @@ pre.TUI_Hint {
     .TUI_Tab-activated dt {
         float: none;
         background-color: var(--color-base);
+        border-radius: 0;
     }
 
     .TUI_Tab-activated dd {
         float: none;
         margin: 0;
         border: 1px solid var(--color-base);
+        border-radius: 0;
+    }
+
+    .TUI_Tab-activated dd:last-child {
+        border-radius: 0 0 var(--radius-border) var(--radius-border);
     }
 }
 
@@ -1228,7 +1260,7 @@ pre.TUI_Hint {
 
 .TUI_InputFile-activated + .TUI_InputFile-info {
     display: inline-block;
-    color: #fff;
+    color: var(--color-font-btn);
     padding: .3em .6em;
     background-color: var(--color-form);
     border-right: var(--color-form-border) solid 1px;
@@ -1262,7 +1294,7 @@ pre.TUI_Hint {
     position: relative;
     padding: .3em;
     text-align: center;
-    color: #fff;
+    color: var(--color-font-btn);
     border-radius: var(--radius-border);
     border: 1px solid var(--color-form-border);
     z-index: 0;
@@ -1301,7 +1333,7 @@ pre.TUI_Hint {
     margin: 0;
     min-width: 1.3em;
     font-size: 1.7em;
-    color: #fff;
+    color: var(--color-font-btn);
     background-color: var(--color-form);
     cursor: pointer;
 }
