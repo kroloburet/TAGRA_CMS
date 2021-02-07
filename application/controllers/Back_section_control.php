@@ -99,15 +99,19 @@ class Back_section_control extends Back_basic_control
      * Удалить раздел
      *
      * Метод принимает данные из POST переданные
-     * ajax запросом, удалит материал и выведет строку ответа.
+     * ajax запросом, удалит материал и все дочерние
+     * материалы вместе с комментариями
      *
      * @return void
      */
     function del()
     {
-        $p = $this->input->post();
-        $res = $this->back_section_model->del_section($p['id']);
+        $p = array_map('trim', $this->input->post());
+        empty($p['id']) || empty($p['lang']) ? exit(json_encode(['status' => 'error'])) : null;
+        $res = $this->back_section_model->del_section($p['id'], $p['lang']);
         $this->app('conf.sitemap.generate') === 'auto' ? $this->sitemap_generator() : null;
-        exit($res ? 'ok' : 'error');
+        exit(json_encode(
+            $res ? ['status' => 'ok', 'ids' => $res] : ['status' => 'error']
+            , JSON_FORCE_OBJECT));
     }
 }

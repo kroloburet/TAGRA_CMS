@@ -49,44 +49,90 @@ class Back_section_model extends Back_basic_model
     /**
      * Удалить раздел
      *
-     * Удаляя раздел также удалит дочерние материалы
-     * этого раздела и комментарии раздела.
+     * Метод удаляет раздел с комментариями и рекурсивно
+     * удаляет все дочерние материалы и относящиеся к ним
+     * комментарии.
      *
-     * @param string $id Идентификатор раздела
-     * @return boolean
+     * @param string $id Идентификатор удаляемого раздела
+     * @param string $lang Язык удаляемого раздела
+     * @return array Идентификаторы удаленных разделов
      */
-    function del_section(string $id)
+    function del_section(string $id, string $lang)
     {
-        $url = 'section/' . $id;
+        /**
+         * Получить и форматировать данные
+         */
+        $m = []; // будет содержать отфарматированные данные
+        $del = ['sections' => [], 'gallerys' => [], 'pages' => [], 'uri' => []]; // будет содержать id и uri для удаления
+        // получить разделы и страницы
+        $q['sections'] = $this->db->select('id, section')->get_where('sections', ['lang' => $lang])->result_array();
+        $q['gallerys'] = $this->db->select('id, section')->get_where('gallerys', ['lang' => $lang])->result_array();
+        $q['pages'] = $this->db->select('id, section')->get_where('pages', ['lang' => $lang])->result_array();
+        // форматировать данные разделов
+        if (!empty($q['sections'])) {
+            foreach ($q['sections'] as $v) {
+                $v['type'] = 'sections';
+                $v['uri'] = "section/{$v['id']}";
+                $m[] = $v;
+            }
+        }
+        // форматировать данные галерей
+        if (!empty($q['gallerys'])) {
+            foreach ($q['gallerys'] as $v) {
+                $v['type'] = 'gallerys';
+                $v['uri'] = "section/{$v['id']}";
+                $m[] = $v;
+            }
+        }
+        // форматировать данные страниц
+        if (!empty($q['pages'])) {
+            foreach ($q['pages'] as $v) {
+                $v['type'] = 'pages';
+                $v['uri'] = "page/{$v['id']}";
+                $m[] = $v;
+            }
+        }
+        unset($q);
 
-        // получить url дочерних материалов для удаления комментариев
-        $urls[] = $url;
-        $ids['p'] = $this->db->select('id')->get_where('pages', ['section' => $id]);
-        $ids['s'] = $this->db->select('id')->get_where('sections', ['section' => $id]);
-        $ids['g'] = $this->db->select('id')->get_where('gallerys', ['section' => $id]);
-        // url дочерних страниц
-        foreach ($ids['p'] as $material_id) {
-            $urls[] = 'page/' . $material_id;
-        }
-        // url дочерних разделов
-        foreach ($ids['s'] as $material_id) {
-            $urls[] = 'section/' . $material_id;
-        }
-        // url дочерних галерей
-        foreach ($ids['g'] as $material_id) {
-            $urls[] = 'gallery/' . $material_id;
-        }
+        /**
+         * Рекурсивно получать данные для удаления
+         * дочерних материалов и удалять связи с
+         * материалом в версиях.
+         *
+         * @param array $data Отформатированный массив данных
+         * @param string $id Идентификатор удаляемого раздела
+         */
+        $get_del_ids = function (array $data, string $id) use (&$del, &$get_del_ids) {
+            foreach ($data as $v) {
+                if ($id === $v['section']) {
+                    $del[$v['type']][] = $v['id'];
+                    $del['uri'][] = $v['uri'];
+                    $this->del_versions($v['type'], "/{$v['uri']}");
+                    $get_del_ids($data, $v['id']);
+                }
+            }
+        };
+        $get_del_ids($m, $id);
+        // добавить данные для удаления текущего удоляемого раздела (родителя)
+        $del['sections'][] = $id;
+        $del['uri'][] = "section/{$id}";
+        // удалить связи с текущим (родителем) разделом в версиях
+        $this->del_versions('sections', "/section/{$id}");
 
-        // удалить материал, дочерние материалы и комментарии
-        if (
-            $this->db->delete('sections', ['id' => $id]) === false ||
-            $this->db->delete(['sections', 'pages', 'gallerys'], ['section' => $id]) === false ||
-            $this->db->where_in('url', $urls)->delete('comments') === false
-        ) {
-            return false;
+        /**
+         * Удалить дочерние материалы и вернуть id удаленных разделов
+         */
+        // удалить комментарии дочерних материалов и текущего раздела
+        $result['comments'] = $this->db->where(['lang' => $lang])->where_in('url', $del['uri'])->delete('comments');
+        // если есть, удалить дочерние галереи дочерних разделов и дочерние галереи текущего раздела
+        $result['gallerys'] = !empty($del['gallerys']) ? $this->db->where(['lang' => $lang])->where_in('id', $del['gallerys'])->delete('gallerys') : true;
+        // если есть, удалить дочерние страницы дочерних разделов и дочерние страницы текущего раздела
+        $result['pages'] = !empty($del['pages']) ? $this->db->where(['lang' => $lang])->where_in('id', $del['pages'])->delete('pages') : true;
+        // удалить дочерние разделы и текущий раздел
+        $result['sections'] = $this->db->where(['lang' => $lang])->where_in('id', $del['sections'])->delete('sections');
+        if ($result['comments'] === false || $result['gallerys'] === false || $result['pages'] === false || $result['sections'] === false) {
+            return [];
         }
-        // удалить связи с материалом в версиях
-        $this->del_versions('sections', '/' . $url);
-        return true;
+        return $del['sections'];
     }
 }
