@@ -155,7 +155,7 @@ class Back_comment_control extends Back_basic_control
             ' . $q[0]['comment'] . '
         </p>
         <p style="padding:0;margin:0.5em 0 0 2em" title="' . htmlspecialchars($lexic['comments']['new']) . '">
-            <b><i style="color:green">* </i>$reply_name</b>&nbsp;
+            <b><i style="color:green">* </i>' . $reply_name . '</b>&nbsp;
             <time style="color:#888">' . $lexic['comments']['published'] . $data['creation_date'] . '</time><br>
             ' . $data['comment'] . '<br>
             <a href="' . base_url($data['url'] . '#comment_' . $data['id']) . '"
@@ -163,30 +163,15 @@ class Back_comment_control extends Back_basic_control
         </p>
         <hr>
         ' . $lexic['comments']['unfeedback_msg'] . '<br>
-        <a href="' . base_url('do/comment_unfeedback?
-            action=uncomment
-            &pid=' . $q[0]['id'] . '
-            &mail=' . $q[0]['name'] . '
-            &url=' . $data['url'] . '
-            &lang=' . $data['lang']) . '"
+        <a href="' . base_url('do/comment_unfeedback?action=uncomment&pid=' . $q[0]['id'] . '&mail=' . $q[0]['name'] . '&url=' . $data['url'] . '&lang=' . $data['lang']) . '"
             target="_blank" title="' . htmlspecialchars($lexic['comments']['uncomment_more']) . '">
             ' . $lexic['comments']['uncomment_less'] . '
         </a>&nbsp;|&nbsp;
-        <a href="' . base_url('do/comment_unfeedback?
-            action=unpage
-            &pid=' . $q[0]['id'] . '
-            &mail=' . $q[0]['name'] . '
-            &url=' . $data['url'] . '
-            &lang=' . $data['lang']) . '"
+        <a href="' . base_url('do/comment_unfeedback?action=unpage&pid=' . $q[0]['id'] . '&mail=' . $q[0]['name'] . '&url=' . $data['url'] . '&lang=' . $data['lang']) . '"
             target="_blank" title="' . htmlspecialchars($lexic['comments']['unpage_more']) . '">
             ' . $lexic['comments']['unpage_less'] . '
         </a>&nbsp;|&nbsp;
-        <a href="' . base_url('do/comment_unfeedback?
-            action=unsite
-            &pid=' . $q[0]['id'] . '
-            &mail=' . $q[0]['name'] . '
-            &url=' . $data['url'] . '
-            &lang=' . $data['lang']) . '"
+        <a href="' . base_url('do/comment_unfeedback?action=unsite&pid=' . $q[0]['id'] . '&mail=' . $q[0]['name'] . '&url=' . $data['url'] . '&lang=' . $data['lang']) . '"
             target="_blank" title="' . htmlspecialchars($lexic['comments']['unsite_more']) . '">
             ' . $lexic['comments']['unsite_less'] . '
         </a>
