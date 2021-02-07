@@ -67,7 +67,7 @@ class Front_comment_control extends Front_basic_control
             ' . $q[0]['comment'] . '
         </p>
         <p style="padding:0;margin:0.5em 0 0 2em" title="' . htmlspecialchars($lexic['comments']['new']) . '">
-            <b><i style="color:green">* </i>$reply_name</b>&nbsp;
+            <b><i style="color:green">* </i>' . $reply_name . '</b>&nbsp;
             <time style="color:#888">' . $lexic['comments']['published'] . $data['creation_date'] . '</time><br>
             ' . $data['comment'] . '<br>
             <a href="' . base_url($data['url'] . '#comment_' . $data['id']) . '"
