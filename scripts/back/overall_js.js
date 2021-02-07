@@ -142,7 +142,9 @@ function subm(form, req) {
                     );
                     break;
                 case 'error':
-                    msg(`Ой! Ошибка..( Данные не сохранены.<br>Проверьте, правильно ли заполнены поля и повторите попытку.`);
+                    resp.msg
+                        ? msg(resp.msg)
+                        : msg(`Ой! Ошибка..( Данные не сохранены.<br>Проверьте, правильно ли заполнены поля и повторите попытку.`);
                     break;
                 default :
                     console.error(`#### TAGRA ERROR INFO ####\n\n${resp}`);
@@ -251,34 +253,28 @@ function toggle_public(el, id, tab) {
 /**
  * Запуск менеджера файлов
  *
- * @param {string} field Селектор/ы поля, куда будет вставлен путь к файлу
- * @param {string} lang Тег языка
+ * @param {string|null} field Селектор/ы поля, куда будет вставлен путь к файлу
+ * @param {string|null} lang Тег языка
  * @param {object} user_conf Пользовательская конфигурация
  * @returns {void}
  */
-function files(field, lang, user_conf) {
-    let insert = true;
-    if (typeof field === 'undefined' || field === '') {
-        insert = false;
-        field = '';
-    }
+function files(field = null, lang = null, user_conf = {}) {
+    let insert = !!field;
     let conf = {
         title: 'Менеджер файлов',
         view: 'thumbs',
         leftpanel: false,
         width: 720,
         height: 400,
-        rootpath: lang || (typeof lang !== 'undefined') ? '/upload/' + lang : '/upload/',
+        rootpath: lang ? `/upload/${lang}` : `/upload/`,
         fields: field,
         insert: insert,
-        onopen: setTimeout(files_notifer, 500)
+        onopen: setTimeout(files_notice, 500)
     };
-    if (typeof user_conf === 'object') {
-        $.extend(true, conf, user_conf);
-    }
+    $.extend(true, conf, user_conf);
     moxman.browse(conf);
 
-    function files_notifer() {
+    function files_notice() {
         $('.moxman-window-head').after(`<div style="padding:4px;background-color:#ffc0a2">Внимание! Не используйте кириллицу и пробелы в именах файлов и папок!</div>`);
     }
 }
