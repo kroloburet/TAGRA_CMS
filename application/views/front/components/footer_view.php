@@ -6,7 +6,8 @@
     <div class="container footer_container TUI_noprint">
 
         <div class="copy">
-            <?= $conf['site_name'] ?>&nbsp;&copy;&nbsp;<?= date('Y') ?>
+            <!-- Tagra installation date: <?= $this->config->item('tagra_instal_date') ?> -->
+            <?= $conf['site_name'] ?>&nbsp;&copy;&nbsp;<?= date('Y') . PHP_EOL ?>
             <hr>
             <img src="/img/i.jpg" alt="kroloburet">&nbsp;development by
             <br><a href="mailto:kroloburet@gmail.com">kroloburet@gmail.com</a>
