@@ -151,10 +151,10 @@
                                 на вашем сайте. Скопируйте в это поле путь из тега
                                 &lt;script&gt;, атребут <q>src</q>.
                             </pre>
-                            <label class="TUI_input">
-                                <input type="text" name="addthis[js]"
-                                       placeholder="//s7.addthis.com/js/300/addthis_widget.js#pubid=XXXXXXXXXXXXXXX"
-                                       value="<?= $conf['addthis']['js'] ?>">
+                            <label class="TUI_textarea">
+                                <textarea name="addthis[js]"
+                                          placeholder="//s7.addthis.com/js/300/addthis_widget.js#pubid=XXXXXXXXXXXXXXX"
+                                          rows="2"><?= $conf['addthis']['js'] ?></textarea>
                             </label>
                             HTML-код кнопок <q>Share</q> <i class="fas fa-info-circle TUI_blue"
                                                             onmouseover="TUI.Hint(this)"></i>
@@ -165,10 +165,10 @@
                                 С их помощью посетители вашего сайта смогут поделиться ссылкой
                                 и информацией о вашей странице в своих социальных сетях.
                             </pre>
-                            <label class="TUI_input">
-                                <input type="text" name="addthis[share]"
-                                       placeholder="<div class='addthis_sharing_toolbox'></div>"
-                                       value="<?= $conf['addthis']['share'] ?>">
+                            <label class="TUI_textarea">
+                                <textarea name="addthis[share]"
+                                          placeholder="<div class='addthis_sharing_toolbox'></div>"
+                                          rows="2"><?= $conf['addthis']['share'] ?></textarea>
                             </label>
                             HTML-код кнопок <q>Follow</q> <i class="fas fa-info-circle TUI_blue"
                                                              onmouseover="TUI.Hint(this)"></i>
@@ -179,10 +179,10 @@
                                 С их помощью посетители вашего сайта смогут посетить
                                 ваши страницы в социальных сетях.
                             </pre>
-                            <label class="TUI_input">
-                                <input type="text" name="addthis[follow]"
-                                       placeholder="<div class='addthis_horizontal_follow_toolbox'></div>"
-                                       value="<?= $conf['addthis']['follow'] ?>">
+                            <label class="TUI_textarea">
+                                <textarea name="addthis[follow]"
+                                          placeholder="<div class='addthis_horizontal_follow_toolbox'></div>"
+                                          rows="2"><?= $conf['addthis']['follow'] ?></textarea>
                             </label>
                             Кнопки <q>Share</q> в системе по умолчанию
                             <label class="TUI_select">
@@ -207,9 +207,9 @@
                                 Ссылка на изображение доступное из Интернета
                                 или выбранное в менеджере файлов. Изображение
                                 будет использовано по умолчанию во всех
-                                вновь создаваемых материалах как привью на
+                                вновь создаваемых материалах как превью на
                                 материал в соцсетях и в списке материалов раздела.
-                                Желательно выбирать изображение 1200х630.
+                                Желательно выбирать изображение 1200х630 px.
                             </pre>
                             <div class="TUI_fieldset">
                                 <label class="TUI_input">
