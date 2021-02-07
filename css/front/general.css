@@ -118,7 +118,7 @@ footer {
     display: inline-block;
     border-right: .1em solid;
     border-top: .1em solid;
-    transform: rotate(-45deg);
+    transform: rotate(-45deg) translateY(.2em);
     padding: .2em;
 }
 
@@ -518,17 +518,17 @@ ul.breadcrumbs li.bc_end:after, ul.breadcrumbs li.bc_end:before {
 }
 
 .add_comment_form textarea {
-    margin: -1px 0px 0px;
+    margin: -1px 0 0;
     border-radius: 0 0 var(--radius-border) 0;
 }
 
 .add_comment_form button {
-    margin-top: -1px;
+    margin: -1px 0 0;
     border-radius: 0 0 var(--radius-border) var(--radius-border);
 }
 
 .reply_form {
-    margin-bottom: .3em;
+    margin-bottom: .7em;
 }
 
 .reply_form textarea {
