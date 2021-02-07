@@ -173,7 +173,6 @@ class Comments
      */
     function print_js()
     {
-        if ($this->conf['form'] === 'off') return;
         ?>
 
         <script>
@@ -223,7 +222,7 @@ class Comments
                         );
                     }
                 },
-                <?php } if ($this->conf['feedback']) {// Обратная связь ?>
+                <?php } if ($this->conf['feedback'] && $this->conf['form'] !== 'off') {// Обратная связь ?>
 
                 /**
                  * Показать уведомление о возможности обратной связи
@@ -484,7 +483,7 @@ class Comments
                 <?php if ($this->conf['show'] > 0) {// Кнопка "Еще комментарии" ?>
 
                 Comments.hide();
-                <?php } if ($this->conf['feedback']) {// Обратная связь ?>
+                <?php } if ($this->conf['feedback'] && $this->conf['form'] !== 'off') {// Обратная связь ?>
 
                 Comments.feedback();
                 <?php } ?>
