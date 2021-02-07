@@ -86,8 +86,8 @@
         <tbody>
         <?php foreach ($data['langs'] as $v) { ?>
             <tr>
-                <td><?= mb_strimwidth($v['title'], 0, 40, '...') ?></td>
-                <td><?= $v['tag'] ?></td>
+                <td title="<?= $v['title'] ?>"><?= mb_strimwidth($v['title'], 0, 40, '...') ?></td>
+                <td title="<?= $v['tag'] ?>"><?= $v['tag'] ?></td>
                 <td>
                     <?= $v['def'] ? '<i class="fas fa-star TUI_red" title="Язык по умолчанию"></i>&nbsp;&nbsp;' : '' ?>
                     <a href="/admin/language/edit_form/<?= $v['id'] ?>" class="fas fa-edit" title="Редактировать"></a>&nbsp;&nbsp;

@@ -84,8 +84,8 @@
         <tbody>
         <?php foreach ($data['contact_pages'] as $v) { ?>
             <tr>
-                <td><?= mb_strimwidth($v['title'], 0, 40, '...') ?></td>
-                <td><?= $v['lang'] ?></td>
+                <td title="<?= $v['title'] ?>"><?= mb_strimwidth($v['title'], 0, 40, '...') ?></td>
+                <td title="<?= $v['lang'] ?>"><?= $v['lang'] ?></td>
                 <td>
                     <a href="/admin/contact/edit_form/<?= $v['id'] ?>"
                        class="fas fa-edit" title="Редактировать"></a>&nbsp;&nbsp;

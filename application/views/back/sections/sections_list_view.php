@@ -93,10 +93,10 @@
         $sec = new id_to_title('sections');
         foreach ($data['sections'] as $v) {
             ?>
-            <tr>
-                <td><?= mb_strimwidth($v['title'], 0, 40, '...') ?></td>
-                <td><?= $sec->get_title($v['section']) ?></td>
-                <td><?= $v['lang'] ?></td>
+            <tr id="<?= $v['id'] ?>">
+                <td title="<?= $v['title'] ?>"><?= mb_strimwidth($v['title'], 0, 40, '...') ?></td>
+                <td title="<?= $v['section'] ?>"><?= $sec->get_title($v['section']) ?></td>
+                <td title="<?= $v['lang'] ?>"><?= $v['lang'] ?></td>
                 <td>
                     <span>
                         <a href="#" class="<?= $v['public'] ? 'fas fa-eye' : 'fas fa-eye-slash TUI_red' ?>"
@@ -108,7 +108,7 @@
                     <a href="/section/<?= $v['id'] ?>" class="fas fa-external-link-alt"
                        target="_blank" title="Смотреть на сайте"></a>&nbsp;&nbsp;
                     <a href="#" class="fas fa-trash-alt TUI_red" title="Удалить"
-                       onclick="del_section(this, <?= $v['id'] ?>);return false"></a>
+                       onclick="del_section('<?= $v['id'] ?>', '<?= $v['lang'] ?>');return false"></a>
                 </td>
             </tr>
         <?php } ?>
@@ -141,24 +141,26 @@
      *
      * Удалит раздел со всеми дочерними материалами.
      *
-     * @param {object} el Ссылка "this" на триггер
      * @param {string} id Идентификатор раздела
+     * @param {string} lang Язык раздела
      * @returns {void}
      */
-    function del_section(el, id) {
+    function del_section(id, lang) {
         if (!confirm('ВНИМАНИЕ! Раздел со всеми дочерними материалами и комментариями будет удален!\nВыполнить действие?')) return;
         $.ajax({
             url: '/admin/section/del',
             type: 'post',
-            data: {id: id},
-            dataType: 'text',
+            data: {id: id, lang: lang},
+            dataType: 'json',
             success: function (resp) {
-                switch (resp) {
+                switch (resp.status) {
                     case 'ok':
-                        $(el).parents('tr').remove();
+                        for (let id in resp.ids) {
+                            $(`tr#${resp.ids[id]}`).remove();
+                        }
                         break;
                     case 'error':
-                        alert('Ошибка! Не удалось удалить раздел..(');
+                        alert('Ошибка! Не удалось удалить раздел или дочерний материал..(');
                         break;
                     default :
                         console.error(`#### TAGRA ERROR INFO ####\n\n${resp}`);

@@ -94,9 +94,9 @@
         foreach ($data['gallerys'] as $v) {
             ?>
             <tr>
-                <td><?= mb_strimwidth($v['title'], 0, 40, '...') ?></td>
-                <td><?= $sec->get_title($v['section']) ?></td>
-                <td><?= $v['lang'] ?></td>
+                <td title="<?= $v['title'] ?>"><?= mb_strimwidth($v['title'], 0, 40, '...') ?></td>
+                <td title="<?= $v['section'] ?>"><?= $sec->get_title($v['section']) ?></td>
+                <td title="<?= $v['lang'] ?>"><?= $v['lang'] ?></td>
                 <td>
                     <span>
                         <a href="#" class="<?= $v['public'] ? 'fas fa-eye' : 'fas fa-eye-slash TUI_red' ?>"
