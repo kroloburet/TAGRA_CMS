@@ -4,6 +4,7 @@
     <form method="POST" action="/admin/page/add">
         <input type="hidden" name="id" value="<?= round(microtime(true) * 1000) ?>">
         <input type="hidden" name="creation_date" value="<?= date('Y-m-d') ?>">
+        <input type="hidden" name="last_mod_date" value="<?= date('Y-m-d') ?>">
         <input type="hidden" name="lang" value="<?= $data['lang'] ?>">
 
         <!--
@@ -48,7 +49,7 @@
                 Введите в поле ниже ссылку на изображение
                 доступное из Интернета или выберите его
                 в менеджере файлов. Изображение будет
-                использовано как привью на эту страницу
+                использовано как превью на эту страницу
                 в соцсетях и в списке материалов раздела.
             </pre>
             <div class="TUI_fieldset">

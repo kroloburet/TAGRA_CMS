@@ -54,6 +54,7 @@ class Back_language_control extends Back_basic_control
             // добавить страницы "Главная" и "Контакты"
             $page = [
                 'creation_date' => date('Y-m-d'),
+                'last_mod_date' => date('Y-m-d'),
                 'layout_l_width' => $this->app('conf.layout_l_width'),
                 'addthis_share' => $this->app('conf.addthis.share_def'),
                 'addthis_follow' => $this->app('conf.addthis.follow_def'),

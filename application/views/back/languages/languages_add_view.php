@@ -59,6 +59,7 @@
     <form method="POST" action="/admin/language/add">
         <input type="hidden" name="id" value="<?= round(microtime(true) * 1000) ?>">
         <input type="hidden" name="creation_date" value="<?= date('Y-m-d') ?>">
+        <input type="hidden" name="last_mod_date" value="<?= date('Y-m-d') ?>">
 
         <!--
         ########### Основное
