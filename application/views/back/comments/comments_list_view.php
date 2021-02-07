@@ -342,9 +342,9 @@
 <script>
     // рег.выражения для проверки полей
     const req = {
-        name_limit: /^\d+$/,
-        text_limit: /^\d+$/,
-        show: /^\d+$/
+        name_limit: /^(0|[1-9]\d*)$/,
+        text_limit: /^(0|[1-9]\d*)$/,
+        show: /^(0|[1-9]\d*)$/
     };
 
     $(function () {
