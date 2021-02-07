@@ -89,8 +89,8 @@ ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;")
     $t = $db_tabl_prefix . 'languages';
     $q_c = $db->query("CREATE TABLE IF NOT EXISTS `$t`(
 `id` bigint UNSIGNED NOT NULL,
-`creation_date` varchar(45) NOT NULL,
-`last_mod_date` varchar(45) NOT NULL,
+`creation_date` date NOT NULL,
+`last_mod_date` date NOT NULL,
 `tag` varchar(10) NOT NULL,
 `title` varchar(20) NOT NULL,
 `def` tinyint(1) UNSIGNED NOT NULL DEFAULT 0,
@@ -98,7 +98,7 @@ ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;")
 PRIMARY KEY (`id`,`tag`))
 ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
     $q_i = $db->query("INSERT INTO `$t` (`id`,`creation_date`,`last_mod_date`,`tag`,`title`,`def`) VALUES
-($id,$date,'','ru','RU',1);");
+($id,$date,'$date','ru','RU',1);");
     if (!$q_c) {
         die("<div class='TUI_notice-r'>Не удалось создать таблицу <q>$t</q>: $db->error</div>$bad_msg");
     }
@@ -143,9 +143,9 @@ ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
     $t = $db_tabl_prefix . 'back_users';
     $q_c = $db->query("CREATE TABLE IF NOT EXISTS `$t`(
 `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-`creation_date` varchar(45) NOT NULL,
-`last_mod_date` varchar(45) NOT NULL,
-`last_login_date` varchar(45) NOT NULL,
+`creation_date` datetime NOT NULL,
+`last_mod_date` datetime NOT NULL,
+`last_login_date` datetime NOT NULL,
 `ip` varchar(45) NOT NULL,
 `status` varchar(45) NOT NULL,
 `login` text NOT NULL,
@@ -155,8 +155,8 @@ ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
 PRIMARY KEY (`id`))
 ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
     $q_i = $db->query("INSERT INTO `$t` (`creation_date`,`last_mod_date`,`last_login_date`,`ip`,`status`,`login`,`password`,`email`) VALUES
-('$moment','','','$ip','administrator','$admin_name','$admin_pass','$admin_mail'),
-('$moment','','','$ip','moderator','$moder_name','$moder_pass','$moder_mail');");
+('$moment','$moment','$moment','$ip','administrator','$admin_name','$admin_pass','$admin_mail'),
+('$moment','$moment','$moment','$ip','moderator','$moder_name','$moder_pass','$moder_mail');");
     if (!$q_c) {
         die("<div class='TUI_notice-r'>Не удалось создать таблицу <q>$t</q>: $db->error</div>$bad_msg");
     }
@@ -170,8 +170,8 @@ ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
     $t = $db_tabl_prefix . 'index_pages';
     $q_c = $db->query("CREATE TABLE IF NOT EXISTS `$t`(
 `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-`creation_date` varchar(45) NOT NULL,
-`last_mod_date` varchar(45) NOT NULL,
+`creation_date` date NOT NULL,
+`last_mod_date` date NOT NULL,
 `title` varchar(250) NOT NULL,
 `description` varchar(250) NOT NULL,
 `robots` varchar(45) NOT NULL DEFAULT 'all',
@@ -189,7 +189,7 @@ ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
 PRIMARY KEY (`id`))
 ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
     $q_i = $db->query("INSERT INTO `$t` (`creation_date`,`last_mod_date`,`title`,`description`,`css`,`js`,`layout_t`,`layout_l`,`layout_r`,`layout_b`,`layout_l_width`,`img_prev`,`lang`) VALUES
-('$date','','$index_title','$index_title','','','','$index_layout_l','$index_layout_r','',25,'{$domen}img/tagra_share.jpg','ru');");
+('$date','$date','$index_title','$index_title','','','','$index_layout_l','$index_layout_r','',25,'{$domen}img/tagra_share.jpg','ru');");
     if (!$q_c) {
         die("<div class='TUI_notice-r'>Не удалось создать таблицу <q>$t</q>: $db->error</div>$bad_msg");
     }
@@ -203,8 +203,8 @@ ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
     $t = $db_tabl_prefix . 'contact_pages';
     $q_c = $db->query("CREATE TABLE IF NOT EXISTS `$t`(
 `id` int UNSIGNED NOT NULL AUTO_INCREMENT,
-`creation_date` varchar(45) NOT NULL,
-`last_mod_date` varchar(45) NOT NULL,
+`creation_date` date NOT NULL,
+`last_mod_date` date NOT NULL,
 `title` varchar(250) NOT NULL,
 `description` varchar(250) NOT NULL,
 `robots` varchar(45) NOT NULL DEFAULT 'all',
@@ -224,7 +224,7 @@ ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
 PRIMARY KEY (`id`))
 ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
     $q_i = $db->query("INSERT INTO `$t` (`creation_date`,`last_mod_date`,`title`,`description`,`css`,`js`,`layout_t`,`layout_l`,`layout_r`,`layout_b`,`layout_l_width`,`contacts`,`img_prev`,`lang`) VALUES
-('$date','','$contact_title','$contact_title','','','','','','',60,'','{$domen}img/tagra_share.jpg','ru');");
+('$date','$date','$contact_title','$contact_title','','','','','','',60,'','{$domen}img/tagra_share.jpg','ru');");
     if (!$q_c) {
         die("<div class='TUI_notice-r'>Не удалось создать таблицу <q>$t</q>: $db->error</div>$bad_msg");
     }
@@ -238,8 +238,8 @@ ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
     $t = $db_tabl_prefix . 'pages';
     $db->query("CREATE TABLE IF NOT EXISTS `$t`(
 `id` bigint UNSIGNED NOT NULL,
-`creation_date` varchar(45) NOT NULL,
-`last_mod_date` varchar(45) NOT NULL,
+`creation_date` date NOT NULL,
+`last_mod_date` date NOT NULL,
 `title` varchar(250) NOT NULL,
 `description` varchar(250) NOT NULL,
 `robots` varchar(45) NOT NULL DEFAULT 'all',
@@ -267,8 +267,8 @@ ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;")
     $t = $db_tabl_prefix . 'gallerys';
     $db->query("CREATE TABLE IF NOT EXISTS `$t`(
 `id` bigint UNSIGNED NOT NULL,
-`creation_date` varchar(45) NOT NULL,
-`last_mod_date` varchar(45) NOT NULL,
+`creation_date` date NOT NULL,
+`last_mod_date` date NOT NULL,
 `title` varchar(250) NOT NULL,
 `description` varchar(250) NOT NULL,
 `robots` varchar(45) NOT NULL DEFAULT 'all',
@@ -298,8 +298,8 @@ ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;")
     $t = $db_tabl_prefix . 'sections';
     $db->query("CREATE TABLE IF NOT EXISTS `$t`(
 `id` bigint UNSIGNED NOT NULL,
-`creation_date` varchar(45) NOT NULL,
-`last_mod_date` varchar(45) NOT NULL,
+`creation_date` date NOT NULL,
+`last_mod_date` date NOT NULL,
 `title` varchar(250) NOT NULL,
 `description` varchar(250) NOT NULL,
 `robots` varchar(45) NOT NULL DEFAULT 'all',
@@ -347,7 +347,7 @@ ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;")
 `premod_code` text NOT NULL,
 `ip` varchar(45) NOT NULL,
 `url` text NOT NULL,
-`creation_date` varchar(45) NOT NULL,
+`creation_date` date NOT NULL,
 `name` varchar(100) NOT NULL,
 `comment` text NOT NULL,
 `rating` text NOT NULL,
