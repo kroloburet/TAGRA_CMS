@@ -28,7 +28,7 @@ if (!function_exists('administrator_control')) {
         -->
 
         <div class="touch" id="administrator_control">
-            <h3>Настройки администратора</h3>
+            <h2>Настройки администратора</h2>
             <hr>
             <!-- форма редактирования -->
             <div class="buc_form" hidden>
@@ -122,8 +122,8 @@ if (!function_exists('administrator_control')) {
                  * @returns {void}
                  */
                 const __get_edit_form = function (id) {
-                    let last_mod = _opt[id].last_mod_date || 'не изменялся',
-                        last_login = _opt[id].last_login_date ? _opt[id].last_login_date + ' с IP ' + _opt[id].ip : 'не входил';
+                    let last_mod = _opt[id].last_mod_date === _opt[id].creation_date ? 'не изменялся' : _opt[id].last_mod_date,
+                        last_login = _opt[id].last_login_date === _opt[id].creation_date ? 'не входил' : _opt[id].last_login_date + ' с IP ' + _opt[id].ip;
 
                     __clear();
                     // событие на "готово" - редактировать
@@ -272,7 +272,7 @@ if (!function_exists('moderators_control')) {
         -->
 
         <div class="touch" id="moderators_control">
-            <h3>Настройки модераторов</h3>
+            <h2>Настройки модераторов</h2>
             <hr>
             <button type="button" class="add_buc_btn">Добавить модератора</button>
             <!-- форма добавления/редактирования -->
@@ -410,8 +410,8 @@ if (!function_exists('moderators_control')) {
                  * @returns {void}
                  */
                 const __get_edit_form = function (id) {
-                    let last_mod = _opt[id].last_mod_date || 'не изменялся',
-                        last_login = _opt[id].last_login_date ? _opt[id].last_login_date + ' с IP ' + _opt[id].ip : 'не входил';
+                    let last_mod = _opt[id].last_mod_date === _opt[id].creation_date ? 'не изменялся' : _opt[id].last_mod_date,
+                        last_login = _opt[id].last_login_date === _opt[id].creation_date ? 'не входил' : _opt[id].last_login_date + ' с IP ' + _opt[id].ip;
 
                     __clear();
                     // событие на "готово" - редактировать
