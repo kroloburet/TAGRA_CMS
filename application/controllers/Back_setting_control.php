@@ -125,7 +125,10 @@ class Back_setting_control extends Back_basic_control
         !$this->_check_back_user($p['login'], $p['password'], $p['email'])
             ? exit(json_encode(['status' => 'nounq'], JSON_FORCE_OBJECT))
             : null;
-        $p['creation_date'] = date('Y-m-d H:i:s');
+        $datetime = date('Y-m-d H:i:s');
+        $p['creation_date'] = $datetime;
+        $p['last_mod_date'] = $datetime;
+        $p['last_login_date'] = $datetime;
         $p['status'] = 'moderator';
         $p['login'] = password_hash($p['login'], PASSWORD_BCRYPT);
         $p['password'] = password_hash($p['password'], PASSWORD_BCRYPT);
