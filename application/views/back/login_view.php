@@ -134,7 +134,10 @@
 <script src="https://kit.fontawesome.com/bacee63d78.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
-    // показать/скрыть пароль в поле
+
+    /**
+     * Показать/скрыть пароль в поле
+     */
     $('#see_pass').on('click', function (e) {
         e.preventDefault();
         let btn = $(this),
@@ -147,19 +150,25 @@
             btn.removeClass('fa-eye-slash').attr('title', 'Показать пароль');
         }
     });
-    // показать/скрыть форму "Восстановить доступ"
+
+    /**
+     * Показать/скрыть форму "Восстановить доступ"
+     */
     $('#show_sand_pass, #no_subm_pass').on('click', function (e) {
         e.preventDefault();
         $('#login_form, #sand_pass').slideToggle(200);
     });
-    // отправить запрос на восстановление доступа
+
+    /**
+     * Отправить запрос на восстановление доступа
+     */
     $('#sand_pass').on('submit', function (e) {
         e.preventDefault();
         let f = $(this),
             msg = f.find('#sand_pass_msg'),
-            control = f.find('.TUI_fieldset'),
-            control_html = control.html();
-        control.html('<i class="fas fa-spin fa-spinner"></i>&nbsp;обработка...');
+            btn = f.find(':submit'),
+            process = $('<i class="fas fa-spin fa-spinner"></i>&nbsp;обработка...');
+        btn.replaceWith(process);
         $.ajax({
             url: '/do/change_login',
             type: 'post',
@@ -188,7 +197,7 @@
                         msg.html(`<div class="TUI_notice-g mini TUI_full">${resp.html}</div>`);
                         setTimeout(function () {// очистить сообщение об отправке, скрыть форму
                             msg.empty();
-                            $('#login_form,#sand_pass').slideToggle();
+                            $('#login_form, #sand_pass').slideToggle();
                         }, 5000);
                 }
             },
@@ -197,7 +206,7 @@
                 alert('Ой! Ошибка соединения..(\nСведения о неполадке выведены в консоль.\nВозможно это проблемы на сервере или с сетью Интернет. Повторите попытку.');
             }
         });
-        control.html(control_html);
+        process.replaceWith(btn);
     });
 </script>
 </body>
