@@ -269,23 +269,24 @@
     .contact_gmap {
         width: 100%;
         height: 300px;
+        margin: 0;
+        padding: 0;
         border: var(--color-form-border) solid 1px;
         border-top: none;
         border-bottom: none;
-        margin: 0;
-        padding: 0;
     }
 
     .marker_desc, .gps_search {
-        border: var(--color-form-border) solid 1px;
-        background-color: var(--color-base-bg);
-        box-shadow: none;
-        min-width: 10em;
         width: 100%;
+        min-width: 10em;
         padding: .3em;
         margin: .2em auto 0 auto;
+        border: var(--color-form-border) solid 1px;
+        background-color: var(--color-form-field-bg);
+        box-shadow: none;
         border-radius: var(--radius-border) var(--radius-border) 0 0;
         font: 100%/1.5em var(--font-base);
+        color: var(--color-font-field);
     }
 
     .marker_desc {
