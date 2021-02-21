@@ -558,6 +558,7 @@ const TUI = (function () {
                         // деактивировать текущий чтобы переписать конфиг
                         if (_isActivate(inputNumber, selfName)) methods.kill(conf.selector);
                         // добавить элементы, валидацию и прослушку событий
+                        const event = new Event('change');
                         const label = inputNumber.parentElement;
                         const inc = document.createElement('span');
                         const dec = document.createElement('span');
@@ -586,6 +587,7 @@ const TUI = (function () {
                                     let down = opt.down();
                                     inputNumber.value = isNaN(min) ? down : min < down ? down : min;
                                 }
+                                inputNumber.dispatchEvent(event);
                             }
                         };
                         opt.initVal();
