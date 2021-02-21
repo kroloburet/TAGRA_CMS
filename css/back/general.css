@@ -60,7 +60,7 @@ body {
 }
 
 .touch:hover {
-    background-color: rgba(0, 0, 0, .1);
+    background-color: var(--color-active-bg);
 }
 
 .sheath {
@@ -107,7 +107,6 @@ body {
 /*---------------------------------------------- Table ---*/
 .TUI_table td {
     border-color: var(--color-gray);
-    min-width: max-content;
 }
 
 /*---------------------------------------------- Preview items --*/
@@ -117,8 +116,9 @@ body {
     justify-content: space-between;
     border: var(--color-form-border) solid 1px;
     border-radius: var(--radius-border);
-    background: center no-repeat var(--color-base-bg);
+    background: center no-repeat var(--color-form-field-bg);
     background-size: cover;
+    overflow: auto;
     font: 100%/1.5em var(--font-base);
 }
 
@@ -132,14 +132,14 @@ body {
     display: flex;
     align-items: center;
     padding: .5em;
-    color: #fff;
+    color: var(--color-font-btn);
     background-color: var(--color-form);
     border-left: 1px solid var(--color-form-border);
     cursor: pointer;
 }
 
 .prev_item_control:hover {
-    background-color: var(--color-form-border);
+    filter: brightness(90%);
 }
 
 /*---------------------------------------------- Pagination --*/
@@ -171,7 +171,7 @@ body {
 
 .pagination .pag_active span {
     color: var(--color-font);
-    background-color: var(--color-form-disabled);
+    background-color: var(--color-active-bg);
     cursor: default;
 }
 
