@@ -33,7 +33,7 @@
     --color-form: #437ee0;
     --color-form-border: #4a76be;
     --color-form-disabled: #bbbbbb;
-    --color-form-field-bg: var(--color-base-bg);
+    --color-form-field-bg: #ffffff;
     --color-font-btn: #ffffff;
     --color-font-field: var(--color-font);
     --notice-color-font: #000000;
@@ -42,7 +42,7 @@
     --hint-color-border-shadow: #333333;
     --hint-color-bg: #f9f9f9;
     --popup-color-box-bg: rgba(0, 0, 0, .95);
-    --popup-color-bg: var(--color-base-bg);
+    --popup-color-bg: #ffffff;
     --popup-color-font: var(--color-font);
     --popup-color-btn: var(--color-link);
     --popup-color-btn-hover: var(--color-link-hover);
@@ -225,7 +225,7 @@ input[name="fuck_bot"] {
     font: 100%/1.5em var(--font-base);
     color: var(--color-font-field);
     box-shadow: none;
-    overflow: hidden;
+    overflow: auto;
 }
 
 /*--- TUI_fieldset ---*/
@@ -333,6 +333,7 @@ input[name="fuck_bot"] {
 
 .TUI_number input[type="number"] {
     border: none;
+    background-color: transparent;
 }
 
 
@@ -386,70 +387,63 @@ input[name="fuck_bot"] {
     cursor: pointer;
 }
 
-.TUI_checkbox input[type="checkbox"], .TUI_radio input[type="checkbox"], .TUI_checkbox input[type="radio"], .TUI_radio input[type="radio"] {
+.TUI_checkbox input[type="checkbox"], .TUI_radio input[type="radio"] {
     position: absolute;
     top: 0;
     left: 0;
     visibility: hidden;
 }
 
-.TUI_checkbox .custom-checkbox, .TUI_radio .custom-checkbox, .TUI_checkbox .custom-radio, .TUI_radio .custom-radio {
+.TUI_checkbox .custom-checkbox, .TUI_radio .custom-radio {
     display: inline-block;
     vertical-align: middle;
     margin: 0 .3em 0 0;
     width: 20px;
     height: 20px;
-    background-color: var(--color-form-field-bg);
     border: 1px solid var(--color-form-border);
     position: relative;
 }
 
 .TUI_checkbox .custom-checkbox {
+    display: inline-flex;
     border-radius: var(--radius-border);
-    transition: box-shadow 180ms ease;
     box-shadow: inset 0 0 0 12px var(--color-form-field-bg);
     top: -2px;
 }
 
-.TUI_checkbox .icon-check {
-    width: 13px;
-    height: 13px;
-    background-size: cover;
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    -webkit-transform: scale(0);
-    transform: scale(0);
-    transition: all 180ms ease;
+.TUI_checkbox .custom-checkbox::before {
+    content: "";
+    display: none;
+    width: 5px;
+    height: 10px;
+    margin: 1px auto auto auto;
+    border: 2px solid var(--color-form-field-bg);
+    border-top: none;
+    border-left: none;
+    transform: rotate(45deg);
+    box-shadow: 1px 1px 0 .02em var(--color-form-border);
 }
 
 .TUI_checkbox input[type="checkbox"]:checked + .custom-checkbox {
-    border-color: var(--color-form);
+    border-color: var(--color-form-border);
     background-color: var(--color-form);
     box-shadow: none;
 }
 
-.TUI_checkbox input[type="checkbox"]:checked + .custom-checkbox .icon-check {
-    -webkit-transform: scale(1);
-    transform: scale(1);
+.TUI_checkbox input[type="checkbox"]:checked + .custom-checkbox::before {
+    display: block;
 }
 
 .TUI_radio .custom-radio {
     border-radius: 50%;
     box-shadow: inset 0 0 0 12px var(--color-form-field-bg);
-    transition: all 180ms ease;
     top: -2px;
 }
 
 .TUI_radio input[type="radio"]:checked + .custom-radio {
     border-color: var(--color-form-border);
     background-color: var(--color-form);
-    box-shadow: inset 0 0 0 4px var(--color-form-field-bg);
-}
-
-.icon-check {
-    background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20baseProfile%3D%22tiny%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2216%22%20height%3D%2216%22%3E%3Cpath%20fill%3D%22%23fff%22%20d%3D%22M13.483%201.992l-7.186%207.066-3.778-3.715-2.518%202.475%205.037%204.954%201.259%201.237%209.704-9.541-2.518-2.476z%22/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
+    box-shadow: inset 0 0 0 4px var(--color-form-field-bg), inset 0 0 0 5px var(--color-form-border);
 }
 
 /*--- TUI_button ---*/
@@ -461,7 +455,6 @@ input[name="fuck_bot"] {
     text-align: center;
     text-decoration: none;
     font-size: 1em;
-    font-weight: bold;
     color: var(--color-font-btn);
     border: 1px solid var(--color-form-border);
     border-radius: var(--radius-border);
@@ -735,6 +728,7 @@ table.TUI_table {
 .TUI_table td, .TUI_table th {
     border: 1px solid var(--color-base);
     width: 1%;
+    min-width: max-content;
     padding: .25em .5em;
     text-align: left;
 }
@@ -1182,7 +1176,7 @@ pre.TUI_Hint {
 
 .TUI_Tab-activated {
     width: 100%;
-    overflow: hidden;
+    overflow: auto;
     margin: 0 0 1.5em 0;
     padding: 0;
     text-align: left;
@@ -1268,7 +1262,7 @@ pre.TUI_Hint {
 }
 
 .TUI_InputFile-activated:hover + .TUI_InputFile-info {
-    background-color: var(--color-form-border);
+    filter: brightness(90%);
 }
 
 .TUI_InputFile-activated + .TUI_InputFile-info .TUI_InputFile-val {
@@ -1303,13 +1297,14 @@ pre.TUI_Hint {
 
 .TUI_InputRange-activated + .TUI_InputRange-info::after {
     content: "";
+    width: .7em;
+    height: .7em;
     position: absolute;
     left: 100%;
     top: 50%;
-    transform: translate(-50%, -50%);
-    border-left: 1em solid var(--color-form);
-    border-top: 1em solid transparent;
-    border-bottom: 1em solid transparent;
+    transform: translate(-50%, -50%) rotate(45deg);
+    background-color: var(--color-form);
+    box-shadow: inset -1px 1px 0 0 var(--color-form-border);
     z-index: -1;
 }
 
@@ -1344,7 +1339,7 @@ pre.TUI_Hint {
 }
 
 .TUI_InputNumber-inc:hover, .TUI_InputNumber-dec:hover {
-    background-color: var(--color-form-border);
+    filter: brightness(90%);
 }
 
 .TUI_InputNumber-dec {
@@ -1359,9 +1354,10 @@ pre.TUI_Hint {
 .TUI_select .TUI_SelectSearch-input {
     display: block;
     width: 100%;
+    margin: 0;
     padding: .3em 2.5em .3em .5em;
     font: 100%/1.5em var(--font-base);
-    margin: 0;
+    color: var(--color-font-field);
     border-radius: var(--radius-border) var(--radius-border) 0 0;
     border: none;
     border-bottom: 1px solid var(--color-form-border);
