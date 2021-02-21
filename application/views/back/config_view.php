@@ -246,7 +246,7 @@
                             <label class="TUI_checkbox inline" style="margin:0">
                                 <input type="checkbox"
                                        name="breadcrumbs[home]" <?= isset($conf['breadcrumbs']['home']) ? 'value="1" checked' : '' ?>>
-                                <span class="custom-checkbox"><i class="icon-check"></i></span>
+                                <span class="custom-checkbox"></span>
                                 Ссылка на главную
                             </label>&nbsp;
                             <i class="fas fa-info-circle TUI_blue" onmouseover="TUI.Hint(this)"></i>

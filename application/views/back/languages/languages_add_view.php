@@ -186,7 +186,7 @@
 
             <label class="TUI_checkbox inline" style="margin:0">
                 <input type="checkbox" name="def" value="1">
-                <span class="custom-checkbox"><i class="icon-check"></i></span>
+                <span class="custom-checkbox"></span>
                 Язык по умолчанию
             </label> <i class="fas fa-info-circle TUI_blue" onmouseover="TUI.Hint(this)"></i>
             <pre class="TUI_Hint">
