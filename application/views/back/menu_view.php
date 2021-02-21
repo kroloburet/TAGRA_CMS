@@ -178,7 +178,7 @@ function print_menu_tree(array $input)
         width: 0;
         position: absolute;
         top: -1em;
-        bottom: 0;
+        bottom: 1em;
         left: 0;
         border-left: 1px solid var(--color-gray);
     }
@@ -199,6 +199,8 @@ function print_menu_tree(array $input)
     ul.m_tree .m_item {
         display: inline-block;
         border: 1px solid var(--color-gray);
+        border-radius: var(--radius-border);
+        background-color: var(--color-form-field-bg);
         padding: .2em .4em;
     }
 
@@ -210,10 +212,19 @@ function print_menu_tree(array $input)
 
     ul.m_tree .m_item.edit {
         display: block;
-        background-color: rgba(0, 0, 0, .1);
+        padding: 1em;
+        background-color: var(--color-active-bg);
     }
 
-    ul.m_tree ul li::before {
+    ul.m_tree .m_item.edit .TUI_fieldset {
+        margin-bottom: -10px;
+    }
+
+    ul.m_tree ul li .m_item.edit {
+        margin-left: -1em;
+    }
+
+    ul.m_tree ul li .m_item::before {
         content: "";
         display: block;
         width: 1em;
@@ -224,11 +235,8 @@ function print_menu_tree(array $input)
         left: 0;
     }
 
-    ul.m_tree ul li:last-child::before {
-        background-color: var(--color-base-bg);
-        height: auto;
-        top: 1em;
-        bottom: 0;
+    ul.m_tree ul li .m_item.edit::before {
+        display: none;
     }
 </style>
 
@@ -457,7 +465,7 @@ function print_menu_tree(array $input)
          */
         update: function (data) {
             // подменить DOM страницы ответом сервера
-            $('#m_area').replaceWith($(data.html).filter('#m_area'));
+            $('#m_area').replaceWith($(data.html).find('#m_area'));
 
             this._mm = data.materials;// обновить объект материалов ресурса
             this._m = data.menu;// обновить объект меню
