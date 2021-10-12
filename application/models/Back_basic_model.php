@@ -34,7 +34,7 @@ class Back_basic_model extends CI_Model
      * @param string $id Идентификатор записи
      * @param array $data Данные
      * @param string $table Имя таблицы
-     * @return bulean
+     * @return boolean
      */
     function edit(string $id, array $data, string $table)
     {
@@ -80,7 +80,7 @@ class Back_basic_model extends CI_Model
      * Добавить/редактировать версии материала
      *
      * @param string $table Имя таблицы
-     * @param array $new Mассив новых данных материала (будут записаны в БД)
+     * @param array $new Массив новых данных материала (будут записаны в БД)
      * @param array $old Массив старых данных материала (уже записаны в БД)
      * @return void|boolean
      */
@@ -119,7 +119,7 @@ class Back_basic_model extends CI_Model
                 case'sections':
                     $preurl = '/section/';
                     break;
-                case'gallerys':
+                case'galleries':
                     $preurl = '/gallery/';
                     break;
             }
@@ -141,7 +141,7 @@ class Back_basic_model extends CI_Model
     }
 
     /**
-     * Удалить связи с метериалом в версиях
+     * Удалить связи с материалом в версиях
      *
      * @param string $table Имя таблицы
      * @param string $url URL материала
@@ -209,6 +209,21 @@ class Back_basic_model extends CI_Model
     }
 
     /**
+     * Проверка уникальности id
+     *
+     * Метод проверяет наличие id в таблице table
+     *
+     * @param string $id Идентификатор записи
+     * @param string $table Имя таблицы
+     * @return boolean false если запись уникальна или true если нашлось совпадение
+     */
+    function check_id(string $id, string $table)
+    {
+        $q = $this->db->get_where($table, ['id' => $id])->result_array();
+        return empty($q) ? false : true;
+    }
+
+    /**
      * Проверка уникальности заголовка
      *
      * Проверка не затрагивает запись с id (если передан), поскольку метод
@@ -217,7 +232,7 @@ class Back_basic_model extends CI_Model
      * @param string $title Заголовок
      * @param string|null $id Идентификатор текущей записи
      * @param string $table Имя таблицы
-     * @return boolean false если запись уникальна или true если нашлось совпадение
+     * @return boolean False если запись уникальна или true если нашлось совпадение
      */
     function check_title(string $title, string $id, string $table)
     {
@@ -256,10 +271,10 @@ class Back_basic_model extends CI_Model
             $search = "LIKE LOWER('%{$this->db->escape_like_str($f['search'])}%') ESCAPE '!'";
             if ($f['context_search'] === 'content') {
                 $like .= "(
-                    LOWER(layout_t) {$search}
-                    OR LOWER(layout_l) {$search}
-                    OR LOWER(layout_r) {$search}
-                    OR LOWER(layout_b) {$search}
+                    LOWER(content_t) {$search}
+                    OR LOWER(content_l) {$search}
+                    OR LOWER(content_r) {$search}
+                    OR LOWER(content_b) {$search}
                 )";
             } else {
                 $like .= "LOWER({$f['context_search']}) {$search}";
@@ -326,12 +341,13 @@ class Back_basic_model extends CI_Model
     /**
      * Получить конфигурацию
      *
-     * Возвращает массив ['name']='value'. Если 'value' - json - преобразовывает в подмассив
+     * Возвращает массив ['name']='value'. Если 'value' - json - преобразовывает в массив
      *
      * @return array
      */
     function get_config()
     {
+        $data = [];
         $q = $this->db->get('config')->result_array();
         foreach ($q as $v) {
             $json = @json_decode($v['value'], true);
