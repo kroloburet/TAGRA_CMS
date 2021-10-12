@@ -5,7 +5,7 @@ $CI = &get_instance();
 $data = $CI->app('data');
 $pages = $CI->db->where('lang', $data['lang'])->select('title, id')->order_by('title')->get('pages')->result_array();
 $sections = $CI->db->where('lang', $data['lang'])->select('title, id')->order_by('title')->get('sections')->result_array();
-$gallerys = $CI->db->where('lang', $data['lang'])->select('title, id')->order_by('title')->get('gallerys')->result_array();
+$galleries = $CI->db->where('lang', $data['lang'])->select('title, id')->order_by('title')->get('galleries')->result_array();
 ?>
 
 <!--
@@ -40,10 +40,10 @@ $gallerys = $CI->db->where('lang', $data['lang'])->select('title, id')->order_by
         },
         <?php } ?>
 
-        <?php if ($gallerys) { ?>
+        <?php if ($galleries) { ?>
         {
             title: "Галереи", menu: [
-                <?php foreach ($gallerys as $i) { ?>
+                <?php foreach ($galleries as $i) { ?>
                 {title: <?= json_encode($i['title']) ?>, value: "<?= '/gallery/' . $i['id'] ?>"},
                 <?php } ?>
             ]
@@ -84,7 +84,7 @@ $gallerys = $CI->db->where('lang', $data['lang'])->select('title, id')->order_by
         toolbar: "undo redo | styleselect | bold italic | forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | table charmap link image media insertfile | fullscreen code",
         link_list: mce_link_list,
         // настройки файлового менеджера
-        moxiemanager_rootpath: '/upload/<?= $data['lang'] ?>',
+        moxiemanager_rootpath: '/upload',
         moxiemanager_title: 'Mенеджер файлов',
         moxiemanager_view: 'thumbs',
         moxiemanager_leftpanel: false
