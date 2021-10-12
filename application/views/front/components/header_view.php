@@ -86,10 +86,10 @@
             max-width: <?= htmlspecialchars($conf['body_width']) ?>px;
         }
 
-        #layouts {
-            grid-template: auto/<?= isset($data['layout_l_width'])
-            ? htmlspecialchars($data['layout_l_width']) . '% 1fr'
-            : htmlspecialchars($conf['layout_l_width']) . '% 1fr' ?>;
+        #content_layout {
+            grid-template: auto/<?= isset($data['content_l_width'])
+            ? htmlspecialchars($data['content_l_width']) . '% 1fr'
+            : htmlspecialchars($conf['content_l_width']) . '% 1fr' ?>;
         }
     </style>
 
