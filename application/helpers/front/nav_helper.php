@@ -39,7 +39,7 @@ class Nav
 
         // сформировать и вывести HTML ссылки
         $this->list['langs'] .= '
-        <!-- преключение языка -->
+        <!-- переключение языка -->
         <span class="l_s">';
         foreach ($this->conf['langs'] as $v) {// проход по языкам системы
             if ($v['tag'] !== $this->conf['user_lang'] && $v['public']) {// язык опубликован, язык не текущего материала
@@ -95,7 +95,7 @@ class Nav
             ' . ($i['url']
                     ? '<a href="' . $i['url'] . '" target="' . $i['target'] . '">' . $i['title'] . '</a>'
                     : '<span>' . $i['title'] . '</span>');
-            // если есть вложенные елементы
+            // если есть вложенные элементы
             if (isset($i['nodes'])) {
                 $this->list['menu'] .= '
             <ul>';
@@ -115,7 +115,7 @@ class Nav
      */
     public function breadcrumbs()
     {
-        // если "Хлебные крошки" скрыты конфигукацией
+        // если "Хлебные крошки" скрыты конфигурацией
         if (!$this->conf['breadcrumbs']['public']) {
             return;
         }
@@ -131,7 +131,7 @@ class Nav
         <ul class="breadcrumbs TUI_noprint">
           ' . $home; // начало цепи + "главная"
 
-        // если етсть раздел - получить цепь подразделов
+        // если есть раздел - получить цепь подразделов
         if (@$this->data['section']) {
             $this->_breadcrumbs_get_sub_sections_list($this->data['section']);
         }
