@@ -21,19 +21,19 @@
      * @returns {void}
      */
     const _builder = function () {
-        _item = this;// текущий элемент галереи
-        _content_box = $('<div/>', {// окно
+        _item = this; // текущий элемент галереи
+        _content_box = $('<div/>', { // окно
             class: 'FVG_pop_content_box',
             html: '<div class="FVG_pop_loader"><i class="fas fa-spin fa-spinner"></i></div>'
         });
         let close = $('<div/>', {class: 'FVG_pop_close fas fa-times-circle'}), // кнопка деактивации окна
-            prev = $('<div/>', {class: 'FVG_pop_prev fas fa-angle-left'})// кнопка "назад"
+            prev = $('<div/>', {class: 'FVG_pop_prev fas fa-angle-left'}) // кнопка "назад"
                 .on('click.FVG', _prev),
-            next = $('<div/>', {class: 'FVG_pop_next fas fa-angle-right'})// кнопка "вперед"
+            next = $('<div/>', {class: 'FVG_pop_next fas fa-angle-right'}) // кнопка "вперед"
                 .on('click.FVG', _next),
             pop = $('<div/>', {class: 'FVG_pop', html: [close, prev, _content_box, next]}), // корневой контейнер окна
-            back = $('<div/>', {class: 'FVG_pop_back', html: pop});// фоновый контейнер окна
-        back.add(close)// деактивация окна по клику
+            back = $('<div/>', {class: 'FVG_pop_back', html: pop}); // фоновый контейнер окна
+        back.add(close) // деактивация окна по клику
             .on('click.FVG', function (e) {
                 if (e.target === this) {
                     $('body').removeClass('FVG_pup-body');
@@ -52,20 +52,20 @@
      * @returns {void}
      */
     const _insert = function () {
-        // запустить лоадер
+        // запустить индикатор обработки
         _content_box.html('<div class="FVG_pop_loader"><i class="fas fa-spin fa-spinner"></i></div>');
-        const opt = JSON.parse(_item.find('.opt').val());// объект с опциями текущего элемента
+        const opt = JSON.parse(_item.find('.opt').val()); // объект с опциями текущего элемента
         // тип галереи
         switch (_conf.type) {
-            // галерея из папки с изображениями
-            case 'foto_folder': {
+            // галерея из каталога с изображениями
+            case 'img_folder': {
                 let img = $('<img/>', {class: 'FVG_pop_img', src: opt.f_url, alt: opt.f_url})
                     .on('click.FVG', _next);
                 _content_box.html(img);
             }
                 break;
             // галерея изображений с описаниями
-            case 'foto_desc': {
+            case 'img_desc': {
                 let img = $('<img/>', {class: 'FVG_pop_img', src: opt.f_url, alt: opt.f_title})
                         .on('click.FVG', _next),
                     title = $('<h2/>', {class: 'FVG_pop_desc_title', text: opt.f_title}),
@@ -123,7 +123,7 @@
      * @type object
      */
     const def_conf = {
-        type: 'foto_folder'
+        type: 'img_folder'
     };
 
     /**
@@ -139,18 +139,18 @@
          * @returns {object}
          */
         init: function (user_conf) {
-            $('head').eq(0).append('<link href="/scripts/libs/FVGallery/FVGallery.css" rel="stylesheet">');// загрузить стили
-            _conf = $.extend({}, def_conf, user_conf);// получить конфигурацию
+            $('head').eq(0).append('<link href="/scripts/libs/FVGallery/FVGallery.css" rel="stylesheet">'); // загрузить стили
+            _conf = $.extend({}, def_conf, user_conf); // получить конфигурацию
 
-            let items = $('.FVG_item');// все элементы галереи
-            items.find('img').each(function () {// отложеная загрузка изображений
+            let items = $('.FVG_item'); // все элементы галереи
+            items.find('img').each(function () { // отложенная загрузка изображений
                 $(this).attr('src', $(this).data('src'));
             });
-            //располагаются ли элементы в один столбец,
-            //чтобы не отрабатывать всплывающее окно.
-            //Добравить/убрать стиль деактивации.
+            // располагаются ли элементы в один столбец,
+            // чтобы не отрабатывать всплывающее окно.
+            // Добавить/убрать стиль деактивации.
             _noactive = function () {
-                if ($(window).outerWidth(true) <= 600) {// ширина окна <= контрольной точки
+                if ($(window).outerWidth(true) <= 600) { // ширина окна <= контрольной точки
                     items.addClass('FVG_noactive');
                     return true;
                 } else {
@@ -159,10 +159,10 @@
                 }
             };
             _noactive();
-            $(window).on('resize.FVG', _noactive);// следить за шириной окна
-            return this.each(function () {// добавить события на все элементы
-                $(this).on('click.FVG', function (e) {// клик запускает окно
-                    if (_noactive() && _conf.type !== 'video_yt') return false;// элементы расположены в одну колонку
+            $(window).on('resize.FVG', _noactive); // следить за шириной окна
+            return this.each(function () { // добавить события на все элементы
+                $(this).on('click.FVG', function (e) { // клик запускает окно
+                    if (_noactive() && _conf.type !== 'video_yt') return false; // элементы расположены в одну колонку
                     e.preventDefault();
                     _builder.apply($(this), null);
                 });
