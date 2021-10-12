@@ -1,8 +1,8 @@
 <h1><?= "{$data['view_title']} [{$data['lang']}]" ?></h1>
 
 <div class="sheath">
-    <form method="POST" action="/admin/home/edit/<?= $data['id'] ?>">
-        <input type="hidden" name="last_mod_date" value="<?= date('Y-m-d') ?>">
+    <form method="post" action="/admin/home/edit/<?= $data['id'] ?>">
+        <input type="hidden" name="last_mod_date" value="<?= date('Y-m-d H:i:s') ?>">
         <input type="hidden" name="lang" value="<?= $data['lang'] ?>">
 
         <!--
@@ -12,7 +12,7 @@
         <div class="touch">
             <h2>Основное</h2>
             <hr>
-            Заголовок страницы <i class="fas fa-info-circle TUI_red" onmouseover="TUI.Hint(this)"></i>
+            Заголовок материала <i class="fas fa-info-circle TUI_red" onmouseover="TUI.Hint(this)"></i>
             <pre class="TUI_Hint">
                 Должен быть информативным и емким,
                 содержать ключевые слова.
@@ -48,7 +48,7 @@
                     <input type="text" name="img_prev" id="img_prev" value="<?= htmlspecialchars($data['img_prev']) ?>">
                 </label>
                 <a href="#" class="fas fa-folder-open fa-2x TUI_blue"
-                   onclick="files('img_prev', '<?= $data['lang'] ?>');return false"></a>
+                   onclick="files('img_prev');return false"></a>
                 <i class="fas fa-eye fa-2x TUI_blue" onmouseover="img_prev(this, '#img_prev')"></i>
                 <pre class="TUI_Hint"></pre>
             </div>
@@ -148,3 +148,4 @@
 </script>
 
 <?php $this->load->helper('back/redactor') ?>
+
