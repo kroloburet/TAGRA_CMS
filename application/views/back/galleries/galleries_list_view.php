@@ -68,7 +68,7 @@
     </div>
 </form>
 
-<?php if (empty($data['gallerys'])) { ?>
+<?php if (empty($data['galleries'])) { ?>
     <div class="sheath">
         <p>Ничего не найдено. Запрос не дал результатов..(</p>
     </div>
@@ -91,7 +91,7 @@
         <?php
         $this->load->helper('back/id_to_title');
         $sec = new id_to_title('sections');
-        foreach ($data['gallerys'] as $v) {
+        foreach ($data['galleries'] as $v) {
             ?>
             <tr>
                 <td title="<?= $v['title'] ?>"><?= mb_strimwidth($v['title'], 0, 40, '...') ?></td>
@@ -101,14 +101,14 @@
                     <span>
                         <a href="#" class="<?= $v['public'] ? 'fas fa-eye' : 'fas fa-eye-slash TUI_red' ?>"
                            title="Опубликовать/не опубликовывать"
-                           onclick="toggle_public(this, <?= $v['id'] ?>, 'gallerys');return false"></a>
+                           onclick="toggle_public(this, '<?= $v['id'] ?>', 'galleries');return false"></a>
                     </span>&nbsp;&nbsp;
                     <a href="/admin/gallery/edit_form/<?= $v['id'] ?>"
                        class="fas fa-edit" title="Редактировать"></a>&nbsp;&nbsp;
                     <a href="/gallery/<?= $v['id'] ?>" class="fas fa-external-link-alt"
                        target="_blank" title="Смотреть на сайте"></a>&nbsp;&nbsp;
                     <a href="#" class="fas fa-trash-alt TUI_red" title="Удалить"
-                       onclick="del_gallery(this, <?= $v['id'] ?>);return false"></a>
+                       onclick="del_gallery(this, '<?= $v['id'] ?>');return false"></a>
                 </td>
             </tr>
         <?php } ?>
@@ -170,3 +170,4 @@
         });
     }
 </script>
+
