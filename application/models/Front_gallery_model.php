@@ -24,7 +24,7 @@ class Front_gallery_model extends Front_basic_model
      */
     function get_gallery(string $id)
     {
-        $q = $this->db->where(['public' => 1, 'id' => $id])->get('gallerys')->result_array();
+        $q = $this->db->where(['public' => 1, 'id' => $id])->get('galleries')->result_array();
         return isset($q[0]) ? $q[0] : [];
     }
 }
