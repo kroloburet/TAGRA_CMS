@@ -35,7 +35,7 @@ function off_notific() {
 
 localStorage.getItem('notific_work_info') ? off_notific() : null;
 
-//localStorage.removeItem('notific_work_info');
+// localStorage.removeItem('notific_work_info');
 
 /**
  * Превью изображения по url из поля
@@ -50,20 +50,22 @@ function img_prev(targ, input) {
         h = $(targ).next('.TUI_Hint');
     if (i.val()) {
         // поле не пустое
-        h.html(`<img src="${i.val()}" style="max-width:30vw">`);
-        TUI.Hint(t);
+        let match = i.val().match(/^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/);
+        h.html(`<img src="${match && match[7].length === 11
+            ? `https://img.youtube.com/vi/${match[7]}/mqdefault.jpg`
+            : i.val()}" style="max-width:30vw">`);
     } else {
         // поле пустое
         h.empty();
-        TUI.Hint(t);
     }
+    TUI.Hint(t);
 }
 
 /**
  * Валидация полей и отправка формы
  *
  * @param {object} form Ссылка "form|this" на отправляемую форму
- * @param {object} req Обьект для валидации полей {имя поля:/рег.выражение/}
+ * @param {object} req Объект для валидации полей {имя поля:/рег.выражение/}
  * @returns {void|boolean}
  */
 function subm(form, req) {
@@ -71,7 +73,7 @@ function subm(form, req) {
         control = f.find('.this_form_control'),
         control_html = control.html(),
         msg = function (m, s, d, c) {
-            m = m || 'Отмеченое красным поле некорректно заполнено!';
+            m = m || 'Отмеченное красным поле некорректно заполнено!';
             s = s || 'TUI_notice-r';
             d = d || 4000;
             c = c || function () {
@@ -87,7 +89,7 @@ function subm(form, req) {
     // валидация полей
     if (typeof req === 'object') {
         for (let key in req) {
-            let el = f.find(`[name="${key}"]`);// проверяемое поле
+            let el = f.find(`[name="${key}"]`); // проверяемое поле
             if (el.length > 1) {
                 // группа полей типа name="name[]" или такие поля динамически создаются
                 for (let i = 0; el.length > i; ++i) {
@@ -161,24 +163,24 @@ function subm(form, req) {
 /**
  * Генерировать пароль и вставить в поле
  *
- * @param {string} id Селектор поля для вставки пароля
+ * @param {string} selector Селектор поля для вставки пароля
  * @returns {void}
  */
-function gen_pass(el) {
+function gen_pass(selector) {
     let passwd = '',
         chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789~@#$[]_-';
     for (let i = 1; i < 11; i++) {
         let c = Math.floor(Math.random() * chars.length + 1);
         passwd += chars.charAt(c);
     }
-    $(el).val(passwd);
+    $(selector).val(passwd);
 }
 
 /**
  * Проверка уникальности "title" в таблице БД
  *
  * @param {object} elem Ссылка "this" на поле name="title"
- * @param {string} id Идетификатор текущего материала
+ * @param {string} id Идентификатор текущего материала
  * @param {string} tab Имя таблицы текущего материала
  * @param {string} msg Сообщение, если title не уникальный
  * @returns {void}
@@ -275,6 +277,6 @@ function files(field = null, lang = null, user_conf = {}) {
     moxman.browse(conf);
 
     function files_notice() {
-        $('.moxman-window-head').after(`<div style="padding:4px;background-color:#ffc0a2">Внимание! Не используйте кириллицу и пробелы в именах файлов и папок!</div>`);
+        $('.moxman-window-head').after(`<div style="padding:4px;background-color:#ffc0a2">Внимание! Не используйте кириллицу и пробелы в именах файлов и каталогов!</div>`);
     }
 }
