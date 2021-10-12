@@ -5,7 +5,7 @@ include_once(APPPATH . 'controllers/Front_basic_control.php');
 /**
  * Контроллер комментариев
  *
- * Методы для работы с комментариями в пользоватьской части
+ * Методы для работы с комментариями в пользовательской части
  *
  * @author Sergey Nizhnik <kroloburet@gmail.com>
  */
@@ -13,7 +13,7 @@ class Front_comment_control extends Front_basic_control
 {
 
     protected $c_conf = []; // массив настроек комментариев
-    protected $domen;
+    protected $domain;
     protected $lexic;
 
     function __construct()
@@ -21,7 +21,7 @@ class Front_comment_control extends Front_basic_control
         parent::__construct();
         $this->load->model('front_comment_model');
         $this->c_conf = $this->app('conf.comments');
-        $this->domen = str_replace('www.', '', $this->input->server('HTTP_HOST'));
+        $this->domain = str_replace('www.', '', $this->input->server('HTTP_HOST'));
     }
 
     /**
@@ -57,10 +57,10 @@ class Front_comment_control extends Front_basic_control
         $msg = '
 <html>
     <head>
-        <title>' . htmlspecialchars($lexic['comments']['feedback_title']) . $this->domen . '</title>
+        <title>' . htmlspecialchars($lexic['comments']['feedback_title']) . $this->domain . '</title>
     </head>
     <body>
-        <h2>' . $lexic['comments']['feedback_title'] . $this->domen . '</h2>
+        <h2>' . $lexic['comments']['feedback_title'] . $this->domain . '</h2>
         <p style="padding:0;margin:0.5em 0 0 0">
             <b>' . explode('@', $q[0]['name'])[0] . '</b>&nbsp;
             <time style="color:#888">' . $lexic['comments']['published'] . $q[0]['creation_date'] . '</time><br>
@@ -91,8 +91,8 @@ class Front_comment_control extends Front_basic_control
 </html>
 ';
         $this->load->library('email');
-        $this->email->subject(htmlspecialchars($lexic['comments']['feedback_title']) . $this->domen);
-        $this->email->from('Robot@' . $this->domen, $this->app('conf.site_name'));
+        $this->email->subject(htmlspecialchars($lexic['comments']['feedback_title']) . $this->domain);
+        $this->email->from('Robot@' . $this->domain, $this->app('conf.site_name'));
         $this->email->to($q[0]['name']);
         $this->email->message($msg);
         return $this->email->send();
@@ -102,7 +102,7 @@ class Front_comment_control extends Front_basic_control
      * Отправить уведомление администратору и модераторам
      *
      * Метод отправляет комментарий установленным
-     * в настройках конфигурации комментариев пользавотелям
+     * в настройках конфигурации комментариев пользователям
      * административной части (администратору/модераторам)
      * с действиями над комментарием.
      *
@@ -181,10 +181,10 @@ class Front_comment_control extends Front_basic_control
         $msg = '
 <html>
     <head>
-        <title>Новый комментарий на ' . $this->domen . '</title>
+        <title>Новый комментарий на ' . $this->domain . '</title>
     </head>
     <body>
-        <h2>Новый комментарий на ' . $this->domen . '</h2>
+        <h2>Новый комментарий на ' . $this->domain . '</h2>
         IP пользователя: ' . $data['ip'] . '<br>
         Материал: <a href="' . base_url($data['url']) . '" target="_blank">' . base_url($data['url']) . '</a><br>
         ' . $parent['html'] . '
@@ -202,8 +202,8 @@ class Front_comment_control extends Front_basic_control
          * отправка уведомления
          */
         $this->load->library('email');
-        $this->email->subject('Новый комментарий на ' . $this->domen);
-        $this->email->from('Robot@' . $this->domen, $this->app('conf.site_name'));
+        $this->email->subject('Новый комментарий на ' . $this->domain);
+        $this->email->from('Robot@' . $this->domain, $this->app('conf.site_name'));
         $this->email->to($mail_to);
         $this->email->message($msg);
         return $this->email->send();
@@ -212,7 +212,7 @@ class Front_comment_control extends Front_basic_control
     /**
      * Добавить комментарий
      *
-     * Метод принимает данные из POST переданные
+     * Метод принимает данные из post переданные
      * ajax запросом, добавит комментарий в БД,
      * инициирует отправку уведомлений о новом комментарии
      * и выведет json ответ.
@@ -227,7 +227,7 @@ class Front_comment_control extends Front_basic_control
         !$this->input->post() ? exit(json_encode(['status' => 'error'], JSON_FORCE_OBJECT)) : null;
         $p = array_map('strip_tags', array_map('trim', $this->input->post()));
         $back_user = $this->app('conf.back_user');
-        // если есть зарезервированные имена и комментитует не администратор/модератор
+        // если есть зарезервированные имена и комментирует не администратор/модератор
         if ($this->c_conf['reserved_names'] && !$back_user) {
             preg_grep('/^' . $p['name'] . '$/ui', array_map('trim', explode(';', $this->c_conf['reserved_names'])))
                 ? exit(json_encode(['status' => 'reserved_name'], JSON_FORCE_OBJECT))
@@ -240,14 +240,15 @@ class Front_comment_control extends Front_basic_control
             'name' => $p['name'],
             'comment' => $p['comment'],
             'url' => $p['url'],
-            'creation_date' => date('Y-m-d'),
+            'creation_date' => date('Y-m-d H:i:s'),
             'ip' => $this->input->server('REMOTE_ADDR'),
             // язык комментируемого материала
             'lang' => $p['lang'],
             // если в имени валидный email - подписка на ответы
             'feedback' => filter_var($p['name'], FILTER_VALIDATE_EMAIL) ? 1 : 0,
             // код премодерации если комментирует не администратор/модератор
-            'premod_code' => !$back_user && $this->c_conf['notific'] !== 'off' ? microtime(true) : '',
+            'premod_code' => !$back_user && in_array($this->c_conf['notific'],
+                ['premod_site_mail', 'premod_admin_mail', 'premod_moderator_mail']) ? microtime(true) : '',
             // не публиковать если премодерация и комментирует не администратор/модератор
             'public' => $back_user || in_array($this->c_conf['notific'],
                 ['off', 'site_mail', 'admin_mail', 'moderator_mail']) ? 1 : 0
@@ -321,7 +322,7 @@ class Front_comment_control extends Front_basic_control
                 if ($resp && $this->c_conf['feedback']) {
                     // опубликован и обратная связь разрешена
                     $q[0]['public'] = 1;
-                    $q[0]['creation_date'] = date('Y-m-d');
+                    $q[0]['creation_date'] = date('Y-m-d H:i:s');
                     // отправить уведомление об ответе
                     $this->_send_feedback($q[0]);
                 }
@@ -436,7 +437,7 @@ class Front_comment_control extends Front_basic_control
     /**
      * Изменить рейтинг
      *
-     * Метод принимает данные из POST переданные
+     * Метод принимает данные из post переданные
      * ajax запросом, изменит рейтинг материала
      * и выведет json ответ.
      *
@@ -454,7 +455,7 @@ class Front_comment_control extends Front_basic_control
                 // нет такого комментария
                 $resp['status'] = 'error';
             } else {
-                // получить или задать массив заначений рейтинга
+                // получить или задать массив значений рейтинга
                 $arr = !$q[0]['rating'] ? ['like' => 0, 'dislike' => 0] : json_decode($q[0]['rating'], true);
                 // увеличить значение
                 $arr[$p['action']]++;
