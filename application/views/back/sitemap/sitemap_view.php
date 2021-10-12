@@ -1,6 +1,6 @@
 <h1><?= $data['view_title'] ?></h1>
 
-<?php if (is_writable(getcwd() . '/sitemap.xml')) {// sitemap.xml доступен для записи ?>
+<?php if (is_writable(getcwd() . '/sitemap.xml')) { // sitemap.xml доступен для записи ?>
     <dl class="TUI_Tab">
         <dt>Обзор</dt>
         <dd>
@@ -21,7 +21,7 @@
             ########### Настройки карты сайта
             -->
 
-            <form method="POST" action="/admin/set_sitemap_config">
+            <form method="post" action="/admin/set_sitemap_config">
                 <div class="TUI_row touch">
                     <div class="TUI_col-6">
                         Генерировать карту сайта <i class="fas fa-info-circle TUI_blue"
@@ -63,7 +63,7 @@
         </dd>
     </dl>
 
-<?php } else {// sitemap.xml не доступен для записи ?>
+<?php } else { // sitemap.xml не доступен для записи ?>
     <div class="sheath">
         <h2 class="TUI_red">Ошибка! Файл sitemap.xml не доступен для записи.</h2>
         <p>Установите права на запись (644) для файла sitemap.xml в корневом каталоге вашего сайта.</p>
@@ -77,3 +77,4 @@
         $('select[name="allowed"] option[value="<?= $conf['sitemap']['allowed'] ?>"]').attr('selected', true);
     });
 </script>
+
