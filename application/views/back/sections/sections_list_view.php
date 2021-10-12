@@ -101,7 +101,7 @@
                     <span>
                         <a href="#" class="<?= $v['public'] ? 'fas fa-eye' : 'fas fa-eye-slash TUI_red' ?>"
                            title="Опубликовать/не опубликовывать"
-                           onclick="toggle_public(this, <?= $v['id'] ?>, 'sections');return false"></a>
+                           onclick="toggle_public(this, '<?= $v['id'] ?>', 'sections');return false"></a>
                     </span>&nbsp;&nbsp;
                     <a href="/admin/section/edit_form/<?= $v['id'] ?>"
                        class="fas fa-edit" title="Редактировать"></a>&nbsp;&nbsp;
@@ -174,3 +174,4 @@
         });
     }
 </script>
+
