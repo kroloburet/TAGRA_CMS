@@ -40,7 +40,7 @@ if (!function_exists('versions')) {
                 case 'sections':
                     $url = '/section/' . $v['id'];
                     break;
-                case 'gallerys':
+                case 'galleries':
                     $url = '/gallery/' . $v['id'];
                     break;
             }
