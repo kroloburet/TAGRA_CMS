@@ -52,10 +52,11 @@ class Back_language_control extends Back_basic_control
                 return false;
             }
             // добавить страницы "Главная" и "Контакты"
+            $datetime = date('Y-m-d H:i:s');
             $page = [
-                'creation_date' => date('Y-m-d'),
-                'last_mod_date' => date('Y-m-d'),
-                'layout_l_width' => $this->app('conf.layout_l_width'),
+                'creation_date' => $datetime,
+                'last_mod_date' => $datetime,
+                'content_l_width' => $this->app('conf.content_l_width'),
                 'addthis_share' => $this->app('conf.addthis.share_def'),
                 'addthis_follow' => $this->app('conf.addthis.follow_def'),
                 'img_prev' => $this->app('conf.img_prev_def'),
@@ -167,7 +168,7 @@ class Back_language_control extends Back_basic_control
     /**
      * Получить содержимое файла локализации
      *
-     * Метод принимает данные из POST переданные
+     * Метод принимает данные из post переданные
      * ajax запросом и возвращает в строке ответа
      * содержимое файла локализации.
      *
@@ -182,7 +183,7 @@ class Back_language_control extends Back_basic_control
     /**
      * Валидировать и сохранить содержимое файла локализации
      *
-     * Метод принимает данные из POST переданные
+     * Метод принимает данные из post переданные
      * ajax запросом, валидирует и сохраняет содержимое
      * файла если валидация успешна.
      * Возвращает в json строке ответа содержимое файла
@@ -288,7 +289,7 @@ class Back_language_control extends Back_basic_control
     /**
      * Добавить язык
      *
-     * Метод принимает данные из POST переданные
+     * Метод принимает данные из post переданные
      * ajax запросом, добавит данные и выведет json ответ.
      *
      * @return void
@@ -308,7 +309,7 @@ class Back_language_control extends Back_basic_control
     /**
      * Редактировать язык
      *
-     * Метод принимает данные из POST переданные
+     * Метод принимает данные из post переданные
      * ajax запросом, редактирует данные и выведет json ответ.
      *
      * @return void
@@ -326,10 +327,10 @@ class Back_language_control extends Back_basic_control
     /**
      * Удалить язык
      *
-     * Метод принимает данные из POST переданные
+     * Метод принимает данные из post переданные
      * ajax запросом, удалит: язык, каталоги языка
      * с их содержимым, все материалы и комментарии
-     * пренадлежащие этому языку.
+     * принадлежащие этому языку.
      * Выведет строку ответа.
      *
      * @return void
