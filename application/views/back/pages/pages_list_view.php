@@ -101,14 +101,14 @@
                     <span>
                         <a href="#" class="<?= $v['public'] ? 'fas fa-eye' : 'fas fa-eye-slash TUI_red' ?>"
                            title="Опубликовать/не опубликовывать"
-                           onclick="toggle_public(this, <?= $v['id'] ?>, 'pages');return false"></a>
+                           onclick="toggle_public(this, '<?= $v['id'] ?>', 'pages');return false"></a>
                     </span>&nbsp;&nbsp;
                     <a href="/admin/page/edit_form/<?= $v['id'] ?>"
                        class="fas fa-edit" title="Редактировать"></a>&nbsp;&nbsp;
                     <a href="/page/<?= $v['id'] ?>" class="fas fa-external-link-alt"
                        target="_blank" title="Смотреть на сайте"></a>&nbsp;&nbsp;
                     <a href="#" class="fas fa-trash-alt TUI_red" title="Удалить"
-                       onclick="del_page(this, <?= $v['id'] ?>);return false"></a>
+                       onclick="del_page(this, '<?= $v['id'] ?>');return false"></a>
                 </td>
             </tr>
         <?php } ?>
@@ -170,3 +170,4 @@
         });
     }
 </script>
+
