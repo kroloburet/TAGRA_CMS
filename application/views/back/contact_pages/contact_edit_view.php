@@ -1,8 +1,8 @@
 <h1><?= "{$data['view_title']} [{$data['lang']}]" ?></h1>
 
 <div class="sheath">
-    <form method="POST" action="/admin/contact/edit/<?= $data['id'] ?>">
-        <input type="hidden" name="last_mod_date" value="<?= date('Y-m-d') ?>">
+    <form method="post" action="/admin/contact/edit/<?= $data['id'] ?>">
+        <input type="hidden" name="last_mod_date" value="<?= date('Y-m-d H:i:s') ?>">
         <input type="hidden" name="lang" value="<?= $data['lang'] ?>">
 
         <!--
@@ -47,7 +47,7 @@
                     <input type="text" name="img_prev" id="img_prev" value="<?= htmlspecialchars($data['img_prev']) ?>">
                 </label>
                 <a href="#" class="fas fa-folder-open fa-2x TUI_blue"
-                   onclick="files('img_prev', '<?= $data['lang'] ?>');return false"></a>
+                   onclick="files('img_prev');return false"></a>
                 <i class="fas fa-eye fa-2x TUI_blue" onmouseover="img_prev(this, '#img_prev')"></i>
                 <pre class="TUI_Hint"></pre>
             </div>
@@ -143,7 +143,7 @@
             <div class="contact_form" hidden>
                 <?php if (!$conf['gapi_key']) { ?>
                     <p class="TUI_notice-y mini TUI_full">Внимание! Если вы хотите использовать GPS-координаты и карты
-                        Google, необходимо иметь аккаунт в Google, вкрючить Google Map API, получить ключ и добавить его
+                        Google, необходимо иметь аккаунт в Google, включить Google Map API, получить ключ и добавить его
                         в конфигурацию (в главном меню: Конфигурация, в поле <q>Ключ Google Map API</q>). Если у вас
                         возникли трудности связанные с получением ключа или отображением карт, обратитесь к разработчику
                         или веб-мастеру.</p>
@@ -180,7 +180,7 @@
                             <b class="TUI_red">Обязательно для заполнения!</b>
                         </pre>
                         <label class="TUI_input">
-                            <input type="text" class="mail" placeholder="info@domen.com, sale@domen.com">
+                            <input type="text" class="mail" placeholder="info@domain.com, sale@domain.com">
                         </label>
                     </div>
                     <div class="TUI_col-6">
@@ -332,14 +332,14 @@
             _gmap = _.find('.contact_gmap'), // блок карты
             _prev = _.find('.contact_prev'), // блок превью
             _add_btn = _.find('.add_contact_btn'), // кнопка "добавить контакт"
-            _del_all_btn = $('<button/>', {type: 'button', text: 'Удалить все'})// кнопка "удалить все"
+            _del_all_btn = $('<button/>', {type: 'button', text: 'Удалить все'}) // кнопка "удалить все"
                 .on('click.Contact', function () {
                     __del_all();
                 }),
             _done_btn = _.find('.contact_done_btn'), // кнопка "готово"
             _cancel_btn = _.find('.contact_cancel_btn'), // кнопка "отмена"
             _gps_reg = /(^-?)[0-9]+(?:\.[0-9]*)?,-?[0-9]+(?:\.[0-9]*)?$/, // регулярка проверки gps
-            _opt = !_contacts.val() ? {} : JSON.parse(_contacts.val());// объект данных контактов
+            _opt = !_contacts.val() ? {} : JSON.parse(_contacts.val()); // объект данных контактов
 
         /**
          * Валидация полей
@@ -348,7 +348,7 @@
          * @returns {boolean}
          */
         const __validator = function (id) {
-            let opt_count = Object.keys(_opt).length;// всего контактов
+            let opt_count = Object.keys(_opt).length; // всего контактов
 
             // валидация поля "Порядок"
             if (!/^[1-9]\d*$/.test(_order.val())) {
@@ -361,24 +361,24 @@
             }
 
             // валидация поля "E-mail"
-            if (!/\S/.test(_mail.val())) {// если пусто
+            if (!/\S/.test(_mail.val())) { // если пусто
                 alert('Поле "E-mail" не заполнено!');
                 return false;
-            } else {// если поле заполнено
-                let mail_arr = _mail.val().split(',');// разбиваю стоку в массив email-ов
-                for (let i = 0; i < mail_arr.length; i++) {// проход по массиву email-ов
-                    if (!/^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/.test(mail_arr[i].trim())) {// проверка
+            } else { // если поле заполнено
+                let mail_arr = _mail.val().split(','); // разбиваю стоку в массив email-ов
+                for (let i = 0; i < mail_arr.length; i++) { // проход по массиву email-ов
+                    if (!/^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/.test(mail_arr[i].trim())) { // проверка
                         alert('Поле "E-mail" заполнено некорректно!');
                         return false;
                     }
                 }
             }
 
-            // валидация поля "Tелефон"
-            if (/\S/.test(_tel.val())) {// поле заполнено
-                let tel_arr = _tel.val().split(',');// разбиваю стоку в массив телефонов
-                for (let i = 0; i < tel_arr.length; i++) {// проход по массиву телефонов
-                    if (!/^\+\d{2,3}[\s-]?\(?\d{0,3}\)?[\s-]?\d{3}[\s-]?\d{2}[\s-]?\d{2}$/.test(tel_arr[i].trim())) {// проверка
+            // валидация поля "Телефон"
+            if (/\S/.test(_tel.val())) { // поле заполнено
+                let tel_arr = _tel.val().split(','); // разбиваю стоку в массив телефонов
+                for (let i = 0; i < tel_arr.length; i++) { // проход по массиву телефонов
+                    if (!/^\+\d{2,3}[\s-]?\(?\d{0,3}\)?[\s-]?\d{3}[\s-]?\d{2}[\s-]?\d{2}$/.test(tel_arr[i].trim())) { // проверка
                         alert('Поле "Телефон" заполнено некорректно!');
                         return false;
                     }
@@ -386,12 +386,12 @@
             }
 
             // валидация поля "Адрес", "GPS-координаты"
-            if (/\S/.test(_address.val())) {// поле "Адрес" заполнено - нужно заполнить координаты
-                if (!_gps_reg.test(_gps.val())) {// GPS-координаты некорректны
+            if (/\S/.test(_address.val())) { // поле "Адрес" заполнено - нужно заполнить координаты
+                if (!_gps_reg.test(_gps.val())) { // GPS-координаты некорректны
                     alert('Поле "GPS-координаты" не заполнено или заполнено некорректно!\nЕсли заполнено поле "Адрес", то поле "GPS-координаты" обязательно для заполнения.');
                     return false;
-                } else {// GPS-координаты корректны - проверка на уникальность в контактах
-                    for (let k in _opt) {// обход контактов
+                } else { // GPS-координаты корректны - проверка на уникальность в контактах
+                    for (let k in _opt) { // обход контактов
                         if (_opt[k].gps === _gps.val() && k !== id) {
                             alert('Контакт с такими координатами уже добавлен!');
                             return false;
@@ -399,7 +399,7 @@
                     }
                 }
             }
-            if (/\S/.test(_gps.val())) {// поле "GPS-координаты" заполнено - нужно заполнить адрес
+            if (/\S/.test(_gps.val())) { // поле "GPS-координаты" заполнено - нужно заполнить адрес
                 if (!/\S/.test(_address.val())) {
                     alert('Поле "Адрес" не заполнено!\nЕсли заполнено поле "GPS-координаты", то поле "Адрес" обязательно для заполнения.');
                     return false;
@@ -418,10 +418,10 @@
         const __get_add_form = function () {
             __clear();
             let order = Object.keys(_opt).length + 1;
-            _done_btn.on('click.Contact', __add);// событие на "готово" - добавить
-            _order.val(order).attr({'readonly': true, 'max': order});// задать порядковый номер и заблокировать поле
+            _done_btn.on('click.Contact', __add); // событие на "готово" - добавить
+            _order.val(order).attr({'readonly': true, 'max': order}); // задать порядковый номер и заблокировать поле
             _form.slideDown(200);
-            __map_init();// активация Google Map
+            __map_init(); // активация Google Map
         };
 
         /**
@@ -432,7 +432,7 @@
          */
         const __get_edit_form = function (id) {
             __clear();
-            _done_btn.on('click.Contact', function () {// событие на "готово" - редактировать
+            _done_btn.on('click.Contact', function () { // событие на "готово" - редактировать
                 __edit(id);
             });
             _order.val(id).attr({'readonly': false, 'max': Object.keys(_opt).length});
@@ -446,7 +446,7 @@
             _gps.val(_opt[id].gps);
             _marker_desc.val(_opt[id].marker_desc);
             _form.slideDown(200);
-            __map_init();// активация Google Map
+            __map_init(); // активация Google Map
         };
 
         /**
@@ -455,9 +455,9 @@
          * @returns {void}
          */
         const __clear = function () {
-            _done_btn.off();// удалить все события у кнопки "готово"
-            _gmap.empty();// очистить карту
-            _form.slideUp(200).find('input, textarea').val('');// очистить поля, скрыть форму
+            _done_btn.off(); // удалить все события у кнопки "готово"
+            _gmap.empty(); // очистить карту
+            _form.slideUp(200).find('input, textarea').val(''); // очистить поля, скрыть форму
         };
 
         /**
@@ -504,7 +504,7 @@
             let order = _order.val(), // новый порядковый номер
                 int_order = parseInt(order, 10), // новый порядковый номер в число
                 int_id = parseInt(id, 10), // текущий порядковый номер в число
-                temp = {};// если изменится порядковый номер - будет хранить объект с новым порядком
+                temp = {}; // если изменится порядковый номер - будет хранить объект с новым порядком
 
             // проверка числа в диапазоне
             Number.prototype.between = function (a, b) {
@@ -516,10 +516,10 @@
             if (order !== id) {
 
                 for (let k in _opt) {
-                    let int_k = parseInt(k, 10);// текущий порядковый номер (ключ) в число
-                    if (int_k.between(int_id, int_order)) {// текущий ключ входит в диапазон
-                        if (int_k === int_id) {// текущий ключ и текущий порядковый номер совпали
-                            temp[order] = {// записать измененный элемент и назначить новый порядковый номер
+                    let int_k = parseInt(k, 10); // текущий порядковый номер (ключ) в число
+                    if (int_k.between(int_id, int_order)) { // текущий ключ входит в диапазон
+                        if (int_k === int_id) { // текущий ключ и текущий порядковый номер совпали
+                            temp[order] = { // записать измененный элемент и назначить новый порядковый номер
                                 title: _title.val(),
                                 mail: _mail.val(),
                                 tel: _tel.val(),
@@ -530,10 +530,10 @@
                                 marker_desc: _marker_desc.val(),
                                 address: _address.val()
                             };
-                        } else {// не совпали - увеличить или уменьшить номер в диапазоне чтобы сдвинуть
+                        } else { // не совпали - увеличить или уменьшить номер в диапазоне чтобы сдвинуть
                             int_id > int_order ? temp[int_k + 1] = _opt[k] : temp[int_k - 1] = _opt[k];
                         }
-                    } else {//текущий ключ не входит в диапазон - оставить как есть
+                    } else { //текущий ключ не входит в диапазон - оставить как есть
                         temp[k] = _opt[k];
                     }
                 }
@@ -548,7 +548,7 @@
                 return true;
             }
 
-            //порядковый номер не изменился
+            // порядковый номер не изменился
             _opt[id] = {
                 title: _title.val(),
                 mail: _mail.val(),
@@ -619,9 +619,9 @@
             // если нет данных
             if ($.isEmptyObject(_opt)) return;
 
-            _add_btn.after(_del_all_btn);// добавить кнопку "удалить все"
-            _prev.empty();// очистить превью
-            for (let k in _opt) {// заполнять превью адресами
+            _add_btn.after(_del_all_btn); // добавить кнопку "удалить все"
+            _prev.empty(); // очистить превью
+            for (let k in _opt) { // заполнять превью адресами
                 let title = $('<div/>', {
                         class: 'prev_item_content',
                         text: (`${k}. ${_opt[k].title} ${_opt[k].mail} ${_opt[k].tel} ${_opt[k].address}`).substring(0, 100) + '...'
@@ -697,7 +697,7 @@
 
             // установить маркер по введенным координатам
             _gps.on('keyup.Contact', function () {
-                if (_gps_reg.test($(this).val())) {// если соответствует шаблону gps-координат
+                if (_gps_reg.test($(this).val())) { // если соответствует шаблону gps-координат
                     let location = new google.maps.LatLng($(this).val().split(',')[0], $(this).val().split(',')[1]);
                     marker.setPosition(location);
                     map.setCenter(location);
@@ -732,3 +732,4 @@
 </script>
 
 <?php $this->load->helper('back/redactor') ?>
+
