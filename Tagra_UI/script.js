@@ -106,7 +106,7 @@ const TUI = (function () {
          * Всплывающая подсказка
          *
          * @param {object} trigger "this" Ссылка на триггер
-         * @param {string} hideEvent Cобытие для скрытия подсказки без префикса "on"
+         * @param {string} hideEvent Событие для скрытия подсказки без префикса "on"
          * @return {object} Элемент подсказки
          */
         Hint(trigger, hideEvent = 'mouseout') {
@@ -123,7 +123,7 @@ const TUI = (function () {
             // обработка положения подсказки
             trigger.addEventListener('mousemove', e => {
                 const cursor = {x: e.pageX, y: e.pageY};
-                const distance = { //дистанция указателя до правого и нижнего края
+                const distance = { // дистанция указателя до правого и нижнего края
                     right: win.innerWidth - (cursor.x - win.pageXOffset),
                     bottom: win.innerHeight - (cursor.y - win.pageYOffset)
                 };
@@ -161,16 +161,16 @@ const TUI = (function () {
             // создать и прикрепить счетчик если не определен
             if (!counter) {
                 counter = document.createElement('span');
-                let paddingR = trigger.style.paddingRight;// отступ в поле (начальный)
+                let paddingR = trigger.style.paddingRight; // отступ в поле (начальный)
                 counter.classList.add(`TUI_${selfName}`);
                 counter.textContent = limit.toString();
                 trigger.after(counter);
                 trigger.addEventListener('blur', () => {
-                    cut();// обрезать значение до лимита
-                    counter.remove();// удалить счетчик
-                    trigger.style.paddingRight = paddingR;// вернуть начальный отступ полю
+                    cut(); // обрезать значение до лимита
+                    counter.remove(); // удалить счетчик
+                    trigger.style.paddingRight = paddingR; // вернуть начальный отступ полю
                 });
-                trigger.style.paddingRight = counter.offsetWidth + 'px';// отступ полю на ширину счетчика
+                trigger.style.paddingRight = counter.offsetWidth + 'px'; // отступ полю на ширину счетчика
             }
             // обработка длины значения поля
             if (val.length <= limit) {
@@ -191,7 +191,7 @@ const TUI = (function () {
          */
         GoTo(selectorId = null) {
             const selfName = 'GoTo';
-            const target = selectorId || location.hash;// id элемента или хеш в url
+            const target = selectorId || location.hash; // id элемента или хеш в url
             if (!target) return;
             const el = document.getElementById(target.replace(/^#/, ''));
             setTimeout(() => {
@@ -446,7 +446,7 @@ const TUI = (function () {
                         info.classList.add(`TUI_${selfName}-info`);
                         info.innerHTML = conf.icon;
                         inputFile.after(info);
-                        innerInfo();// отобразить информацию если файлы уже выбраны
+                        innerInfo(); // отобразить информацию если файлы уже выбраны
                         inputFile.onchange = innerInfo;
                         // пометить элемент как активированный
                         _markActivate(inputFile, selfName);
