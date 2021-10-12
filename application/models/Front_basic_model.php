@@ -20,7 +20,7 @@ class Front_basic_model extends CI_Model
      * Получить значение из массива "app"
      *
      * app[] содержит: конфигурацию ресурса, публичные данные пользователей,
-     * массив локализации и иные вспомагательные опции общего пользования.
+     * массив локализации и иные вспомогательные опции общего пользования.
      * Метод реализует удобный доступ к нужному значению передав в него "путь"
      * из ключей через точку.
      * Например: $this->app('conf.langs') === $app['conf']['langs']
@@ -75,7 +75,7 @@ class Front_basic_model extends CI_Model
      * Метод записывает и возвращает в массиве все публичные
      * настройки, данные сеанса, язык пользователя с данными локализации...
      * Задавайте здесь ваши данные которые повсеместно используются
-     * в текущем севнсе
+     * в текущем сеансе
      *
      * @return array
      */
@@ -89,7 +89,7 @@ class Front_basic_model extends CI_Model
             $data['conf'][$v['name']] = $json === null ? $v['value'] : $json;
         }
         // модераторы системы
-        $m = []; // массив будет хранить emailы всех модераторов
+        $m = []; // массив будет хранить email всех модераторов
         $ip = $this->input->server('REMOTE_ADDR'); // текущий ip
         $q = $this->db->get('back_users')->result_array();
         $data['conf']['back_user'] = false;
@@ -105,7 +105,7 @@ class Front_basic_model extends CI_Model
                     break;
             }
         }
-        // emailы всех разрешенных модераторов в строку через запятую
+        // email всех разрешенных модераторов в строку через запятую
         $data['conf']['moderator_mail'] = implode(',', $m);
         // языки системы
         $data['conf']['langs'] = $this->db->get('languages')->result_array();
@@ -118,7 +118,7 @@ class Front_basic_model extends CI_Model
         }
         $tags = array_column($data['conf']['langs'], 'tag'); // массив тегов языков системы
         $hal = substr($this->input->server('HTTP_ACCEPT_LANGUAGE'), 0, 2); // тег языка браузера пользователя
-        $ulc = $this->input->cookie('user_lang'); // куки с языком пользоватля
+        $ulc = $this->input->cookie('user_lang'); // куки с языком пользователя
         // язык пользователя
         $data['conf']['user_lang'] = $ulc && in_array($ulc, $tags) ? $ulc :
             (in_array($hal, $tags) ? $hal : $data['conf']['lang_def']['tag']);
@@ -130,7 +130,7 @@ class Front_basic_model extends CI_Model
     /**
      * Получить меню
      *
-     * Получает из БД все пункты меню пренадлежащие языку пользователя,
+     * Получает из БД все пункты меню принадлежащие языку пользователя,
      * возвращает в отформатированном массиве (дерево)
      *
      * @return array
