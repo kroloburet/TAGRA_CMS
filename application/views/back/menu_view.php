@@ -118,10 +118,10 @@ function print_menu_tree(array $input)
                             <option value="">Выбрать из предложенных:</option>
                             <option value="pages">Страница сайта</option>
                             <option value="sections">Раздел сайта</option>
-                            <option value="gallerys">Галерея сайта</option>
+                            <option value="galleries">Галерея сайта</option>
                             <option value="home">Страница "Главная"</option>
                             <option value="contact">Страница "Контакты"</option>
-                            <option value="file">Файл или папка</option>
+                            <option value="file">Файл или каталог</option>
                         </select>
                     </label>
                 </div>
@@ -256,18 +256,18 @@ function print_menu_tree(array $input)
          * @returns {void}
          */
         load_order: function (el, id = null) {
-            let f = $(el.form),// форма добавления/редактирования
-                pid = $(el),// список "Родительский пункт"
-                order = f.find('.m_order'),// список "Порядок"
-                n = 1,// счетчик значения порядка пунктов
-                filling = function (m) {// рекурсивное заполнение пунктами родителя
-                    for (let i in m) {// проход по меню
-                        if (pid.val() === m[i].pid) {// это значение списка "Родительский пункт"
-                            if (!id || id !== m[i].id) {// это неисключаемый пункт
+            let f = $(el.form), // форма добавления/редактирования
+                pid = $(el), // список "Родительский пункт"
+                order = f.find('.m_order'), // список "Порядок"
+                n = 1, // счетчик значения порядка пунктов
+                filling = function (m) { // рекурсивное заполнение пунктами родителя
+                    for (let i in m) { // проход по меню
+                        if (pid.val() === m[i].pid) { // это значение списка "Родительский пункт"
+                            if (!id || id !== m[i].id) { // это не исключаемый пункт
                                 order.append('<option value="' + (n++) + '">После "' + m[i].title + '"</option>');
                             }
-                        } else if (m[i].nodes) {// это подуровень
-                            filling(m[i].nodes);// рекурсиивно заполнить подуровень
+                        } else if (m[i].nodes) { // это подуровень
+                            filling(m[i].nodes); // рекурсивно заполнить подуровень
                         }
                     }
                 };
@@ -290,12 +290,12 @@ function print_menu_tree(array $input)
          * @returns {void}
          */
         select_link: function (el) {
-            let f = $(el.form),// форма добавления/редактирования
-                link = $(el),// список "Материалы ресурса"
-                viewer = f.find('.m_link_viewer'),// контейнер для выбора материала
-                url = f.find('.m_url');// поле "Ссылка"
+            let f = $(el.form), // форма добавления/редактирования
+                link = $(el), // список "Материалы ресурса"
+                viewer = f.find('.m_link_viewer'), // контейнер для выбора материала
+                url = f.find('.m_url'); // поле "Ссылка"
 
-            // выбранно в списке "Материалы ресурса"
+            // выбрано в списке "Материалы ресурса"
             switch (link.val()) {
                 // страница "Главная"
                 case 'home':
@@ -309,7 +309,7 @@ function print_menu_tree(array $input)
                     break;
                 // файл
                 case 'file':
-                    files(url.attr('id'), '<?= $data['lang'] ?>', {no_host: true});
+                    files(url.attr('id'), null, {no_host: true});
                     viewer.empty();
                     break;
                 // страница
@@ -323,8 +323,8 @@ function print_menu_tree(array $input)
                     TUI.SelectSearch();
                     break;
                 // галерея
-                case 'gallerys':
-                    viewer.html(this.load_link_viewer('gallerys', url));
+                case 'galleries':
+                    viewer.html(this.load_link_viewer('galleries', url));
                     TUI.SelectSearch();
                     break;
             }
@@ -338,10 +338,10 @@ function print_menu_tree(array $input)
          * @returns {object} Список материалов
          */
         load_link_viewer: function (material, url) {
-            let mm = this._mm[material],// объект материалов
-                label = $('<label/>', {class: 'TUI_select'}),// label списка
-                section = $('<select/>', {class: 'TUI_SelectSearch', size: '5'}),// список
-                preurl = '/';// сегменты url перед id
+            let mm = this._mm[material], // объект материалов
+                label = $('<label/>', {class: 'TUI_select'}), // label списка
+                section = $('<select/>', {class: 'TUI_SelectSearch', size: '5'}), // список
+                preurl = '/'; // сегменты url перед id
 
             // задать структуру списка по умолчанию
             label.html(section);
@@ -358,7 +358,7 @@ function print_menu_tree(array $input)
                 case 'sections':
                     preurl = '/section/';
                     break;
-                case 'gallerys':
+                case 'galleries':
                     preurl = '/gallery/';
                     break;
             }
@@ -387,11 +387,11 @@ function print_menu_tree(array $input)
             // скрыть все открытые формы редактирования
             this.hide_edit_form($('.m_item'));
 
-            let m_item = $(el).parent('.m_item'),// контейнер пункта меню
-                clone = $('.m_form').clone(true),// клон формы добавления станет формой редактирования текущего пункта
-                m_pid = clone.find('.m_pid'),// список "Родительский пункт"
-                opt = $.parseJSON(m_item.find('.m_item_opt').val()),// данные редактируемого пункта с вложенными
-                set_pids = function (m) {// удаление из списка "Родительский пункт" редактируемого пункта с вложенными
+            let m_item = $(el).parent('.m_item'), // контейнер пункта меню
+                clone = $('.m_form').clone(true), // клон формы добавления станет формой редактирования текущего пункта
+                m_pid = clone.find('.m_pid'), // список "Родительский пункт"
+                opt = $.parseJSON(m_item.find('.m_item_opt').val()), // данные редактируемого пункта с вложенными
+                set_pids = function (m) { // удаление из списка "Родительский пункт" редактируемого пункта с вложенными
                     m_pid.find('option[value="' + m.id + '"]').remove();
                     if (m.nodes) {
                         for (let i in m.nodes) {
@@ -399,7 +399,7 @@ function print_menu_tree(array $input)
                         }
                     }
                 },
-                btns = [// кнопки формы редактирования пункта
+                btns = [ // кнопки формы редактирования пункта
                     $('<button/>', {type: 'button', text: 'Сохранить изменения'})
                         .on('click.M', function () {
                             Menu.add_edit(this, 'edit');
@@ -446,11 +446,11 @@ function print_menu_tree(array $input)
          * @returns {void}
          */
         msg: function (style, msg, targ, call) {
-            style = style || 'TUI_notice-r';// css сласс контейнера сообщения
-            msg = msg || 'Поле "Название пункта" должно быть заплнено!';// сообщение
-            let box = $('<p/>', {class: 'TUI_full ' + style, html: msg});// контейнер
-            targ.html(box);// поместить контейнер в елемент отображения сообщения в форме
-            setTimeout(function () {// вывести и удалить сообщение, запустить коллбэк
+            style = style || 'TUI_notice-r'; // css класс контейнера сообщения
+            msg = msg || 'Поле "Название пункта" должно быть заполнено!'; // сообщение
+            let box = $('<p/>', {class: 'TUI_full ' + style, html: msg}); // контейнер
+            targ.html(box); // поместить контейнер в элемент отображения сообщения в форме
+            setTimeout(function () { // вывести и удалить сообщение, запустить колбэк
                 box.remove();
                 call();
             }, 3000);
@@ -465,10 +465,10 @@ function print_menu_tree(array $input)
          */
         update: function (data) {
             // подменить DOM страницы ответом сервера
-            $('#m_area').replaceWith($(data.html).find('#m_area'));
+            $('#m_area').replaceWith($(data.html).filter('#m_area'));
 
-            this._mm = data.materials;// обновить объект материалов ресурса
-            this._m = data.menu;// обновить объект меню
+            this._mm = data.materials; // обновить объект материалов ресурса
+            this._m = data.menu; // обновить объект меню
 
             // заполнить список "Порядок" в форме добавления
             this.load_order($('.m_form').find('.m_pid')[0]);
@@ -489,12 +489,12 @@ function print_menu_tree(array $input)
             // проверка аргументов
             if (!el || (action !== 'add' && action !== 'edit')) return;
 
-            let f = $(el.form),// текущая форма
-                title = f.find('.m_title').val(),// поле "Название пункта"
-                process = '<i class="fas fa-spin fa-spinner"></i>&nbsp;обработка...',// лодер
-                control = f.find('.m_control'),// контейнер кнопок отправки/отмены
-                btn = control.html(),// кнопки
-                err = action === 'add'// сообщение ошибки по умолчанию
+            let f = $(el.form), // текущая форма
+                title = f.find('.m_title').val(), // поле "Название пункта"
+                process = '<i class="fas fa-spin fa-spinner"></i>&nbsp;обработка...',
+                control = f.find('.m_control'), // контейнер кнопок отправки/отмены
+                btn = control.html(), // кнопки
+                err = action === 'add' // сообщение ошибки по умолчанию
                     ? 'Ошибка! Не удалось добавить пункт меню..('
                     : 'Ошибка! Не удалось изменить пункт меню..(';
 
@@ -505,7 +505,7 @@ function print_menu_tree(array $input)
                 });
             }
 
-            // лодер
+            // идет обработка
             control.html(process);
 
             // отправить запрос
@@ -579,9 +579,9 @@ function print_menu_tree(array $input)
             ) return;
 
             let self = $(el),// триггер
-                process = $('<i/>', {class: 'fas fa-spin fa-spinner'});// лодер
+                process = $('<i/>', {class: 'fas fa-spin fa-spinner'});
 
-            // замена триггера лодером
+            // заменить триггер индикатором обработки
             self.replaceWith(process);
 
             // отправить запрос
@@ -620,3 +620,4 @@ function print_menu_tree(array $input)
     // заполнить список "Порядок" в форме добавления
     Menu.load_order($('.m_form').find('.m_pid')[0]);
 </script>
+
