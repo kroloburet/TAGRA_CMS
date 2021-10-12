@@ -22,16 +22,16 @@ if (!function_exists('content')) {
         <div class="touch" id="content">
             <h2>Контент</h2>
             <hr>
-            <div class="layout_control">
+            <div class="content_control">
                 <label>
                     Ширина левой колонки макета
-                    <input type="text" name="layout_l_width" size="3">%
+                    <input type="text" name="content_l_width" size="3">%
                 </label>
-                <a href="#" onclick="TUI.Toggle('layout_info');return false">
+                <a href="#" onclick="TUI.Toggle('content_layout_info');return false">
                     О макете&nbsp;<i class="fas fa-angle-down"></i></a>
-                <a href="#" class="layout_compact">Kомпактно <i class="fas fa-compress"></i></a>
+                <a href="#" class="content_layout_compact">Компактно <i class="fas fa-compress"></i></a>
             </div>
-            <p id="layout_info" hidden>
+            <p id="content_layout_info" hidden>
                 Чтобы основная часть страницы проще воспринималась визуально и была адаптивной, она представлена в виде
                 макета. Сам макет разделен на 4 сегмента (колонки). Вы можете заполнять один и более этих сегментов
                 своим контентом (содержимым). Чтобы разместить или редактировать контент в одном из сегментов, выберите
@@ -41,64 +41,66 @@ if (!function_exists('content')) {
                     и редактор</q> (в главном меню: Конфигурация). Чтобы вернуть макет к <q>компактному</q> виду,
                 нажмите на <q>Компактно</q> в верхней части этого блока.
             </p>
-            <div id="layouts">
-                <div id="layout_t"><?= isset($data['layout_t']) ? $data['layout_t'] : '' ?></div>
-                <div id="layout_l"><?= isset($data['layout_l']) ? $data['layout_l'] : '' ?></div>
-                <div id="layout_r"><?= isset($data['layout_r']) ? $data['layout_r'] : '' ?></div>
-                <div id="layout_b"><?= isset($data['layout_b']) ? $data['layout_b'] : '' ?></div>
+            <div id="content_layout">
+                <div id="content_t"><?= isset($data['content_t']) ? $data['content_t'] : '' ?></div>
+                <div id="content_l"><?= isset($data['content_l']) ? $data['content_l'] : '' ?></div>
+                <div id="content_r"><?= isset($data['content_r']) ? $data['content_r'] : '' ?></div>
+                <div id="content_b"><?= isset($data['content_b']) ? $data['content_b'] : '' ?></div>
             </div>
         </div>
 
         <style>
-            #content .layout_control {
+            #content .content_control {
                 display: flex;
                 flex-wrap: wrap;
                 margin-bottom: 10px;
             }
 
-            #content .layout_control label {
+            #content .content_control label {
                 flex-grow: 1;
                 margin-right: 10px;
             }
 
-            #content .layout_control input {
+            #content .content_control input {
                 border: solid 1px var(--color-form-border);
                 border-radius: var(--radius-border);
+                background-color: var(--color-form-field-bg);
                 margin: 0 .5em;
                 padding: .2em;
                 text-align: center;
                 width: 3em;
+                color: var(--color-font-field);
             }
 
-            #content .layout_control a {
+            #content .content_control a {
                 margin-right: 10px;
                 flex-shrink: 0;
             }
 
-            #content .layout_control a:last-child {
+            #content .content_control a:last-child {
                 margin-right: 0;
             }
 
-            #content #layouts {
+            #content #content_layout {
                 display: grid;
                 grid-template: 2.2em / 60% 1fr;
                 grid-auto-rows: 2.2em;
                 grid-gap: 10px 1.5em;
             }
 
-            #content #layout_t, #content #layout_b {
+            #content #content_t, #content #content_b {
                 grid-column: 1 / -1;
             }
 
-            #content #layout_t, #content #layout_l, #content #layout_r, #content #layout_b {
+            #content #content_t, #content #content_l, #content #content_r, #content #content_b {
                 border: solid 1px var(--color-form-border);
                 border-radius: var(--radius-border);
-                background-color: var(--color-base-bg);
+                background-color: var(--color-form-field-bg);
                 padding: .3em;
                 overflow: auto;
             }
 
-            #content #layout_t.layout_activated, #content #layout_l.layout_activated, #content #layout_r.layout_activated, #content #layout_b.layout_activated {
+            #content #content_t.content_activated, #content #content_l.content_activated, #content #content_r.content_activated, #content #content_b.content_activated {
                 grid-row: span 10;
                 grid-column: 1 / -1;
                 border: solid 1px #c0c0c0;
@@ -108,14 +110,14 @@ if (!function_exists('content')) {
 
         <script>
             ;(function () {
-                const layoutsSelector = '#layout_t, #layout_l, #layout_r, #layout_b';
+                const layoutsSelector = '#content_t, #content_l, #content_r, #content_b';
                 const content = document.querySelector('#content');
-                const layouts = content.querySelector('#layouts');
+                const layouts = content.querySelector('#content_layout');
                 const segments = layouts.querySelectorAll(layoutsSelector);
-                const inputLWidth = content.querySelector('input[name="layout_l_width"]');
-                const lWidth = '<?= isset($data['layout_l_width'])
-                    ? htmlspecialchars($data['layout_l_width'])
-                    : htmlspecialchars($conf['layout_l_width']) ?>';
+                const inputLWidth = content.querySelector('input[name="content_l_width"]');
+                const lWidth = '<?= isset($data['content_l_width'])
+                    ? htmlspecialchars($data['content_l_width'])
+                    : htmlspecialchars($conf['content_l_width']) ?>';
 
                 /**
                  * Ширина левого сегмента
@@ -134,18 +136,18 @@ if (!function_exists('content')) {
                  */
                 segments.forEach(segment => {
                     segment.addEventListener('click', () => {
-                        segments.forEach(el => el.classList.remove('layout_activated'));
-                        segment.classList.add('layout_activated');
+                        segments.forEach(el => el.classList.remove('content_activated'));
+                        segment.classList.add('content_activated');
                     });
                 });
 
                 /**
                  * Макет в компактный вид
                  */
-                content.querySelector('.layout_compact').addEventListener('click', (e) => {
+                content.querySelector('.content_layout_compact').addEventListener('click', (e) => {
                     e.preventDefault();
                     segments.forEach(segment => {
-                        segment.classList.remove('layout_activated');
+                        segment.classList.remove('content_activated');
                     });
                 });
 
@@ -161,7 +163,7 @@ if (!function_exists('content')) {
                      */
                     tinymce.init(Object.assign(mce_overall_conf, {
                         selector: layoutsSelector,
-                        inline: true,// редактор появляется после клика в елементе
+                        inline: true,// редактор появляется после клика в элементе
                     }));
                 });
             })();
