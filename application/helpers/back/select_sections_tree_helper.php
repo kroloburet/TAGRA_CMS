@@ -41,7 +41,7 @@ class Select_section
      *
      * @param array $input Входные данные
      * @param string $section Идентификатор родительского раздела
-     * @param int $level Уровень вложености
+     * @param int $level Уровень вложенности
      * @return string
      */
     private function get_options(array &$input, string $section = '', int $level = 0)
