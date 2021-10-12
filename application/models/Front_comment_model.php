@@ -49,7 +49,7 @@ class Front_comment_model extends Front_basic_model
     {
         return $this->db->update(
             'comments',
-            ['public' => 1, 'creation_date' => date('Y-m-d'), 'premod_code' => ''],
+            ['public' => 1, 'creation_date' => date('Y-m-d H:i:s'), 'premod_code' => ''],
             ['premod_code' => $code, 'public' => 0]
         );
     }
