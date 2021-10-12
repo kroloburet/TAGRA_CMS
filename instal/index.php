@@ -15,8 +15,8 @@
 <div id="content">
     <h1>Установка системы управления контентом</h1>
     <?php ini_get('date.timezone') ? date_default_timezone_set(ini_get('date.timezone')) : null ?>
-    <p><b>Временная зона:</b> <?= date_default_timezone_get() ?>
-        <b>Дата и время:</b> <?= date('Y-m-d H:i') ?><br>
+    <p><b>Временная зона:</b> <?= date_default_timezone_get() ?><br>
+        <b>Дата и время:</b> <?= date('Y-m-d H:i:s') ?><br>
         Чтобы система правильно работала с датой и временем, на вашем сервере должна быть выбрана ваша временная зона.
         Если текущая временная зона вам не подходит, установите желаемую в файле <q>php.ini</q>.
         <i class="fas fa-info-circle TUI_blue" onmouseover="TUI.Hint(this)"></i>
@@ -56,7 +56,7 @@
                 <input type="text" name="db_host" value="localhost" required>
             </label>
             <label class="TUI_input">
-                <span>Пользлватель базы данных</span>
+                <span>Пользователь базы данных</span>
                 <input type="text" name="db_user" required>
             </label>
             <label class="TUI_input">
@@ -74,7 +74,7 @@
                     не возникло конфликтов с уже существующими таблицами
                     &mdash; введите короткий префикс на латинице,
                     не используя специальные символы.
-                    Пример: good
+                    Пример: new
                 </span>
             </label>
         </div>
@@ -92,7 +92,7 @@
             </label>
             <label class="TUI_input">
                 <span>Домен</span>
-                <input type="url" name="domen" value="<?= 'http'
+                <input type="url" name="domain" value="<?= 'http'
                 . (empty($_SERVER['HTTPS']) ? '' : 's') . '://'
                 . $_SERVER['SERVER_NAME'] . '/' ?>" required>&nbsp;
                 <i class="fas fa-info-circle TUI_red" onmouseover="TUI.Hint(this)"></i>
@@ -115,20 +115,6 @@
             <label class="TUI_input">
                 <span>E-mail администратора</span>
                 <input type="email" name="admin_mail" required>
-            </label>
-            <label class="TUI_input">
-                <span>Логин модератора</span>
-                <input type="text" name="moder_name" value="moderator" required>
-            </label>
-            <label class="TUI_input">
-                <span>Пароль модератора</span>
-                <input type="text" name="moder_pass" id="moder_pass" value="moderator" required>&nbsp;
-                <a href="#" onclick="gen_pass('moder_pass');return false" class="fas fa-sync-alt"
-                   title="Генерировать пароль"></a>
-            </label>
-            <label class="TUI_input">
-                <span>E-mail модератора</span>
-                <input type="email" name="moder_mail" required>
             </label>
         </div>
         <div class="TUI_fieldset">
