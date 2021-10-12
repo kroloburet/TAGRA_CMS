@@ -70,13 +70,13 @@
 <script src="<?= htmlspecialchars($conf['jq']) ?>"></script>
 
 <?php
-if (// если галерея
+if ( // если галерея
     (isset($data['gallery_type']) && $data['gallery_type'])
     && (isset($data['gallery_opt']) && $data['gallery_opt'])
 ) {
-    if (// фото или видео
-        $data['gallery_type'] == 'foto_folder'
-        || $data['gallery_type'] == 'foto_desc'
+    if ( // фото или видео
+        $data['gallery_type'] == 'img_folder'
+        || $data['gallery_type'] == 'img_desc'
         || $data['gallery_type'] == 'video_yt'
     ) {
         ?>
@@ -90,7 +90,7 @@ if (// если галерея
         </script>
     <?php } ?>
 
-    <?php if ($data['gallery_type'] == 'audio') {// аудио ?>
+    <?php if ($data['gallery_type'] == 'audio') { // аудио ?>
         <!-- JS для аудио галереи -->
         <script>
             /**
