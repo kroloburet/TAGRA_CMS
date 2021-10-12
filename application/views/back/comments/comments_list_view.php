@@ -122,7 +122,7 @@
         ########### Настройки комментариев
         -->
 
-        <form method="POST" action="/admin/comment/set_comments_config">
+        <form method="post" action="/admin/comment/set_comments_config">
             <div class="TUI_row">
                 <div class="TUI_col-6">
                     <!-- вывод -->
@@ -288,7 +288,7 @@
         <tbody>
         <?php
         $tree_arr = [];
-        foreach ($data['comments'] as $v) {// получить многомерный массив
+        foreach ($data['comments'] as $v) { // получить многомерный массив
             $tree_arr[$v['pid']][] = $v;
         }
         // построение дерева
@@ -400,3 +400,4 @@
         });
     }
 </script>
+
