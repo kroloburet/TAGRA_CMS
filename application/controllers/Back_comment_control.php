@@ -17,7 +17,7 @@ class Back_comment_control extends Back_basic_control
         parent::__construct();
         $this->load->model('back_comment_model');
         $this->c_conf = $this->app('conf.comments');
-        $this->domen = str_replace('www.', '', $this->input->server('HTTP_HOST'));
+        $this->domain = str_replace('www.', '', $this->input->server('HTTP_HOST'));
     }
 
     /**
@@ -39,7 +39,7 @@ class Back_comment_control extends Back_basic_control
     /**
      * Удалить ветвь комментариев
      *
-     * Метод принимает данные из POST переданные
+     * Метод принимает данные из post переданные
      * ajax запросом, удалит комментарий вместе с
      * дочерними и выведет json ответ.
      *
@@ -88,7 +88,7 @@ class Back_comment_control extends Back_basic_control
     }
 
     /**
-     * Вывести количество новых (неопубликованых) комментариев
+     * Вывести количество новых (неопубликованных) комментариев
      *
      * @return void
      */
@@ -100,7 +100,7 @@ class Back_comment_control extends Back_basic_control
     /**
      * Задать конфигурацию комментариев
      *
-     * Метод принимает данные из POST переданные
+     * Метод принимает данные из post переданные
      * ajax запросом, редактирует данные и выведет json ответ.
      *
      * @return void
@@ -145,10 +145,10 @@ class Back_comment_control extends Back_basic_control
         $msg = '
 <html>
     <head>
-        <title>' . htmlspecialchars($lexic['comments']['feedback_title']) . $this->domen . '</title>
+        <title>' . htmlspecialchars($lexic['comments']['feedback_title']) . $this->domain . '</title>
     </head>
     <body>
-        <h2>' . $lexic['comments']['feedback_title'] . $this->domen . '</h2>
+        <h2>' . $lexic['comments']['feedback_title'] . $this->domain . '</h2>
         <p style="padding:0;margin:0.5em 0 0 0">
             <b>' . explode('@', $q[0]['name'])[0] . '</b>&nbsp;
             <time style="color:#888">' . $lexic['comments']['published'] . $q[0]['creation_date'] . '</time><br>
@@ -179,8 +179,8 @@ class Back_comment_control extends Back_basic_control
 </html>
 ';
         $this->load->library('email');
-        $this->email->subject(htmlspecialchars($lexic['comments']['feedback_title']) . $this->domen);
-        $this->email->from('Robot@' . $this->domen, $this->app('conf.site_name'));
+        $this->email->subject(htmlspecialchars($lexic['comments']['feedback_title']) . $this->domain);
+        $this->email->from('Robot@' . $this->domain, $this->app('conf.site_name'));
         $this->email->to($q[0]['name']);
         $this->email->message($msg);
         return $this->email->send();
