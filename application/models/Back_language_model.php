@@ -29,14 +29,14 @@ class Back_language_model extends Back_basic_model
     /**
      * Удалить язык
      *
-     * Удалит язык и принадлижащие к языку: все материалы, все связи в материалах и комментарии.
+     * Удалит язык и принадлежащие к языку: все материалы, все связи в материалах и комментарии.
      *
      * @param string $tag Тег языка
      * @return boolean
      */
     function del_lang(string $tag)
     {
-        $tables = ['index_pages', 'contact_pages', 'pages', 'sections', 'gallerys', 'comments', 'menu'];
+        $tables = ['index_pages', 'contact_pages', 'pages', 'sections', 'galleries', 'comments', 'menu'];
         // удалить все материалы принадлежащие языку
         if ($this->db->delete($tables, ['lang' => $tag]) === false) {
             return false;
@@ -44,7 +44,7 @@ class Back_language_model extends Back_basic_model
         // поиск и удаление связей материалов удаляемого языка в версиях
         foreach ($tables as $table) {
             // искать только в этих материалах или к следующей итерации
-            if (!in_array($table, ['pages', 'sections', 'gallerys'])) {
+            if (!in_array($table, ['pages', 'sections', 'galleries'])) {
                 continue;
             }
             // выбрать записи с удаляемым языком в версиях
