@@ -39,7 +39,7 @@ class Change_login extends CI_Controller
     /**
      * Сбросить и отправить новые логин и пароль пользователю
      *
-     * Метод принимает данные из POST переданные
+     * Метод принимает данные из post переданные
      * ajax запросом, валидирует, перезаписывает логин и пароль,
      * отправляет новые логин и пароль пользователю, выведет строку ответа.
      *
@@ -63,7 +63,7 @@ class Change_login extends CI_Controller
         /**
          * обработка выборки
          */
-        $domen = str_replace('www.', '', $this->input->server('HTTP_HOST')); // домен
+        $domain = str_replace('www.', '', $this->input->server('HTTP_HOST')); // домен
         $site_name = $this->back_basic_model->get_val('config', 'name', 'site_name', 'value'); // имя сайта
         $this->load->library('email');
         // проход по выборке
@@ -91,12 +91,12 @@ class Change_login extends CI_Controller
             $msg = '
 <html>
     <head>
-        <title>Пароли к ' . $domen . '</title>
+        <title>Пароли к ' . $domain . '</title>
     </head>
     <body>
         <h2>Здравствуйте!</h2>
         <p>
-            ' . date('Y-m-d H:i:s') . ' вам отосланы новые логин и пароль для авторизации на сайте ' . $domen . '.<br>
+            ' . date('Y-m-d H:i:s') . ' вам отосланы новые логин и пароль для авторизации на сайте ' . $domain . '.<br>
             Вы можете использовать их для <a href="' . base_url('admin') . '" target="_blank">входа в админку сайта</a>.
             Старые логин и пароль были перезаписаны с целью безопасности. Ваш статус в системе &mdash; ' . $v['status'] . '.
         </p>
@@ -110,9 +110,9 @@ class Change_login extends CI_Controller
     </body>
 </html>
 ';
-            $this->email->from('Robot@' . $domen, $site_name);
+            $this->email->from('Robot@' . $domain, $site_name);
             $this->email->to($mail);
-            $this->email->subject('Пароли к ' . $domen);
+            $this->email->subject('Пароли к ' . $domain);
             $this->email->message($msg);
             $this->email->send() ? $count++ : exit(json_encode(['status' => 'nosend'], JSON_FORCE_OBJECT));
         }
