@@ -25,11 +25,11 @@ class Back_gallery_control extends Back_basic_control
      */
     function get_list()
     {
-        $gallerys = $this->_filter_list('gallerys');
-        $data['gallerys'] = $gallerys['result'];
-        $data['filter'] = $gallerys['filter'];
+        $galleries = $this->_filter_list('galleries');
+        $data['galleries'] = $galleries['result'];
+        $data['filter'] = $galleries['filter'];
         $data['view_title'] = 'Управление галереями';
-        $this->_viewer('back/gallerys/gallerys_list_view', $data);
+        $this->_viewer('back/galleries/galleries_list_view', $data);
     }
 
     /**
@@ -43,7 +43,7 @@ class Back_gallery_control extends Back_basic_control
         if ($this->_lang_selection($data)) {
             return false;
         }
-        $this->_viewer('back/gallerys/gallerys_add_view', $data);
+        $this->_viewer('back/galleries/galleries_add_view', $data);
     }
 
     /**
@@ -54,15 +54,15 @@ class Back_gallery_control extends Back_basic_control
      */
     function edit_form(string $id)
     {
-        $data = $this->back_basic_model->get_where_id('gallerys', $id);
+        $data = $this->back_basic_model->get_where_id('galleries', $id);
         $data['view_title'] = 'Редактировать галерею';
-        $this->_viewer('back/gallerys/gallerys_edit_view', $data);
+        $this->_viewer('back/galleries/galleries_edit_view', $data);
     }
 
     /**
      * Добавить галерею
      *
-     * Метод принимает данные из POST переданные
+     * Метод принимает данные из post переданные
      * ajax запросом, добавит данные и выведет json ответ.
      *
      * @return void
@@ -80,7 +80,7 @@ class Back_gallery_control extends Back_basic_control
     /**
      * Редактировать галерею
      *
-     * Метод принимает данные из POST переданные
+     * Метод принимает данные из post переданные
      * ajax запросом, редактирует данные и выведет json ответ.
      *
      * @param string $id Идентификатор галереи
@@ -98,7 +98,7 @@ class Back_gallery_control extends Back_basic_control
     /**
      * Удалить галерею
      *
-     * Метод принимает данные из POST переданные
+     * Метод принимает данные из post переданные
      * ajax запросом, удалит материал и выведет строку ответа.
      *
      * @return void
