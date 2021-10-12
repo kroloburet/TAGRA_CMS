@@ -4,7 +4,7 @@
 ########### Выбор языка
 -->
 
-<form method="GET" action="<?= current_url() ?>">
+<form method="get" action="<?= current_url() ?>">
     <label class="TUI_select">
         <select name="lang" onchange="submit()">
             <option>Выберите язык</option>
@@ -14,3 +14,4 @@
         </select>
     </label>
 </form>
+
