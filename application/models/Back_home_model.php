@@ -21,7 +21,7 @@ class Back_home_model extends Back_basic_model
      *
      * @param string $id Идентификатор страницы "Главная"
      * @param array $data Данные
-     * @return bollean
+     * @return boolean
      */
     function edit_home_page(string $id, array $data)
     {
