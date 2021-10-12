@@ -29,7 +29,7 @@ class Front_section_control extends Front_basic_control
         $data = $this->front_section_model->get_section($id);
         if ($data) {
             $data['sub_sections'] = $this->front_section_model->get_sub_sections($id);
-            $data['sub_gallerys'] = $this->front_section_model->get_sub_gallerys($id);
+            $data['sub_galleries'] = $this->front_section_model->get_sub_galleries($id);
             $data['sub_pages'] = $this->front_section_model->get_sub_pages($id);
             $this->_viewer('front/section_view', $data);
         } else {
