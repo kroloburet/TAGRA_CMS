@@ -183,7 +183,7 @@ class Markup_data
             }
         };
 
-        if (@$data['section']) {// етсть раздел
+        if (@$data['section']) { // есть раздел
             $get_sub_sections($data['section'], $home ? 2 : 1);
         }
 
@@ -210,19 +210,20 @@ class Markup_data
             return '';
         }
 
-        $creation_date = !empty($this->data['creation_date']) ? $this->data['creation_date'] : date('Y-m-d');
-        $last_mod_date = !empty($this->data['last_mod_date']) ? $this->data['last_mod_date'] : date('Y-m-d');
-        $layout = @$this->data['layout_t'] . @$this->data['layout_l'] . @$this->data['layout_r'] . @$this->data['layout_b'];
+        $datetime = date('Y-m-d H:i:s');
+        $creation_date = !empty($this->data['creation_date']) ? $this->data['creation_date'] : $datetime;
+        $last_mod_date = !empty($this->data['last_mod_date']) ? $this->data['last_mod_date'] : $datetime;
+        $content = @$this->data['content_t'] . @$this->data['content_l'] . @$this->data['content_r'] . @$this->data['content_b'];
         $imgs = $audios = $comments_count = $comments = '';
 
         /**
-         * обработка контента статьи
+         * Обработка контента статьи
          */
-        if (!empty($layout)) {
+        if (!empty($content)) {
             //изображения в контенте
-            preg_match_all('/<img[^>]+src="([^"]+)"[^>]*>/i', $layout, $layout_imgs);
-            if (!empty($layout_imgs[1])) {
-                foreach ($layout_imgs[1] as $v) {
+            preg_match_all('/<img[^>]+src="([^"]+)"[^>]*>/i', $content, $content_imgs);
+            if (!empty($content_imgs[1])) {
+                foreach ($content_imgs[1] as $v) {
                     if (!preg_match('/.+(\.jpg|\.jpeg|\.gif|\.png)$/i', $v)) {
                         continue; // тип не разрешен
                     }
@@ -231,9 +232,9 @@ class Markup_data
                 }
             }
             // аудио в контенте
-            preg_match_all('/<audio[^>]+src="([^"]+)"[^>]*>/i', $layout, $layout_audios);
-            if (!empty($layout_audios[1])) {
-                foreach ($layout_audios[1] as $v) {
+            preg_match_all('/<audio[^>]+src="([^"]+)"[^>]*>/i', $content, $content_audios);
+            if (!empty($content_audios[1])) {
+                foreach ($content_audios[1] as $v) {
                     $v = preg_match('/^https?:\/\//i', $v) ? $v : base_url($v); //url должен быть абсолютный
                     $audios .= '{"@type":"AudioObject","url":"' . $v . '"}';
                 }
@@ -241,27 +242,27 @@ class Markup_data
         }
 
         /**
-         * обработка галерей статьи
+         * Обработка галерей статьи
          */
         if (isset($this->data['gallery_opt']) && $this->data['gallery_opt']) {
             switch ($this->data['gallery_type']) {
 
-                // галерея из папки с изображениями
-                case'foto_folder':
+                // галерея из каталога с изображениями
+                case'img_folder':
 
                     /**
-                     * Получить ld+json с URL изображений из папки
+                     * Получить ld+json с URL изображений из каталога
                      *
-                     * @param string $dir Путь к папке с изображениями
+                     * @param string $dir Путь к каталогу с изображениями
                      * @return string
                      */
-                    function get_foto_folder_srcs(string $dir)
+                    function get_img_folder_srcs(string $dir)
                     {
                         $result = '';
-                        if ($dir_handle = @opendir('.' . $dir)) {// открыть папку
+                        if ($dir_handle = @opendir('.' . $dir)) {// открыть каталог
                             while ($file = readdir($dir_handle)) {// проход по файлам
                                 if ($file == '.' || $file == '..')
-                                    continue; // пропустить ссылки на другие папки
+                                    continue; // пропустить ссылки на другие каталоги
                                 if (!preg_match('/.+(\.jpg|\.jpeg|\.gif|\.png)$/i', $file)) {
                                     continue;// тип не разрешен
                                 }
@@ -272,11 +273,11 @@ class Markup_data
                         return $result;
                     }
 
-                    $imgs .= get_foto_folder_srcs(json_decode($this->data['gallery_opt'], true)['f_folder']);
+                    $imgs .= get_img_folder_srcs(json_decode($this->data['gallery_opt'], true)['f_folder']);
                     break;
 
                 // галерея изображений с описаниями
-                case'foto_desc':
+                case'img_desc':
                     $g_opt = json_decode($this->data['gallery_opt'], true);
                     foreach ($g_opt as $v) {
                         if (!preg_match('/.+(\.jpg|\.jpeg|\.gif|\.png)$/i', $v['f_url'])) {
@@ -310,7 +311,7 @@ class Markup_data
         }
 
         /**
-         * обработка комментариев статьи
+         * Обработка комментариев статьи
          */
         if (isset($this->data['comments']) && $this->data['comments'] !== 'off') {
             $q = $this->CI->db
