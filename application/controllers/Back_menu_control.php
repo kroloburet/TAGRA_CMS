@@ -29,10 +29,10 @@ class Back_menu_control extends Back_basic_control
         $data['lang'] = $lang;
         $data['view_title'] = 'Главное меню сайта';
         $data['menu'] = $this->back_menu_model->get_menu($lang);
-        $p = $this->db->where('lang', $lang)->select('title,id,section')->order_by('title')->get('pages')->result_array();
-        $s = $this->db->where('lang', $lang)->select('title,id,section')->order_by('title')->get('sections')->result_array();
-        $g = $this->db->where('lang', $lang)->select('title,id,section')->order_by('title')->get('gallerys')->result_array();
-        $data['materials'] = ['pages' => $p, 'sections' => $s, 'gallerys' => $g];
+        $p = $this->db->where('lang', $lang)->select('title, id, section')->order_by('title')->get('pages')->result_array();
+        $s = $this->db->where('lang', $lang)->select('title, id, section')->order_by('title')->get('sections')->result_array();
+        $g = $this->db->where('lang', $lang)->select('title, id, section')->order_by('title')->get('galleries')->result_array();
+        $data['materials'] = ['pages' => $p, 'sections' => $s, 'galleries' => $g];
         return $data;
     }
 
@@ -52,7 +52,7 @@ class Back_menu_control extends Back_basic_control
     /**
      * Добавить пункт меню
      *
-     * Метод принимает данные из POST переданные
+     * Метод принимает данные из post переданные
      * ajax запросом, добавит пункт меню и выведет json строку ответа.
      *
      * @return void
@@ -72,7 +72,7 @@ class Back_menu_control extends Back_basic_control
     /**
      * Редактировать пункт меню
      *
-     * Метод принимает данные из POST переданные
+     * Метод принимает данные из post переданные
      * ajax запросом, редактирует пункт меню и выведет json строку ответа.
      *
      * @return void
@@ -92,7 +92,7 @@ class Back_menu_control extends Back_basic_control
     /**
      * Удалить пункт меню
      *
-     * Метод принимает данные из POST переданные
+     * Метод принимает данные из post переданные
      * ajax запросом, удалит пункт меню вместе с
      * дочерними и выведет json строку ответа.
      *
@@ -113,7 +113,7 @@ class Back_menu_control extends Back_basic_control
     /**
      * Переключить публикацию пункта меню
      *
-     * Метод принимает данные из POST переданные
+     * Метод принимает данные из post переданные
      * ajax запросом, переключит публикацию пункта
      * меню и выведет json строку ответа.
      *
