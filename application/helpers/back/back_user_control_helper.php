@@ -63,7 +63,7 @@ if (!function_exists('administrator_control')) {
                 E-mail <i class="fas fa-info-circle TUI_red" onmouseover="TUI.Hint(this)"></i>
                 <pre class="TUI_Hint">
                     На этот е-mail будут высланы логин
-                    и парол, если вы их забудите.
+                    и пароль, если вы их забудете.
                     Указывайте надежный почтовый ящик.
                     <b class="TUI_red">Обязательно для заполнения!</b>
                 </pre>
@@ -565,9 +565,6 @@ if (!function_exists('moderators_control')) {
                                 case'error':
                                     alert('Ой! Ошибка..( Данные не сохранены.\nПроверьте, правильно ли заполнены поля и повторите попытку.');
                                     break;
-                                case'last':
-                                    alert('Вы пытаетесь удалить единственного модератора!\nВ системе должен быть один или более модераторов.');
-                                    break;
                                 case'ok':
                                     delete _opt[id];
                                     __show();
@@ -590,10 +587,6 @@ if (!function_exists('moderators_control')) {
                  * @returns {void}
                  */
                 const __show = function () {
-
-                    // если нет данных
-                    if ($.isEmptyObject(_opt)) return;
-
                     _prev.empty();// очистить превью
                     for (let k in _opt) {// заполнять превью
                         let edit_btn = $('<div/>', {
@@ -606,6 +599,7 @@ if (!function_exists('moderators_control')) {
                             }).data('id', k),
                             title = $('<div/>', {
                                 class: 'prev_item_content ' + (_opt[k].access === '0' ? 'TUI_red' : ''),
+                                title: 'Доступ ' + (_opt[k].access === '0' ? 'запрещен' : 'разрешен'),
                                 html: _opt[k].email
                             }),
                             prev_item = $('<div/>', {class: 'prev_item', html: [title, edit_btn, del_btn]});
