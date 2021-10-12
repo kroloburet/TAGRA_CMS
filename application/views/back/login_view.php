@@ -85,7 +85,7 @@
     ########### Авторизация
     -->
 
-    <form method="POST" id="login_form">
+    <form method="post" id="login_form">
         <label class="TUI_input">
             <input type="text" name="lgn" placeholder="логин" required>
         </label>
@@ -132,7 +132,7 @@
 </div>
 
 <script src="https://kit.fontawesome.com/bacee63d78.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
 
     /**
@@ -195,7 +195,7 @@
                     case 'ok':
                         f.find('[name=send_pass_mail]').val('');
                         msg.html(`<div class="TUI_notice-g mini TUI_full">${resp.html}</div>`);
-                        setTimeout(function () {// очистить сообщение об отправке, скрыть форму
+                        setTimeout(function () { // очистить сообщение об отправке, скрыть форму
                             msg.empty();
                             $('#login_form, #sand_pass').slideToggle();
                         }, 5000);
