@@ -40,7 +40,7 @@ class Back_section_model extends Back_basic_model
     function edit_section(string $id, array $data)
     {
         $q = $this->db->where('id', $id)->get('sections')->result_array(); // изменяемый материал
-        if ($q[0]['versions'] !== $data['versions']) {// версии изменились
+        if ($q[0]['versions'] !== $data['versions']) { // версии изменились
             $this->set_versions('sections', $data, $q[0]); // добавить/обновить связи с материалом в версиях
         }
         return $this->db->update('sections', $data, ['id' => $id]);
@@ -63,10 +63,10 @@ class Back_section_model extends Back_basic_model
          * Получить и форматировать данные
          */
         $m = []; // будет содержать отфарматированные данные
-        $del = ['sections' => [], 'gallerys' => [], 'pages' => [], 'uri' => []]; // будет содержать id и uri для удаления
+        $del = ['sections' => [], 'galleries' => [], 'pages' => [], 'uri' => []]; // будет содержать id и uri для удаления
         // получить разделы и страницы
         $q['sections'] = $this->db->select('id, section')->get_where('sections', ['lang' => $lang])->result_array();
-        $q['gallerys'] = $this->db->select('id, section')->get_where('gallerys', ['lang' => $lang])->result_array();
+        $q['galleries'] = $this->db->select('id, section')->get_where('galleries', ['lang' => $lang])->result_array();
         $q['pages'] = $this->db->select('id, section')->get_where('pages', ['lang' => $lang])->result_array();
         // форматировать данные разделов
         if (!empty($q['sections'])) {
@@ -77,9 +77,9 @@ class Back_section_model extends Back_basic_model
             }
         }
         // форматировать данные галерей
-        if (!empty($q['gallerys'])) {
-            foreach ($q['gallerys'] as $v) {
-                $v['type'] = 'gallerys';
+        if (!empty($q['galleries'])) {
+            foreach ($q['galleries'] as $v) {
+                $v['type'] = 'galleries';
                 $v['uri'] = "section/{$v['id']}";
                 $m[] = $v;
             }
@@ -113,7 +113,7 @@ class Back_section_model extends Back_basic_model
             }
         };
         $get_del_ids($m, $id);
-        // добавить данные для удаления текущего удоляемого раздела (родителя)
+        // добавить данные для удаления текущего удаляемого раздела (родителя)
         $del['sections'][] = $id;
         $del['uri'][] = "section/{$id}";
         // удалить связи с текущим (родителем) разделом в версиях
@@ -125,12 +125,12 @@ class Back_section_model extends Back_basic_model
         // удалить комментарии дочерних материалов и текущего раздела
         $result['comments'] = $this->db->where(['lang' => $lang])->where_in('url', $del['uri'])->delete('comments');
         // если есть, удалить дочерние галереи дочерних разделов и дочерние галереи текущего раздела
-        $result['gallerys'] = !empty($del['gallerys']) ? $this->db->where(['lang' => $lang])->where_in('id', $del['gallerys'])->delete('gallerys') : true;
+        $result['galleries'] = !empty($del['galleries']) ? $this->db->where(['lang' => $lang])->where_in('id', $del['galleries'])->delete('galleries') : true;
         // если есть, удалить дочерние страницы дочерних разделов и дочерние страницы текущего раздела
         $result['pages'] = !empty($del['pages']) ? $this->db->where(['lang' => $lang])->where_in('id', $del['pages'])->delete('pages') : true;
         // удалить дочерние разделы и текущий раздел
         $result['sections'] = $this->db->where(['lang' => $lang])->where_in('id', $del['sections'])->delete('sections');
-        if ($result['comments'] === false || $result['gallerys'] === false || $result['pages'] === false || $result['sections'] === false) {
+        if ($result['comments'] === false || $result['galleries'] === false || $result['pages'] === false || $result['sections'] === false) {
             return [];
         }
         return $del['sections'];
