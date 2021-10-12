@@ -24,10 +24,12 @@
 
 /*---------------------------------------------- html, body ---*/
 html {
+    height: 100%;
     max-width: 2500px;
 }
 
 body {
+    height: 100%;
     margin: 0;
     padding: 0;
     display: grid;
@@ -64,20 +66,20 @@ main {
     grid-area: main;
 }
 
-/*--- layouts ---*/
-#layouts {
+/*--- content_layout ---*/
+#content_layout {
     display: grid;
     grid-template: auto / auto;
     grid-column-gap: 1.5em;
     text-align: justify;
 }
 
-#layout_t, #layout_b {
+#content_t, #content_b {
     grid-column: 1 / -1;
 }
 
 @media (max-width: 600px) {
-    #layouts {
+    #content_layout {
         display: block;
         text-align: left;
     }
@@ -97,11 +99,11 @@ footer {
 }
 
 .copy {
-    opacity: .5
+    opacity: .5;
 }
 
 .copy:hover {
-    opacity: 1
+    opacity: 1;
 }
 
 .go_top_btn {
@@ -118,7 +120,7 @@ footer {
     display: inline-block;
     border-right: .1em solid;
     border-top: .1em solid;
-    transform: rotate(-45deg) translateY(.2em);
+    transform: rotate(-45deg);
     padding: .2em;
 }
 
@@ -365,6 +367,10 @@ ul.breadcrumbs li.bc_end:after, ul.breadcrumbs li.bc_end:before {
 
 .count_comments, .comment_date, .reply_to {
     color: var(--color-gray);
+}
+
+.comment_date {
+    font-size: 80%;
 }
 
 .count_comments span {
