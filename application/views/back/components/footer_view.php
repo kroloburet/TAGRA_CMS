@@ -39,9 +39,9 @@
 <?php if ($conf['emmet']) { ?>
     <script src="/scripts/libs/emmet.min.js"></script>
     <script>
-        emmet.require('textarea').setup({//Emmet plugin for <textarea> https://github.com/emmetio/textarea
+        emmet.require('textarea').setup({ //Emmet plugin for <textarea> https://github.com/emmetio/textarea
             pretty_break: true, // enable formatted line breaks (when inserting between opening and closing tag)
-            use_tab: true// expand abbreviations by Tab key
+            use_tab: true // expand abbreviations by Tab key
         });
     </script>
 <?php } ?>
