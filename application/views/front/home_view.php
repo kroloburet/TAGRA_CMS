@@ -15,18 +15,18 @@
 
         </div>
 
-        <?php if ($data['layout_l'] || $data['layout_r'] || $data['layout_t'] || $data['layout_b']) { ?>
-            <!-- контент  материала -->
-            <div id="layouts">
-                <?php if ($data['layout_t']) { ?>
-                    <div id="layout_t"><?= $data['layout_t'] ?></div>
+        <?php if ($data['content_l'] || $data['content_r'] || $data['content_t'] || $data['content_b']) { ?>
+            <!-- контент материала -->
+            <div id="content_layout">
+                <?php if ($data['content_t']) { ?>
+                    <div id="content_t"><?= $data['content_t'] ?></div>
                 <?php } ?>
-                <?php if ($data['layout_l'] || $data['layout_r']) { ?>
-                    <div id="layout_l"><?= $data['layout_l'] ?></div>
-                    <div id="layout_r"><?= $data['layout_r'] ?></div>
+                <?php if ($data['content_l'] || $data['content_r']) { ?>
+                    <div id="content_l"><?= $data['content_l'] ?></div>
+                    <div id="content_r"><?= $data['content_r'] ?></div>
                 <?php } ?>
-                <?php if ($data['layout_b']) { ?>
-                    <div id="layout_b"><?= $data['layout_b'] ?></div>
+                <?php if ($data['content_b']) { ?>
+                    <div id="content_b"><?= $data['content_b'] ?></div>
                 <?php } ?>
             </div>
         <?php } ?>
