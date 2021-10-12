@@ -95,7 +95,7 @@
                         <span>
                             <a href="#" class="<?= $v['public'] ? 'fas fa-eye' : 'fas fa-eye-slash TUI_red' ?>"
                                title="Опубликовать/не опубликовывать"
-                               onclick="toggle_public(this, <?= $v['id'] ?>, 'languages');return false"></a>
+                               onclick="toggle_public(this, '<?= $v['id'] ?>', 'languages');return false"></a>
                         </span>&nbsp;&nbsp;
                         <a href="#" class="fas fa-trash-alt TUI_red" title="Удалить"
                            onclick="del_lang(this, '<?= $v['tag'] ?>');return false"></a>
@@ -130,7 +130,7 @@
     /**
      * Удалить язык
      *
-     * Удалит язык со всеми пренадлежащими
+     * Удалит язык со всеми принадлежащими
      * ему объектами и материалами.
      *
      * @param {object} el Ссылка "this" на триггер
@@ -170,3 +170,4 @@
         });
     }
 </script>
+
