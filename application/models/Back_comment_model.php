@@ -17,7 +17,7 @@ class Back_comment_model extends Back_basic_model
     }
 
     /**
-     * Получить новые (неопубликованые) комментарии
+     * Получить новые (неопубликованные) комментарии
      *
      * @return array
      */
@@ -36,7 +36,7 @@ class Back_comment_model extends Back_basic_model
     {
         return $this->db->update(
             'comments',
-            ['public' => 1, 'creation_date' => date('Y-m-d'), 'premod_code' => ''],
+            ['public' => 1, 'creation_date' => date('Y-m-d H:i:s'), 'premod_code' => ''],
             ['premod_code' => $code, 'public' => 0]
         );
     }
