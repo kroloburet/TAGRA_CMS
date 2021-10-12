@@ -2,7 +2,7 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
- * Класс вивода комментариев и формы комментирования в материале
+ * Класс вывода комментариев и формы комментирования в материале
  */
 class Comments
 {
@@ -477,7 +477,7 @@ class Comments
             };
 
             /**
-             * Вызов методов событий елементов (слушателей)
+             * Вызов методов событий элементов (слушателей)
              */
             window.addEventListener('load', function () {
                 <?php if ($this->conf['show'] > 0) {// Кнопка "Еще комментарии" ?>
@@ -528,7 +528,7 @@ class Comments
     }
 
     /**
-     * Заменить URL в комментарие на ссылки
+     * Заменить URL в комментарии на ссылки
      *
      * @param string $text Комментарий
      * @return string
