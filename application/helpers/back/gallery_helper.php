@@ -31,22 +31,22 @@ if (!function_exists('gallery')) {
             </pre>
             <label class="TUI_select">
                 <select name="gallery_type" id="g_type">
-                    <option value="foto_folder" <?= $type == 'foto_folder' ? 'selected' : '' ?>>Папка с изображениями
+                    <option value="img_folder" <?= $type == 'img_folder' ? 'selected' : '' ?>>Каталог с изображениями
                     </option>
-                    <option value="foto_desc" <?= $type == 'foto_desc' ? 'selected' : '' ?>>Изображения с описанием
+                    <option value="img_desc" <?= $type == 'img_desc' ? 'selected' : '' ?>>Изображения с описанием
                     </option>
                     <option value="video_yt" <?= $type == 'video_yt' ? 'selected' : '' ?>>Видео c YouTube</option>
                     <option value="audio" <?= $type == 'audio' ? 'selected' : '' ?>>Аудио</option>
                 </select>
             </label>
 
-            <!-- Папка с изображениями -->
-            <div class="type_section" data-type="foto_folder" hidden>
-                Путь к папке <i class="fas fa-info-circle TUI_blue" onmouseover="TUI.Hint(this)"></i>
+            <!-- Каталог с изображениями -->
+            <div class="type_section" data-type="img_folder" hidden>
+                Путь к каталогу <i class="fas fa-info-circle TUI_blue" onmouseover="TUI.Hint(this)"></i>
                 <pre class="TUI_Hint">
                     Нажмите на значок папки и выберите
-                    папку с изображениями в менеджере файлов.
-                    Все изображения в выбранной папке
+                    каталог с изображениями в менеджере.
+                    Все изображения в выбранном каталоге
                     будут отображены в этой галерее.
                 </pre>
                 <div class="TUI_fieldset">
@@ -54,12 +54,12 @@ if (!function_exists('gallery')) {
                         <input type="text" id="g_f_folder_url" class="g_field">
                     </label>
                     <a href="#" class="fas fa-folder-open fa-2x TUI_blue"
-                       onclick="files('g_f_folder_url', '<?= $lang ?>', {no_host: true});return false"></a>
+                       onclick="files('g_f_folder_url', null, {no_host: true});return false"></a>
                 </div>
             </div>
 
             <!-- Изображения с описанием -->
-            <div class="type_section" data-type="foto_desc" hidden>
+            <div class="type_section" data-type="img_desc" hidden>
                 <div class="TUI_row">
                     <div class="TUI_col-3">
                         Порядок <i class="fas fa-info-circle TUI_blue" onmouseover="TUI.Hint(this)"></i>
@@ -83,7 +83,7 @@ if (!function_exists('gallery')) {
                                 <input type="text" id="g_f_url" class="g_field">
                             </label>
                             <a href="#" class="fas fa-folder-open fa-2x TUI_blue"
-                               onclick="files('g_f_url', '<?= $lang ?>');return false"></a>
+                               onclick="files('g_f_url');return false"></a>
                             <i class="fas fa-eye fa-2x TUI_blue" onmouseover="img_prev(this, '#g_f_url')"></i>
                             <pre class="TUI_Hint"></pre>
                         </div>
@@ -159,7 +159,7 @@ if (!function_exists('gallery')) {
                             в разных браузерах, сохраните его
                             в форматах .mp3, .ogg, .wav с одинаковым
                             именем файла. Все три файла должны находиться
-                            в одной папке. Если браузер не поддерживает
+                            в одном каталоге. Если браузер не поддерживает
                             один из форматов &mdash; он загружает другой.
                         </pre>
                         <div class="TUI_fieldset">
@@ -167,7 +167,7 @@ if (!function_exists('gallery')) {
                                 <input type="text" id="g_a_url" class="g_field">
                             </label>
                             <a href="#" class="fas fa-folder-open fa-2x TUI_blue"
-                               onclick="files('g_a_url', '<?= $lang ?>');return false"></a>
+                               onclick="files('g_a_url');return false"></a>
                         </div>
                     </div>
                 </div>
@@ -196,11 +196,11 @@ if (!function_exists('gallery')) {
                 margin: .5em 0 0 0;
             }
 
-            #gallery .type_section[data-type="foto_desc"] .g_preview, #gallery .type_section[data-type="video_yt"] .g_preview {
+            #gallery .type_section[data-type="img_desc"] .g_preview, #gallery .type_section[data-type="video_yt"] .g_preview {
                 margin-right: -1%;
             }
 
-            #gallery .type_section[data-type="foto_desc"] .prev_item, #gallery .type_section[data-type="video_yt"] .prev_item {
+            #gallery .type_section[data-type="img_desc"] .prev_item, #gallery .type_section[data-type="video_yt"] .prev_item {
                 display: inline-flex;
                 justify-content: flex-end;
                 align-items: flex-start;
@@ -228,7 +228,7 @@ if (!function_exists('gallery')) {
              * @returns {void}
              */
             ;(function ($) {
-                let _type = $('#g_type').val() || 'foto_folder', // тип галереи
+                let _type = $('#g_type').val() || 'img_folder', // тип галереи
                     _section = $('[data-type=' + _type + ']'), // секция типа галереи
                     _g_opt = $('#g_opt'), // textarea с json данными галереи
                     _opt = !_g_opt.val() ? {} : JSON.parse(_g_opt.val());// объект данных галереи
@@ -257,17 +257,17 @@ if (!function_exists('gallery')) {
 
                     switch (_type) {
 
-                        // валидация полей типа "Папка с изображениями"
-                        case 'foto_folder':
-                            // поле "путь к папке"
+                        // валидация полей типа "Каталог с изображениями"
+                        case 'img_folder':
+                            // поле "путь к каталогу"
                             if (!/\S/.test($('#g_f_folder_url').val())) {
-                                alert('Выберите папку!');
+                                alert('Выберите каталог!');
                                 return false;
                             }
                             break;
 
                         // валидация полей типа "Изображения с описанием"
-                        case 'foto_desc':
+                        case 'img_desc':
                             // поле "путь к изображению"
                             if (!/^(https?:\/\/)[\(\)\s\w\.\/-]+\.(png|jpg|jpeg|gif|webp|svg)$/i.test($('#g_f_url').val())) {
                                 alert('Выберите изображение!');
@@ -325,7 +325,7 @@ if (!function_exists('gallery')) {
                  * @returns {void}
                  */
                 const _get_edit_form = function (id) {
-                    let control = _section.find('.g_control'), // блок кнопок секции: "добавть", "редактировать", "удалить все"...
+                    let control = _section.find('.g_control'), // блок кнопок секции: "добавить", "редактировать", "удалить все"...
                         edit_btn = $('<button/>', {
                             class: 'g_edit_btn',
                             type: 'button',
@@ -344,11 +344,11 @@ if (!function_exists('gallery')) {
                     // заполнить поля типа
                     switch (_type) {
 
-                        case 'foto_folder':
+                        case 'img_folder':
                             $('#g_f_folder_url').val(_opt.f_folder);
                             break;
 
-                        case 'foto_desc':
+                        case 'img_desc':
                             $('#g_f_url').val(_opt[id].f_url);
                             $('#g_f_title').val(_opt[id].f_title);
                             $('#g_f_desc').val(_opt[id].f_desc);
@@ -392,13 +392,13 @@ if (!function_exists('gallery')) {
 
                     switch (_type) {
 
-                        case 'foto_folder':
+                        case 'img_folder':
                             _opt = {
                                 f_folder: $('#g_f_folder_url').val()
                             };
                             break;
 
-                        case 'foto_desc':
+                        case 'img_desc':
                             _opt[order.val()] = {
                                 f_url: $('#g_f_url').val(),
                                 f_title: $('#g_f_title').val(),
@@ -471,7 +471,7 @@ if (!function_exists('gallery')) {
                                 if (int_k === int_id) {// текущий ключ и текущий порядковый номер совпали
                                     switch (_type) {// записать измененный элемент и назначить новый порядковый номер
 
-                                        case 'foto_desc':
+                                        case 'img_desc':
                                             temp[order] = {
                                                 f_url: $('#g_f_url').val(),
                                                 f_title: $('#g_f_title').val(),
@@ -529,7 +529,7 @@ if (!function_exists('gallery')) {
                  */
                 const _clear = function () {
                     let order = Object.keys(_opt).length + 1, // следующий порядковый номер элемента
-                        control = _section.find('.g_control'), // блок кнопок секции: "добавть", "редактировать", "удалить все"...
+                        control = _section.find('.g_control'), // блок кнопок секции: "добавить", "редактировать", "удалить все"...
                         add_btn = $('<button/>', {class: 'g_add_btn', type: 'button', text: 'Добавить мультимедиа'})
                             .on('click.G', _add),
                         clear_btn = $('<button/>', {class: 'g_clear_btn', type: 'button', text: 'Удалить все'})
@@ -598,11 +598,11 @@ if (!function_exists('gallery')) {
                     let g_preview = _section.find('.g_preview').empty();
                     switch (_type) {
 
-                        case 'foto_folder':
+                        case 'img_folder':
                             $('#g_f_folder_url').val(_opt.f_folder);
                             break;
 
-                        case 'foto_desc':
+                        case 'img_desc':
                             for (let k in _opt) {
                                 let info = _opt[k].f_title || _opt[k].f_desc
                                     ? $('<span/>', {class: 'prev_item_control fas fa-info-circle'})
@@ -723,7 +723,7 @@ if (!function_exists('gallery')) {
                     }
                 });
 
-                // добавить "папка с изображениями"
+                // добавить "каталог с изображениями"
                 $('#g_f_folder_url').on('change.G', _add);
 
                 // открыть форму добавления
