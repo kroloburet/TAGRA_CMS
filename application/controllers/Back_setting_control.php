@@ -53,7 +53,7 @@ class Back_setting_control extends Back_basic_control
     /**
      * Редактировать данные администратора
      *
-     * Метод принимает данные из POST переданные
+     * Метод принимает данные из post переданные
      * ajax запросом, валидирует, перезаписывает данные и выведет строку ответа.
      *
      * @return void
@@ -106,7 +106,7 @@ class Back_setting_control extends Back_basic_control
     /**
      * Добавить модератора
      *
-     * Метод принимает данные из POST переданные
+     * Метод принимает данные из post переданные
      * ajax запросом, валидирует, сохраняет данные и выведет строку ответа.
      *
      * @return void
@@ -155,7 +155,7 @@ class Back_setting_control extends Back_basic_control
     /**
      * Редактировать данные модератора
      *
-     * Метод принимает данные из POST переданные
+     * Метод принимает данные из post переданные
      * ajax запросом, валидирует, перезаписывает данные и выведет строку ответа.
      *
      * @param string $id Идентификатор модератора
@@ -211,15 +211,13 @@ class Back_setting_control extends Back_basic_control
     /**
      * Удалить модератора
      *
-     * Метод принимает данные из POST переданные
+     * Метод принимает данные из post переданные
      * ajax запросом, удалит модератора и выведет строку ответа.
      *
      * @return void
      */
     function del_moderator()
     {
-        // если в системе только один модератор - не удалять
-        $this->db->where('status', 'moderator')->from('back_users')->count_all_results() === 1 ? exit('last') : null;
         $id = $this->input->post('id');
         $this->back_basic_model->del('back_users', $id) ? exit('ok') : exit('error');
     }
@@ -227,7 +225,7 @@ class Back_setting_control extends Back_basic_control
     /**
      * Редактировать настройки конфигурации системы
      *
-     * Метод принимает данные из POST переданные
+     * Метод принимает данные из post переданные
      * ajax запросом, редактирует данные и выведет json ответ.
      *
      * @return void
