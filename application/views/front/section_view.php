@@ -20,18 +20,18 @@
 
         </div>
 
-        <?php if ($data['layout_l'] || $data['layout_r'] || $data['layout_t'] || $data['layout_b']) { ?>
-            <!-- контент  материала -->
-            <div id="layouts">
-                <?php if ($data['layout_t']) { ?>
-                    <div id="layout_t"><?= $data['layout_t'] ?></div>
+        <?php if ($data['content_l'] || $data['content_r'] || $data['content_t'] || $data['content_b']) { ?>
+            <!-- контент материала -->
+            <div id="content_layout">
+                <?php if ($data['content_t']) { ?>
+                    <div id="content_t"><?= $data['content_t'] ?></div>
                 <?php } ?>
-                <?php if ($data['layout_l'] || $data['layout_r']) { ?>
-                    <div id="layout_l"><?= $data['layout_l'] ?></div>
-                    <div id="layout_r"><?= $data['layout_r'] ?></div>
+                <?php if ($data['content_l'] || $data['content_r']) { ?>
+                    <div id="content_l"><?= $data['content_l'] ?></div>
+                    <div id="content_r"><?= $data['content_r'] ?></div>
                 <?php } ?>
-                <?php if ($data['layout_b']) { ?>
-                    <div id="layout_b"><?= $data['layout_b'] ?></div>
+                <?php if ($data['content_b']) { ?>
+                    <div id="content_b"><?= $data['content_b'] ?></div>
                 <?php } ?>
             </div>
         <?php } ?>
@@ -76,10 +76,10 @@
         }
 
         // Раздел содержит галереи
-        if ($data['sub_gallerys']) {
-            $sub_gallerys = '';
+        if ($data['sub_galleries']) {
+            $sub_galleries = '';
             $icon = 'fas fa-file-image';
-            foreach ($data['sub_gallerys'] as $v) {
+            foreach ($data['sub_galleries'] as $v) {
                 $icon = $v['gallery_type'] === 'audio' ? 'fas fa-file-audio' : $icon;
                 $icon = $v['gallery_type'] === 'video_yt' ? 'fas fa-file-video' : $icon;
                 $img_prev = $v['img_prev']
@@ -97,7 +97,7 @@
             <i class="' . $icon . '"></i>
           </a>
           ';
-                $sub_gallerys .= '
+                $sub_galleries .= '
         <div class="section_sub_item">
           ' . $img_prev . '
           <div class="section_sub_item_desc">
@@ -111,8 +111,8 @@
             }
             echo '
         <!-- галереи -->
-        <h2>' . $lexic['section']['sub_gallerys_title'] . '</h2>
-        ' . $sub_gallerys;
+        <h2>' . $lexic['section']['sub_galleries_title'] . '</h2>
+        ' . $sub_galleries;
         }
 
         // Раздел содержит страницы
