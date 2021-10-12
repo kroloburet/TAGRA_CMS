@@ -24,7 +24,7 @@ class Back_basic_control extends CI_Controller
      * Получить значение из массива "app"
      *
      * app[] содержит: конфигурацию ресурса, публичные данные пользователей,
-     * массив локализации и иные вспомагательные опции общего пользования.
+     * массив локализации и иные вспомогательные опции общего пользования.
      * Метод реализует удобный доступ к нужному значению передав в него "путь"
      * из ключей через точку.
      * Например: $this->app('conf.langs') === $app['conf']['langs']
@@ -234,7 +234,7 @@ class Back_basic_control extends CI_Controller
         // определить данные фильтра для запроса в БД и настройки пагинации
         if (!empty($filter)) {
             // есть GET данные фильтра
-            // слиять GET данные фильтра с сессией фильтра
+            // слить GET данные фильтра с сессией фильтра
             $this->session->set_userdata('filter',
                 array_merge($this->session->filter,
                     [$table => $filter]));
@@ -261,7 +261,7 @@ class Back_basic_control extends CI_Controller
     /**
      * Форматировать данные
      *
-     * Метод возвращает отформатировнный массив данных.
+     * Метод возвращает отформатированный массив данных.
      * Используется в основном для post\get данных перед записью в базу.
      *
      * @param array $data Данные
@@ -311,7 +311,7 @@ class Back_basic_control extends CI_Controller
      *
      * Применяется в методах загрузки шаблонов добавления материала, меню.
      * Создавая новый материал, если в системе больше одного языка
-     * и если язык не передан в GET, метод загружает шаблон выбора языка.
+     * и если язык не передан в get, метод загружает шаблон выбора языка.
      *
      * @param array $data Данные материала
      * @return boolean
@@ -319,7 +319,7 @@ class Back_basic_control extends CI_Controller
     protected function _lang_selection(array $data)
     {
         $langs = $this->app('conf.langs'); // языки в системе
-        $lang = $this->input->get('lang'); // выбраный язык из get
+        $lang = $this->input->get('lang'); // выбранный язык из get
         if (count($langs) === 1) {// в системе один язык
             $this->set_app(['data.lang' => $langs[0]['tag']]);
             return false;
@@ -332,9 +332,25 @@ class Back_basic_control extends CI_Controller
     }
 
     /**
+     * Проверка на уникальность id в таблице БД
+     *
+     * Метод принимает данные из post переданные
+     * ajax запросом, проверяет уникальность id в
+     * таблице и отдает результат.
+     *
+     * @return void
+     */
+    function check_id()
+    {
+        $p = $this->input->post();
+        $res = $this->back_basic_model->check_id($p['id'], $p['tab']);
+        exit($res ? 'found' : 'ok');
+    }
+
+    /**
      * Проверка на уникальность title в таблице БД
      *
-     * Метод принимает данные из POST переданные
+     * Метод принимает данные из post переданные
      * ajax запросом, проверяет уникальность и выводит строку ответа.
      *
      * @return void
@@ -349,7 +365,7 @@ class Back_basic_control extends CI_Controller
     /**
      * Переключение публикации материала
      *
-     * Метод принимает данные из POST переданные
+     * Метод принимает данные из post переданные
      * ajax запросом, переключает публикацию и выводит строку ответа.
      *
      * @return void
@@ -376,7 +392,7 @@ class Back_basic_control extends CI_Controller
     /**
      * Задать конфигурацию генератора карты сайта
      *
-     * Метод принимает данные из POST переданные
+     * Метод принимает данные из post переданные
      * ajax запросом, редактирует данные и выведет json ответ.
      *
      * @return void
@@ -403,7 +419,7 @@ class Back_basic_control extends CI_Controller
         if (!is_writable(getcwd() . '/sitemap.xml')) {
             return false;
         }
-        $pages = $sections = $gallerys = '';
+        $pages = $sections = $galleries = '';
         // только индексируемые
         $where = ['robots !=' => 'none', 'robots !=' => 'noindex'];
         // если включать только опубликованные материалы
@@ -411,7 +427,7 @@ class Back_basic_control extends CI_Controller
         $select = 'id';
         $p = $this->db->where($where)->select($select)->get('pages')->result_array();
         $s = $this->db->where($where)->select($select)->get('sections')->result_array();
-        $g = $this->db->where($where)->select($select)->get('gallerys')->result_array();
+        $g = $this->db->where($where)->select($select)->get('galleries')->result_array();
         // разметка <url>
         if (!empty($p)) {// есть страницы
             foreach ($p as $i) {
@@ -425,7 +441,7 @@ class Back_basic_control extends CI_Controller
         }
         if (!empty($g)) {// есть галереи
             foreach ($g as $i) {
-                $gallerys .= '<url><loc>' . base_url('gallery/' . $i['id']) . '</loc></url>' . PHP_EOL;
+                $galleries .= '<url><loc>' . base_url('gallery/' . $i['id']) . '</loc></url>' . PHP_EOL;
             }
         }
         // перезаписать sitemap.xml
@@ -444,8 +460,8 @@ class Back_basic_control extends CI_Controller
             . $pages
             . '<!-- Sections -->' . PHP_EOL
             . $sections
-            . '<!-- Gallerys -->' . PHP_EOL
-            . $gallerys
+            . '<!-- Galleries -->' . PHP_EOL
+            . $galleries
             . '</urlset>' . PHP_EOL;
         fwrite($f, $sitemap); // записать sitemap.xml
         fclose($f); // закрыть файл
