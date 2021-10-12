@@ -155,7 +155,7 @@ class Back_menu_model extends Back_basic_model
             }
         };
         $get_del_ids($q, $data['id']);
-        foreach ($q as $v) {// сбор id с новым порядком
+        foreach ($q as $v) { // сбор id с новым порядком
             // того же родителя, порядок которых больше удаляемого пункта
             if ($data['pid'] === $v['pid'] && $data['order'] < $v['order']) {
                 $ids['decrement'][] = ['id' => $v['id'], 'order' => $v['order'] - 1];
