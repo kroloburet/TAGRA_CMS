@@ -46,14 +46,14 @@ class Front_section_model extends Front_basic_model
      * @param string $id Идентификатор раздела
      * @return array
      */
-    function get_sub_gallerys(string $id)
+    function get_sub_galleries(string $id)
     {
-        $q = $this->db->where(['public' => 1, 'section' => $id])->get('gallerys')->result_array();
+        $q = $this->db->where(['public' => 1, 'section' => $id])->get('galleries')->result_array();
         return !empty($q) ? $q : [];
     }
 
     /**
-     * Получить доченрние страницы
+     * Получить дочерние страницы
      *
      * @param string $id Идентификатор раздела
      * @return array
