@@ -40,7 +40,7 @@ class Back_page_model extends Back_basic_model
     function edit_page(string $id, array $data)
     {
         $q = $this->db->where('id', $id)->get('pages')->result_array(); // изменяемый материал
-        if ($q[0]['versions'] !== $data['versions']) {// версии изменились
+        if ($q[0]['versions'] !== $data['versions']) { // версии изменились
             $this->set_versions('pages', $data, $q[0]); // добавить/обновить связи с материалом в версиях
         }
         return $this->db->update('pages', $data, ['id' => $id]);
