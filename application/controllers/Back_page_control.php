@@ -62,7 +62,7 @@ class Back_page_control extends Back_basic_control
     /**
      * Добавить страницу
      *
-     * Метод принимает данные из POST переданные
+     * Метод принимает данные из post переданные
      * ajax запросом, добавит данные и выведет json ответ.
      *
      * @return void
@@ -80,7 +80,7 @@ class Back_page_control extends Back_basic_control
     /**
      * Редактировать страницу
      *
-     * Метод принимает данные из POST переданные
+     * Метод принимает данные из post переданные
      * ajax запросом, редактирует данные и выведет json ответ.
      *
      * @param string $id Идентификатор страницы
@@ -98,7 +98,7 @@ class Back_page_control extends Back_basic_control
     /**
      * Удалить страницу
      *
-     * Метод принимает данные из POST переданные
+     * Метод принимает данные из post переданные
      * ajax запросом, удалит материал и выведет строку ответа.
      *
      * @return void
