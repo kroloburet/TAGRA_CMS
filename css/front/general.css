@@ -553,16 +553,13 @@ ul.breadcrumbs li.bc_end:after, ul.breadcrumbs li.bc_end:before {
 }
 
 .feedback_msg {
-    font-size: 11px;
-    color: #444;
+    font-size: 85%;
+    color: var(--hint-color-font);
     line-height: 1.2;
     padding: .5em;
-    margin-bottom: -2px;
-    position: relative;
-    background-color: #e8e8e8;
-    border-radius: var(--radius-border) var(--radius-border) 0 0;
+    background-color: var(--hint-color-bg);
     border: 1px solid var(--color-form-border);
-    z-index: 1;
+    border-top: none;
 }
 
 @media (max-width: 400px) {

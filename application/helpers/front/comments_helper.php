@@ -237,7 +237,7 @@ class Comments
                             text: '<?= addslashes($this->lexic['comments']['feedback_msg']) ?>'
                         });
                     name.on('focus.Feedback', function () {
-                        $(this).before(msg);
+                        $(this).after(msg);
                     });
                     name.on('blur.Feedback', function () {
                         msg.remove();
