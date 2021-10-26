@@ -7,9 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="none">
-    <link href="/Tagra_UI/style.css" rel="stylesheet">
+    <link href="/TUI/TUI.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
-    <script src="https://kit.fontawesome.com/bacee63d78.js" defer></script>
     <title>Установка системы управления контентом</title>
 </head>
 <body>
@@ -40,7 +39,6 @@
     $admin_mail = $_POST['admin_mail'];
 
     // шифрование логина\пароля
-    // админ
     $admin_name = password_hash($_POST['admin_name'], PASSWORD_BCRYPT);
     $admin_pass = password_hash($_POST['admin_pass'], PASSWORD_BCRYPT);
 
@@ -51,7 +49,7 @@
     // промо-данные для записи в БД
     $index_title = 'Привет, Мир!';
     $index_content_l = '<p><img src="/img/tagra_share.svg" alt="Tagra CMS"></p>';
-    $index_content_r = '<p>Добро пожаловать в систему управления контентом <q>Tagra</q>!<br> Итак. Для быстрого старта вашего сайта &mdash; <a href="/admin">зайдите в админку</a>, используя логин и пароль, созданный вами при установке системы, и начинайте творить..) Но прежде, чтобы облегчить работу с самой системой и верстку контента для вашего сайта, я предлагаю <a href="/Tagra_UI/info.html" target="_blank">краткое знакомство с системой</a></p>';
+    $index_content_r = '<p>Добро пожаловать в систему управления контентом <q>Tagra</q>!<br> Итак. Для быстрого старта вашего сайта &mdash; <a href="/admin">зайдите в админку</a>, используя логин и пароль, созданный вами при установке системы, и начинайте творить..) Но прежде, предлагаю ознакомиться с короткой справкой <a href="/about-Tagra.html" target="_blank">о системе</a> и руководству <a href="/TUI" target="_blank">для верстальщика</a>.</p>';
     $contact_title = 'Контакты';
 
     /**
@@ -61,10 +59,10 @@
     // подключение
     $db = new mysqli($db_host, $db_user, $db_pass, $db_name);
     if ($db->connect_errno) {
-        die("<div class='TUI_notice-r'>Не удалось соединиться с сервером: $db->connect_error</div>$bad_msg");
+        die("<div class='TUI_notice-error'>Не удалось соединиться с сервером: $db->connect_error</div>$bad_msg");
     }
     $db->set_charset('utf8');
-    echo "<div class='TUI_notice-g'>Соединение с сервером успешно установлено</div>";
+    echo "<div class='TUI_notice-success'>Соединение с сервером успешно установлено</div>";
 
     // sessions
     $t = $db_tabl_prefix . 'sessions';
@@ -76,8 +74,8 @@
 PRIMARY KEY (`id`),
 KEY `ci_sessions_timestamp` (`timestamp`))
 ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;")
-    or die("<div class='TUI_notice-r'>Не удалось создать таблицу <q>$t</q>: $db->error</div>$bad_msg");
-    echo "<div class='TUI_notice-g'>Таблица <q>$t</q> успешно создана</div>";
+    or die("<div class='TUI_notice-error'>Не удалось создать таблицу <q>$t</q>: $db->error</div>$bad_msg");
+    echo "<div class='TUI_notice-success'>Таблица <q>$t</q> успешно создана</div>";
 
     // languages
     $t = $db_tabl_prefix . 'languages';
@@ -94,13 +92,13 @@ ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
     $q_i = $db->query("INSERT INTO `$t` (`id`,`creation_date`,`last_mod_date`,`tag`,`title`,`def`) VALUES
 ($id,'$datetime','$datetime','ru','RU',1);");
     if (!$q_c) {
-        die("<div class='TUI_notice-r'>Не удалось создать таблицу <q>$t</q>: $db->error</div>$bad_msg");
+        die("<div class='TUI_notice-error'>Не удалось создать таблицу <q>$t</q>: $db->error</div>$bad_msg");
     }
-    echo "<div class='TUI_notice-g'>Таблица <q>$t</q> успешно создана</div>";
+    echo "<div class='TUI_notice-success'>Таблица <q>$t</q> успешно создана</div>";
     if (!$q_i) {
-        die("<div class='TUI_notice-r'>Не удалось записать начальные данные в таблицу <q>$t</q>: $db->error</div>$bad_msg");
+        die("<div class='TUI_notice-error'>Не удалось записать начальные данные в таблицу <q>$t</q>: $db->error</div>$bad_msg");
     }
-    echo "<div class='TUI_notice-g'>Начальные данные успешно записаны в таблицу <q>$t</q></div>";
+    echo "<div class='TUI_notice-success'>Начальные данные успешно записаны в таблицу <q>$t</q></div>";
 
     // config
     $t = $db_tabl_prefix . 'config';
@@ -125,13 +123,13 @@ ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
 ('sitemap','{\"generate\":\"auto\",\"allowed\":\"public\"}'),
 ('comments','{\"form\":\"on\",\"reserved_names\":\"\",\"rating\":\"1\",\"name_limit\":\"50\",\"text_limit\":\"500\",\"show\":\"3\",\"notific\":\"off\",\"feedback\":\"1\"}');");
     if (!$q_c) {
-        die("<div class='TUI_notice-r'>Не удалось создать таблицу <q>$t</q>: $db->error</div>$bad_msg");
+        die("<div class='TUI_notice-error'>Не удалось создать таблицу <q>$t</q>: $db->error</div>$bad_msg");
     }
-    echo "<div class='TUI_notice-g'>Таблица <q>$t</q> успешно создана</div>";
+    echo "<div class='TUI_notice-success'>Таблица <q>$t</q> успешно создана</div>";
     if (!$q_i) {
-        die("<div class='TUI_notice-r'>Не удалось записать начальные данные в таблицу <q>$t</q>: $db->error</div>$bad_msg");
+        die("<div class='TUI_notice-error'>Не удалось записать начальные данные в таблицу <q>$t</q>: $db->error</div>$bad_msg");
     }
-    echo "<div class='TUI_notice-g'>Начальные данные успешно записаны в таблицу <q>$t</q></div>";
+    echo "<div class='TUI_notice-success'>Начальные данные успешно записаны в таблицу <q>$t</q></div>";
 
     // back_users
     $t = $db_tabl_prefix . 'back_users';
@@ -151,13 +149,13 @@ ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
     $q_i = $db->query("INSERT INTO `$t` (`creation_date`,`last_mod_date`,`last_login_date`,`ip`,`status`,`login`,`password`,`email`) VALUES
 ('$datetime','$datetime','$datetime','$ip','administrator','$admin_name','$admin_pass','$admin_mail');");
     if (!$q_c) {
-        die("<div class='TUI_notice-r'>Не удалось создать таблицу <q>$t</q>: $db->error</div>$bad_msg");
+        die("<div class='TUI_notice-error'>Не удалось создать таблицу <q>$t</q>: $db->error</div>$bad_msg");
     }
-    echo "<div class='TUI_notice-g'>Таблица <q>$t</q> успешно создана</div>";
+    echo "<div class='TUI_notice-success'>Таблица <q>$t</q> успешно создана</div>";
     if (!$q_i) {
-        die("<div class='TUI_notice-r'>Не удалось записать начальные данные в таблицу <q>$t</q>: $db->error</div>$bad_msg");
+        die("<div class='TUI_notice-error'>Не удалось записать начальные данные в таблицу <q>$t</q>: $db->error</div>$bad_msg");
     }
-    echo "<div class='TUI_notice-g'>Начальные данные успешно записаны в таблицу <q>$t</q></div>";
+    echo "<div class='TUI_notice-success'>Начальные данные успешно записаны в таблицу <q>$t</q></div>";
 
     // index_pages
     $t = $db_tabl_prefix . 'index_pages';
@@ -184,13 +182,13 @@ ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
     $q_i = $db->query("INSERT INTO `$t` (`creation_date`,`last_mod_date`,`title`,`description`,`css`,`js`,`content_t`,`content_l`,`content_r`,`content_b`,`content_l_width`,`img_prev`,`lang`) VALUES
 ('$datetime','$datetime','$index_title','$index_title','','','','$index_content_l','$index_content_r','',25,'{$domain}img/tagra_share.jpg','ru');");
     if (!$q_c) {
-        die("<div class='TUI_notice-r'>Не удалось создать таблицу <q>$t</q>: $db->error</div>$bad_msg");
+        die("<div class='TUI_notice-error'>Не удалось создать таблицу <q>$t</q>: $db->error</div>$bad_msg");
     }
-    echo "<div class='TUI_notice-g'>Таблица <q>$t</q> успешно создана</div>";
+    echo "<div class='TUI_notice-success'>Таблица <q>$t</q> успешно создана</div>";
     if (!$q_i) {
-        die("<div class='TUI_notice-r'>Не удалось записать начальные данные в таблицу <q>$t</q>: $db->error</div>$bad_msg");
+        die("<div class='TUI_notice-error'>Не удалось записать начальные данные в таблицу <q>$t</q>: $db->error</div>$bad_msg");
     }
-    echo "<div class='TUI_notice-g'>Начальные данные успешно записаны в таблицу <q>$t</q></div>";
+    echo "<div class='TUI_notice-success'>Начальные данные успешно записаны в таблицу <q>$t</q></div>";
 
     // contact_pages
     $t = $db_tabl_prefix . 'contact_pages';
@@ -219,13 +217,13 @@ ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
     $q_i = $db->query("INSERT INTO `$t` (`creation_date`,`last_mod_date`,`title`,`description`,`css`,`js`,`content_t`,`content_l`,`content_r`,`content_b`,`content_l_width`,`contacts`,`img_prev`,`lang`) VALUES
 ('$datetime','$datetime','$contact_title','$contact_title','','','','','','',60,'','{$domain}img/tagra_share.jpg','ru');");
     if (!$q_c) {
-        die("<div class='TUI_notice-r'>Не удалось создать таблицу <q>$t</q>: $db->error</div>$bad_msg");
+        die("<div class='TUI_notice-error'>Не удалось создать таблицу <q>$t</q>: $db->error</div>$bad_msg");
     }
-    echo "<div class='TUI_notice-g'>Таблица <q>$t</q> успешно создана</div>";
+    echo "<div class='TUI_notice-success'>Таблица <q>$t</q> успешно создана</div>";
     if (!$q_i) {
-        die("<div class='TUI_notice-r'>Не удалось записать начальные данные в таблицу <q>$t</q>: $db->error</div>$bad_msg");
+        die("<div class='TUI_notice-error'>Не удалось записать начальные данные в таблицу <q>$t</q>: $db->error</div>$bad_msg");
     }
-    echo "<div class='TUI_notice-g'>Начальные данные успешно записаны в таблицу <q>$t</q></div>";
+    echo "<div class='TUI_notice-success'>Начальные данные успешно записаны в таблицу <q>$t</q></div>";
 
     // pages
     $t = $db_tabl_prefix . 'pages';
@@ -253,8 +251,8 @@ ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
 `versions` text NOT NULL,
 PRIMARY KEY (`id`))
 ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;")
-    or die("<div class='TUI_notice-r'>Не удалось создать таблицу <q>$t</q>: $db->error</div>$bad_msg");
-    echo "<div class='TUI_notice-g'>Таблица <q>$t</q> успешно создана</div>";
+    or die("<div class='TUI_notice-error'>Не удалось создать таблицу <q>$t</q>: $db->error</div>$bad_msg");
+    echo "<div class='TUI_notice-success'>Таблица <q>$t</q> успешно создана</div>";
 
     // galleries
     $t = $db_tabl_prefix . 'galleries';
@@ -284,8 +282,8 @@ ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;")
 `versions` text NOT NULL,
 PRIMARY KEY (`id`))
 ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;")
-    or die("<div class='TUI_notice-r'>Не удалось создать таблицу <q>$t</q>: $db->error</div>$bad_msg");
-    echo "<div class='TUI_notice-g'>Таблица <q>$t</q> успешно создана</div>";
+    or die("<div class='TUI_notice-error'>Не удалось создать таблицу <q>$t</q>: $db->error</div>$bad_msg");
+    echo "<div class='TUI_notice-success'>Таблица <q>$t</q> успешно создана</div>";
 
     // sections
     $t = $db_tabl_prefix . 'sections';
@@ -313,8 +311,8 @@ ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;")
 `versions` text NOT NULL,
 PRIMARY KEY (`id`))
 ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;")
-    or die("<div class='TUI_notice-r'>Не удалось создать таблицу <q>$t</q>: $db->error</div>$bad_msg");
-    echo "<div class='TUI_notice-g'>Таблица <q>$t</q> успешно создана</div>";
+    or die("<div class='TUI_notice-error'>Не удалось создать таблицу <q>$t</q>: $db->error</div>$bad_msg");
+    echo "<div class='TUI_notice-success'>Таблица <q>$t</q> успешно создана</div>";
 
     // menu
     $t = $db_tabl_prefix . 'menu';
@@ -329,8 +327,8 @@ ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;")
 `lang` varchar(10) NOT NULL,
 PRIMARY KEY (`id`))
 ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;")
-    or die("<div class='TUI_notice-r'>Не удалось создать таблицу <q>$t</q>: $db->error</div>$bad_msg");
-    echo "<div class='TUI_notice-g'>Таблица <q>$t</q> успешно создана</div>";
+    or die("<div class='TUI_notice-error'>Не удалось создать таблицу <q>$t</q>: $db->error</div>$bad_msg");
+    echo "<div class='TUI_notice-success'>Таблица <q>$t</q> успешно создана</div>";
 
     // comments
     $t = $db_tabl_prefix . 'comments';
@@ -349,8 +347,8 @@ ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;")
 `lang` varchar(10) NOT NULL,
 PRIMARY KEY (`id`))
 ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;")
-    or die("<div class='TUI_notice-r'>Не удалось создать таблицу <q>$t</q>: $db->error</div>$bad_msg");
-    echo "<div class='TUI_notice-g'>Таблица <q>$t</q> успешно создана</div>";
+    or die("<div class='TUI_notice-error'>Не удалось создать таблицу <q>$t</q>: $db->error</div>$bad_msg");
+    echo "<div class='TUI_notice-success'>Таблица <q>$t</q> успешно создана</div>";
 
     $db->close();
 
@@ -454,41 +452,41 @@ ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;")
 
     // каталог для загрузки медиа
     if (!mkdir($cms_path . '/upload', 0755)) {
-        die("<div class='TUI_notice-r'>Не удалось создать каталог <q>/upload</q> для загрузки медиа</div>$bad_msg");
+        die("<div class='TUI_notice-error'>Не удалось создать каталог <q>/upload</q> для загрузки медиа</div>$bad_msg");
     }
-    echo "<div class='TUI_notice-g'>Каталог <q>/upload</q> для загрузки медиа успешно создан</div>";
+    echo "<div class='TUI_notice-success'>Каталог <q>/upload</q> для загрузки медиа успешно создан</div>";
 
     // каталог для языка ru (по умолчанию)
     if (!mkdir($cms_path . '/upload/ru', 0755)) {
-        die("<div class='TUI_notice-r'>Не удалось создать каталог <q>/upload/ru</q> загрузки медиа языка по умолчанию</div>$bad_msg");
+        die("<div class='TUI_notice-error'>Не удалось создать каталог <q>/upload/ru</q> загрузки медиа языка по умолчанию</div>$bad_msg");
     }
-    echo "<div class='TUI_notice-g'>Каталог <q>/upload/ru</q> загрузки медиа языка по умолчанию успешно создан</div>";
+    echo "<div class='TUI_notice-success'>Каталог <q>/upload/ru</q> загрузки медиа языка по умолчанию успешно создан</div>";
 
     // файл конфигурации CMS
     if (!file_put_contents($cms_path . '/application/config/config.php', $conf)) {
-        die("<div class='TUI_notice-r'>Не удалось создать файл конфигурации CMS <q>/application/config/config.php</q></div>$bad_msg");
+        die("<div class='TUI_notice-error'>Не удалось создать файл конфигурации CMS <q>/application/config/config.php</q></div>$bad_msg");
     }
-    echo "<div class='TUI_notice-g'>Файл конфигурации CMS <q>/application/config/config.php</q> успешно создан</div>";
+    echo "<div class='TUI_notice-success'>Файл конфигурации CMS <q>/application/config/config.php</q> успешно создан</div>";
 
     // файл конфигурации базы данных CMS
     if (!file_put_contents($cms_path . '/application/config/database.php', $conf_db)) {
-        die("<div class='TUI_notice-r'>Не удалось создать файл конфигурации базы данных CMS "
+        die("<div class='TUI_notice-error'>Не удалось создать файл конфигурации базы данных CMS "
             . "<q>/application/config/database.php</q></div>$bad_msg");
     }
-    echo "<div class='TUI_notice-g'>Файл конфигурации базы данных CMS <q>/application/config/database.php</q> успешно создан</div>";
+    echo "<div class='TUI_notice-success'>Файл конфигурации базы данных CMS <q>/application/config/database.php</q> успешно создан</div>";
 
     // файл карты сайта
     if (!file_put_contents($cms_path . '/sitemap.xml', $sitemap)) {
-        die("<div class='TUI_notice-r'>Не удалось создать файл карты сайта <q>/sitemap.xml</q></div>$bad_msg");
+        die("<div class='TUI_notice-error'>Не удалось создать файл карты сайта <q>/sitemap.xml</q></div>$bad_msg");
     }
-    echo "<div class='TUI_notice-g'>Файл карты сайта <q>/sitemap.xml</q> успешно создан</div>";
+    echo "<div class='TUI_notice-success'>Файл карты сайта <q>/sitemap.xml</q> успешно создан</div>";
 
     // файл index.php для корня
     if (!copy($cms_path . '/instal/root_index.php', $cms_path . '/index.php')) {
-        die("<div class='TUI_notice-r'>Не удалось скопировать содержимое файла "
+        die("<div class='TUI_notice-error'>Не удалось скопировать содержимое файла "
             . "<q>/instal/root_index.php</q> в файл <q>/index.php</q></div>$bad_msg");
     }
-    echo "<div class='TUI_notice-g'>Содержимое для файла индекса CMS <q>/index.php</q> успешно скопировано</div>";
+    echo "<div class='TUI_notice-success'>Содержимое для файла индекса CMS <q>/index.php</q> успешно скопировано</div>";
 
     /**
      * Установка завершена

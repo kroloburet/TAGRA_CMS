@@ -115,15 +115,15 @@
                             };
                         // валидация полей
                         if (!/^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/.test(mail.val())) {
-                            msg(`<p class="TUI_notice-r"><?= addslashes($lexic['contact']['novalid_field']) ?>"${mail.attr('placeholder')}"</p>`);
+                            msg(`<p class="TUI_notice-error"><?= addslashes($lexic['contact']['novalid_field']) ?>"${mail.attr('placeholder')}"</p>`);
                             return;
                         }
                         if (!/\S/.test(name.val())) {
-                            msg(`<p class="TUI_notice-r"><?= addslashes($lexic['contact']['novalid_field']) ?>"${name.attr('placeholder')}"</p>`);
+                            msg(`<p class="TUI_notice-error"><?= addslashes($lexic['contact']['novalid_field']) ?>"${name.attr('placeholder')}"</p>`);
                             return;
                         }
                         if (!/\S/.test(text.val())) {
-                            msg(`<p class="TUI_notice-r"><?= addslashes($lexic['contact']['novalid_field']) ?>"${text.attr('placeholder')}"</p>`);
+                            msg(`<p class="TUI_notice-error"><?= addslashes($lexic['contact']['novalid_field']) ?>"${text.attr('placeholder')}"</p>`);
                             return;
                         }
                         // блокировать кнопку
@@ -138,25 +138,25 @@
                             success: function (resp) {
                                 switch (resp) {
                                     case'bot':
-                                        msg('<p class="TUI_notice-r"><?= addslashes($lexic['basic']['bot']) ?></p>');
+                                        msg('<p class="TUI_notice-error"><?= addslashes($lexic['basic']['bot']) ?></p>');
                                         break;
                                     case'nomail':
-                                        msg('<p class="TUI_notice-r"><?= addslashes($lexic['contact']['nomail']) ?></p>');
+                                        msg('<p class="TUI_notice-error"><?= addslashes($lexic['contact']['nomail']) ?></p>');
                                         break;
                                     case'error':
-                                        msg('<p class="TUI_notice-r"><?= addslashes($lexic['basic']['error']) ?></p>');
+                                        msg('<p class="TUI_notice-error"><?= addslashes($lexic['basic']['error']) ?></p>');
                                         break;
                                     case'ok':
                                         mail.add(name).add(text).val('');
-                                        msg('<p class="TUI_notice-g"><?= addslashes($lexic['contact']['send_ok']) ?></p>');
+                                        msg('<p class="TUI_notice-success"><?= addslashes($lexic['contact']['send_ok']) ?></p>');
                                         break;
                                     default:
                                         console.error(`#### TAGRA ERROR INFO ####\n\n${resp}`);
-                                        msg('<p class="TUI_notice-r"><?= addslashes($lexic['basic']['error']) ?></p>');
+                                        msg('<p class="TUI_notice-error"><?= addslashes($lexic['basic']['error']) ?></p>');
                                 }
                             },
                             error: function () {
-                                msg('<p class="TUI_notice-r"><?= addslashes($lexic['basic']['server_error']) ?></p>');
+                                msg('<p class="TUI_notice-error"><?= addslashes($lexic['basic']['server_error']) ?></p>');
                             }
                         });
                     });

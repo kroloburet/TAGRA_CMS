@@ -4,7 +4,7 @@
     ########### Справка по режиму "Разработка/тестирование"
     -->
 
-    <div class="TUI_notice-y" style="margin-top:1.5em">
+    <div class="TUI_notice-warning" style="margin-top:1.5em">
         Внимание! Ресурс находится в режиме <q>разработка</q> или <q>тестирование</q>.
         <a href="#" onclick="TUI.Toggle('env_info');return false">Подробнее</a>
         <div id="env_info" hidden>
@@ -32,9 +32,8 @@
     <img src="/img/tagra.svg" alt="Tagra CMS"> Tagra CMS <sup><?= $this->config->item('tagra_version') ?></sup>
 </footer>
 
-<script src="/Tagra_UI/script.js"></script>
+<script src="/TUI/TUI.js"></script>
 <script src="/scripts/back/overall_js.js"></script>
-<script src="https://kit.fontawesome.com/bacee63d78.js"></script>
 <script src="/scripts/libs/tinymce_4.7.11/plugins/moxiemanager/js/moxman.loader.min.js"></script>
 <?php if ($conf['emmet']) { ?>
     <script src="/scripts/libs/emmet.min.js"></script>

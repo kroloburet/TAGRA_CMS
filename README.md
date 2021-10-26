@@ -19,10 +19,11 @@
    instal/
    scripts/
    system/
-   Tagra_UI/
+   TUI/
    .htaccess
    favicon.ico
    403.html
+   about-Tagra.html
    plug.html
    index.php
    robots.txt

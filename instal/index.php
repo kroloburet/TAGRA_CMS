@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="none">
-    <link href="/Tagra_UI/style.css" rel="stylesheet">
+    <link href="/TUI/TUI.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
     <title>Установка системы управления контентом</title>
 </head>
@@ -135,8 +135,7 @@
     </div>
 </div>
 
-<script src="/Tagra_UI/script.js"></script>
-<script src="https://kit.fontawesome.com/bacee63d78.js"></script>
+<script src="/TUI/TUI.js"></script>
 <script>
     /**
      * Генерировать пароль и вставить в поле

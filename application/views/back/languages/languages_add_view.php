@@ -6,7 +6,7 @@
     ########### Справка по добавлению языка
     -->
 
-    <div class="TUI_notice-b">
+    <div class="TUI_notice-info">
         Добавление языка состоит из двух этапов.&nbsp;
         <a href="#" onclick="TUI.Toggle('add_info');return false">
             Подробнее <i class="fas fa-angle-down"></i>

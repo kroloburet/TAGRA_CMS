@@ -63,7 +63,7 @@
                         }
                         closedir($dir_handle);
                     } else {
-                        echo '<div class="TUI_notice-b">' . $lexic['gallery']['noimgs'] . '</div>' . PHP_EOL;
+                        echo '<div class="TUI_notice-info">' . $lexic['gallery']['noimgs'] . '</div>' . PHP_EOL;
                     }
                     break;
 
@@ -84,7 +84,7 @@
           ';
                         }
                     } else {
-                        echo '<div class="TUI_notice-b">' . $lexic['gallery']['noimgs'] . '</div>' . PHP_EOL;
+                        echo '<div class="TUI_notice-info">' . $lexic['gallery']['noimgs'] . '</div>' . PHP_EOL;
                     }
                     break;
 
@@ -101,7 +101,7 @@
           ';
                         }
                     } else {
-                        echo '<div class="TUI_notice-b">' . $lexic['gallery']['novideos'] . '</div>' . PHP_EOL;
+                        echo '<div class="TUI_notice-info">' . $lexic['gallery']['novideos'] . '</div>' . PHP_EOL;
                     }
                     break;
 
@@ -143,7 +143,7 @@
             </div>
                     ';
                     } else {
-                        echo '<div class="TUI_notice-b">' . $lexic['gallery']['noaudios'] . '</div>' . PHP_EOL;
+                        echo '<div class="TUI_notice-info">' . $lexic['gallery']['noaudios'] . '</div>' . PHP_EOL;
                     }
             }
             ?>

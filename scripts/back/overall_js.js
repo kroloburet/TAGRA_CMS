@@ -74,7 +74,7 @@ function subm(form, req) {
         control_html = control.html(),
         msg = function (m, s, d, c) {
             m = m || 'Отмеченное красным поле некорректно заполнено!';
-            s = s || 'TUI_notice-r';
+            s = s || 'TUI_notice-error';
             d = d || 4000;
             c = c || function () {
                 control.html(control_html);
@@ -95,10 +95,10 @@ function subm(form, req) {
                 for (let i = 0; el.length > i; ++i) {
                     if (req[key].test(el[i].value)) {
                         // валидация пройдена
-                        el[i].className = el[i].className.replace(/(\sTUI_novalid)/g, '');
+                        el[i].className = el[i].className.replace(/(\sTUI_invalid)/g, '');
                     } else {
                         // валидация не пройдена
-                        el[i].className += ' TUI_novalid';
+                        el[i].className += ' TUI_invalid';
                         el[i].focus();
                         msg();
                         return false;
@@ -110,13 +110,13 @@ function subm(form, req) {
                 if (req[key].test(el.val())) {
                     // валидация пройдена
                     el.is('select') || el.is('input:file')
-                        ? el.parent('label').removeClass('TUI_novalid')
-                        : el.removeClass('TUI_novalid');
+                        ? el.parent('label').removeClass('TUI_invalid')
+                        : el.removeClass('TUI_invalid');
                 } else {
                     // валидация не пройдена
                     el.is('select') || el.is('input:file')
-                        ? el.parent('label').addClass('TUI_novalid').focus()
-                        : el.addClass('TUI_novalid').focus();
+                        ? el.parent('label').addClass('TUI_invalid').focus()
+                        : el.addClass('TUI_invalid').focus();
                     msg();
                     return false;
                 }
@@ -136,7 +136,7 @@ function subm(form, req) {
                 case 'ok':
                     msg(
                         'Данные успешно сохранены!',
-                        'TUI_notice-g',
+                        'TUI_notice-success',
                         1000,
                         (resp.redirect ? function () {
                             location.href = resp.redirect;
@@ -192,16 +192,16 @@ function check_title(elem, id, tab, msg) {
         function (resp) {
             switch (resp) {
                 case 'ok':
-                    $(elem).removeClass('TUI_novalid');
+                    $(elem).removeClass('TUI_invalid');
                     $('.this_form_control button').attr('disabled', false);
                     break;
                 case 'found':
-                    $(elem).addClass('TUI_novalid').focus();
+                    $(elem).addClass('TUI_invalid').focus();
                     $('.this_form_control button').attr('disabled', true);
                     alert(msg);
                     break;
                 default:
-                    $(elem).addClass('TUI_novalid').focus();
+                    $(elem).addClass('TUI_invalid').focus();
                     $('.this_form_control button').attr('disabled', true);
                     alert(resp);
             }

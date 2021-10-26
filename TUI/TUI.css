@@ -1,14 +1,26 @@
 @charset "UTF-8";
 
 /**
- * Tagra_UI styles
+ * TUI styles
  *
+ * Примеры применения и документация по API
+ * на странице ./index.html
+ *
+ * @see ./index.html
  * @author Sergey Nizhnik <kroloburet@gmail.com>
  */
 
 /**
- * Basic styles
+ * Импорт зависимостей TUI
  */
+@import "https://use.fontawesome.com/releases/v5.15.4/css/all.css";
+
+/**
+ * Технический класс-метка для блокировки вызова
+ * методов TUI.js на элементе и его предках
+ */
+.TUI_disabled-node {
+}
 
 /*---------------------------------------------- TUI variables ---*/
 :root {
@@ -30,6 +42,7 @@
     --color-bg-red: #f0ac8c;
     --color-bg-blue: #cfe1ff;
     --color-bg-yellow: #f4f097;
+    --color-bg-gray: #e3e3e3;
     --color-form: #437ee0;
     --color-form-border: #4a76be;
     --color-form-disabled: #bbbbbb;
@@ -51,17 +64,9 @@
 }
 
 /*---------------------------------------------- Layouts & typographic ---*/
-* {
-    box-sizing: border-box;
-}
-
-*, :focus, :active, :visited, :hover {
-    outline: none;
-    outline-offset: 0;
-}
-
-::-moz-focus-outer, ::-moz-focus-inner, :-moz-focusring {
-    border-color: transparent;
+html {
+    line-height: 1.15;
+    -webkit-text-size-adjust: 100%;
 }
 
 body {
@@ -77,8 +82,30 @@ body {
     }
 }
 
+/*--- Normalize and style ---*/
+* {
+    box-sizing: border-box;
+}
+
+*, :focus, :active, :visited, :hover {
+    outline: none;
+    outline-offset: 0;
+}
+
+::-moz-focus-outer, ::-moz-focus-inner, :-moz-focusring {
+    border-color: transparent;
+}
+
 article, aside, details, figcaption, figure, footer, header, hgroup, nav, section, main {
     display: block;
+}
+
+summary {
+    display: list-item;
+}
+
+template {
+    display: none;
 }
 
 figure {
@@ -112,7 +139,9 @@ img, canvas {
 
 a {
     color: var(--color-link);
+    background-color: transparent;
     text-decoration: none;
+    cursor: pointer;
 }
 
 a:hover {
@@ -121,7 +150,7 @@ a:hover {
 }
 
 a[target="_blank"], .TUI_blank {
-    cursor: url(img/pointer_blank.png), pointer;
+    cursor: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABUAAAAdCAMAAABymtfJAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAAXFQTFRFAAAA////////////////////////////////////////////////////////9/f39vb2////////+/v76urq5+fn5OTk09PT6enp5OTk39/f6Ojo29vb19fXsLCw0dHRu7u7q6ursrKypaWlxsbGra2t09PTpaWlqKio0tLSqKiotra2oqKisrKypaWlioqKkpKSnZ2dp6eniIiIjo6Oj4+Pnp6esbGxAAAADw8PERERGhoaHh4eKioqODg4SkpKVVVVV1dXW1tbXV1dXl5eX19fYmJiZGRkZWVlZmZmaGhoaWlpampqa2trbW1tcnJyc3NzdXV1d3d3enp6fX19gICAgYGBhYWFiIiIkJCQlJSUl5eXmJiYmZmZm5ubpaWlq6urr6+vsLCws7OzwMDAwcHByMjIycnJysrKy8vL0NDQ0dHR1tbW19fX2dnZ3d3d5ubm7Ozs7u7u7+/v8vLy8/Pz9PT09vb2/Pz8/f39////NkXe/gAAADh0Uk5TAAIFBgsOEhYXGSkxMjRPYHR2d4CUnqCipaq4xdPX4OLo7vHz9PX2+Pn5+vr7+/z9/f39/v7+/v5Tpa/9AAAA+0lEQVQoz2NgAAEBHQNJBgygERgdxoQhqp9W4sWOKZpe6s1BvKirqgwjpqhNjLOeoQgzmqhnVaR/vEeQNhdEhIkJYm5VVEqFXbafLFhQ2NxMmhEqWulTFacEFjXyS3DSNUEXNUisKo6wzahMrcoqqEqBiUq5lFVV5ZVXQQFUlFErqgoJQEUZ+N1zsYgyyPtWwsQqi9I1xcRE+YCinKZJVaEWyEAdpFjCudDBCglYBoPsY1MJCShBMjszloGBVSEiIgpDlNvRwsIaQ5THHptaHk8ggxTRcDdPBHBQhorCQY6akJAgL7posiIkGLjd85FAHFSURS4CCRiLg8QA5lyUGD+P1IMAAAAASUVORK5CYII="), auto;
 }
 
 blockquote {
@@ -139,6 +168,8 @@ s, del {
 hr {
     padding: 0;
     margin: .5em 0;
+    box-sizing: content-box;
+    overflow: visible;
     border: none;
     border-bottom: var(--color-base) solid 1px;
     height: 0;
@@ -146,18 +177,48 @@ hr {
 }
 
 abbr {
-    text-decoration: none;
-    border-bottom: var(--color-gray) dashed 1px;
+    border-bottom: none;
+    text-decoration: underline;
+    text-decoration: underline dotted;
     cursor: help;
 }
 
-code {
-    padding: .2em;
+code, kbd, samp, mark {
+    padding: .3em .5em;
     background-color: rgba(0, 0, 0, .2);
+    border-radius: var(--radius-border);
     color: var(--color-font);
+    font-size: inherit;
     font-weight: normal;
     font-style: normal;
     font-family: monospace;
+}
+
+mark {
+    background-color: var(--color-mark);
+}
+
+b, strong {
+    font-weight: bolder;
+}
+
+small {
+    font-size: 80%;
+}
+
+sub, sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+}
+
+sub {
+    bottom: -0.25em;
+}
+
+sup {
+    top: -0.5em;
 }
 
 p {
@@ -180,23 +241,104 @@ pre {
     overflow: auto
 }
 
-mark {
-    background-color: var(--color-mark);
-    padding: .2em;
-}
-
 ul, ol {
     margin-top: 0;
     margin-bottom: 1em;
 }
 
+[hidden] {
+    display: none;
+}
+
+#copy {
+    opacity: .5;
+}
+
+#copy:hover {
+    opacity: 1;
+}
+
 /*---------------------------------------------- Form elements ---*/
+/*--- Normalize form ---*/
+button, input, optgroup, select, textarea {
+    font-family: inherit;
+    font-size: 100%;
+    line-height: 1.15;
+    margin: 0;
+}
+
+button, input {
+    overflow: visible;
+}
+
+button, select {
+    text-transform: none;
+}
+
+button, [type="button"], [type="reset"], [type="submit"] {
+    -webkit-appearance: button;
+}
+
+button::-moz-focus-inner, [type="button"]::-moz-focus-inner, [type="reset"]::-moz-focus-inner, [type="submit"]::-moz-focus-inner {
+    border-style: none;
+    padding: 0;
+}
+
+button:-moz-focusring, [type="button"]:-moz-focusring, [type="reset"]:-moz-focusring, [type="submit"]:-moz-focusring {
+    outline: 1px dotted ButtonText;
+}
+
+fieldset {
+    padding: 0.35em 0.75em 0.625em;
+}
+
+legend {
+    box-sizing: border-box;
+    color: inherit;
+    display: table;
+    max-width: 100%;
+    padding: 0;
+    white-space: normal;
+}
+
+progress {
+    vertical-align: baseline;
+}
+
+textarea {
+    overflow: auto;
+}
+
+[type="checkbox"], [type="radio"] {
+    box-sizing: border-box;
+    padding: 0;
+}
+
+[type="number"]::-webkit-inner-spin-button, [type="number"]::-webkit-outer-spin-button {
+    height: auto;
+}
+
+[type="search"] {
+    -webkit-appearance: textfield;
+    outline-offset: -2px;
+}
+
+[type="search"]::-webkit-search-decoration {
+    -webkit-appearance: none;
+}
+
+::-webkit-file-upload-button {
+    -webkit-appearance: button;
+    font: inherit;
+}
+
 input[name="fuck_bot"] {
     display: none;
     visibility: hidden;
 }
 
-.TUI_novalid {
+/*--- TUI form classes ---*/
+.TUI_invalid {
     border-color: var(--color-red) !important;
 }
 
@@ -373,7 +515,6 @@ input[name="fuck_bot"] {
 .TUI_checkbox, .TUI_radio {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
-    -khtml-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
@@ -546,7 +687,7 @@ input[type="button"][disabled], input[type="submit"][disabled], input[type="rese
 }
 
 /*---------------------------------------------- Notifications ---*/
-.TUI_notice-g, .TUI_notice-r, .TUI_notice-y, .TUI_notice-b {
+.TUI_notice-success, .TUI_notice-error, .TUI_notice-warning, .TUI_notice-info, .TUI_notice-process {
     display: inline-block;
     position: relative;
     padding: 1em 1em 1em 4.5em;
@@ -555,11 +696,11 @@ input[type="button"][disabled], input[type="submit"][disabled], input[type="rese
     color: var(--notice-color-font);
 }
 
-.TUI_notice-g hr, .TUI_notice-r hr, .TUI_notice-y hr, .TUI_notice-b hr {
+.TUI_notice-success hr, .TUI_notice-error hr, .TUI_notice-warning hr, .TUI_notice-info hr, .TUI_notice-process hr {
     border-bottom: 1px solid rgba(255, 255, 255, .7);
 }
 
-.TUI_notice-g::before, .TUI_notice-r::before, .TUI_notice-y::before, .TUI_notice-b::before {
+.TUI_notice-success::before, .TUI_notice-error::before, .TUI_notice-warning::before, .TUI_notice-info::before, .TUI_notice-process::before {
     content: "";
     position: absolute;
     top: 0;
@@ -569,7 +710,7 @@ input[type="button"][disabled], input[type="submit"][disabled], input[type="rese
     border-right: 1px solid rgba(255, 255, 255, .7);
 }
 
-.TUI_notice-g::after, .TUI_notice-r::after, .TUI_notice-y::after, .TUI_notice-b::after {
+.TUI_notice-success::after, .TUI_notice-error::after, .TUI_notice-warning::after, .TUI_notice-info::after, .TUI_notice-process::after {
     position: absolute;
     top: 50%;
     left: 1em;
@@ -582,55 +723,68 @@ input[type="button"][disabled], input[type="submit"][disabled], input[type="rese
     line-height: 0;
 }
 
-.TUI_notice-g {
+.TUI_notice-process::after {
+    -webkit-animation: fa-spin 2s linear infinite;
+    animation: fa-spin 2s linear infinite;
+}
+
+.TUI_notice-success {
     background-color: var(--color-bg-green);
 }
 
-.TUI_notice-g::after {
+.TUI_notice-success::after {
     content: "\f00c";
 }
 
-.TUI_notice-y {
+.TUI_notice-warning {
     background-color: var(--color-bg-yellow);
 }
 
-.TUI_notice-y::after {
+.TUI_notice-warning::after {
     content: "\f071";
 }
 
-.TUI_notice-r {
+.TUI_notice-error {
     background-color: var(--color-bg-red);
 }
 
-.TUI_notice-r::after {
+.TUI_notice-error::after {
     content: "\f00d";
 }
 
-.TUI_notice-b {
+.TUI_notice-info {
     background-color: var(--color-bg-blue);
 }
 
-.TUI_notice-b::after {
+.TUI_notice-info::after {
     content: "\f129";
 }
 
+.TUI_notice-process {
+    background-color: var(--color-bg-gray);
+}
+
+.TUI_notice-process::after {
+    content: "\f110";
+}
+
 /*---Mini notifications----*/
-.TUI_notice-g.mini, .TUI_notice-r.mini, .TUI_notice-y.mini, .TUI_notice-b.mini {
+.TUI_notice-success.mini, .TUI_notice-error.mini, .TUI_notice-warning.mini, .TUI_notice-info.mini, .TUI_notice-process.mini {
     font-size: 75%;
     line-height: 1.3em;
     padding: .5em .5em .5em 3.3em;
 }
 
-.TUI_notice-g.mini::before, .TUI_notice-r.mini::before, .TUI_notice-y.mini::before, .TUI_notice-b.mini::before {
+.TUI_notice-success.mini::before, .TUI_notice-error.mini::before, .TUI_notice-warning.mini::before, .TUI_notice-info.mini::before, .TUI_notice-process.mini::before {
     left: 2.5em;
 }
 
-.TUI_notice-g.mini::after, .TUI_notice-r.mini::after, .TUI_notice-y.mini::after, .TUI_notice-b.mini::after {
+.TUI_notice-success.mini::after, .TUI_notice-error.mini::after, .TUI_notice-warning.mini::after, .TUI_notice-info.mini::after, .TUI_notice-process.mini::after {
     left: .5em;
 }
 
 /*---------------------------------------------- Grid ---*/
-/*--- расчет:((100/кол.ячеек) - margin-left)+(margin-left/кол.ячеек) ---*/
+/*--- расчёт:((100/кол.ячеек) - margin-left)+(margin-left/кол.ячеек) ---*/
 .TUI_row {
     padding: 0;
     margin-bottom: 1.5em;
@@ -751,8 +905,8 @@ table.TUI_table {
     font-style: italic;
 }
 
-.TUI_world {
-    cursor: url(img/pointer_world.png), pointer;
+.TUI_external {
+    cursor: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABcAAAAZCAMAAADt/kXiAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAAGXRFWHRTb2Z0d2FyZQB3d3cuaW5rc2NhcGUub3Jnm+48GgAAAXpQTFRFAAAA/////////////////////////////////////////////////////////Pz8////////7+/v////////7+/v6Ojo9vb25+fn6Ojo8vLyw8PDysrK3Nzc19fX6Ojo////zMzM////ysrK////zMzMoqKiu7u7vb29oqKiycnJnp6eq6uro6OjuLi4kpKSi4uLkZGRkpKSoqKig4ODhISEiIiIiYmJi4uLm5ubAAAAQUFBSkpKVlZWV1dXW1tbXV1dXl5eY2NjZGRkZmZmZ2dnaGhoampqa2trbm5ub29vcHBwdXV1dnZ2d3d3eHh4eXl5e3t7fHx8g4ODhISEiIiIiYmJjY2Nj4+PkZGRkpKSlJSUmpqanZ2dpKSkqqqqq6urrq6usLCws7OztLS0tra2ubm5u7u7vLy8vb29vr6+ysrKzc3Nz8/P0dHR1dXV2tra3d3d39/f5ubm6Ojo6urq7e3t8vLy+fn5+vr6/Pz8/f39/v7+////loloEAAAADp0Uk5TAAceHyAmKywtMjU5OkRNV2lqfJCSlKSkqa6uuLrM0dzm5+jr6/Dx8vT19vr6+/v8/f39/f7+/v7+/uSLPNAAAAELSURBVCjPY2AAAX4dAzkGLEDdKcmJD4u4dlKtlzB2cW8R0sTdjDXYGbGI28S5WwQpMrGgi3vWZjjk2XkESMDEOLkh5tdmRte6ZKcbQoWlInxUOeDipQW+UHHLsHzvEEuQeBaKuG5MbW2GdWptYW15cW1hDVxcyLGotraiqhYK4OIMyu7VtQhQ4MfFCwSsDAzM5onI4pGxfl4erppADWL2JbVlCfEQkFOmoKSip2UKMkkjoDbaCgqsgXpSPeXB4jyBaX62LhAQXlub7FUjawK2WtIlKhduQ7xvba1sMMRNogjxRP/a2kpxGahjjeDiZUDsJsiAIQ4CzgTF9VMKkYCDAExc2iwUCaixMQAAsEF8RaFan24AAAAASUVORK5CYII="), auto;
 }
 
 .TUI_full {
@@ -836,14 +990,6 @@ table.TUI_table {
 
 .TUI_bg-y {
     background-color: var(--color-bg-yellow) !important;
-}
-
-#copy {
-    opacity: .5;
-}
-
-#copy:hover {
-    opacity: 1;
 }
 
 /*---------------------------------------------- Print styles ---*/
@@ -979,8 +1125,46 @@ pre.TUI_Hint {
  * Plugins
  */
 
+/*---------------------------------------------- TUI_Notice ---*/
+.TUI_Notice-box {
+    display: flex;
+    padding: 4em 3%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-color: var(--popup-color-box-bg);
+    z-index: 99999;
+}
+
+.TUI_Notice-body {
+    overflow: hidden;
+}
+
+.TUI_Notice {
+    position: relative;
+    max-width: 50%;
+    margin: auto;
+}
+
+@media (max-width: 800px) {
+    .TUI_Notice {
+        max-width: 70%;
+    }
+}
+
+@media (max-width: 500px) {
+    .TUI_Notice {
+        max-width: 100%;
+    }
+}
+
 /*---------------------------------------------- TUI_Popup ---*/
 .TUI_Popup-box {
+    padding: 4em 3%;
     position: fixed;
     display: none;
     left: 0;
@@ -990,7 +1174,6 @@ pre.TUI_Hint {
     overflow-y: auto;
     overflow-x: hidden;
     background-color: var(--popup-color-box-bg);
-    text-align: center;
     z-index: 9999;
 }
 
@@ -999,11 +1182,11 @@ pre.TUI_Hint {
 }
 
 .TUI_Popup-box.TUI_Popup-show {
-    display: block;
+    display: flex;
 }
 
 .TUI_Popup-box.TUI_Popup-show .TUI_Popup {
-    display: inline-block;
+    display: block;
 }
 
 .TUI_Popup {
@@ -1011,12 +1194,11 @@ pre.TUI_Hint {
     position: relative;
     max-width: 100%;
     padding: 1.5em;
-    margin: 4em 3%;
+    margin: auto;
     border: 1px solid var(--popup-color-font);
     border-radius: var(--radius-border);
     background-color: var(--popup-color-bg);
     color: var(--popup-color-font);
-    text-align: left;
 }
 
 .TUI_Popup .TUI_Popup-close {

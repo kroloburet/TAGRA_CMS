@@ -79,7 +79,7 @@
                 <a href="#" onclick="TUI.Toggle('l_r_info');return false">
                     Справка по редактированию <i class="fas fa-angle-down"></i>
                 </a>
-                <div id="l_r_info" class="TUI_notice-b">
+                <div id="l_r_info" class="TUI_notice-info">
                     <h3>Обратите внимание</h3>
                     <hr>
                     <p>Файлы локализации написаны на скриптовом языке PHP. Данные в них представлены в многомерном
@@ -350,7 +350,7 @@
         const _get_file = function (path) {
             let name = _l_list.find('option[value="' + path + '"]').text();
 
-            _l_msg('TUI_notice-b', `<i class="fas fa-spin fa-spinner"></i>&nbsp;загрузка файла <q>${name}</q>`);
+            _l_msg('TUI_notice-info', `<i class="fas fa-spin fa-spinner"></i>&nbsp;загрузка файла <q>${name}</q>`);
 
             $.ajax({
                 url: '/admin/language/get_localization_file',
@@ -364,15 +364,15 @@
                         _liner();
                         _l_redactor.slideDown(200);
                         _l_file = {name: name, path: path, hash: _get_hash(resp), text: resp};
-                        _l_msg('TUI_notice-g', `Файл <q>${name}</q> готов к редактированию`, 3000);
+                        _l_msg('TUI_notice-success', `Файл <q>${name}</q> готов к редактированию`, 3000);
                     } else {
-                        _l_msg('TUI_notice-r', `Ошибка! Не удалось загрузить файл <q>${name}</q>`);
+                        _l_msg('TUI_notice-error', `Ошибка! Не удалось загрузить файл <q>${name}</q>`);
                         _clear();
                     }
                 },
                 error: function (xhr, status, thrown) {
                     console.error(`#### TAGRA ERROR INFO ####\n\nПричина: ${thrown}\nОтвет сервера:\n${xhr.responseText}`);
-                    _l_msg('TUI_notice-r', `Не удалось загрузить файл <q>${name}</q>.<br>Сведения о неполадке выведены в консоль.<br>Возможно это проблемы на сервере или с сетью Интернет. Повторите попытку.`);
+                    _l_msg('TUI_notice-error', `Не удалось загрузить файл <q>${name}</q>.<br>Сведения о неполадке выведены в консоль.<br>Возможно это проблемы на сервере или с сетью Интернет. Повторите попытку.`);
                 }
             });
         };
@@ -394,11 +394,11 @@
                     });
 
             if (!_is_php(_l_textarea.val())) {
-                _l_msg('TUI_notice-r', `Файл <q>${_l_file.name}</q> не сохранен!<br>Возможные ошибки:<br>В начале файла не найден обязательный тег <mark>&lt;?php</mark>;<br>Перед тегом <mark>&lt;?php</mark> присутствует текст;<br>Найдено более одного тега <mark>&lt;?php</mark>`).append(revoke);
+                _l_msg('TUI_notice-error', `Файл <q>${_l_file.name}</q> не сохранен!<br>Возможные ошибки:<br>В начале файла не найден обязательный тег <mark>&lt;?php</mark>;<br>Перед тегом <mark>&lt;?php</mark> присутствует текст;<br>Найдено более одного тега <mark>&lt;?php</mark>`).append(revoke);
                 return false;
             }
 
-            _l_msg('TUI_notice-b', `<i class="fas fa-spin fa-spinner"></i>&nbsp;сохранение файла <q>${_l_file.name}</q>`);
+            _l_msg('TUI_notice-info', `<i class="fas fa-spin fa-spinner"></i>&nbsp;сохранение файла <q>${_l_file.name}</q>`);
 
             $.ajax({
                 url: '/admin/language/save_localization_file',
@@ -409,20 +409,20 @@
                 success: function (resp) {
                     switch (resp.status) {
                         case 'error':
-                            _l_msg('TUI_notice-r', `Файл <q>${_l_file.name}</q> не сохранен!<br>Возможные ошибки:<br>${resp.msg}`).append(revoke);
+                            _l_msg('TUI_notice-error', `Файл <q>${_l_file.name}</q> не сохранен!<br>Возможные ошибки:<br>${resp.msg}`).append(revoke);
                             break;
                         case 'ok':
-                            _l_msg('TUI_notice-g', `Файл <q>${_l_file.name}</q> успешно сохранен!`, 3000);
+                            _l_msg('TUI_notice-success', `Файл <q>${_l_file.name}</q> успешно сохранен!`, 3000);
                             result = true;
                             break;
                         default :
                             console.error(`#### TAGRA ERROR INFO ####\n\n${resp}`);
-                            _l_msg('TUI_notice-r', `Ой! Что-то пошло не так..(<br>Сведения о неполадке выведены в консоль.`);
+                            _l_msg('TUI_notice-error', `Ой! Что-то пошло не так..(<br>Сведения о неполадке выведены в консоль.`);
                     }
                 },
                 error: function (xhr, status, thrown) {
                     console.error(`#### TAGRA ERROR INFO ####\n\nПричина: ${thrown}\nОтвет сервера:\n${xhr.responseText}`);
-                    _l_msg('TUI_notice-r', `Файл <q>${_l_file.name}</q> не сохранен!<br>Возможно это проблемы на сервере или с сетью Интернет. Повторите попытку.`);
+                    _l_msg('TUI_notice-error', `Файл <q>${_l_file.name}</q> не сохранен!<br>Возможно это проблемы на сервере или с сетью Интернет. Повторите попытку.`);
                 }
             });
 
@@ -452,7 +452,7 @@
             if (_l_file.hash && _get_hash(_l_textarea.val()) !== _l_file.hash) {
                 control.html(`<i class="fas fa-spin fa-spinner"></i>&nbsp;сохранение файла <q>${_l_file.name}</q>`);
                 if (!_save_file()) {
-                    control.html(`<p class="TUI_notice-r mini">Ошибка при сохранении файла <q>${_l_file.name}</q>!</p>`);
+                    control.html(`<p class="TUI_notice-error mini">Ошибка при сохранении файла <q>${_l_file.name}</q>!</p>`);
                     setTimeout(function () {
                         control.html(control_html);
                     }, 5000);

@@ -41,7 +41,7 @@ if (!function_exists('content')) {
                     и редактор</q> (в главном меню: Конфигурация). Чтобы вернуть макет к <q>компактному</q> виду,
                 нажмите на <q>Компактно</q> в верхней части этого блока.
             </p>
-            <div id="content_layout">
+            <div id="content_layout" class="TUI_disabled-node">
                 <div id="content_t"><?= isset($data['content_t']) ? $data['content_t'] : '' ?></div>
                 <div id="content_l"><?= isset($data['content_l']) ? $data['content_l'] : '' ?></div>
                 <div id="content_r"><?= isset($data['content_r']) ? $data['content_r'] : '' ?></div>
@@ -124,10 +124,10 @@ if (!function_exists('content')) {
                  */
                 inputLWidth.addEventListener('input', ({target: input}) => {
                     if (!/^[1-9]\d?(\.\d+)?$/.test(input.value)) {
-                        input.classList.add('TUI_novalid');
+                        input.classList.add('TUI_invalid');
                         return;
                     }
-                    input.classList.remove('TUI_novalid');
+                    input.classList.remove('TUI_invalid');
                     layouts.style.gridTemplateColumns = `${input.value}% 1fr`;
                 });
 

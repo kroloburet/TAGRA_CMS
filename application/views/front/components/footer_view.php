@@ -39,10 +39,10 @@
         gc.rel = 'stylesheet';
         gc.href = "/css/front/general.css";
         head.insertBefore(gc, head.firstChild);
-        // Tagra_UI
+        // TUI
         const tu = document.createElement('link');
         tu.rel = 'stylesheet';
-        tu.href = "/Tagra_UI/style.css";
+        tu.href = "/TUI/TUI.css";
         head.insertBefore(tu, head.firstChild);
         <?php
         if (
@@ -65,8 +65,7 @@
 ########### Подключение JS
 -->
 
-<script src="/Tagra_UI/script.js" defer></script>
-<script src="https://kit.fontawesome.com/bacee63d78.js" defer></script>
+<script src="/TUI/TUI.js" defer></script>
 <script src="<?= htmlspecialchars($conf['jq']) ?>"></script>
 
 <?php

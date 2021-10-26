@@ -113,7 +113,7 @@
     <div id="pagePreloader"></div>
 </div>
 <noscript>
-    <div class="TUI_notice-y"><?= $lexic['basic']['nojs'] ?></div>
+    <div class="TUI_notice-warning"><?= $lexic['basic']['nojs'] ?></div>
 </noscript>
 
 <!--

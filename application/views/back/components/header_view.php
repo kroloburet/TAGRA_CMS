@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="none">
-    <link href="/Tagra_UI/style.css" rel="stylesheet">
+    <link href="/TUI/TUI.css" rel="stylesheet">
     <link href="/css/back/general.css" rel="stylesheet">
     <script src="<?= htmlspecialchars($conf['jq']) ?>"></script>
     <title><?= $data['view_title'] ?> | <?= $conf['site_name'] ?></title>
@@ -71,7 +71,7 @@
     <div id="pagePreloader"></div>
 </div>
 <noscript>
-    <div class="TUI_notice-y">
+    <div class="TUI_notice-warning">
         Внимание! В вашем браузере выключен Javascript. Для корректной работы сайта рекомендуем включить Javascript.
     </div>
 </noscript>
@@ -83,7 +83,7 @@
 <header>
 
     <!-- сообщение от разработчика -->
-    <!--    <p class="TUI_notice-y TUI_full">ВНИМАНИЕ! Тут может быть сообщение о том, что сейчас разработчик ведет-->
+    <!--    <p class="TUI_notice-warning TUI_full">ВНИМАНИЕ! Тут может быть сообщение о том, что сейчас разработчик ведет-->
     <!--        какие-то работы. Ну, или ваша реклама..)</p>-->
 
     <ul class="TUI_Menu">
@@ -130,14 +130,15 @@
                      title="А пальцем тыкать некультурно! ;Р"></i>&nbsp;<?= $conf['status'] ?></span>
             <ul>
                 <li><a href="/" target="_blank">Перейти на сайт</a></li>
-                <li><a href="/Tagra_UI/index.html" target="_blank">О системе</a></li>
+                <li><a href="/about-Tagra.html" target="_blank">О системе</a></li>
+                <li><a href="/TUI" target="_blank">Верстальщику</a></li>
                 <li><a href="/admin/logout" class="TUI_red">Выйти</a></li>
             </ul>
         </li>
     </ul>
 
     <!-- короткая справка по работе с системой -->
-    <div class="TUI_notice-b" id="notific_work_info">Привет, <?= $conf['status'] ?>!<br>
+    <div class="TUI_notice-info" id="notific_work_info">Привет, <?= $conf['status'] ?>!<br>
         Это короткая справка-рекомендация о том, как начать работу в системе.<br>
         <a href="#" onclick="TUI.Toggle('work_info');return false">Показать справку</a>
         &nbsp;&nbsp;|&nbsp;&nbsp;
@@ -209,8 +210,8 @@
                 Конфигурация/Генератор карты сайта).</p>
             <h3>Напоследок</h3>
             <hr>
-            <p>Информация о системе, используемых скриптах и руководство для верстальщика (в главном
-                меню: <?= $conf['status'] ?>/О системе).</p>
+            <p>Информация о системе и используемых скриптах (в главном меню: <?= $conf['status'] ?>/О системе),
+                документация для верстальщика (в главном меню: <?= $conf['status'] ?>/Верстальщику).</p>
             <div class="TUI_align-r"><em>Приятного использования!</em></div>
             <a href="#" onclick="TUI.Toggle('work_info');return false">Скрыть справку</a>
         </div>

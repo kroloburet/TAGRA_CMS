@@ -7,8 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="none">
-    <link href="/Tagra_UI/style.css" rel="stylesheet">
-    <script src="https://kit.fontawesome.com/bacee63d78.js" defer></script>
+    <link href="/TUI/TUI.css" rel="stylesheet">
     <title>Действия над комментарием</title>
     <style>
         .comment_action_box {

@@ -103,7 +103,7 @@ class Back_basic_control extends CI_Controller
                 if (password_verify($p['lgn'], $v['login']) && password_verify($p['pswd'], $v['password'])) {
                     // это запрещенный модератор
                     if ($v['status'] === 'moderator' && !$v['access']) {
-                        $data_msg['msg'] = '<p class="TUI_notice-r mini TUI_full">'
+                        $data_msg['msg'] = '<p class="TUI_notice-error mini TUI_full">'
                             . 'Упс! Администратор запретил вам вход и все действия от имени модератора.</p>';
                         break;
                     }
@@ -116,7 +116,7 @@ class Back_basic_control extends CI_Controller
                     break;
                 }
                 // данные неверны
-                $data_msg['msg'] = '<p class="TUI_notice-r mini TUI_full">Нет пользователя с такими данными!</p>';
+                $data_msg['msg'] = '<p class="TUI_notice-error mini TUI_full">Нет пользователя с такими данными!</p>';
             }
         }
         /**
@@ -131,7 +131,7 @@ class Back_basic_control extends CI_Controller
                     $this->session->moderator === $v['password'] . $v['login']) {
                     // это запрещенный модератор
                     if ($v['status'] === 'moderator' && !$v['access']) {
-                        $data_msg['msg'] = '<p class="TUI_notice-r mini TUI_full">'
+                        $data_msg['msg'] = '<p class="TUI_notice-error mini TUI_full">'
                             . 'Упс! Администратор запретил вам вход и все действия от имени модератора.</p>';
                         break;
                     }

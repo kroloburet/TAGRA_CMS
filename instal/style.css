@@ -28,34 +28,34 @@
     margin-bottom: 2em;
 }
 
-.TUI_notice-r, .TUI_notice-g, .TUI_notice-y, .TUI_notice-b {
+.TUI_notice-error, .TUI_notice-success, .TUI_notice-warning, .TUI_notice-info {
     display: block;
     padding: 0 0 0 2em;
     margin: 0 0 .3em 0;
     background-color: var(--color-base-bg) !important;
 }
 
-.TUI_notice-g::before, .TUI_notice-r::before, .TUI_notice-y::before, .TUI_notice-b::before {
+.TUI_notice-success::before, .TUI_notice-error::before, .TUI_notice-warning::before, .TUI_notice-info::before {
     display: none;
 }
 
-.TUI_notice-g::after, .TUI_notice-r::after, .TUI_notice-y::after, .TUI_notice-b::after {
+.TUI_notice-success::after, .TUI_notice-error::after, .TUI_notice-warning::after, .TUI_notice-info::after {
     left: 0;
 }
 
-.TUI_notice-r::after {
+.TUI_notice-error::after {
     color: var(--color-red);
 }
 
-.TUI_notice-g::after {
+.TUI_notice-success::after {
     color: var(--color-green);
 }
 
-.TUI_notice-y::after {
+.TUI_notice-warning::after {
     color: var(--color-yellow);
 }
 
-.TUI_notice-b::after {
+.TUI_notice-info::after {
     color: var(--color-blue);
 }
 

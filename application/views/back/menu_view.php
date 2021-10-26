@@ -446,7 +446,7 @@ function print_menu_tree(array $input)
          * @returns {void}
          */
         msg: function (style, msg, targ, call) {
-            style = style || 'TUI_notice-r'; // css класс контейнера сообщения
+            style = style || 'TUI_notice-error'; // css класс контейнера сообщения
             msg = msg || 'Поле "Название пункта" должно быть заполнено!'; // сообщение
             let box = $('<p/>', {class: 'TUI_full ' + style, html: msg}); // контейнер
             targ.html(box); // поместить контейнер в элемент отображения сообщения в форме

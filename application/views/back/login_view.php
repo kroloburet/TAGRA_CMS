@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="none">
-    <link href="/Tagra_UI/style.css" rel="stylesheet">
+    <link href="/TUI/TUI.css" rel="stylesheet">
     <link href="/css/back/general.css" rel="stylesheet">
     <title>Авторизация</title>
 
@@ -178,23 +178,23 @@
                 switch (resp.status) {
                     case 'bot':
                         f.find('[name=send_pass_mail]').val('');
-                        msg.html(`<div class="TUI_notice-r mini TUI_full">Ой! Вы робот?! Вам здесь не рады..(</div>`);
+                        msg.html(`<div class="TUI_notice-error mini TUI_full">Ой! Вы робот?! Вам здесь не рады..(</div>`);
                         break;
                     case 'nomail':
-                        msg.html(`<div class="TUI_notice-r mini TUI_full">Ой! Ошибка..(<br>Пользователя с таким email нет в системе.</div>`);
+                        msg.html(`<div class="TUI_notice-error mini TUI_full">Ой! Ошибка..(<br>Пользователя с таким email нет в системе.</div>`);
                         break;
                     case 'noaccess':
-                        msg.html(`<div class="TUI_notice-r mini TUI_full">Упс! Администратор запретил вам вход и все действия от имени модератора.</div>`);
+                        msg.html(`<div class="TUI_notice-error mini TUI_full">Упс! Администратор запретил вам вход и все действия от имени модератора.</div>`);
                         break;
                     case 'noedit':
-                        msg.html(`<div class="TUI_notice-r mini TUI_full">Ой! Ошибка..(<br>Не удалось сбросить логин/пароль. Повторите попытку.</div>`);
+                        msg.html(`<div class="TUI_notice-error mini TUI_full">Ой! Ошибка..(<br>Не удалось сбросить логин/пароль. Повторите попытку.</div>`);
                         break;
                     case 'nosend':
-                        msg.html(`<div class="TUI_notice-r mini TUI_full">Ой! Ошибка..(<br>Не удалось отправить логин/пароль. Повторите попытку.</div>`);
+                        msg.html(`<div class="TUI_notice-error mini TUI_full">Ой! Ошибка..(<br>Не удалось отправить логин/пароль. Повторите попытку.</div>`);
                         break;
                     case 'ok':
                         f.find('[name=send_pass_mail]').val('');
-                        msg.html(`<div class="TUI_notice-g mini TUI_full">${resp.html}</div>`);
+                        msg.html(`<div class="TUI_notice-success mini TUI_full">${resp.html}</div>`);
                         setTimeout(function () { // очистить сообщение об отправке, скрыть форму
                             msg.empty();
                             $('#login_form, #sand_pass').slideToggle();

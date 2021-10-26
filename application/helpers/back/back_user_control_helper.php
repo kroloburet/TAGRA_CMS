@@ -129,7 +129,7 @@ if (!function_exists('administrator_control')) {
                     // событие на "готово" - редактировать
                     _done_btn.on('click.BUC', __edit);
                     // информация об администраторе
-                    _info.html(`<p class="TUI_notice-b mini TUI_full">
+                    _info.html(`<p class="TUI_notice-info mini TUI_full">
                         Дата создания: ${_opt[id].creation_date}<br>
                         Дата изменения: ${last_mod}<br>
                         Дата последнего входа: ${last_login}
@@ -419,7 +419,7 @@ if (!function_exists('moderators_control')) {
                         __edit(id);
                     });
                     // информация о модераторе
-                    _info.html(`<p class="TUI_notice-b mini TUI_full">
+                    _info.html(`<p class="TUI_notice-info mini TUI_full">
                         Дата создания: ${_opt[id].creation_date}<br>
                         Дата изменения: ${last_mod}<br>
                         Дата последнего входа: ${last_login}
@@ -639,7 +639,7 @@ if (!function_exists('moderators_control')) {
         margin: 0;
     }
 
-    .buc_form .TUI_notice-b {
+    .buc_form .TUI_notice-info {
         margin-bottom: .5em;
     }
 </style>
