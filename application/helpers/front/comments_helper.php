@@ -374,7 +374,7 @@ class Comments
                     // валидация полей
                     if (!/\S/.test(name_val)) {
                         msg(
-                            `<p class="TUI_notice-error mini TUI_full">
+                            `<p class="TUI_notice-error mini">
                             <?= addslashes($this->lexic['comments']['novalid_field']) . PHP_EOL ?>
                             <q>${name.attr('placeholder')}</q>
                            </p>`);
@@ -382,7 +382,7 @@ class Comments
                     }
                     if (!/\S/.test(comment.val())) {
                         msg(
-                            `<p class="TUI_notice-error mini TUI_full">
+                            `<p class="TUI_notice-error mini">
                             <?= addslashes($this->lexic['comments']['novalid_field']) . PHP_EOL?>
                             <q>${comment.attr('placeholder')}</q>
                            </p>`);
@@ -395,7 +395,7 @@ class Comments
                         && !/^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/.test(name_val)
                     ) {
                         msg(
-                            `<p class="TUI_notice-error mini TUI_full">
+                            `<p class="TUI_notice-error mini">
                             <?= addslashes($this->lexic['comments']['novalid_mail']) . PHP_EOL?>
                             <q>${name.attr('placeholder')}</q>
                            </p>`);
@@ -441,7 +441,7 @@ class Comments
                                 case 'premod':
                                     comment.val(''); // очистка формы
                                     msg(
-                                        `<p class="TUI_notice-success mini TUI_full">
+                                        `<p class="TUI_notice-success mini">
                                          <?= addslashes($this->lexic['comments']['premod_msg']) . PHP_EOL?>
                                         </p>`);
                                     if (pid.val() !== '0') {// удалить форму ответа, отобразить основную
@@ -454,21 +454,21 @@ class Comments
                                 // имя зарезервировано
                                 case 'reserved_name':
                                     msg(
-                                        `<p class="TUI_notice-error mini TUI_full">
+                                        `<p class="TUI_notice-error mini">
                                          <?= addslashes($this->lexic['comments']['reserved_name_msg']) . PHP_EOL?>
                                         </p>`);
                                     break;
                                 // ошибки
                                 case 'error':
-                                    msg('<p class="TUI_notice-error mini TUI_full"><?= addslashes($this->lexic['basic']['error']) ?></p>');
+                                    msg('<p class="TUI_notice-error mini"><?= addslashes($this->lexic['basic']['error']) ?></p>');
                                     break;
                                 default :
                                     console.error(`#### TAGRA ERROR INFO ####\n\n${resp}`);
-                                    msg('<p class="TUI_notice-error mini TUI_full"><?= addslashes($this->lexic['basic']['error']) ?></p>');
+                                    msg('<p class="TUI_notice-error mini"><?= addslashes($this->lexic['basic']['error']) ?></p>');
                             }
                         },
                         error: function () {
-                            msg('<p class="TUI_notice-error mini TUI_full"><?= addslashes($this->lexic['basic']['server_error']) ?></p>');
+                            msg('<p class="TUI_notice-error mini"><?= addslashes($this->lexic['basic']['server_error']) ?></p>');
                         }
                     });
                 }
