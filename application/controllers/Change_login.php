@@ -18,20 +18,20 @@ class Change_login extends CI_Controller
     /**
      * Генерировать пароль
      *
-     * @param int $lenght Символов в строке результата
+     * @param int $length Символов в строке результата
      * @return string
      */
-    protected function _gen_pass(int $lenght = 10)
+    protected function _gen_pass(int $length = 10)
     {
         $alphabet = range('a', 'z');
         $up_alphabet = range('A', 'Z');
         $digits = range('1', '9');
-        $spech = ['~', '@', '#', '$', '[', ']', '_', '-'];
-        $full_array = array_merge($alphabet, $up_alphabet, $digits, $spech);
+        $special = ['~', '@', '#', '$', '[', ']', '_', '-'];
+        $full_array = array_merge($alphabet, $up_alphabet, $digits, $special);
         $password = '';
-        for ($i = 0; $i < $lenght; $i++) {
-            $entrie = array_rand($full_array);
-            $password .= $full_array[$entrie];
+        for ($i = 0; $i < $length; $i++) {
+            $entry = array_rand($full_array);
+            $password .= $full_array[$entry];
         }
         return $password;
     }
@@ -58,8 +58,8 @@ class Change_login extends CI_Controller
         // валидация email
         !$mail ? exit(json_encode(['status' => 'nomail'], JSON_FORCE_OBJECT)) : null;
         // получить выборку по email
-        !$q = $this->back_basic_model->get_back_users($mail) ?
-            exit(json_encode(['status' => 'nomail'], JSON_FORCE_OBJECT)) : null;
+        $q = $this->back_basic_model->get_back_users($mail);
+        !$q ? exit(json_encode(['status' => 'nomail'], JSON_FORCE_OBJECT)) : null;
         /**
          * обработка выборки
          */
@@ -75,7 +75,7 @@ class Change_login extends CI_Controller
                 continue; // пропустить итерацию
             }
             // имя пользователя email или генерировать
-            $login = strstr($mail, '@', true) ? strstr($mail, '@', true) : $this->_gen_pass(8);
+            $login = strstr($mail, '@', true) ?? $this->_gen_pass(8);
             // генерировать новый пароль
             $pass = $this->_gen_pass();
             // шифровать логин для БД
@@ -84,7 +84,7 @@ class Change_login extends CI_Controller
             $data['password'] = password_hash($pass, PASSWORD_BCRYPT);
             $data['last_mod_date'] = date('Y-m-d H:i:s');
             // перезаписать данные пользователя
-            $this->back_basic_model->edit_back_user($v['id'], $data)
+            !$this->back_basic_model->edit_back_user($v['id'], $data)
                 ? exit(json_encode(['status' => 'noedit'], JSON_FORCE_OBJECT))
                 : null;
             // отправить новые данные пользователю
