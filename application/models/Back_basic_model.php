@@ -315,15 +315,14 @@ class Back_basic_model extends CI_Model
      * Выбрать всех по email если передан
      *
      * @param string|null $email
-     * @return array|boolean
+     * @return array
      */
     function get_back_users(string $email = null)
     {
         if ($email) {
             $this->db->where('email', $email);
         }
-        $q = $this->db->get('back_users')->result_array();
-        return empty($q) ? false : $q;
+        return $this->db->get('back_users')->result_array();
     }
 
     /**
